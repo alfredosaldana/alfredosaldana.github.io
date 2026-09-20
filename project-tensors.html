@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="A didactic educational project on PyTorch tensors, covering tensor rank, shape, dtype, devices, indexing, reshaping, broadcasting, matrix operations, activation functions and neural-network data flow.">
+<title>Tensors 101 with PyTorch — Alfredo Saldana</title>
+<link rel="icon" href="assets/images/favicon.svg">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .learning-block{margin:30px 0;padding:24px;border:1px solid #dce6f2;border-radius:18px;background:#fbfdff}
+  .equation{margin:16px 0;padding:16px 18px;border-left:4px solid #2457a7;border-radius:10px;background:#f3f7fc;font-family:Georgia,"Times New Roman",serif;font-size:1.1rem;overflow-x:auto}
+  .equation .eq-main{display:block;text-align:center;font-size:1.28rem;margin:6px 0}
+  .key-idea{margin:18px 0;padding:16px 18px;border-radius:14px;background:#eef6ff;border:1px solid #cfe2fb}
+  .warning{margin:18px 0;padding:16px 18px;border-radius:14px;background:#fff8ea;border:1px solid #ead7a5}
+  .worked{margin:18px 0;padding:18px;border-radius:14px;background:#f5fbf7;border:1px solid #cfe7d4}
+  .theory-table{width:100%;border-collapse:collapse;margin:18px 0;font-size:.98rem}
+  .theory-table th,.theory-table td{padding:12px 13px;border:1px solid #dfe6ee;vertical-align:top;text-align:left}
+  .theory-table th{background:#f2f6fb;color:#13233b}
+  .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}
+  .flow div{padding:15px 10px;border:1px solid #dce6f2;border-radius:12px;background:#fff;text-align:center;font-weight:700}
+  .codebox{margin:16px 0;padding:16px 18px;border-radius:12px;background:#0f172a;color:#e2e8f0;overflow-x:auto;font-family:Consolas,Monaco,monospace;white-space:pre-wrap}
+  .concept-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:18px 0}
+  .concept-card{padding:18px;border:1px solid #dce6f2;border-radius:14px;background:#fff}
+  .concept-card h4{margin:0 0 8px}
+  @media(max-width:760px){.flow,.concept-grid{grid-template-columns:1fr}.equation{font-size:1rem}.equation .eq-main{font-size:1.1rem}}
+</style>
+</head>
+<body>
+<header class="site-header"><div class="container nav-wrap"><a class="brand" href="index.html">Alfredo Saldana</a><button class="menu-btn" aria-label="Open navigation">☰</button><nav class="nav"><a href="index.html">Home</a><a href="tutorials.html">Learn</a><a href="projects.html">Projects</a><a href="open-box.html">Open Box</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav></div></header>
+
+<main>
+<section class="page-hero"><div class="container"><div class="eyebrow">Educational Project · Deep Learning Foundations</div><h1>Tensors 101 with PyTorch</h1><p class="lead">A four-notebook educational series designed to help students understand tensors deeply—not merely use them—by connecting mathematical structure, PyTorch syntax and the way data flows through neural networks.</p><span class="status">Educational Project</span></div></section>
+
+<section class="article"><div class="narrow">
+<img src="assets/images/ai.svg" alt="Tensors 101 with PyTorch" style="border-radius:24px;margin-bottom:34px">
+
+<h2>1. Why tensors matter</h2>
+<p>A tensor is the basic data structure used throughout modern deep learning. Images, tabular records, sequences, model parameters, activations and gradients are all represented as tensors. The main purpose of this educational project is to move from the idea of a simple number to higher-dimensional data structures and then show how those structures are manipulated inside PyTorch.</p>
+<div class="key-idea"><strong>Key idea:</strong> tensors are not a special “AI object” disconnected from mathematics. They generalize scalars, vectors and matrices to an arbitrary number of dimensions.</div>
+
+<h2>2. The tensor hierarchy</h2>
+<table class="theory-table"><thead><tr><th>Object</th><th>Tensor rank</th><th>Example shape</th><th>Typical interpretation</th></tr></thead><tbody>
+<tr><td>Scalar</td><td>0D</td><td>()</td><td>One number, such as temperature = 42.5</td></tr>
+<tr><td>Vector</td><td>1D</td><td>(4,)</td><td>Four patient measurements or four features</td></tr>
+<tr><td>Matrix</td><td>2D</td><td>(3, 4)</td><td>Three observations with four variables each</td></tr>
+<tr><td>3D tensor</td><td>3D</td><td>(3, 224, 224)</td><td>Color image: channels × height × width</td></tr>
+<tr><td>4D tensor</td><td>4D</td><td>(32, 3, 224, 224)</td><td>Batch of 32 color images</td></tr>
+<tr><td>5D tensor</td><td>5D</td><td>(8, 20, 3, 224, 224)</td><td>Batch of videos with frames and image channels</td></tr>
+</tbody></table>
+
+<h2>3. Rank, axes, shape and element count</h2>
+<p>These terms are related but not interchangeable.</p>
+<div class="concept-grid">
+<div class="concept-card"><h4>Rank / ndim</h4><p>The number of axes in the tensor. A matrix has rank 2 because it has two axes.</p></div>
+<div class="concept-card"><h4>Axis</h4><p>One direction through the data. For shape (32, 3, 224, 224), axis 0 is batch, axis 1 is channel, axis 2 is height and axis 3 is width.</p></div>
+<div class="concept-card"><h4>Shape</h4><p>A tuple containing the length of each axis. Shape completely describes the arrangement of values.</p></div>
+<div class="concept-card"><h4>numel</h4><p>Total number of scalar values. It equals the product of all shape dimensions.</p></div>
+</div>
+<div class="equation"><span class="eq-main">numel = d₁ × d₂ × ··· × dₙ</span><div>If a tensor has shape (2, 3, 4), then numel = 2 × 3 × 4 = 24.</div></div>
+<div class="worked"><strong>Mini example.</strong> A tensor with shape (4, 5, 6) has rank 3 and contains 4 × 5 × 6 = <strong>120 elements</strong>.</div>
+
+<h2>4. Why shape is one of the most important concepts in deep learning</h2>
+<p>Neural-network layers expect data in specific structural formats. A large fraction of beginner errors are shape mismatches rather than complicated mathematical failures.</p>
+<div class="equation"><span class="eq-main">(batch, features)</span><div>Typical fully connected/tabular input.</div><span class="eq-main">(batch, channels, height, width)</span><div>Typical PyTorch image input.</div><span class="eq-main">(batch, sequence length, embedding dimension)</span><div>Typical sequence representation.</div></div>
+<div class="worked"><strong>Shape reasoning example.</strong> Suppose x has shape (4, 5, 6). If we compute <code>x.sum(dim=1)</code>, axis 1 disappears because the values along its length-5 dimension are summed. The output shape becomes <strong>(4, 6)</strong>.</div>
+
+<h2>5. Data types: what is stored inside the tensor?</h2>
+<p>Every tensor has a <strong>dtype</strong> that determines how values are represented in memory. This affects precision, memory use and compatibility with PyTorch operations.</p>
+<table class="theory-table"><thead><tr><th>dtype</th><th>Typical use</th><th>Why it matters</th></tr></thead><tbody>
+<tr><td>torch.float32</td><td>Model inputs, parameters, activations and gradients</td><td>Standard balance of precision and memory for deep learning.</td></tr>
+<tr><td>torch.float16</td><td>Mixed-precision training</td><td>Uses less memory and can accelerate supported GPU workloads.</td></tr>
+<tr><td>torch.int64</td><td>Class labels and indices</td><td>Many PyTorch loss functions require integer class labels.</td></tr>
+<tr><td>torch.bool</td><td>Masks and conditions</td><td>Useful for selecting or excluding elements.</td></tr>
+</tbody></table>
+<div class="key-idea"><strong>Why dtype matters:</strong> a model with 100 million parameters uses about 400 MB for the parameter values alone in float32, but about 200 MB in float16. Precision choices therefore have real computational consequences.</div>
+
+<h2>6. Devices: CPU and GPU</h2>
+<p>A tensor must live somewhere physically. In PyTorch, that means normally CPU memory or GPU memory. Operations require participating tensors to be on the same device.</p>
+<div class="codebox">device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+x = torch.randn(32, 10, device=device)</div>
+<div class="warning"><strong>Common mistake:</strong> adding a CPU tensor to a GPU tensor produces a device mismatch error. Device management is not optional in GPU-based workflows.</div>
+
+<h2>7. Creating tensors</h2>
+<p>PyTorch offers several creation strategies. The educational goal is not to memorize commands, but to understand when each one is appropriate.</p>
+<div class="codebox">torch.tensor([1.0, 2.0, 3.0])     # from known values
+torch.zeros(3, 4)                  # all zeros
+torch.ones(3, 4)                   # all ones
+torch.eye(4)                       # identity matrix
+torch.arange(0, 10)                # integer sequence
+torch.linspace(0, 1, 5)            # evenly spaced sequence
+torch.rand(3, 4)                   # uniform random values
+torch.randn(3, 4)                  # standard normal random values</div>
+<p>For reproducibility, the notebooks also emphasize setting a random seed:</p>
+<div class="codebox">torch.manual_seed(42)</div>
+
+<h2>8. Indexing and slicing</h2>
+<p>Indexing asks for specific elements or regions of a tensor. The number of indices required reflects the tensor's rank.</p>
+<div class="equation"><span class="eq-main">x[i, j, k]</span><div>For a rank-3 tensor, three indices identify one scalar element.</div></div>
+<p>Slicing allows us to preserve axes while selecting ranges. This matters when selecting a batch, subset of features, image region or sequence window.</p>
+<div class="worked"><strong>Mini example.</strong> If x has shape (32, 10), then <code>x[:, 0]</code> selects the first feature for all 32 observations and returns shape <strong>(32,)</strong>.</div>
+
+<h2>9. Reshaping: changing structure without changing data</h2>
+<p>Many deep-learning operations require the same numbers to be reorganized into a different shape. A reshape is legal only if the total element count is preserved.</p>
+<div class="equation"><span class="eq-main">∏ old dimensions = ∏ new dimensions</span></div>
+<div class="worked"><strong>Mini example.</strong> A tensor of shape (2, 3, 4) has 24 elements. It can be reshaped to (6, 4), (8, 3), (24,) or (1, 24), because all contain 24 values.</div>
+<p>Important PyTorch tools include <code>reshape()</code>, <code>view()</code>, <code>unsqueeze()</code>, <code>squeeze()</code>, <code>transpose()</code> and <code>permute()</code>.</p>
+<div class="warning"><strong>view() vs reshape():</strong> <code>view()</code> requires a contiguous memory layout. <code>reshape()</code> is more flexible because it may create a copy when needed.</div>
+
+<h2>10. Broadcasting: doing mathematics across compatible shapes</h2>
+<p>Broadcasting lets PyTorch apply element-wise operations to tensors whose shapes are different but compatible. Starting from the last dimension and moving left, dimensions are compatible if they are equal, one of them is 1, or one tensor has no corresponding dimension.</p>
+<div class="worked"><strong>Broadcasting example.</strong><br><br>
+A has shape <strong>(3, 4)</strong> and b has shape <strong>(4,)</strong>.<br>
+PyTorch interprets b as if it were repeated across the three rows.<br>
+The result A + b has shape <strong>(3, 4)</strong>.</div>
+<div class="key-idea"><strong>Why broadcasting matters:</strong> neural networks constantly add bias vectors to batches of activations. Broadcasting makes this efficient without physically duplicating the bias vector.</div>
+
+<h2>11. Element-wise operations versus matrix multiplication</h2>
+<p>These are mathematically different operations and one of the most important distinctions for beginners.</p>
+<div class="equation"><span class="eq-main">Element-wise: Cᵢⱼ = Aᵢⱼ Bᵢⱼ</span><div>In PyTorch: <code>A * B</code></div><span class="eq-main">Matrix product: Cᵢⱼ = Σₖ Aᵢₖ Bₖⱼ</span><div>In PyTorch: <code>A @ B</code> or <code>torch.matmul(A,B)</code></div></div>
+<div class="worked"><strong>Matrix multiplication example.</strong> If A has shape (5, 3) and B has shape (3, 2), the inner dimensions match, so A @ B has shape <strong>(5, 2)</strong>.</div>
+
+<h2>12. Reduction operations</h2>
+<p>A reduction combines many values into fewer values. Examples include sum, mean, maximum and minimum.</p>
+<div class="equation"><span class="eq-main">mean(x) = (1/n) Σᵢ xᵢ</span></div>
+<p>The crucial question is always: <strong>along which axis?</strong></p>
+<div class="worked"><strong>Mini example.</strong> If x has shape (32, 10), then <code>x.mean(dim=0)</code> computes one mean for each feature across the 32 observations and returns shape <strong>(10,)</strong>.</div>
+
+<h2>13. Activation functions</h2>
+<p>Activation functions introduce nonlinearity into neural networks. Without nonlinear activations, stacking multiple linear layers would still collapse to one overall linear transformation.</p>
+<table class="theory-table"><thead><tr><th>Function</th><th>Formula</th><th>Interpretation</th></tr></thead><tbody>
+<tr><td>ReLU</td><td>ReLU(x)=max(0,x)</td><td>Keeps positive values and clips negative values to zero.</td></tr>
+<tr><td>Sigmoid</td><td>σ(x)=1/(1+e<sup>−x</sup>)</td><td>Maps any real number into (0,1); often used for binary probabilities.</td></tr>
+<tr><td>Tanh</td><td>tanh(x)</td><td>Maps values to (−1,1) and is centered at zero.</td></tr>
+</tbody></table>
+
+<h2>14. How tensors flow through a neural network</h2>
+<p>A dense neural-network layer applies an affine transformation followed by an activation function:</p>
+<div class="equation"><span class="eq-main">z = XW + b</span><span class="eq-main">a = φ(z)</span><div>X = batch of input features, W = weight matrix, b = bias vector, φ = activation function.</div></div>
+<div class="worked"><strong>Shape example.</strong><br><br>
+Input X: (32, 10)<br>
+Weights W: (10, 64)<br>
+Bias b: (64,)<br>
+Matrix product XW: (32, 64)<br>
+Broadcast b across 32 rows → output z: <strong>(32, 64)</strong>.</div>
+<p>This single example combines matrix multiplication, shape reasoning and broadcasting—the three tensor ideas students must understand before moving confidently into neural networks.</p>
+
+<h2>15. Automatic differentiation: why PyTorch tensors are more than arrays</h2>
+<p>When <code>requires_grad=True</code>, PyTorch records operations in a computational graph. During backpropagation, it applies the chain rule to compute how a loss changes with respect to model parameters.</p>
+<div class="equation"><span class="eq-main">∂L/∂w = (∂L/∂y)(∂y/∂w)</span><div>This is the chain rule behind gradient-based learning.</div></div>
+<div class="codebox">w = torch.tensor(2.0, requires_grad=True)
+y = w**2
+y.backward()
+print(w.grad)   # 4.0</div>
+<p>Because y = w², the derivative is dy/dw = 2w. At w = 2, the gradient is 4.</p>
+
+<h2>16. Common tensor mistakes this project helps prevent</h2>
+<ul>
+<li>Confusing <strong>rank</strong> with the number of elements.</li>
+<li>Ignoring the batch dimension.</li>
+<li>Trying matrix multiplication with incompatible inner dimensions.</li>
+<li>Mixing CPU and GPU tensors.</li>
+<li>Using the wrong dtype for class labels.</li>
+<li>Applying <code>view()</code> to non-contiguous tensors.</li>
+<li>Reshaping without checking that the total number of elements is preserved.</li>
+<li>Reducing along the wrong axis.</li>
+<li>Confusing element-wise multiplication with matrix multiplication.</li>
+<li>Relying on code without predicting the output shape first.</li>
+</ul>
+
+<h2>17. Four-notebook learning sequence</h2>
+<div class="flow"><div>1. Tensor fundamentals</div><div>2. Creating tensors</div><div>3. Manipulating tensors</div><div>4. Tensor operations</div></div>
+<p>The repository is intentionally organized as a sequence. Each notebook builds on the previous one: first understanding what tensors are, then creating them, manipulating their structure, and finally using the operations that appear inside deep-learning models.</p>
+
+<h2>18. What this educational project teaches</h2>
+<ul>
+<li><strong>Think in shapes before thinking in code.</strong></li>
+<li><strong>Understand the mathematics behind PyTorch syntax.</strong></li>
+<li><strong>Use rank, axes, dtype and devices precisely.</strong></li>
+<li><strong>Recognize broadcasting and matrix multiplication as core neural-network mechanics.</strong></li>
+<li><strong>Use PyTorch tensors as the bridge between linear algebra and deep learning.</strong></li>
+<li><strong>Debug systematically by checking shape, dtype and device at every stage.</strong></li>
+</ul>
+
+<h2>19. Repository</h2>
+<p>The complete four-notebook series and companion guide are available in the GitHub repository.</p>
+<p><a class="btn primary" href="https://github.com/alfredosaldana/Tensors-101-with-Pytorch" target="_blank" rel="noopener">View GitHub Repository ↗</a></p>
+<div class="actions"><a class="btn secondary" href="projects.html">← Back to Projects</a></div>
+
+</div></section>
+</main>
+
+<footer class="footer"><div class="container"><div class="footer-grid"><div><h3>Alfredo Saldana</h3><p>Data Scientist · Economist · Educator</p><p>I study, explore and share ideas across Data Science, Statistics, Machine Learning, Deep Learning and Artificial Intelligence.</p></div><div><h4>Explore</h4><a href="projects.html">Projects</a><a href="tutorials.html">Learn</a><a href="open-box.html">Open Box</a></div><div><h4>Connect</h4><a href="https://github.com/alfredosaldana" target="_blank" rel="noopener">GitHub ↗</a><a href="https://www.linkedin.com/in/asaldanamle/" target="_blank" rel="noopener">LinkedIn ↗</a><a href="https://www.youtube.com/@alfredosaldana-ds" target="_blank" rel="noopener">YouTube ↗</a><a href="contact.html">Contact</a></div></div><div class="footer-bottom"><span>© 2026 Alfredo Saldana</span><span>Built as a learning and project portfolio.</span></div></div></footer>
+<script src="assets/js/script.js"></script>
+</body>
+</html>
