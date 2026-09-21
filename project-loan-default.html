@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="A didactic end-to-end machine learning project on loan default prediction using the Home Credit dataset, with theory, formulas, model comparison, SHAP explainability and deployment.">
+<title>Loan Default Predictor — Alfredo Saldana</title>
+<link rel="icon" href="assets/images/favicon.svg">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .learning-block{margin:30px 0;padding:24px;border:1px solid #dce6f2;border-radius:18px;background:#fbfdff}
+  .learning-block h3{margin-top:0}
+  .equation{margin:16px 0;padding:16px 18px;border-left:4px solid #2457a7;border-radius:10px;background:#f3f7fc;font-family:Georgia,"Times New Roman",serif;font-size:1.08rem;overflow-x:auto}
+  .equation .eq-main{display:block;text-align:center;font-size:1.22rem;margin:6px 0}
+  .key-idea{margin:18px 0;padding:16px 18px;border-radius:14px;background:#eef6ff;border:1px solid #cfe2fb}
+  .warning{margin:18px 0;padding:16px 18px;border-radius:14px;background:#fff8ea;border:1px solid #ead7a5}
+  .worked{margin:18px 0;padding:18px;border-radius:14px;background:#f5fbf7;border:1px solid #cfe7d4}
+  .theory-table{width:100%;border-collapse:collapse;margin:18px 0;font-size:.98rem}
+  .theory-table th,.theory-table td{padding:12px 13px;border:1px solid #dfe6ee;vertical-align:top;text-align:left}
+  .theory-table th{background:#f2f6fb;color:#13233b}
+  .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:20px 0}
+  .flow div{padding:15px 10px;border:1px solid #dce6f2;border-radius:12px;background:#fff;text-align:center;font-weight:700}
+  .metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:18px 0}
+  .metric-card{padding:18px;border:1px solid #dce6f2;border-radius:14px;background:#fff}
+  .metric-card h4{margin:0 0 8px}
+  .mini{font-size:.93rem;color:#5f6f82}
+  .section-rule{height:1px;background:#e7edf4;margin:34px 0}
+  .codebox{margin:16px 0;padding:16px 18px;border-radius:12px;background:#0f172a;color:#e2e8f0;overflow-x:auto;font-family:Consolas,Monaco,monospace;white-space:pre-wrap}
+  @media(max-width:760px){.flow,.metric-grid{grid-template-columns:1fr}.equation{font-size:1rem}.equation .eq-main{font-size:1.08rem}}
+</style>
+</head>
+<body>
+<header class="site-header"><div class="container nav-wrap"><a class="brand" href="index.html">Alfredo Saldana</a><button class="menu-btn" aria-label="Open navigation">☰</button><nav class="nav"><a href="index.html">Home</a><a href="tutorials.html">Learn</a><a href="projects.html">Projects</a><a href="open-box.html">Open Box</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav></div></header>
+<main>
+<section class="page-hero"><div class="container"><div class="eyebrow">Machine Learning · Finance & Risk</div><h1>Loan Default Predictor</h1><p class="lead">Credit risk modeling with the Home Credit dataset: from business understanding and exploratory data analysis to XGBoost, SHAP explanations and deployment in Streamlit.</p><span class="status">Educational Project</span></div></section>
+<section class="article"><div class="narrow"><img src="assets/images/loan-default.png" alt="Loan Default Predictor thumbnail" style="border-radius:24px;margin-bottom:34px"><h2>Project question</h2><p><strong>Can we estimate the probability that a loan applicant will default?</strong> This project builds an end-to-end machine learning pipeline that takes applicant information and predicts credit risk in a didactic, student-friendly way.</p>
+<div class="key-idea"><strong>Main idea:</strong> the output is not merely “approve” or “deny.” The most informative output is a <em>default probability</em>. That probability can then be converted into a lending decision using a threshold chosen by the institution.</div>
+
+<h2>Why this project matters</h2><p>Credit risk modeling is one of the classic applications of data science in finance. Banks and lenders must decide which applicants are likely to repay and which ones are more likely to default. If the institution approves too many risky loans, losses rise. If it denies too many good borrowers, revenue is lost and good customers are pushed away.</p>
+<div class="worked"><strong>Economic intuition:</strong> a single large default can erase the profits from many good loans. That is why classification, probability estimation and interpretability matter so much in credit scoring.</div>
+
+<h2>Dataset and prediction target</h2><p>The project uses the <strong>Home Credit Default Risk</strong> dataset. The main training file contains <strong>307,511 applicants</strong> and <strong>122 variables</strong>. The target variable is called <strong>TARGET</strong>:</p>
+<table class="theory-table"><thead><tr><th>Value</th><th>Meaning</th></tr></thead><tbody><tr><td><strong>0</strong></td><td>The applicant repaid the loan (no default in the defined horizon).</td></tr><tr><td><strong>1</strong></td><td>The applicant defaulted. In this dataset, the label corresponds to payment difficulties that signal meaningful credit distress.</td></tr></tbody></table>
+<p>The features include income, credit amount, annuity, age, employment time, family information, housing variables and external credit-related scores such as <code>EXT_SOURCE_1</code>, <code>EXT_SOURCE_2</code> and <code>EXT_SOURCE_3</code>.</p>
+
+<h2>A machine-learning view of the problem</h2><p>Suppose each applicant is represented by a vector of features</p>
+<div class="equation"><span class="eq-main">x = (x_1, x_2, \ldots, x_p)</span><span>where each <em>x<sub>j</sub></em> is one observed characteristic, such as income, annuity, age or an external score.</span></div>
+<p>The task is to learn a function that maps these inputs into a probability of default:</p>
+<div class="equation"><span class="eq-main">\hat p(x) = P(Y = 1 \mid X = x)</span><span><strong>Interpretation:</strong> given the applicant characteristics <em>x</em>, what is the estimated probability that the person belongs to the default class?</span></div>
+<p>After we estimate that probability, a decision rule can be applied:</p>
+<div class="equation"><span class="eq-main">\hat y = egin{cases}1 & 	ext{if } \hat p(x) \ge t \ 0 & 	ext{if } \hat p(x) < t\end{cases}</span><span>Here <em>t</em> is the classification threshold. A stricter lender may use a lower threshold to flag more applicants as risky.</span></div>
+
+<div class="section-rule"></div>
+<h2>The five-stage learning roadmap</h2><div class="flow"><div>1. Setup & Data</div><div>2. EDA</div><div>3. Preprocessing</div><div>4. Models & Evaluation</div><div>5. SHAP & Export</div></div>
+<p>This project is structured as a step-by-step learning sequence. The notebooks move from understanding the raw data, to cleaning and feature engineering, to training models, evaluating them and finally exporting the artifacts for deployment in a Streamlit app.</p>
+
+<div class="learning-block"><h3>Stage 1 — Setup & Data</h3><p>Load the dataset, inspect dimensions, understand the target and establish the train/test workflow. This stage answers a foundational question: <em>what exactly are we predicting and why?</em></p></div>
+<div class="learning-block"><h3>Stage 2 — Exploratory Data Analysis (EDA)</h3><p>Study the distribution of the target and the predictor variables. This is where we begin to ask whether income, annuity, age or external scores appear related to default risk.</p></div>
+<div class="learning-block"><h3>Stage 3 — Preprocessing & Feature Engineering</h3><p>Handle missing values, encode categorical features, scale numerical variables and create engineered ratios such as <strong>credit-to-income</strong> and <strong>annuity-to-income</strong>.</p></div>
+<div class="learning-block"><h3>Stage 4 — Models & Evaluation</h3><p>Train three models—Logistic Regression, Random Forest and XGBoost—then compare them using metrics that make sense for an imbalanced credit-risk problem.</p></div>
+<div class="learning-block"><h3>Stage 5 — SHAP & Export</h3><p>Explain predictions using SHAP and export the model artifacts so the final pipeline can be used inside the Streamlit application.</p></div>
+
+<h2>Why class imbalance matters</h2><p>Only about <strong>8.1%</strong> of loans are defaults, while about <strong>91.9%</strong> are non-defaults. This is called <strong>class imbalance</strong>.</p>
+<div class="warning"><strong>Important warning:</strong> if a model predicts “no default” for every applicant, it would still be about 91.9% accurate. That sounds good, but the model would completely fail at the business objective because it would miss every risky borrower.</div>
+<p>That is why this project does not rely on accuracy alone. It also uses <strong>SMOTE</strong>, class-aware metrics and probability-based evaluation.</p>
+<div class="equation"><span class="eq-main">	ext{Accuracy} = rac{TP + TN}{TP + TN + FP + FN}</span><span>Accuracy is easy to compute but can be misleading when one class dominates.</span></div>
+<div class="equation"><span class="eq-main">	ext{Recall} = rac{TP}{TP + FN}</span><span>Recall matters greatly in credit risk because a false negative means approving an applicant who later defaults.</span></div>
+
+<h2>SMOTE and resampling</h2><p><strong>SMOTE</strong> stands for <em>Synthetic Minority Oversampling Technique</em>. Instead of merely duplicating default cases, it creates synthetic minority examples by interpolating between existing default observations.</p>
+<div class="worked"><strong>Small example:</strong> if one defaulting borrower has income = 30k and another has income = 35k, SMOTE can create a synthetic borrower with income around 32k or 33k, together with correspondingly interpolated values for other features. This helps the model “see” the default region more clearly during training.</div>
+
+<div class="section-rule"></div>
+<h2>The three models in the project</h2>
+<div class="learning-block"><h3>1) Logistic Regression</h3><p>This is the baseline classification model. It computes a linear score and pushes it through a sigmoid function:</p>
+<div class="equation"><span class="eq-main">z = eta_0 + eta_1 x_1 + eta_2 x_2 + \cdots + eta_p x_p</span><span class="eq-main">\hat p(x) = rac{1}{1 + e^{-z}}</span><span>The sigmoid function converts any real-valued score into a number between 0 and 1, which we interpret as a default probability.</span></div>
+<p><strong>Why it is useful:</strong> it is simple, fast and interpretable. If it performs well, it provides a strong benchmark.</p></div>
+<div class="learning-block"><h3>2) Random Forest</h3><p>A Random Forest combines many decision trees. Each tree sees a bootstrap sample of the data and a random subset of features. The final probability is based on the ensemble of trees.</p><div class="equation"><span class="eq-main">\hat p(x) = rac{1}{B} \sum_{b=1}^{B} T_b(x)</span><span>Here <em>T<sub>b</sub>(x)</em> is the prediction from tree <em>b</em>, and <em>B</em> is the number of trees.</span></div><p><strong>Why it helps:</strong> it captures nonlinear patterns and interactions that Logistic Regression might miss.</p></div>
+<div class="learning-block"><h3>3) XGBoost</h3><p>XGBoost is the strongest model in the project. It builds trees sequentially, where each new tree tries to correct the errors of the previous ensemble.</p><div class="equation"><span class="eq-main">F_M(x) = \sum_{m=1}^{M} \gamma_m h_m(x)</span><span>In words: the final score is the sum of many weighted weak learners. This boosting strategy often performs very well on structured tabular data.</span></div><p>In the project documentation, the XGBoost model achieved an <strong>AUC of about 0.76</strong>, which is a strong result for a difficult real-world problem.</p></div>
+
+<h2>Evaluation metrics and interpretation</h2><p>Because this is a credit-risk classification task, we use multiple metrics rather than a single number.</p>
+<div class="metric-grid"><div class="metric-card"><h4>Precision</h4><div class="equation"><span class="eq-main">	ext{Precision} = rac{TP}{TP + FP}</span></div><p class="mini">Of the applicants predicted to default, how many actually default?</p></div><div class="metric-card"><h4>Recall</h4><div class="equation"><span class="eq-main">	ext{Recall} = rac{TP}{TP + FN}</span></div><p class="mini">Of the true defaulters, how many did the model catch?</p></div><div class="metric-card"><h4>F1 Score</h4><div class="equation"><span class="eq-main">F1 = 2\,rac{	ext{Precision}	imes	ext{Recall}}{	ext{Precision}+	ext{Recall}}</span></div><p class="mini">Balances precision and recall in one summary measure.</p></div><div class="metric-card"><h4>AUC-ROC</h4><div class="equation"><span class="eq-main">	ext{AUC} = Pig(s(X^+) > s(X^-)ig)</span></div><p class="mini">Interpretation: if we randomly choose one defaulting and one non-defaulting borrower, how often does the model rank the defaulter higher?</p></div></div>
+<div class="key-idea"><strong>Business interpretation:</strong> a false negative is often the most expensive error in lending, because it means the bank approved a risky borrower. That is why recall and AUC are especially important.</div>
+
+<h2>Worked probability example</h2><div class="worked"><p>Suppose the model evaluates a borrower and returns</p><div class="equation"><span class="eq-main">\hat p(x) = 0.29</span></div><p>This means the estimated default probability is <strong>29%</strong>. If the lender uses a threshold <em>t = 0.50</em>, the applicant would not be automatically flagged as default. But if the lender uses a more conservative threshold <em>t = 0.25</em>, the same applicant would be flagged as risky.</p><p><strong>Lesson:</strong> the model output and the business decision are related but not identical. The threshold encodes the institution’s risk appetite.</p></div>
+
+<div class="section-rule"></div>
+<h2>Preprocessing, scaling and feature engineering</h2><p>The project applies standard supervised-learning hygiene:</p>
+<ul>
+<li>Train/test split with stratification so class proportions remain similar in both sets.</li>
+<li>One-hot encoding for categorical variables.</li>
+<li><strong>StandardScaler</strong> for numerical variables when appropriate.</li>
+<li>Engineered features such as <code>CREDIT_INCOME_RATIO = AMT_CREDIT / AMT_INCOME_TOTAL</code> and <code>ANNUITY_INCOME_RATIO = AMT_ANNUITY / AMT_INCOME_TOTAL</code>.</li>
+</ul>
+<div class="equation"><span class="eq-main">z = rac{x - \mu}{\sigma}</span><span>This is the standardization formula. It centers a numerical variable by subtracting its mean and rescales it by dividing by its standard deviation.</span></div>
+<div class="warning"><strong>Data leakage warning:</strong> the scaler must be fit on the training set only. If information from the test set is used while preprocessing, the evaluation becomes too optimistic.</div>
+
+<h2>Model explainability with SHAP</h2><p>Regulated financial applications need more than raw predictive performance. They also need explanations. This project uses <strong>SHAP</strong> (SHapley Additive exPlanations) to explain both global and individual predictions.</p>
+<div class="equation"><span class="eq-main">f(x) = \phi_0 + \sum_{j=1}^{p} \phi_j</span><span>The baseline prediction is <em>\phi<sub>0</sub></em>. Each feature contribution <em>\phi<sub>j</sub></em> pushes the final prediction up or down.</span></div>
+<p>For example, a low external score may push the risk upward, while a stable income or lower annuity burden may push the risk downward.</p>
+<div class="key-idea"><strong>Why students should care:</strong> SHAP is the bridge between predictive accuracy and interpretability. It helps us answer the question, “Why did the model produce this prediction?”</div>
+
+<h2>Deployment: from notebook to web application</h2><p>The project is not limited to notebooks. It also includes a <strong>Streamlit application</strong> that loads the final model, scaler and feature names, accepts user input and returns a predicted default probability together with a risk category.</p>
+<div class="codebox">Risk categories used in the app:
+prob &lt; 0.20  → LOW
+0.20 ≤ prob &lt; 0.50 → MEDIUM
+prob ≥ 0.50 → HIGH</div>
+<p>This is an excellent portfolio feature because it shows not only model training but also packaging and communication of results to an end user.</p>
+
+<h2>What a student should learn from this project</h2>
+<table class="theory-table"><thead><tr><th>Theme</th><th>What the student should understand</th></tr></thead><tbody><tr><td>Business framing</td><td>Why probability of default matters and how it affects lending decisions.</td></tr><tr><td>Classification</td><td>How a binary target is predicted from structured features.</td></tr><tr><td>Imbalance</td><td>Why accuracy can be deceptive and why SMOTE and threshold tuning matter.</td></tr><tr><td>Model comparison</td><td>Why Logistic Regression, Random Forest and XGBoost behave differently.</td></tr><tr><td>Evaluation</td><td>How precision, recall, F1 and AUC answer different questions.</td></tr><tr><td>Interpretability</td><td>How SHAP decomposes a prediction into feature contributions.</td></tr><tr><td>Deployment</td><td>How a trained model becomes an interactive application.</td></tr></tbody></table>
+
+<h2>Final takeaway</h2><p>This is a strong educational project because it combines <strong>finance</strong>, <strong>machine learning</strong>, <strong>model evaluation</strong>, <strong>interpretability</strong> and <strong>deployment</strong>. It teaches not just how to fit a classifier, but how to think through the entire lifecycle of a practical data science system.</p>
+<p><a class="btn primary" href="projects.html">← Back to Projects</a></p>
+</div></section></main>
+<footer class="footer"><div class="container"><div class="footer-grid"><div><h3>Alfredo Saldana</h3><p>Data Scientist · Economist · Educator</p><p>I study, explore and share ideas across Data Science, Statistics, Machine Learning, Deep Learning and Artificial Intelligence.</p></div><div><h4>Explore</h4><a href="projects.html">Projects</a><a href="tutorials.html">Learn</a><a href="open-box.html">Open Box</a></div><div><h4>Connect</h4><a href="https://github.com/alfredosaldana" target="_blank" rel="noopener">GitHub ↗</a><a href="https://www.linkedin.com/in/asaldanamle/" target="_blank" rel="noopener">LinkedIn ↗</a><a href="https://www.youtube.com/@alfredosaldana-ds" target="_blank" rel="noopener">YouTube ↗</a><a href="contact.html">Contact</a></div></div><div class="footer-bottom"><span>© 2026 Alfredo Saldana</span><span>Built as a learning and project portfolio.</span></div></div></footer><script src="assets/js/script.js"></script></body></html>
