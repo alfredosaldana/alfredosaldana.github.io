@@ -1,1 +1,260 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Learning materials in statistics, data science, machine learning, deep learning and artificial intelligence."><title>Learn — Alfredo Saldana</title><link rel="icon" href="assets/images/favicon.svg"><link rel="stylesheet" href="assets/css/style.css"></head><body><header class="site-header"><div class="container nav-wrap"><a class="brand" href="index.html">Alfredo Saldana</a><button class="menu-btn" aria-label="Open navigation">☰</button><nav class="nav"><a href="index.html">Home</a><a href="tutorials.html" class="active">Learn</a><a href="projects.html">Projects</a><a href="open-box.html">Open Box</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav></div></header><main><section class="page-hero"><div class="container"><div class="eyebrow">Learn</div><h1>Learning Materials</h1><p class="lead">Visual explanations, practical notebooks and step-by-step tutorials across Statistics, Data Science, Machine Learning, Deep Learning and AI.</p></div></section><section class="section"><div class="container"><div class="learning-grid"><article class="learn-card"><img src="assets/images/survival.svg"><div class="card-body"><span class="tag">Statistics · Coming Soon</span><h3>Survival Analysis from First Principles</h3><p>Build intuition for censoring, S(t), h(t), Kaplan–Meier estimation and time-to-event reasoning.</p></div></article><article class="learn-card"><img src="assets/images/svd.svg"><div class="card-body"><span class="tag">Linear Algebra</span><h3>SVD: Seeing Through the Noise</h3><p>Understand Singular Value Decomposition through image denoising and low-rank reconstruction.</p><a href="https://github.com/alfredosaldana/svd-digit-denoising" target="_blank"><strong>Repository ↗</strong></a></div></article><article class="learn-card"><img src="assets/images/ai.svg"><div class="card-body"><span class="tag">Deep Learning</span><h3>Tensors 101 with PyTorch</h3><p>A practical introduction to tensors, shapes, operations and the structures used by neural networks.</p></div></article></div></div></section><section class="section white"><div class="narrow"><div class="eyebrow">Teaching philosophy</div><h2>Learn the idea, not only the syntax.</h2><p class="lead">The goal is to move from intuition to mathematics to implementation. I prefer complete examples, visible assumptions and explanations that make the reasoning reproducible.</p></div></section></main><footer class="footer"><div class="container"><div class="footer-grid"><div><h3>Alfredo Saldana</h3><p>Data Scientist · Economist · Educator</p><p>I study, explore and share ideas across Data Science, Statistics, Machine Learning, Deep Learning and Artificial Intelligence.</p></div><div><h4>Explore</h4><a href="projects.html">Projects</a><a href="tutorials.html">Learn</a><a href="open-box.html">Open Box</a></div><div><h4>Connect</h4><a href="https://github.com/alfredosaldana" target="_blank" rel="noopener">GitHub ↗</a><a href="https://www.linkedin.com/in/asaldanamle/" target="_blank" rel="noopener">LinkedIn ↗</a><a href="https://www.youtube.com/@alfredosaldana-ds" target="_blank" rel="noopener">YouTube ↗</a><a href="contact.html">Contact</a></div></div><div class="footer-bottom"><span>© 2026 Alfredo Saldana</span><span>Built as a learning and project portfolio.</span></div></div></footer><script src="assets/js/script.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Rutas de aprendizaje en Data Science, Estadística, Machine Learning, Matemáticas, Deep Learning, SQL, Python y herramientas.">
+<title>Aprender — Alfredo Saldana</title>
+<link rel="icon" href="assets/images/favicon.svg">
+<link rel="stylesheet" href="assets/css/style.css">
+
+<style>
+  .learning-grid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:24px;
+  }
+
+  .learn-card{
+    background:#fff;
+    border:1px solid #dfe8f2;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 12px 28px rgba(18,42,74,.08);
+    display:flex;
+    flex-direction:column;
+    transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+  }
+
+  .learn-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 18px 36px rgba(18,42,74,.13);
+    border-color:#cbdced;
+  }
+
+  .learn-card img{
+    display:block;
+    width:100%;
+    aspect-ratio:1/1;
+    object-fit:cover;
+    background:#f5f8fc;
+  }
+
+  .learn-card .card-body{
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+    flex:1;
+  }
+
+  .learn-card .tag{
+    display:inline-flex;
+    align-self:flex-start;
+    border-radius:999px;
+    padding:5px 9px;
+    margin-bottom:10px;
+    background:#eef4fb;
+    color:#3f5f82;
+    font-size:.76rem;
+    font-weight:800;
+  }
+
+  .learn-card h3{
+    margin:0 0 10px;
+    color:#0b1f3a;
+    line-height:1.25;
+  }
+
+  .learn-card p{
+    margin:0 0 18px;
+    color:#617287;
+    line-height:1.65;
+  }
+
+  .learn-card a{
+    margin-top:auto;
+    text-decoration:none;
+  }
+
+  .learn-card a strong{
+    color:#1558b0;
+  }
+
+  @media(max-width:900px){
+    .learning-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+
+  @media(max-width:620px){
+    .learning-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a class="brand" href="index.html">Alfredo Saldana</a>
+    <button class="menu-btn" aria-label="Abrir navegación">☰</button>
+    <nav class="nav">
+      <a href="index.html">Inicio</a>
+      <a href="tutorials.html" class="active">Aprender</a>
+      <a href="projects.html">Proyectos</a>
+      <a href="open-box.html">Open Box</a>
+      <a href="about.html">Acerca de</a>
+      <a href="contact.html">Contacto</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="eyebrow">Aprender</div>
+    <h1>Materiales de Aprendizaje</h1>
+    <p class="lead">
+      Explicaciones visuales, guías paso a paso y rutas estructuradas para construir fundamentos sólidos en Data Science.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+
+    <div class="learning-grid">
+
+      <article class="learn-card">
+        <img src="assets/images/learn-data-science-foundations.png" alt="Data Science Foundations">
+        <div class="card-body">
+          <span class="tag">Fundamentos</span>
+          <h3>Data Science Foundations</h3>
+          <p>
+            Predicciones, métricas, thresholds, class imbalance, validación, calibration,
+            generalization y evaluación confiable de modelos.
+          </p>
+          <a href="learn/data-science-foundations/"><strong>Explorar ruta →</strong></a>
+        </div>
+      </article>
+
+      <article class="learn-card">
+        <img src="assets/images/learn-statistics-probability.png" alt="Statistics and Probability">
+        <div class="card-body">
+          <span class="tag">Estadística</span>
+          <h3>Statistics &amp; Probability</h3>
+          <p>
+            Probabilidad, distribuciones, muestreo, inferencia, confidence intervals,
+            hypothesis testing, ANOVA, correlación y regresión.
+          </p>
+          <a href="learn/statistics-probability/"><strong>Explorar ruta →</strong></a>
+        </div>
+      </article>
+
+      <article class="learn-card">
+        <img src="assets/images/learn-machine-learning.png" alt="Machine Learning">
+        <div class="card-body">
+          <span class="tag">Modelos</span>
+          <h3>Machine Learning</h3>
+          <p>
+            Desde los fundamentos y modelos lineales hasta trees, ensembles,
+            feature engineering, tuning, explainability y deployment.
+          </p>
+          <a href="learn/machine-learning/"><strong>Explorar ruta →</strong></a>
+        </div>
+      </article>
+
+      <article class="learn-card">
+        <img src="assets/images/learn-mathematics-data-science.png" alt="Mathematics for Data Science">
+        <div class="card-body">
+          <span class="tag">Matemáticas</span>
+          <h3>Mathematics for Data Science</h3>
+          <p>
+            Vectors, matrices, linear systems, projections, eigenvalues, PCA, SVD,
+            calculus, gradients y optimization.
+          </p>
+          <a href="learn/mathematics-data-science/"><strong>Explorar ruta →</strong></a>
+        </div>
+      </article>
+
+      <article class="learn-card">
+        <img src="assets/images/learn-deep-learning.png" alt="Deep Learning">
+        <div class="card-body">
+          <span class="tag">Neural Networks</span>
+          <h3>Deep Learning</h3>
+          <p>
+            Tensors, neural networks, backpropagation, optimization, CNNs, RNNs,
+            Attention, Transformers y PyTorch.
+          </p>
+          <a href="learn/deep-learning/"><strong>Explorar ruta →</strong></a>
+        </div>
+      </article>
+
+      <article class="learn-card">
+        <img src="assets/images/learn-sql-python-tools.png" alt="SQL Python and Tools">
+        <div class="card-body">
+          <span class="tag">Herramientas</span>
+          <h3>SQL, Python &amp; Tools</h3>
+          <p>
+            Python, NumPy, pandas, SQL, EDA, visualización, Jupyter,
+            Git/GitHub y workflows reproducibles para Data Science.
+          </p>
+          <a href="learn/sql-python-tools/"><strong>Explorar ruta →</strong></a>
+        </div>
+      </article>
+
+    </div>
+
+  </div>
+</section>
+
+<section class="section white">
+  <div class="narrow">
+    <div class="eyebrow">Filosofía de enseñanza</div>
+    <h2>Aprender la idea, no solamente la sintaxis.</h2>
+    <p class="lead">
+      El objetivo es avanzar desde la intuición hacia las matemáticas y luego hacia la implementación.
+      Prefiero ejemplos completos, supuestos visibles y explicaciones que permitan reproducir el razonamiento.
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h3>Alfredo Saldana</h3>
+        <p>Data Scientist · Economista · Educador</p>
+        <p>
+          Estudio, exploro y comparto ideas sobre Data Science, Estadística,
+          Machine Learning, Deep Learning e Inteligencia Artificial.
+        </p>
+      </div>
+
+      <div>
+        <h4>Explorar</h4>
+        <a href="projects.html">Proyectos</a>
+        <a href="tutorials.html">Aprender</a>
+        <a href="open-box.html">Open Box</a>
+      </div>
+
+      <div>
+        <h4>Conectar</h4>
+        <a href="https://github.com/alfredosaldana" target="_blank" rel="noopener">GitHub ↗</a>
+        <a href="https://www.linkedin.com/in/asaldanamle/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a href="https://www.youtube.com/@alfredosaldana-ds" target="_blank" rel="noopener">YouTube ↗</a>
+        <a href="contact.html">Contacto</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Alfredo Saldana</span>
+      <span>Construido como un portafolio de aprendizaje y proyectos.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/script.js"></script>
+</body>
+</html>
