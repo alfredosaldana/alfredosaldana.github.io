@@ -19,36 +19,103 @@
 <body>
 
 <header class="site-header">
+
   <div class="container nav-wrap">
 
-    <a class="brand" href="index.html">
-      Alfredo Saldana
-    </a>
+    <!-- BRAND + LANGUAGE -->
+    <div style="display:flex; align-items:center; gap:20px;">
+
+      <a class="brand" href="index.html">
+        Alfredo Saldana
+      </a>
+
+      <div
+        class="lang-switch"
+        style="
+          display:flex;
+          align-items:center;
+          gap:6px;
+          font-weight:700;
+          font-size:0.92rem;
+          white-space:nowrap;
+        "
+      >
+
+        <a
+          href="../index.html"
+          style="
+            color:#111827;
+            text-decoration:none;
+            font-weight:700;
+          "
+        >
+          EN
+        </a>
+
+        <span
+          aria-hidden="true"
+          style="color:#64748b;"
+        >
+          |
+        </span>
+
+        <a
+          href="index.html"
+          aria-current="page"
+          style="
+            color:#2563eb;
+            text-decoration:none;
+            font-weight:800;
+          "
+        >
+          ES
+        </a>
+
+      </div>
+
+    </div>
+
 
     <button class="menu-btn" aria-label="Abrir navegación">
       ☰
     </button>
 
-    <nav class="nav">
-      <a href="index.html" class="active">Inicio</a>
-      <a href="../tutorials.html">Recursos</a>
-      <a href="../projects.html">Proyectos</a>
-      <a href="../open-box.html">Open Box</a>
-      <a href="../about.html">Acerca de</a>
-      <a href="../contact.html">Contacto</a>
 
-      <span class="lang-switch">
-        <a href="../index.html">EN</a>
-        <span aria-hidden="true">|</span>
-        <a href="index.html" class="active">ES</a>
-      </span>
+    <nav class="nav">
+
+      <a href="index.html" class="active">
+        Inicio
+      </a>
+
+      <a href="../tutorials.html">
+        Recursos
+      </a>
+
+      <a href="../projects.html">
+        Proyectos
+      </a>
+
+      <a href="../open-box.html">
+        Open Box
+      </a>
+
+      <a href="../about.html">
+        Acerca de
+      </a>
+
+      <a href="../contact.html">
+        Contacto
+      </a>
+
     </nav>
 
   </div>
+
 </header>
 
 
 <main>
+
 
   <!-- HERO -->
   <section class="hero">
@@ -75,17 +142,25 @@
           mediante explicaciones visuales, proyectos prácticos y guías paso a paso.
         </p>
 
+
         <div class="actions">
 
-          <a class="btn primary" href="../projects.html">
+          <a
+            class="btn primary"
+            href="../projects.html"
+          >
             Explorar Proyectos
           </a>
 
-          <a class="btn secondary" href="../tutorials.html">
+          <a
+            class="btn secondary"
+            href="../tutorials.html"
+          >
             Explorar Recursos
           </a>
 
         </div>
+
 
         <div class="socials">
 
@@ -132,6 +207,7 @@
   </section>
 
 
+
   <!-- TOPIC STRIP -->
   <div class="topic-strip">
 
@@ -146,6 +222,7 @@
     </div>
 
   </div>
+
 
 
   <!-- LEARNING AREAS -->
@@ -167,6 +244,7 @@
 
         </div>
 
+
         <p>
           Explora rutas estructuradas que conectan teoría, intuición,
           matemáticas, código y aplicaciones prácticas en las principales
@@ -176,7 +254,9 @@
       </div>
 
 
+
       <div class="cards-3">
+
 
         <!-- DATA SCIENCE FOUNDATIONS -->
         <article class="topic-card">
@@ -188,18 +268,19 @@
 
           <div class="card-body">
 
-            <h3>
-              Data Science Foundations
-            </h3>
-
             <p>
-              Métricas, validación, thresholds, model evaluation y los
-              fundamentos necesarios para comprender cómo se construyen
-              y evalúan soluciones de Data Science.
+              Métricas, validación, thresholds, model evaluation
+              y los fundamentos necesarios para comprender cómo
+              se construyen y evalúan soluciones de Data Science.
             </p>
 
-            <a href="../learn/data-science-foundations/">
-              <strong>Explorar área →</strong>
+            <a
+              href="../learn/data-science-foundations/"
+              aria-label="Explorar Data Science Foundations"
+            >
+              <strong>
+                Explorar área →
+              </strong>
             </a>
 
           </div>
@@ -207,7 +288,8 @@
         </article>
 
 
-        <!-- STATISTICS -->
+
+        <!-- STATISTICS & PROBABILITY -->
         <article class="topic-card">
 
           <img
@@ -217,23 +299,25 @@
 
           <div class="card-body">
 
-            <h3>
-              Statistics & Probability
-            </h3>
-
             <p>
               Probability, distributions, sampling, statistical inference,
               hypothesis testing y los fundamentos de la incertidumbre
               y la toma de decisiones con datos.
             </p>
 
-            <a href="../learn/statistics-probability/">
-              <strong>Explorar área →</strong>
+            <a
+              href="../learn/statistics-probability/"
+              aria-label="Explorar Statistics and Probability"
+            >
+              <strong>
+                Explorar área →
+              </strong>
             </a>
 
           </div>
 
         </article>
+
 
 
         <!-- MACHINE LEARNING -->
@@ -241,23 +325,24 @@
 
           <img
             src="../assets/images/home-machine-learning.png"
-            alt="Machine Learning"
+            alt="Machine Learning Foundations"
           >
 
           <div class="card-body">
 
-            <h3>
-              Machine Learning
-            </h3>
-
             <p>
               Features, models, training, prediction, validation,
-              generalization y el proceso completo de construir
-              modelos predictivos.
+              generalization y el proceso completo de construir,
+              evaluar e interpretar modelos predictivos.
             </p>
 
-            <a href="../learn/machine-learning/">
-              <strong>Explorar área →</strong>
+            <a
+              href="../learn/machine-learning/"
+              aria-label="Explorar Machine Learning"
+            >
+              <strong>
+                Explorar área →
+              </strong>
             </a>
 
           </div>
@@ -265,7 +350,8 @@
         </article>
 
 
-        <!-- MATHEMATICS -->
+
+        <!-- MATHEMATICS FOR DATA SCIENCE -->
         <article class="topic-card">
 
           <img
@@ -275,22 +361,25 @@
 
           <div class="card-body">
 
-            <h3>
-              Mathematics for Data Science
-            </h3>
-
             <p>
               Vectors, matrices, geometry, eigenvalues, PCA, SVD,
-              calculus y optimization explicados desde los fundamentos.
+              calculus y optimization explicados desde los fundamentos
+              y conectados con aplicaciones de Data Science.
             </p>
 
-            <a href="../learn/mathematics-data-science/">
-              <strong>Explorar área →</strong>
+            <a
+              href="../learn/mathematics-data-science/"
+              aria-label="Explorar Mathematics for Data Science"
+            >
+              <strong>
+                Explorar área →
+              </strong>
             </a>
 
           </div>
 
         </article>
+
 
 
         <!-- DEEP LEARNING -->
@@ -303,18 +392,19 @@
 
           <div class="card-body">
 
-            <h3>
-              Deep Learning
-            </h3>
-
             <p>
               Tensors, neural networks, activation functions,
               backpropagation, optimization, CNNs, RNNs,
               Attention y Transformers.
             </p>
 
-            <a href="../learn/deep-learning/">
-              <strong>Explorar área →</strong>
+            <a
+              href="../learn/deep-learning/"
+              aria-label="Explorar Deep Learning"
+            >
+              <strong>
+                Explorar área →
+              </strong>
             </a>
 
           </div>
@@ -322,7 +412,8 @@
         </article>
 
 
-        <!-- SQL PYTHON TOOLS -->
+
+        <!-- SQL PYTHON & TOOLS -->
         <article class="topic-card">
 
           <img
@@ -332,18 +423,19 @@
 
           <div class="card-body">
 
-            <h3>
-              SQL, Python & Tools
-            </h3>
-
             <p>
               Python, NumPy, pandas, SQL, data cleaning,
               joins, aggregations, visualization, Jupyter,
               Git y reproducible analysis.
             </p>
 
-            <a href="../learn/sql-python-tools/">
-              <strong>Explorar área →</strong>
+            <a
+              href="../learn/sql-python-tools/"
+              aria-label="Explorar SQL Python and Tools"
+            >
+              <strong>
+                Explorar área →
+              </strong>
             </a>
 
           </div>
@@ -353,9 +445,13 @@
       </div>
 
 
+
       <div class="actions">
 
-        <a class="btn secondary" href="../tutorials.html">
+        <a
+          class="btn secondary"
+          href="../tutorials.html"
+        >
           Ver todos los Recursos
         </a>
 
@@ -364,6 +460,7 @@
     </div>
 
   </section>
+
 
 
   <!-- FEATURED PROJECT -->
@@ -395,11 +492,13 @@
           SVD Digit Denoising
         </h3>
 
+
         <p>
           Uso de Singular Value Decomposition (SVD) y low-rank reconstruction
           para recuperar estructura oculta en imágenes de dígitos manuscritos
           contaminadas con ruido.
         </p>
+
 
         <div class="tags">
 
@@ -413,7 +512,10 @@
 
         <div class="actions">
 
-          <a class="btn primary" href="../project-svd.html">
+          <a
+            class="btn primary"
+            href="../project-svd.html"
+          >
             Ver proyecto
           </a>
 
@@ -453,6 +555,7 @@
   </section>
 
 
+
   <!-- SELECTED PROJECTS -->
   <section class="section">
 
@@ -472,14 +575,20 @@
 
         </div>
 
-        <a class="btn secondary" href="../projects.html">
+
+        <a
+          class="btn secondary"
+          href="../projects.html"
+        >
           Ver todos los proyectos
         </a>
 
       </div>
 
 
+
       <div class="cards-3">
+
 
         <!-- LOAN DEFAULT -->
         <article class="project-card">
@@ -501,18 +610,22 @@
 
             <p>
               Aplicación de Machine Learning para estimar riesgo de default,
-              interpretar los factores que influyen en la predicción y apoyar
-              el análisis de riesgo crediticio.
+              interpretar los factores que influyen en la predicción
+              y apoyar el análisis de riesgo crediticio.
             </p>
 
             <div class="tags">
+
               <span>XGBoost</span>
               <span>SHAP</span>
               <span>Streamlit</span>
+
             </div>
 
             <a href="../project-loan-default.html">
-              <strong>Ver proyecto →</strong>
+              <strong>
+                Ver proyecto →
+              </strong>
             </a>
 
           </div>
@@ -520,7 +633,8 @@
         </article>
 
 
-        <!-- CHURN -->
+
+        <!-- CUSTOMER CHURN -->
         <article class="project-card">
 
           <img
@@ -539,21 +653,27 @@
             </h3>
 
             <p>
-              Proyecto de clasificación que analiza qué clientes tienen
-              mayor probabilidad de abandonar el banco y qué variables
-              contribuyen al churn.
+              Proyecto de clasificación que analiza qué clientes
+              tienen mayor probabilidad de abandonar el banco
+              y qué variables contribuyen al churn.
             </p>
 
+
             <div class="tags">
+
               <span>Python</span>
               <span>Random Forest</span>
               <span>Classification</span>
+
             </div>
+
 
             <div class="project-links">
 
               <a href="../project-churn.html">
-                <strong>Ver proyecto →</strong>
+                <strong>
+                  Ver proyecto →
+                </strong>
               </a>
 
               <a
@@ -561,7 +681,9 @@
                 target="_blank"
                 rel="noopener"
               >
-                <strong>GitHub ↗</strong>
+                <strong>
+                  GitHub ↗
+                </strong>
               </a>
 
             </div>
@@ -569,6 +691,7 @@
           </div>
 
         </article>
+
 
 
         <!-- MORTGAGE RISK -->
@@ -590,19 +713,27 @@
             </h3>
 
             <p>
-              Aplicación de Data Science y predictive modeling para
-              comprender patrones asociados con riesgo de crédito
-              hipotecario.
+              Aplicación de Data Science y predictive modeling
+              para comprender patrones asociados con riesgo
+              de crédito hipotecario.
             </p>
 
+
             <div class="tags">
+
               <span>Python</span>
               <span>Risk Modeling</span>
               <span>Machine Learning</span>
+
             </div>
 
+
             <a href="../project-mortgage-risk.html">
-              <strong>Ver proyecto →</strong>
+
+              <strong>
+                Ver proyecto →
+              </strong>
+
             </a>
 
           </div>
@@ -614,6 +745,7 @@
     </div>
 
   </section>
+
 
 
   <!-- FEATURED GUIDES -->
@@ -635,6 +767,7 @@
 
         </div>
 
+
         <p>
           Guías estructuradas para comprender primero la intuición
           y la teoría, trabajar ejemplos paso a paso y finalmente
@@ -644,7 +777,9 @@
       </div>
 
 
+
       <div class="cards-3">
+
 
         <!-- CONFUSION MATRIX -->
         <article class="topic-card">
@@ -668,12 +803,15 @@
             <a
               href="../learn/data-science-foundations/confusion-matrix-es.html"
             >
-              <strong>Leer guía →</strong>
+              <strong>
+                Leer guía →
+              </strong>
             </a>
 
           </div>
 
         </article>
+
 
 
         <!-- PROBABILITY -->
@@ -702,6 +840,7 @@
           </div>
 
         </article>
+
 
 
         <!-- GRADIENT DESCENT -->
@@ -737,6 +876,7 @@
   </section>
 
 
+
   <!-- ABOUT -->
   <section class="section">
 
@@ -746,6 +886,7 @@
         src="../assets/images/alfredo-hero.jpg"
         alt="Alfredo Saldana"
       >
+
 
       <div>
 
@@ -758,13 +899,16 @@
         </h2>
 
         <p class="lead">
-          Mi trayectoria académica combina Economía, Data Science y
-          Artificial Intelligence. Utilizo este sitio para documentar
+          Mi trayectoria académica combina Economía, Data Science
+          y Artificial Intelligence. Utilizo este sitio para documentar
           lo que aprendo y transformar ideas complejas en explicaciones
           claras, ejemplos visuales y proyectos prácticos.
         </p>
 
-        <a class="btn secondary" href="../about.html">
+        <a
+          class="btn secondary"
+          href="../about.html"
+        >
           Más sobre mí
         </a>
 
@@ -777,12 +921,14 @@
 </main>
 
 
+
 <!-- FOOTER -->
 <footer class="footer">
 
   <div class="container">
 
     <div class="footer-grid">
+
 
       <div>
 
@@ -796,11 +942,12 @@
 
         <p>
           Estudio, exploro y comparto ideas sobre Data Science,
-          Statistics, Machine Learning, Deep Learning y
-          Artificial Intelligence.
+          Statistics, Machine Learning, Deep Learning
+          y Artificial Intelligence.
         </p>
 
       </div>
+
 
 
       <div>
@@ -822,6 +969,7 @@
         </a>
 
       </div>
+
 
 
       <div>
@@ -861,6 +1009,7 @@
       </div>
 
     </div>
+
 
 
     <div class="footer-bottom">
