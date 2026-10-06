@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Comprender la Matriz de Confusión desde los primeros principios: TP, TN, FP, FN, exactitud, precisión, recall, especificidad, F1 y umbrales." name="description"/>
+<title>Understanding the Confusion Matrix — Alfredo Saldana</title>
+<link href="../../../assets/images/favicon.svg" rel="icon"/>
+<link href="../../../assets/css/style.css" rel="stylesheet"/>
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'}};
+</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+/* Presentación académica clara alineada con el resto del sitio web de Alfredo Saldana */
+html,body{background:#ffffff;color:#23364d}
+main{background:#ffffff}
+.page-hero{background:#f7faff}
+.article{background:#ffffff}
+.narrow{max-width:980px;margin:0 auto;padding:0 20px}
+.article h2{margin-top:0;color:#0b1f3a}
+.article h3{color:#17385f}
+.article p,.article li{font-size:1.03rem;line-height:1.78}
+.lesson-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.lesson-meta span{border:1px solid #d8e2ef;background:#fff;border-radius:999px;padding:7px 12px;font-size:.88rem;color:#42566f}
+.key-idea,.warning,.worked,.lesson-card,.quick-check{margin:22px 0;padding:20px;border-radius:16px}.key-idea{background:#eef6ff;border:1px solid #cfe2fb}.warning{background:#fff8ea;border:1px solid #ead7a5}.worked{background:#f5fbf7;border:1px solid #cfe7d4}.lesson-card,.quick-check{background:#fbfdff;border:1px solid #dce6f2}.lesson-card h3{margin-top:0}
+.equation{margin:18px 0;padding:18px 20px;border-left:4px solid #2457a7;border-radius:10px;background:#f3f7fc;overflow-x:auto}.equation p{margin:8px 0 0}.section-rule{height:1px;background:#e7edf4;margin:42px 0}
+.lesson-table{width:100%;border-collapse:collapse;margin:22px 0;font-size:.97rem}.lesson-table th,.lesson-table td{padding:12px 13px;border:1px solid #dfe6ee;vertical-align:top;text-align:left}.lesson-table th{background:#f2f6fb;color:#13233b}
+.metric-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:22px 0}.metric-card{padding:20px;border:1px solid #dce6f2;border-radius:16px;background:#fff}.metric-card h3{margin-top:0}.metric-card .equation{margin:12px 0}
+.cm-wrap{margin:28px auto;max-width:760px}.cm-axis-top{text-align:center;font-weight:800;margin:0 0 10px 130px;letter-spacing:.04em}.cm-layout{display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:center}.cm-axis-side{font-weight:800;text-align:center;writing-mode:vertical-rl;transform:rotate(180deg);justify-self:center;letter-spacing:.04em}.cm-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.cm-col-labels{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,1fr);gap:12px;text-align:center;font-weight:700;color:#42566f;margin-bottom:-4px}.cm-cell{min-height:175px;border-radius:18px;padding:22px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:1px solid #d8e2ef}.cm-cell strong{font-size:2rem;line-height:1;margin-bottom:10px}.cm-cell .name{font-weight:800;font-size:1.06rem;margin-bottom:6px}.cm-cell .desc{font-size:.92rem;line-height:1.45}.cm-good{background:#eef9f2;border-color:#bfe0c8}.cm-error{background:#fff4f1;border-color:#efc9c0}.cm-count{display:inline-flex;align-items:center;justify-content:center;min-width:46px;height:46px;border-radius:50%;background:#fff;border:1px solid currentColor;margin-top:10px;font-weight:800}
+.memory-strip{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0}.memory-strip div{padding:16px 18px;border-radius:14px;background:#f4f7fb;border:1px solid #dde5ef}.memory-strip strong{display:block;margin-bottom:5px}
+.steps{counter-reset:step;list-style:none;padding:0;margin:22px 0}.steps li{counter-increment:step;position:relative;margin:0 0 14px;padding:16px 18px 16px 58px;border:1px solid #dfe6ee;border-radius:14px;background:#fff}.steps li:before{content:counter(step);position:absolute;left:16px;top:14px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#eaf2fd;color:#1f4e8c;font-weight:800}
+.resource-links{display:flex;flex-wrap:wrap;gap:12px;margin:22px 0}.resource-links a{text-decoration:none}
+@media(max-width:760px){.metric-grid,.memory-strip{grid-template-columns:1fr}.cm-layout{grid-template-columns:38px 1fr;gap:6px}.cm-axis-top{margin-left:44px}.cm-grid{gap:7px}.cm-col-labels{gap:7px;font-size:.84rem}.cm-cell{min-height:150px;padding:14px 8px}.cm-cell strong{font-size:1.5rem}.cm-cell .name{font-size:.92rem}.cm-cell .desc{font-size:.8rem}}
+</style>
+</head>
+<body>
+<header class="site-header"><div class="container nav-wrap"><div style="display:flex;align-items:center;gap:20px;"><a class="brand" href="../../index.html">Alfredo Saldana</a><div class="lang-switch" style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap;"><a href="../../../learn/data-science-foundations/confusion-matrix.html" style="color:#111827;text-decoration:none;font-weight:700;">EN</a><span aria-hidden="true" style="color:#64748b;">|</span><a href="confusion-matrix.html" aria-current="page" style="color:#2563eb;text-decoration:none;font-weight:800;">ES</a></div></div><button aria-label="Abrir navegación" class="menu-btn">☰</button><nav class="nav"><a href="../../index.html">Inicio</a><a class="active" href="../../tutorials.html">Recursos</a><a href="../../projects.html">Proyectos</a><a href="../../open-box.html">Open Box</a><a href="../../about.html">Acerca de</a><a href="../../contact.html">Contacto</a></nav></div></header>
+<main>
+<section class="page-hero"><div class="container"><div class="eyebrow">Machine Learning · Estadística</div><h1>Understanding the Confusion Matrix</h1><p class="lead">Verdaderos Positivos, Verdaderos Negativos, Falsos Positivos y Falsos Negativos — explicados visualmente desde los primeros principios.</p><div class="lesson-meta"><span>Principiante</span><span>Clasificación Binaria</span><span>Evaluación de Modelos</span><span>Precisión y Recall</span></div></div></section>
+<section class="article"><div class="narrow">
+<h2>¿Por qué necesitamos una matriz de confusión?</h2>
+<p>Supongamos que construimos un modelo de machine learning que predice si una observación pertenece a una de dos clases. Algunos ejemplos incluyen si un cliente abandonará la empresa, si una transacción es fraudulenta, si un correo electrónico es spam o si un prestatario experimentará dificultades de pago.</p>
+<div class="key-idea"><strong>“¿Cuántas predicciones hizo correctamente el modelo?”</strong><p>Esa pregunta nos lleva a la <strong>exactitud</strong>, pero la exactitud por sí sola no nos dice qué tipos de errores cometió el modelo. Una matriz de confusión separa las predicciones en cuatro resultados posibles para que podamos comprender esos errores.</p></div>
+<h2>1. Comencemos con Real vs. Predicho</h2>
+<div class="memory-strip"><div><strong>Clase real</strong>Lo que realmente ocurrió en los datos observados.</div><div><strong>Clase pronosticada</strong>Lo que el modelo ajustado predijo que ocurriría.</div></div>
+<p>Para un problema binario, definimos el resultado observado como</p>
+<div class="equation">\[
+Y=\begin{cases}1,&amp;\text{clase positiva},\\[4pt]0,&amp;\text{clase negativa}.\end{cases}
+\]<p>\(Y\) representa el <strong>resultado real observado</strong>.</p></div>
+<p>El modelo produce una clase pronosticada:</p>
+<div class="equation">\[
+\widehat{Y}=\begin{cases}1,&amp;\text{predicción positiva},\\[4pt]0,&amp;\text{predicción negativa}.\end{cases}
+\]<p>\(\widehat{Y}\), que se pronuncia <strong>“Y sombrero,”</strong> es la predicción del modelo.</p></div>
+<div class="warning"><strong>Importante:</strong> “positivo” no significa “bueno” y “negativo” no significa “malo”. Positivo simplemente significa la clase designada como el evento de interés, a menudo codificada como 1.</div>
+<div class="section-rule"></div>
+<h2>2. Los cuatro resultados posibles</h2>
+<p>Para cada observación, el modelo puede estar correcto o equivocado, y puede predecir positivo o negativo. Eso produce exactamente cuatro posibilidades.</p>
+<div class="cm-wrap"><div class="cm-axis-top">CLASE REAL</div><div class="cm-layout"><div class="cm-axis-side">CLASE PRONOSTICADA</div><div class="cm-grid"><div class="cm-col-labels"><div>Real Positivo</div><div>Real Negativo</div></div>
+<div class="cm-cell cm-good"><strong>TP</strong><div class="name">Verdadero Positivo</div><div class="desc">Predicho Positivo<br/>Realmente Positivo<br/><b>Correcto</b></div></div>
+<div class="cm-cell cm-error"><strong>FP</strong><div class="name">Falso Positivo</div><div class="desc">Predicho Positivo<br/>Realmente Negativo<br/><b>Incorrecto</b></div></div>
+<div class="cm-cell cm-error"><strong>FN</strong><div class="name">Falso Negativo</div><div class="desc">Predicho Negativo<br/>Realmente Positivo<br/><b>Incorrecto</b></div></div>
+<div class="cm-cell cm-good"><strong>TN</strong><div class="name">Verdadero Negativo</div><div class="desc">Predicho Negativo<br/>Realmente Negativo<br/><b>Correcto</b></div></div>
+</div></div></div>
+<h3>Una regla sencilla para recordar</h3>
+<div class="memory-strip"><div><strong>VERDADERO o FALSO</strong>Nos dice si la predicción del modelo fue correcta o incorrecta.</div><div><strong>POSITIVO o NEGATIVO</strong>Nos dice qué clase predijo el modelo.</div></div>
+<h2>3. Comprenda cada celda en lenguaje sencillo</h2>
+<div class="lesson-card"><h3>Verdadero Positivo (TP)</h3><p>El modelo predice <strong>positivo</strong>, y la observación es realmente positiva. El modelo detecta correctamente el evento de interés.</p></div>
+<div class="lesson-card"><h3>Verdadero Negativo (TN)</h3><p>El modelo predice <strong>negativo</strong>, y la observación es realmente negativa. El modelo reconoce correctamente la ausencia del evento positivo.</p></div>
+<div class="lesson-card"><h3>Falso Positivo (FP)</h3><p>El modelo predice <strong>positivo</strong>, pero la observación es realmente negativa. Esto suele describirse como una <strong>falsa alarma</strong>.</p></div>
+<div class="lesson-card"><h3>Falso Negativo (FN)</h3><p>El modelo predice <strong>negativo</strong>, pero la observación es realmente positiva. Este es un <strong>caso positivo no detectado</strong>.</p></div>
+<h3>Lea los nombres de derecha a izquierda</h3>
+<p>Un truco útil para principiantes es interpretar primero la <strong>segunda palabra</strong>. La palabra <em>Positivo</em> o <em>Negativo</em> le indica lo que predijo el modelo. Luego, la palabra <em>Verdadero</em> o <em>Falso</em> le indica si esa predicción fue correcta.</p>
+<table class="lesson-table">
+<thead><tr><th>Nombre</th><th>Lo que predijo el modelo</th><th>¿Fue correcto?</th><th>Clase real</th></tr></thead>
+<tbody>
+<tr><td><strong>Verdadero Positivo</strong></td><td>Positivo</td><td>Sí</td><td>Positivo</td></tr>
+<tr><td><strong>Falso Positivo</strong></td><td>Positivo</td><td>No</td><td>Negativo</td></tr>
+<tr><td><strong>Verdadero Negativo</strong></td><td>Negativo</td><td>Sí</td><td>Negativo</td></tr>
+<tr><td><strong>Falso Negativo</strong></td><td>Negativo</td><td>No</td><td>Positivo</td></tr>
+</tbody>
+</table>
+<div class="worked"><strong>Mini-ejemplo:</strong> supongamos que “positivo” significa abandono del cliente. Si el modelo predice que María abandonará y María realmente abandona, esa observación es un <strong>Verdadero Positivo</strong>. Si el modelo predice que David abandonará pero David permanece, eso es un <strong>Falso Positivo</strong>. Si el modelo predice que Ana permanecerá pero Ana realmente abandona, eso es un <strong>Falso Negativo</strong>.</div>
+<div class="section-rule"></div>
+<h2>4. Construya una matriz de confusión a partir de datos</h2>
+<p>Supongamos que evaluamos un clasificador con <strong>100 observaciones</strong>. En realidad, 20 son positivas y 80 son negativas.</p>
+<div class="equation">\[20+80=100\]</div>
+<p>De los 20 positivos reales, el modelo identifica correctamente 15 y no detecta 5:</p>
+<div class="equation">\[TP=15,\qquad FN=5\]<p>Comprobación de coherencia: \(TP+FN=15+5=20\).</p></div>
+<p>De los 80 negativos reales, el modelo identifica correctamente 70 y clasifica incorrectamente 10 como positivos:</p>
+<div class="equation">\[TN=70,\qquad FP=10\]<p>Comprobación de coherencia: \(TN+FP=70+10=80\).</p></div>
+<div class="cm-wrap"><div class="cm-axis-top">CLASE REAL</div><div class="cm-layout"><div class="cm-axis-side">CLASE PRONOSTICADA</div><div class="cm-grid"><div class="cm-col-labels"><div>Real Positivo</div><div>Real Negativo</div></div>
+<div class="cm-cell cm-good"><strong>TP</strong><div class="name">Verdadero Positivo</div><div class="cm-count">15</div></div>
+<div class="cm-cell cm-error"><strong>FP</strong><div class="name">Falso Positivo</div><div class="cm-count">10</div></div>
+<div class="cm-cell cm-error"><strong>FN</strong><div class="name">Falso Negativo</div><div class="cm-count">5</div></div>
+<div class="cm-cell cm-good"><strong>TN</strong><div class="name">Verdadero Negativo</div><div class="cm-count">70</div></div>
+</div></div></div>
+<div class="equation">\[TP+TN+FP+FN=15+70+10+5=100\]</div>
+<h3>Dos direcciones diferentes a través de la matriz</h3>
+<p>Las filas y columnas de la matriz de confusión responden preguntas diferentes. Esta distinción es la clave para comprender por qué <strong>precisión</strong> y <strong>recall</strong> son diferentes.</p>
+<div class="memory-strip">
+<div><strong>Start from predicción positivas</strong>Hay \(TP+FP=15+10=25\) observaciones que el modelo clasificó como positivas. Este es el denominador utilizado por la <strong>precisión</strong>.</div>
+<div><strong>Comience desde los positivos reales</strong>Hay \(TP+FN=15+5=20\) observaciones que realmente son positivas. Este es el denominador utilizado por el <strong>recall</strong>.</div>
+</div>
+<p>Observe que el numerador es el mismo en ambos casos—\(TP=15\)—pero el denominador cambia porque la pregunta cambia.</p>
+<div class="section-rule"></div>
+<h2>5. Derive las métricas de evaluación</h2>
+<p>En lugar de memorizar fórmulas, primero pregunte <strong>qué pregunta responde cada métrica</strong>.</p>
+<div class="metric-grid">
+<div class="metric-card"><h3>Exactitud</h3><p>¿Con qué frecuencia fue correcto el clasificador en general?</p><div class="equation">\[\mathrm{Exactitud}=\frac{TP+TN}{TP+TN+FP+FN}\]</div><div class="equation">\[\frac{15+70}{100}=\boxed{85\%}\]</div></div>
+<div class="metric-card"><h3>Precisión</h3><p>De todo lo predicho como positivo, ¿cuántos eran realmente positivos?</p><div class="equation">\[\mathrm{Precisión}=\frac{TP}{TP+FP}\]</div><div class="equation">\[\frac{15}{15+10}=\boxed{60\%}\]</div></div>
+<div class="metric-card"><h3>Recall / Sensibilidad</h3><p>De todos los positivos reales, ¿cuántos encontró el modelo?</p><div class="equation">\[\mathrm{Recall}=\frac{TP}{TP+FN}\]</div><div class="equation">\[\frac{15}{15+5}=\boxed{75\%}\]</div></div>
+<div class="metric-card"><h3>Especificidad</h3><p>De todos los negativos reales, ¿cuántos identificó correctamente el modelo?</p><div class="equation">\[\mathrm{Especificidad}=\frac{TN}{TN+FP}\]</div><div class="equation">\[\frac{70}{70+10}=\boxed{87.5\%}\]</div></div>
+</div>
+<h3>Puntuación F1 — equilibrando precisión y recall</h3>
+<div class="equation">\[
+F_1=2\frac{\mathrm{Precisión}\cdot\mathrm{Recall}}{\mathrm{Precisión}+\mathrm{Recall}}
+\]</div>
+<p>Con precisión \(=0.60\) y recall \(=0.75\):</p>
+<div class="equation">\[
+F_1=2\frac{(0.60)(0.75)}{0.60+0.75}=\frac{0.90}{1.35}\approx0.667=\boxed{66.7\%}
+\]</div>
+<table class="lesson-table"><thead><tr><th>Métrica</th><th>Pregunta que responde</th><th>Resultado</th></tr></thead><tbody>
+<tr><td><strong>Exactitud</strong></td><td>¿Con qué frecuencia fue correcto el clasificador en general?</td><td><strong>85%</strong></td></tr>
+<tr><td><strong>Precisión</strong></td><td>De los positivos predichos, ¿cuántos eran realmente positivos?</td><td><strong>60%</strong></td></tr>
+<tr><td><strong>Recall</strong></td><td>De los positivos reales, ¿cuántos encontramos?</td><td><strong>75%</strong></td></tr>
+<tr><td><strong>Especificidad</strong></td><td>De los negativos reales, ¿cuántos identificamos correctamente?</td><td><strong>87.5%</strong></td></tr>
+<tr><td><strong>Puntuación F1</strong></td><td>¿Qué tan bien están equilibrados la precisión y el recall?</td><td><strong>66.7%</strong></td></tr>
+</tbody></table>
+<div class="key-idea"><strong>No existe una única “métrica de la matriz de confusión”.</strong> Cada métrica responde una pregunta diferente. Qué métrica importa más depende del problema y de las consecuencias de los diferentes errores.</div>
+<h3>Precisión y recall lado a lado</h3>
+<p>Esta es una de las distinciones más importantes en clasificación:</p>
+<div class="metric-grid">
+<div class="metric-card"><h3>La precisión observa las predicciones</h3><p>El modelo predijo positivo 25 veces. De esas 25 predicciones positivas, 15 fueron correctas.</p><div class="equation">\[\frac{15}{25}=0.60\]</div><p><strong>Interpretación:</strong> cuando el modelo dice “positivo”, acierta el 60% de las veces en este ejemplo.</p></div>
+<div class="metric-card"><h3>El recall observa la realidad</h3><p>Había 20 observaciones realmente positivas. El modelo encontró correctamente 15 de ellas.</p><div class="equation">\[\frac{15}{20}=0.75\]</div><p><strong>Interpretación:</strong> el modelo detecta el 75% de los casos positivos que realmente existen.</p></div>
+</div>
+<h3>Dos tasas adicionales que encontrará con frecuencia</h3>
+<p>Las mismas cuatro celdas también producen la <strong>Tasa de Falsos Positivos (FPR)</strong> y <strong>Tasa de Falsos Negativos (FNR)</strong>.</p>
+<div class="metric-grid">
+<div class="metric-card"><h3>Tasa de Falsos Positivos</h3><div class="equation">\[\mathrm{FPR}=\frac{FP}{FP+TN}=\frac{10}{80}=12.5\%\]</div><p>Entre los negativos reales, el 12.5% fue clasificado incorrectamente como positivo. Observe que \(\mathrm{FPR}=1-\mathrm{Especificidad}\).</p></div>
+<div class="metric-card"><h3>Tasa de Falsos Negativos</h3><div class="equation">\[\mathrm{FNR}=\frac{FN}{FN+TP}=\frac{5}{20}=25\%\]</div><p>Entre los positivos reales, no se detectó el 25%. Observe que \(\mathrm{FNR}=1-\mathrm{Recall}\).</p></div>
+</div>
+<div class="section-rule"></div>
+<h2>6. Por qué la exactitud puede ser engañosa</h2>
+<p>Supongamos que tenemos 1,000 observaciones: 950 son negativas y solo 50 son positivas. Imagine un clasificador inútil que predice <strong>negativo para todos</strong>.</p>
+<table class="lesson-table"><thead><tr><th>Resultado</th><th>Cantidad</th></tr></thead><tbody><tr><td>TP</td><td>0</td></tr><tr><td>TN</td><td>950</td></tr><tr><td>FP</td><td>0</td></tr><tr><td>FN</td><td>50</td></tr></tbody></table>
+<div class="equation">\[\mathrm{Exactitud}=\frac{950}{1000}=\boxed{95\%}\]</div>
+<p>Pero el recall es</p>
+<div class="equation">\[\mathrm{Recall}=\frac{0}{0+50}=\boxed{0\%}\]</div>
+<div class="warning"><strong>La lección:</strong> Una exactitud del 95% no significa necesariamente que tengamos un clasificador útil. Con clases desbalanceadas, un modelo puede lograr una alta exactitud simplemente prediciendo la clase mayoritaria.</div>
+<div class="section-rule"></div>
+<h2>7. Falso Positivo vs. Falso Negativo: ¿cuál es peor?</h2>
+<p>No existe una respuesta universal. La importancia de cada error depende de la aplicación y de cómo se utilizará la predicción.</p>
+<table class="lesson-table"><thead><tr><th>Aplicación</th><th>Clase positiva</th><th>Ejemplo de error</th></tr></thead><tbody>
+<tr><td>Detección de fraude</td><td>Fraude</td><td>Un falso negativo significa que había fraude, pero el modelo no lo detectó.</td></tr>
+<tr><td>Filtrado de spam</td><td>Spam</td><td>Un falso positivo puede enviar un correo legítimo a la carpeta de spam.</td></tr>
+<tr><td>Abandono de clientes</td><td>Abandono</td><td>Un falso negativo significa que se predijo que permanecería un cliente que en realidad abandonó.</td></tr>
+<tr><td>Modelado de riesgo crediticio</td><td>Evento de riesgo definido</td><td>Los falsos positivos y los falsos negativos tienen consecuencias diferentes según el proceso de decisión.</td></tr>
+</tbody></table>
+<div class="key-idea"><strong>La matriz de confusión es matemática; el costo de cada error depende del contexto.</strong> La matriz nos dice qué ocurrió. El conocimiento del dominio nos dice cuánto importa cada tipo de error.</div>
+<div class="section-rule"></div>
+<h2>8. ¿De dónde proviene la matriz de confusión?</h2>
+<p>Muchos clasificadores producen primero una probabilidad estimada para la clase positiva:</p>
+<div class="equation">\[
+\widehat{p}(\mathbf{x})=\widehat{P}\!\left(Y=1\mid\mathbf{X}=\mathbf{x}\right)
+\]</div>
+<p>Supongamos que el modelo produce \(\widehat{p}(\mathbf{x})=0.72\). Para convertir esa probabilidad en una clase, elija un umbral \(t\):</p>
+<div class="equation">\[
+\widehat{Y}
+=
+\begin{cases}
+1, &amp; \widehat{p}(\mathbf{x}) \ge t,\\[6pt]
+0, &amp; \widehat{p}(\mathbf{x}) < t.
+\end{cases}
+\]</div>
+<p>Si \(t=0.50\), entonces \(0.72\ge0.50\), por lo que la observación se clasifica como positiva.</p>
+<h3>Cambie el umbral → cambia la matriz de confusión</h3>
+<p>Reducir el umbral generalmente hace que más observaciones se clasifiquen como positivas. Esto suele aumentar el recall porque se detectan más positivos reales, pero también puede crear más falsos positivos y reducir la precisión. Elevar el umbral generalmente hace que el clasificador sea más selectivo.</p>
+<div class="key-idea"><strong>Conexión importante:</strong> TP, TN, FP y FN no son necesariamente propiedades fijas de un modelo probabilístico. Dependen del umbral de clasificación utilizado para convertir probabilidades en predicciones de clase.</div>
+<h3>Un ejemplo numérico de umbral</h3>
+<p>Supongamos que tres observaciones reciben las siguientes probabilidades predichas:</p>
+<table class="lesson-table">
+<thead><tr><th>Observación</th><th>Probabilidad predicha</th><th>Predicción si \(t=0.50\)</th><th>Predicción si \(t=0.30\)</th></tr></thead>
+<tbody>
+<tr><td>A</td><td>0.72</td><td>Positivo</td><td>Positivo</td></tr>
+<tr><td>B</td><td>0.44</td><td>Negativo</td><td>Positivo</td></tr>
+<tr><td>C</td><td>0.18</td><td>Negativo</td><td>Negativo</td></tr>
+</tbody>
+</table>
+<p>La observación B no cambió su puntuación del modelo: permaneció en 0.44. Lo que cambió fue la <strong>regla de decisión</strong>. Con un umbral de 0.50, 0.44 se clasifica como negativo; con un umbral de 0.30, la misma observación se clasifica como positiva.</p>
+<p>Por eso, cambiar el umbral puede cambiar TP, FP, TN y FN y, por lo tanto, cambiar la precisión, el recall, la especificidad y otras métricas dependientes del umbral.</p>
+<h3>Los umbrales crean compensaciones</h3>
+<table class="lesson-table">
+<thead><tr><th>Cambio del umbral</th><th>Efecto típico</th><th>Por qué</th></tr></thead>
+<tbody>
+<tr><td>Reducir el umbral</td><td>Más positivos predichos</td><td>El modelo requiere una probabilidad menor para asignar la clase positiva.</td></tr>
+<tr><td>Reducir el umbral</td><td>El recall suele aumentar</td><td>Se pueden capturar más positivos reales.</td></tr>
+<tr><td>Reducir el umbral</td><td>Los falsos positivos pueden aumentar</td><td>Más negativos reales también pueden ser etiquetados como positivos.</td></tr>
+<tr><td>Elevar el umbral</td><td>Menos positivos predichos</td><td>El modelo se vuelve más selectivo antes de asignar la clase positiva.</td></tr>
+</tbody>
+</table>
+<div class="warning"><strong>Matiz importante:</strong> estos son efectos direccionales típicos, no una garantía de que cada métrica cambie en la misma magnitud. El resultado exacto depende de la distribución de las puntuaciones del modelo y de los datos.</div>
+<div class="section-rule"></div>
+<h2>9. Errores comunes que debe evitar</h2>
+<ol class="steps">
+<li><strong>Pensar que “positivo” significa bueno.</strong> Positivo simplemente identifica la clase de interés.</li>
+<li><strong>Confundir FP y FN.</strong> La segunda palabra indica la clase pronosticada; Verdadero o Falso indica si esa predicción fue correcta.</li>
+<li><strong>Mirar únicamente la exactitud.</strong> La exactitud puede ocultar un rendimiento deficiente en la clase minoritaria.</li>
+<li><strong>Tratar la precisión y el recall como si fueran intercambiables.</strong> La precisión parte de los positivos predichos; el recall parte de los positivos reales.</li>
+<li><strong>Olvidar el umbral.</strong> Cambiar el umbral puede cambiar cada celda de la matriz de confusión.</li>
+</ol>
+<div class="section-rule"></div>
+<h2>10. Comprobación rápida de conocimientos</h2>
+<div class="quick-check"><ol>
+<li>Un modelo predice positivo, pero la clase real es negativa. ¿Qué celda es esta?</li>
+<li>Un modelo predice negativo y la clase real es negativa. ¿Qué celda es esta?</li>
+<li>¿Qué métrica pregunta: “De todos los positivos reales, cuántos encontramos?”</li>
+<li>¿Qué métrica pregunta: “De todos los positivos predichos, cuántos eran realmente positivos?”</li>
+<li>¿Puede un clasificador tener una alta exactitud y aun así no identificar la clase positiva?</li>
+</ol>
+<details><summary><strong>Mostrar respuestas</strong></summary><p>1. Falso Positivo (FP)<br/>2. Verdadero Negativo (TN)<br/>3. Recall (Sensibilidad)<br/>4. Precisión<br/>5. Sí, especialmente con clases fuertemente desbalanceadas.</p></details></div>
+<div class="section-rule"></div>
+<h2>11. Glosario de referencia rápida</h2>
+<table class="lesson-table">
+<thead><tr><th>Término</th><th>Significado</th></tr></thead>
+<tbody>
+<tr><td><strong>TP</strong></td><td>Verdadero Positivo — predicho positivo y realmente positivo.</td></tr>
+<tr><td><strong>TN</strong></td><td>Verdadero Negativo — predicho negativo y realmente negativo.</td></tr>
+<tr><td><strong>FP</strong></td><td>Falso Positivo — predicho positivo pero realmente negativo.</td></tr>
+<tr><td><strong>FN</strong></td><td>Falso Negativo — predicho negativo pero realmente positivo.</td></tr>
+<tr><td><strong>Exactitud</strong></td><td>Fracción de todas las observaciones clasificadas correctamente.</td></tr>
+<tr><td><strong>Precisión</strong></td><td>Fracción de los positivos predichos que realmente son positivos.</td></tr>
+<tr><td><strong>Recall / Sensibilidad / TPR</strong></td><td>Fracción de los positivos reales que se detectan correctamente.</td></tr>
+<tr><td><strong>Especificidad / TNR</strong></td><td>Fracción de los negativos reales que se detectan correctamente.</td></tr>
+<tr><td><strong>Puntuación F1</strong></td><td>Media armónica de la precisión y el recall.</td></tr>
+<tr><td><strong>Umbral</strong></td><td>Punto de corte de decisión utilizado para convertir una puntuación o probabilidad en una etiqueta de clase.</td></tr>
+</tbody>
+</table>
+<h3>¿Qué debería aprender a continuación?</h3>
+<p>La matriz de confusión es una base fundamental. Una vez que estas cuatro celdas resulten intuitivas, los siguientes temas naturales son <strong>precisión versus recall</strong>, <strong>desbalance de clases</strong>, <strong>umbrales de clasificación</strong>, <strong>curvas ROC</strong>, <strong>AUC</strong>, y <strong>calibración de probabilidades</strong>.</p>
+<div class="section-rule"></div>
+<h2>Conclusión final</h2>
+<p>La matriz de confusión es más que una tabla \(2\times2\). Es la base para comprender <strong>cómo un modelo de clasificación acierta y cómo falla</strong>.</p>
+<div class="key-idea"><p>En lugar de preguntar solamente <strong>“¿Qué tan exacto es mi modelo?”</strong>, pregunte:</p><p><strong>¿Qué hizo correctamente? ¿Qué hizo incorrectamente? ¿Qué errores importan? ¿Y cómo cambia esos errores al modificar el umbral de decisión?</strong></p></div>
+<p>Una vez que se comprenden TP, TN, FP y FN, la precisión, el recall, la especificidad y F1 dejan de ser fórmulas para memorizar. Se convierten en respuestas naturales a diferentes preguntas sobre el comportamiento del modelo.</p>
+<div class="section-rule"></div>
+<h2>Vea el concepto en la práctica</h2>
+<p>Explore cómo aparecen la clasificación, el desbalance de clases, la estimación de probabilidades y la evaluación de modelos en el proyecto Loan Default Predictor.</p>
+<div class="resource-links"><a class="btn primary" href="../../project-loan-default.html">Explorar Loan Default Predictor →</a><a class="btn" href="https://github.com/alfredosaldana/Loan-Default-Predictor" rel="noopener noreferrer" target="_blank">Repositorio de GitHub ↗</a></div>
+<p><a href="index.html"><strong>← Volver a Data Science Foundations</strong></a></p>
+</div></section>
+</main>
+<footer class="footer"><div class="container"><div class="footer-grid"><div><h3>Alfredo Saldana</h3><p>Data Scientist · Economista · Educador</p><p>Estudio, exploro y comparto ideas sobre Data Science, Estadística, Machine Learning, Deep Learning e Inteligencia Artificial.</p></div><div><h4>Explorar</h4><a href="../../projects.html">Proyectos</a><a href="../../tutorials.html">Recursos</a><a href="../../open-box.html">Open Box</a></div><div><h4>Conectar</h4><a href="https://github.com/alfredosaldana" rel="noopener" target="_blank">GitHub ↗</a><a href="https://www.linkedin.com/in/asaldanamle/" rel="noopener" target="_blank">LinkedIn ↗</a><a href="https://www.youtube.com/@alfredosaldana-ds" rel="noopener" target="_blank">YouTube ↗</a><a href="../../contact.html">Contacto</a></div></div><div class="footer-bottom"><span>© 2026 Alfredo Saldana</span></div></div></footer>
+<script src="../../../assets/js/script.js"></script>
+</body>
+</html>
