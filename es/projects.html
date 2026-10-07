@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Proyectos de Alfredo Saldana en Data Science, Machine Learning, Risk Modeling, Mathematics y Deep Learning.">
+<title>Proyectos — Alfredo Saldana</title>
+<link rel="icon" href="../assets/images/favicon.svg">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav-wrap">
+
+    <div style="display:flex;align-items:center;gap:20px;">
+      <a class="brand" href="index.html">Alfredo Saldana</a>
+
+      <div class="lang-switch"
+           style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap;">
+        <a href="../projects.html"
+           style="color:#111827;text-decoration:none;font-weight:700;">EN</a>
+        <span aria-hidden="true" style="color:#64748b;">|</span>
+        <a href="projects.html"
+           aria-current="page"
+           style="color:#2563eb;text-decoration:none;font-weight:800;">ES</a>
+      </div>
+    </div>
+
+    <button class="menu-btn" aria-label="Abrir navegación">☰</button>
+
+    <nav class="nav">
+      <a href="index.html">Inicio</a>
+      <a href="tutorials.html">Recursos</a>
+      <a href="projects.html" class="active">Proyectos</a>
+      <a href="../open-box.html">Open Box</a>
+      <a href="../about.html">Acerca de</a>
+      <a href="../contact.html">Contacto</a>
+    </nav>
+
+  </div>
+</header>
+
+<main>
+
+<section class="page-hero">
+  <div class="container">
+
+    <div class="eyebrow">Portfolio</div>
+
+    <h1>Proyectos</h1>
+
+    <p class="lead">
+      Trabajo aplicado en Data Science, Machine Learning, Statistics,
+      Risk Modeling, Deep Learning y Mathematical Computing.
+    </p>
+
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">Todos</button>
+      <button class="filter-btn" data-filter="ml">Machine Learning</button>
+      <button class="filter-btn" data-filter="risk">Finance & Risk</button>
+      <button class="filter-btn" data-filter="math">Mathematics</button>
+      <button class="filter-btn" data-filter="deep">Deep Learning</button>
+    </div>
+
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container">
+
+    <div class="project-list">
+
+      <article class="project-card" data-category="math ml">
+
+        <img src="../assets/images/svd.svg" alt="SVD Digit Denoising">
+
+        <div class="card-body">
+
+          <span class="status">Completado</span>
+
+          <h3>SVD Digit Denoising</h3>
+
+          <p>
+            Reconstrucción low-rank de imágenes de dígitos manuscritos con ruido
+            utilizando Singular Value Decomposition.
+          </p>
+
+          <div class="tags">
+            <span>Python</span>
+            <span>SVD</span>
+            <span>Linear Algebra</span>
+          </div>
+
+          <div class="project-links">
+            <a href="../project-svd.html">
+              <strong>Ver proyecto →</strong>
+            </a>
+
+            <a href="https://github.com/alfredosaldana/svd-digit-denoising"
+               target="_blank"
+               rel="noopener noreferrer">
+              <strong>GitHub ↗</strong>
+            </a>
+          </div>
+
+        </div>
+      </article>
+
+
+      <article class="project-card" data-category="ml risk">
+
+        <img src="../assets/images/churn.svg" alt="Bank Customer Churn Prediction">
+
+        <div class="card-body">
+
+          <span class="status">Completado</span>
+
+          <h3>Bank Customer Churn Prediction</h3>
+
+          <p>
+            Modelos de clasificación para identificar clientes con mayor riesgo
+            de abandonar el banco y analizar las variables asociadas con churn.
+          </p>
+
+          <div class="tags">
+            <span>Python</span>
+            <span>Scikit-learn</span>
+            <span>Classification</span>
+          </div>
+
+          <div class="project-links">
+            <a href="../project-churn.html">
+              <strong>Ver proyecto →</strong>
+            </a>
+
+            <a href="https://github.com/alfredosaldana/Bank-Customer-Churn-Prediction"
+               target="_blank"
+               rel="noopener">
+              <strong>GitHub ↗</strong>
+            </a>
+          </div>
+
+        </div>
+      </article>
+
+
+      <article class="project-card" data-category="ml risk">
+
+        <img src="../assets/images/loan-default.png" alt="Loan Default Predictor">
+
+        <div class="card-body">
+
+          <span class="status">Proyecto educativo</span>
+
+          <h3>Loan Default Predictor</h3>
+
+          <p>
+            Modelado de riesgo crediticio con el dataset Home Credit,
+            incluyendo XGBoost, SHAP explainability y una aplicación en Streamlit.
+          </p>
+
+          <div class="tags">
+            <span>Python</span>
+            <span>XGBoost</span>
+            <span>SHAP</span>
+          </div>
+
+          <div class="project-links">
+            <a href="../project-loan-default.html">
+              <strong>Ver proyecto →</strong>
+            </a>
+          </div>
+
+        </div>
+      </article>
+
+
+      <article class="project-card" data-category="ml risk">
+
+        <img src="../assets/images/mortgage.svg" alt="Mortgage Risk Prediction">
+
+        <div class="card-body">
+
+          <span class="status">En desarrollo</span>
+
+          <h3>Mortgage Risk Prediction</h3>
+
+          <p>
+            Predictive modeling enfocado en patrones asociados con
+            mortgage credit risk.
+          </p>
+
+          <div class="tags">
+            <span>Python</span>
+            <span>Risk Modeling</span>
+          </div>
+
+          <a href="../project-mortgage-risk.html">
+            <strong>Ver proyecto →</strong>
+          </a>
+
+        </div>
+      </article>
+
+
+      <article class="project-card" data-category="ml risk">
+
+        <div class="card-body">
+
+          <span class="status">Proyecto</span>
+
+          <h3>Credit Scoring Model</h3>
+
+          <p>
+            Exploración de enfoques predictivos para credit-risk assessment
+            y clasificación de borrowers.
+          </p>
+
+          <div class="tags">
+            <span>Risk</span>
+            <span>Classification</span>
+          </div>
+
+        </div>
+      </article>
+
+
+      <article class="project-card" data-category="ml">
+
+        <div class="card-body">
+
+          <span class="status">Proyecto</span>
+
+          <h3>House Price Predictor</h3>
+
+          <p>
+            Modelado de regresión aplicado a valores de propiedades residenciales
+            y variables del mercado de vivienda.
+          </p>
+
+          <div class="tags">
+            <span>Regression</span>
+            <span>Python</span>
+          </div>
+
+        </div>
+      </article>
+
+
+      <article class="project-card" data-category="deep math">
+
+        <img src="../assets/images/ai.svg" alt="Tensors 101 with PyTorch">
+
+        <div class="card-body">
+
+          <span class="status">Proyecto educativo</span>
+
+          <h3>Tensors 101 with PyTorch</h3>
+
+          <p>
+            Introducción estructurada a tensors y a los bloques matemáticos
+            fundamentales utilizados en Deep Learning.
+          </p>
+
+          <div class="tags">
+            <span>PyTorch</span>
+            <span>Deep Learning</span>
+          </div>
+
+          <div class="project-links">
+            <a href="../project-tensors.html">
+              <strong>Ver proyecto →</strong>
+            </a>
+
+            <a href="https://github.com/alfredosaldana/Tensors-101-with-Pytorch"
+               target="_blank"
+               rel="noopener">
+              <strong>GitHub ↗</strong>
+            </a>
+          </div>
+
+        </div>
+      </article>
+
+
+      <article class="project-card" data-category="math">
+
+        <img src="../assets/images/survival.svg" alt="Survival Analysis from First Principles">
+
+        <div class="card-body">
+
+          <span class="status">Próximamente</span>
+
+          <h3>Survival Analysis from First Principles</h3>
+
+          <p>
+            Exploración visual y práctica de censoring, survival functions,
+            hazard functions y Kaplan–Meier estimation.
+          </p>
+
+          <div class="tags">
+            <span>Statistics</span>
+            <span>Probability</span>
+            <span>Python</span>
+          </div>
+
+        </div>
+      </article>
+
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+
+<footer class="footer">
+
+  <div class="container">
+
+    <div class="footer-grid">
+
+      <div>
+        <h3>Alfredo Saldana</h3>
+
+        <p>Data Scientist · Economista · Educador</p>
+
+        <p>
+          Estudio, exploro y comparto ideas sobre Data Science,
+          Statistics, Machine Learning, Deep Learning y Artificial Intelligence.
+        </p>
+      </div>
+
+      <div>
+        <h4>Explorar</h4>
+
+        <a href="projects.html">Proyectos</a>
+        <a href="tutorials.html">Recursos</a>
+        <a href="../open-box.html">Open Box</a>
+      </div>
+
+      <div>
+        <h4>Conectar</h4>
+
+        <a href="https://github.com/alfredosaldana"
+           target="_blank"
+           rel="noopener">GitHub ↗</a>
+
+        <a href="https://www.linkedin.com/in/asaldanamle/"
+           target="_blank"
+           rel="noopener">LinkedIn ↗</a>
+
+        <a href="https://www.youtube.com/@alfredosaldana-ds"
+           target="_blank"
+           rel="noopener">YouTube ↗</a>
+
+        <a href="../contact.html">Contacto</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Alfredo Saldana</span>
+    </div>
+
+  </div>
+
+</footer>
+
+<script src="../assets/js/script.js"></script>
+
+</body>
+</html>
