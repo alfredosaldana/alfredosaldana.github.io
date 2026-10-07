@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Ruta de aprendizaje de Deep Learning por Alfredo Saldana: tensors, neural networks, forward propagation, backpropagation, optimizers, CNNs, RNNs, attention, transformers y PyTorch.">
+<title>Deep Learning — Alfredo Saldana</title>
+<link rel="icon" href="../../../assets/images/favicon.svg">
+<link rel="stylesheet" href="../../../assets/css/style.css">
+
+<style>
+.path-wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.breadcrumb{margin:0 0 18px;font-size:.94rem;color:#6b7b8f}
+.breadcrumb a{color:#245f9e;text-decoration:none;font-weight:700}
+.breadcrumb a:hover{text-decoration:underline}
+.path-intro{display:grid;grid-template-columns:1.12fr .88fr;gap:30px;align-items:center;margin:0 0 36px}
+.path-copy h2{margin:0 0 12px;color:#0b1f3a;font-size:clamp(1.7rem,3vw,2.35rem)}
+.path-copy p{margin:0 0 14px;color:#5e6f83;line-height:1.75;font-size:1.03rem}
+.path-image{width:100%;border-radius:22px;box-shadow:0 16px 38px rgba(18,42,74,.12);border:1px solid #dbe6f2}
+.path-note{margin:18px 0 0;padding:16px 18px;border-radius:15px;background:#eef6ff;border:1px solid #d2e4f7;color:#33506d;line-height:1.65}
+.section-mini{margin:0 0 10px;color:#5a6b7f;font-size:.94rem;line-height:1.65}
+.guide-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:26px}
+.guide-card{--accent:#2f6fb0;position:relative;background:#fff;border:1px solid #dfe8f2;border-radius:18px;padding:24px 20px 20px;box-shadow:0 10px 26px rgba(18,42,74,.07);display:flex;flex-direction:column;min-height:255px;overflow:hidden;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.guide-card::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:var(--accent)}
+.guide-card.group-tensors{--accent:#2563a8}
+.guide-card.group-learning{--accent:#16847a}
+.guide-card.group-stability{--accent:#7253a5}
+.guide-card.group-architectures{--accent:#c77a22}
+.guide-card.group-production{--accent:#b94d5c}
+.guide-card:hover{transform:translateY(-4px);box-shadow:0 16px 32px rgba(18,42,74,.12);border-color:#cbdced}
+.guide-status{display:inline-flex;align-self:flex-start;padding:5px 9px;border-radius:999px;font-size:.76rem;font-weight:800;letter-spacing:.02em;margin-bottom:11px;background:#f1f5f9;color:#607085}
+.guide-card h3{margin:0 0 10px;color:#0b1f3a;font-size:1.12rem;line-height:1.36}
+.guide-card p{margin:0 0 16px;color:#617287;line-height:1.62;font-size:.95rem}
+.disabled-link{margin-top:auto;color:#94a3b8;font-weight:700}
+.sequence{margin:38px 0 0;padding:22px;background:#fff;border:1px solid #dfe8f2;border-radius:18px}
+.sequence h3{margin:0 0 12px;color:#0b1f3a}
+.sequence p{color:#5f6f82;line-height:1.7;margin:0 0 12px}
+.sequence p:last-child{margin-bottom:0}
+@media(max-width:900px){.path-intro{grid-template-columns:1fr}.guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.guide-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container nav-wrap">
+    <div style="display:flex;align-items:center;gap:20px;">
+      <a class="brand" href="../../index.html">Alfredo Saldana</a>
+      <div class="lang-switch" style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap;">
+        <a href="../../../learn/deep-learning/" style="color:#111827;text-decoration:none;font-weight:700;">EN</a>
+        <span aria-hidden="true" style="color:#64748b;">|</span>
+        <a href="index.html" aria-current="page" style="color:#2563eb;text-decoration:none;font-weight:800;">ES</a>
+      </div>
+    </div>
+    <button class="menu-btn" aria-label="Abrir navegación">☰</button>
+    <nav class="nav">
+      <a href="../../index.html">Inicio</a>
+      <a href="../../tutorials.html" class="active">Recursos</a>
+      <a href="../../projects.html">Proyectos</a>
+      <a href="../../open-box.html">Open Box</a>
+      <a href="../../about.html">Acerca de</a>
+      <a href="../../contact.html">Contacto</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-hero">
+  <div class="container">
+    <div class="eyebrow">Recursos · Deep Learning</div>
+    <h1>Deep Learning</h1>
+    <p class="lead">Una ruta estructurada para comprender Neural Networks desde tensors y neurons hasta CNNs, RNNs, Attention, Transformers y PyTorch.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="path-wrap">
+
+    <div class="breadcrumb">
+      <a href="../../tutorials.html">Recursos</a> → Deep Learning
+    </div>
+
+    <div class="path-intro">
+      <div class="path-copy">
+        <h2>De tensors y neurons a Transformers.</h2>
+
+        <p>
+          Esta ruta comienza con Tensors y las operaciones fundamentales en PyTorch,
+          y después construye Neural Networks desde el Artificial Neuron, Activation Functions
+          y Forward Propagation.
+        </p>
+
+        <p>
+          Luego desarrollamos Loss Functions, Backpropagation, Chain Rule, optimizers,
+          regularization y normalization antes de estudiar CNNs, RNNs, LSTM, GRU,
+          Attention y Transformers.
+        </p>
+
+        <div class="path-note">
+          <strong>Orden de aprendizaje recomendado:</strong>
+          sigue las guías en secuencia. La ruta está diseñada para que la matemática,
+          la intuición y la implementación se construyan juntas.
+        </div>
+      </div>
+
+      <img class="path-image"
+           src="../../../assets/images/learn-deep-learning.png"
+           alt="Ruta de aprendizaje de Deep Learning">
+    </div>
+
+    <div class="eyebrow">Guías</div>
+    <h2 style="margin-top:8px;color:#0b1f3a;">Secuencia de aprendizaje</h2>
+
+    <p class="section-mini">
+      El recorrido sigue una progresión intencional:
+      <strong>
+        Tensors → Neural Networks → Forward Propagation → Loss →
+        Backpropagation → Optimization → CNNs → RNNs/LSTM/GRU →
+        Attention → Transformers → PyTorch → Deployment.
+      </strong>
+    </p>
+
+    <div class="path-note" style="margin-top:20px;">
+      <strong>Guía visual:</strong>
+      azul = tensors y fundamentos de redes,
+      verde = aprendizaje y optimización,
+      violeta = estabilidad y regularization,
+      naranja = arquitecturas modernas,
+      rojo = implementación y lifecycle.
+    </div>
+
+    <div class="guide-grid">
+      <article class="guide-card group-tensors">
+        <span class="guide-status">Planeada · 1</span>
+        <h3>Tensors desde los fundamentos</h3>
+        <p>Comprende qué es un tensor, sus dimensiones, shape, rank y por qué es la estructura básica de datos en Deep Learning.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-tensors">
+        <span class="guide-status">Planeada · 2</span>
+        <h3>Tensor Operations with PyTorch</h3>
+        <p>Aprende a crear, indexar, transformar y operar tensors en PyTorch como base práctica para construir modelos.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-tensors">
+        <span class="guide-status">Planeada · 3</span>
+        <h3>Neural Networks: la idea fundamental</h3>
+        <p>Construye la intuición de una Neural Network como composición de capas que transforma entradas en predicciones.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-tensors">
+        <span class="guide-status">Planeada · 4</span>
+        <h3>The Artificial Neuron desde los fundamentos</h3>
+        <p>Estudia el neuron artificial, sus inputs, weights, bias y activation como unidad básica de una red neuronal.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-tensors">
+        <span class="guide-status">Planeada · 5</span>
+        <h3>Activation Functions: ReLU, Sigmoid, Tanh and Softmax</h3>
+        <p>Compara ReLU, Sigmoid, Tanh y Softmax y comprende por qué las activation functions introducen no linealidad.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-tensors">
+        <span class="guide-status">Planeada · 6</span>
+        <h3>Forward Propagation paso a paso</h3>
+        <p>Sigue paso a paso cómo una entrada atraviesa capas sucesivas hasta producir una predicción.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-learning">
+        <span class="guide-status">Planeada · 7</span>
+        <h3>Loss Functions in Deep Learning</h3>
+        <p>Comprende cómo una Loss Function mide el error y define el objetivo que la red intenta minimizar.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-learning">
+        <span class="guide-status">Planeada · 8</span>
+        <h3>Backpropagation desde los fundamentos</h3>
+        <p>Construye Backpropagation desde la idea de propagar gradientes hacia atrás para actualizar parámetros.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-learning">
+        <span class="guide-status">Planeada · 9</span>
+        <h3>The Chain Rule and Computational Graphs</h3>
+        <p>Relaciona Computational Graphs y Chain Rule para entender matemáticamente cómo se calculan gradientes en una red.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-learning">
+        <span class="guide-status">Planeada · 10</span>
+        <h3>Gradient Descent for Neural Networks</h3>
+        <p>Comprende cómo Gradient Descent utiliza gradientes para ajustar weights y bias en Neural Networks.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-learning">
+        <span class="guide-status">Planeada · 11</span>
+        <h3>Stochastic Gradient Descent, Mini-Batches and Epochs</h3>
+        <p>Distingue batch, mini-batch, epoch y Stochastic Gradient Descent dentro del proceso de entrenamiento.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-learning">
+        <span class="guide-status">Planeada · 12</span>
+        <h3>Optimizers: SGD, Momentum, RMSProp and Adam</h3>
+        <p>Compara SGD, Momentum, RMSProp y Adam y comprende cómo cada optimizer modifica la actualización de parámetros.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-stability">
+        <span class="guide-status">Planeada · 13</span>
+        <h3>Weight Initialization</h3>
+        <p>Aprende por qué la inicialización de weights afecta el flujo de información y la estabilidad del entrenamiento.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-stability">
+        <span class="guide-status">Planeada · 14</span>
+        <h3>Vanishing and Exploding Gradients</h3>
+        <p>Comprende por qué los gradients pueden desaparecer o explotar y cómo esto afecta redes profundas.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-stability">
+        <span class="guide-status">Planeada · 15</span>
+        <h3>Regularization in Deep Learning</h3>
+        <p>Estudia técnicas de regularization como dropout y weight decay para reducir overfitting.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-stability">
+        <span class="guide-status">Planeada · 16</span>
+        <h3>Batch Normalization and Layer Normalization</h3>
+        <p>Compara Batch Normalization y Layer Normalization y su efecto sobre estabilidad y velocidad de entrenamiento.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-architectures">
+        <span class="guide-status">Planeada · 17</span>
+        <h3>Convolutional Neural Networks (CNNs) desde los fundamentos</h3>
+        <p>Construye Convolutional Neural Networks desde filtros, feature maps y patrones espaciales.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-architectures">
+        <span class="guide-status">Planeada · 18</span>
+        <h3>Pooling and Feature Extraction in CNNs</h3>
+        <p>Comprende cómo pooling y extracción jerárquica de features reducen dimensión y capturan estructura visual.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-architectures">
+        <span class="guide-status">Planeada · 19</span>
+        <h3>Image Classification with CNNs</h3>
+        <p>Conecta CNNs con un workflow completo de Image Classification, entrenamiento, evaluación y predicción.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-architectures">
+        <span class="guide-status">Planeada · 20</span>
+        <h3>Recurrent Neural Networks (RNNs) desde los fundamentos</h3>
+        <p>Introduce Recurrent Neural Networks y su capacidad para procesar secuencias con dependencia temporal.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-architectures">
+        <span class="guide-status">Planeada · 21</span>
+        <h3>LSTM and GRU Explained</h3>
+        <p>Comprende cómo LSTM y GRU fueron diseñadas para manejar dependencias largas y problemas de memoria.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-architectures">
+        <span class="guide-status">Planeada · 22</span>
+        <h3>Attention Mechanism desde los fundamentos</h3>
+        <p>Construye la intuición de Attention como mecanismo para ponderar dinámicamente partes relevantes de una secuencia.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-architectures">
+        <span class="guide-status">Planeada · 23</span>
+        <h3>Transformers Explained from First Principles</h3>
+        <p>Comprende Transformers desde self-attention, positional information, multi-head attention y bloques repetidos.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-production">
+        <span class="guide-status">Planeada · 24</span>
+        <h3>Building and Training Neural Networks with PyTorch</h3>
+        <p>Conecta tensors, modules, loss, optimizers y training loops para construir y entrenar redes con PyTorch.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-production">
+        <span class="guide-status">Planeada · 25</span>
+        <h3>From Training to Deployment: The Deep Learning Lifecycle</h3>
+        <p>Integra entrenamiento, validación, deployment, monitoring y mantenimiento dentro del ciclo de vida de Deep Learning.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+    </div>
+
+    <div class="sequence">
+      <h3>¿Por qué este orden?</h3>
+
+      <p>
+        Primero necesitamos comprender la estructura de los datos y el cálculo básico dentro de una red:
+        tensors, neurons, layers, activations y Forward Propagation.
+      </p>
+
+      <p>
+        Después introducimos Loss Functions, Backpropagation y optimizers porque explican cómo aprende realmente una red.
+        Weight Initialization, gradient stability, regularization y normalization ayudan a entender por qué entrenar redes profundas puede ser difícil.
+      </p>
+
+      <p>
+        Con esa base, CNNs y RNNs pueden estudiarse como arquitecturas diseñadas para diferentes estructuras de datos.
+        Attention y Transformers amplían estas ideas, y finalmente PyTorch y deployment conectan la teoría con un workflow real de Deep Learning.
+      </p>
+    </div>
+
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+
+      <div>
+        <h3>Alfredo Saldana</h3>
+        <p>Data Scientist · Economista · Educador</p>
+        <p>Estudio, exploro y comparto ideas sobre Data Science, Statistics, Machine Learning, Deep Learning y Artificial Intelligence.</p>
+      </div>
+
+      <div>
+        <h4>Explorar</h4>
+        <a href="../../projects.html">Proyectos</a>
+        <a href="../../tutorials.html">Recursos</a>
+        <a href="../../open-box.html">Open Box</a>
+      </div>
+
+      <div>
+        <h4>Conectar</h4>
+        <a href="https://github.com/alfredosaldana" target="_blank" rel="noopener">GitHub ↗</a>
+        <a href="https://www.linkedin.com/in/asaldanamle/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a href="https://www.youtube.com/@alfredosaldana-ds" target="_blank" rel="noopener">YouTube ↗</a>
+        <a href="../../contact.html">Contacto</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Alfredo Saldana</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../../../assets/js/script.js"></script>
+</body>
+</html>
