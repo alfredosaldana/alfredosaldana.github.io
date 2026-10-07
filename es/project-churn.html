@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Caso didáctico end-to-end de Machine Learning para Bank Customer Churn Prediction, con teoría, fórmulas, class imbalance, data leakage, model selection y evaluation metrics.">
+<title>Bank Customer Churn Prediction — Alfredo Saldana</title>
+
+<link rel="icon" href="../assets/images/favicon.svg">
+<link rel="stylesheet" href="../assets/css/style.css">
+
+<style>
+  .learning-block{margin:30px 0;padding:24px;border:1px solid #dce6f2;border-radius:18px;background:#fbfdff}
+  .learning-block h3{margin-top:0}
+  .equation{margin:16px 0;padding:16px 18px;border-left:4px solid #2457a7;border-radius:10px;background:#f3f7fc;font-family:Georgia,"Times New Roman",serif;font-size:1.12rem;overflow-x:auto}
+  .equation .eq-main{display:block;text-align:center;font-size:1.28rem;margin:6px 0}
+  .key-idea{margin:18px 0;padding:16px 18px;border-radius:14px;background:#eef6ff;border:1px solid #cfe2fb}
+  .warning{margin:18px 0;padding:16px 18px;border-radius:14px;background:#fff8ea;border:1px solid #ead7a5}
+  .worked{margin:18px 0;padding:18px;border-radius:14px;background:#f5fbf7;border:1px solid #cfe7d4}
+  .theory-table{width:100%;border-collapse:collapse;margin:18px 0;font-size:.98rem}
+  .theory-table th,.theory-table td{padding:12px 13px;border:1px solid #dfe6ee;vertical-align:top;text-align:left}
+  .theory-table th{background:#f2f6fb;color:#13233b}
+  .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}
+  .flow div{padding:15px 10px;border:1px solid #dce6f2;border-radius:12px;background:#fff;text-align:center;font-weight:700}
+  .metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:18px 0}
+  .metric-card{padding:18px;border:1px solid #dce6f2;border-radius:14px;background:#fff}
+  .metric-card h4{margin:0 0 8px}
+  .mini{font-size:.93rem;color:#5f6f82}
+  .section-rule{height:1px;background:#e7edf4;margin:34px 0}
+  @media(max-width:760px){
+    .flow,.metric-grid{grid-template-columns:1fr}
+    .equation{font-size:1rem}
+    .equation .eq-main{font-size:1.1rem}
+  }
+</style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav-wrap">
+
+    <div style="display:flex;align-items:center;gap:20px;">
+      <a class="brand" href="index.html">Alfredo Saldana</a>
+
+      <div class="lang-switch"
+           style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap;">
+        <a href="../project-churn.html"
+           style="color:#111827;text-decoration:none;font-weight:700;">EN</a>
+        <span aria-hidden="true" style="color:#64748b;">|</span>
+        <a href="project-churn.html"
+           aria-current="page"
+           style="color:#2563eb;text-decoration:none;font-weight:800;">ES</a>
+      </div>
+    </div>
+
+    <button class="menu-btn" aria-label="Abrir navegación">☰</button>
+
+    <nav class="nav">
+      <a href="index.html">Inicio</a>
+      <a href="tutorials.html">Recursos</a>
+      <a href="projects.html" class="active">Proyectos</a>
+      <a href="../open-box.html">Open Box</a>
+      <a href="../about.html">Acerca de</a>
+      <a href="../contact.html">Contacto</a>
+    </nav>
+
+  </div>
+</header>
+
+<main>
+
+<section class="page-hero">
+  <div class="container">
+
+    <div class="eyebrow">Machine Learning · Classification</div>
+
+    <h1>Bank Customer Churn Prediction</h1>
+
+    <p class="lead">
+      Un caso end-to-end de Machine Learning que evalúa si los atributos de los clientes
+      pueden utilizarse para identificar un mayor riesgo de churn manteniendo un workflow
+      riguroso de train/test.
+    </p>
+
+    <span class="status">Completado</span>
+
+  </div>
+</section>
+
+
+<section class="article">
+<div class="narrow">
+
+<img src="../assets/images/churn.svg"
+     alt="Bank Customer Churn Prediction"
+     style="border-radius:24px;margin-bottom:34px">
+
+
+<h2>1. Pregunta del proyecto</h2>
+
+<p>
+  <strong>
+    ¿Pueden los atributos de un cliente utilizarse para estimar el riesgo de que abandone el banco,
+    y qué decisiones de modelado producen predicciones útiles para clientes que el modelo nunca ha visto?
+  </strong>
+</p>
+
+<p>
+  En este proyecto, <em>churn</em> significa que un cliente abandona el banco o deja de utilizar sus servicios.
+  La variable objetivo es binaria:
+  <strong>Exited = 1</strong> para un cliente que hizo churn y
+  <strong>Exited = 0</strong> para un cliente que permaneció.
+  El repository contiene 10,000 registros de clientes y 18 columnas originales,
+  seguidas por data cleaning, feature engineering, model comparison y un reusable prediction module.
+</p>
+
+<div class="key-idea">
+  <strong>Idea clave:</strong>
+  churn prediction es un problema de <strong>supervised binary classification</strong>.
+  Conocemos el resultado histórico de cada cliente del training set y usamos esos ejemplos etiquetados
+  para aprender una regla capaz de estimar churn risk en clientes futuros.
+</div>
+
+
+<h2>2. ¿Qué está aprendiendo un classification model?</h2>
+
+<p>Sea <strong>Y</strong> el resultado del cliente:</p>
+
+<div class="equation">
+  <span class="eq-main">Y ∈ {0,1}</span>
+  <div>Y = 1 significa churn; Y = 0 significa que el cliente permaneció.</div>
+</div>
+
+<p>
+  Sea <strong>X</strong> el conjunto de características disponibles del cliente,
+  como age, credit score, tenure, balance, number of products, activity status y geography.
+  Un classifier intenta aprender una relación entre <strong>X</strong> y <strong>Y</strong>.
+</p>
+
+<p>Muchos classifiers pueden interpretarse como modelos que estiman una probabilidad:</p>
+
+<div class="equation">
+  <span class="eq-main">p(X) = P(Y = 1 | X)</span>
+  <div>
+    Se lee como: “la probabilidad de que el cliente haga churn,
+    dadas las características observadas del cliente”.
+  </div>
+</div>
+
+<p>
+  Luego, un decision threshold puede convertir esa probabilidad en una predicción de clase.
+  Por ejemplo, con threshold = 0.50:
+</p>
+
+<div class="equation">
+  <span class="eq-main">ŷ = 1 si p(X) ≥ 0.50; de lo contrario ŷ = 0</span>
+</div>
+
+<p>
+  El threshold <strong>no</strong> tiene que ser 0.50.
+  En un retention program real, un banco podría reducirlo o aumentarlo dependiendo del costo
+  de no detectar a un cliente con alta probabilidad de churn frente al costo de contactar
+  innecesariamente a un cliente leal.
+</p>
+
+
+<h2>3. Dataset y predictive features</h2>
+
+<p>
+  El proyecto comienza con atributos como
+  <strong>CreditScore, Geography, Gender, Age, Tenure, Balance, NumOfProducts,
+  HasCrCard, IsActiveMember, EstimatedSalary, Satisfaction Score,
+  Card Type</strong> y <strong>Point Earned</strong>.
+  Algunos identifier fields se eliminan porque no representan información predictiva significativa.
+</p>
+
+<table class="theory-table">
+<thead>
+<tr>
+  <th>Feature type</th>
+  <th>Ejemplos</th>
+  <th>Por qué importa</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr>
+  <td>Continuous / numeric</td>
+  <td>Age, Balance, CreditScore, EstimatedSalary</td>
+  <td>Pueden capturar relaciones graduales con churn risk.</td>
+</tr>
+
+<tr>
+  <td>Count / discrete</td>
+  <td>Tenure, NumOfProducts, Point Earned</td>
+  <td>Pueden representar customer history, engagement y relaciones con productos.</td>
+</tr>
+
+<tr>
+  <td>Binary</td>
+  <td>HasCrCard, IsActiveMember</td>
+  <td>Ya poseen una interpretación significativa 0/1.</td>
+</tr>
+
+<tr>
+  <td>Categorical</td>
+  <td>Geography, Gender, Card Type</td>
+  <td>Deben codificarse numéricamente antes de que muchos algoritmos puedan utilizarlas.</td>
+</tr>
+
+</tbody>
+</table>
+
+
+<h2>4. Data leakage: un modelo puede ser “demasiado bueno” por la razón equivocada</h2>
+
+<p>
+  Uno de los hallazgos más importantes del proyecto es que la variable
+  <strong>Complain</strong> está casi perfectamente alineada con el target.
+  En el análisis del repository presenta aproximadamente 0.99 de Pearson correlation con
+  <strong>Exited</strong> y es casi idéntica row-by-row.
+  Esto la convierte en un ejemplo clásico de <strong>target leakage</strong>.
+</p>
+
+<div class="warning">
+  <strong>Por qué data leakage es peligroso:</strong>
+  si una variable contiene información que solamente estaría disponible después —o como parte—
+  del evento de churn, el modelo puede parecer extremadamente preciso durante el desarrollo
+  y aun así fallar en producción.
+  Un predictive model debe utilizar únicamente información realmente disponible
+  en el momento en que se realiza la predicción.
+</div>
+
+<p>
+  Esta es una lección académica importante:
+  <strong>high accuracy no es automáticamente evidencia de un buen modelo.</strong>
+  Primero debemos preguntar si la información utilizada para obtener esa accuracy es legítima.
+</p>
+
+
+<h2>5. Preprocessing: colocando las variables en una escala utilizable</h2>
+
+<p>
+  Las variables numéricas continuas pueden vivir en escalas muy diferentes.
+  Por ejemplo, <strong>Age</strong> puede medirse en decenas,
+  mientras que <strong>Balance</strong> puede estar en miles.
+  Standardization transforma una variable numérica en unidades de standard deviations respecto de su media:
+</p>
+
+<div class="equation">
+  <span class="eq-main">z = (x − μ) / σ</span>
+  <div>
+    <strong>x</strong> = valor original,
+    <strong>μ</strong> = feature mean,
+    <strong>σ</strong> = feature standard deviation.
+  </div>
+</div>
+
+<div class="worked">
+  <strong>Mini ejemplo.</strong>
+  Supongamos que la mean age es μ = 50 años y la standard deviation es σ = 10 años.
+  Un cliente de 65 años tiene:
+  <br><br>
+  <strong>z = (65 − 50) / 10 = 1.5</strong>
+  <br><br>
+  Ese cliente está 1.5 standard deviations por encima de la edad promedio.
+</div>
+
+<p>
+  El proyecto deja intencionalmente indicadores binarios como
+  <strong>HasCrCard</strong> e <strong>IsActiveMember</strong> como valores 0/1.
+  Las categorical variables se transforman mediante one-hot encoding,
+  creando indicator columns que los algoritmos pueden utilizar sin imponer
+  un orden numérico artificial.
+</p>
+
+
+<h2>6. Class imbalance: por qué Accuracy puede engañar</h2>
+
+<p>
+  Los datos originales contienen aproximadamente
+  <strong>80% non-churners y 20% churners</strong>.
+  Esto importa porque un classifier ingenuo podría predecir “stay” para todos
+  y obtener cerca de 80% Accuracy identificando <strong>cero</strong> clientes que realmente hacen churn.
+</p>
+
+<div class="key-idea">
+  <strong>Idea clave:</strong>
+  cuando existe class imbalance, la calidad del modelo debe evaluarse con métricas como
+  <strong>Precision, Recall, F1 Score y ROC-AUC</strong>, no solamente Accuracy.
+</div>
+
+
+<h2>7. Train/test split y por qué SMOTE pertenece solamente al training set</h2>
+
+<p>
+  El proyecto utiliza un stratified 80/20 train/test split:
+  aproximadamente 8,000 clientes para model development
+  y 2,000 clientes untouched para evaluación.
+  El test set permanece real y desbalanceado para que se comporte como
+  la población que el modelo encontraría en la práctica.
+</p>
+
+<p>
+  <strong>SMOTE</strong> significa
+  <strong>Synthetic Minority Over-sampling Technique</strong>.
+  Crea observaciones sintéticas de la minority class interpolando
+  entre observaciones vecinas de esa clase.
+</p>
+
+<div class="equation">
+  <span class="eq-main">
+    x<sub>new</sub> =
+    x<sub>i</sub> + λ(x<sub>neighbor</sub> − x<sub>i</sub>)
+  </span>
+  <div>
+    donde 0 ≤ λ ≤ 1.
+    El nuevo punto queda ubicado entre dos observaciones de la minority class.
+  </div>
+</div>
+
+<p>
+  SMOTE se aplica <strong>solamente después del train/test split y únicamente al training data</strong>.
+  Aplicarlo antes del split permitiría que información sintética derivada de observaciones
+  que terminarían en el test set se filtre hacia model development.
+</p>
+
+<div class="flow">
+  <div>Raw data</div>
+  <div>Train/Test split</div>
+  <div>SMOTE solo en training</div>
+  <div>Evaluación en untouched test set</div>
+</div>
+
+
+<h2>8. Seis classification models</h2>
+
+<p>
+  El proyecto compara seis algoritmos.
+  Cada uno representa una forma diferente de aproximar la decision boundary desconocida
+  entre churners y non-churners.
+</p>
+
+<table class="theory-table">
+
+<thead>
+<tr>
+  <th>Model</th>
+  <th>Core idea</th>
+  <th>Interpretación didáctica</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr>
+  <td>Logistic Regression</td>
+  <td>Models log-odds as a linear function of predictors.</td>
+  <td>Baseline simple e interpretable para probabilistic classification.</td>
+</tr>
+
+<tr>
+  <td>Decision Tree</td>
+  <td>Recursively splits the feature space.</td>
+  <td>Crea reglas human-readable del tipo “if/then”.</td>
+</tr>
+
+<tr>
+  <td>Random Forest</td>
+  <td>Averages many decision trees trained on randomized samples/features.</td>
+  <td>Reduce la inestabilidad de un solo árbol y captura patrones no lineales.</td>
+</tr>
+
+<tr>
+  <td>Support Vector Classifier</td>
+  <td>Finds a separating boundary with maximum margin.</td>
+  <td>Se concentra en observaciones cercanas a la decision boundary.</td>
+</tr>
+
+<tr>
+  <td>Gradient Boosting</td>
+  <td>Builds weak learners sequentially to correct prior errors.</td>
+  <td>Cada nuevo árbol se concentra en errores cometidos por el ensemble anterior.</td>
+</tr>
+
+<tr>
+  <td>K-Nearest Neighbors</td>
+  <td>Classifies using nearby observations in feature space.</td>
+  <td>“Clientes similares a este tendieron a hacer churn o a permanecer.”</td>
+</tr>
+
+</tbody>
+
+</table>
+
+
+<h2>9. Logistic Regression: el probability baseline</h2>
+
+<p>
+  Logistic Regression es especialmente útil para comprender classification
+  porque convierte un linear score en una probabilidad utilizando
+  la logistic —o sigmoid— function.
+</p>
+
+<div class="equation">
+  <span class="eq-main">
+    p(X) = 1 / [1 + e<sup>−(β₀ + β₁X₁ + ··· + βₚXₚ)</sup>]
+  </span>
+</div>
+
+<p>
+  La expresión dentro del exponential es un linear predictor.
+  La sigmoid comprime cualquier valor real al intervalo entre 0 y 1.
+</p>
+
+<p>El mismo modelo puede escribirse mediante <strong>log-odds</strong>:</p>
+
+<div class="equation">
+  <span class="eq-main">
+    log[p/(1−p)] = β₀ + β₁X₁ + ··· + βₚXₚ
+  </span>
+</div>
+
+<p>
+  Para un aumento de una unidad en X<sub>j</sub>, manteniendo fijas las otras variables,
+  <strong>e<sup>βⱼ</sup></strong> representa el cambio multiplicativo en los odds.
+  Esta es una de las razones por las que Logistic Regression continúa siendo importante
+  incluso cuando un modelo más flexible termina mostrando mejor performance.
+</p>
+
+
+<h2>10. Decision Trees y Random Forest</h2>
+
+<p>
+  Un Decision Tree realiza preguntas repetidas como
+  “¿Age &gt; 52?” o “¿IsActiveMember = 0?”
+  y divide el dataset en grupos progresivamente más homogéneos.
+</p>
+
+<p>Una medida común de impurity es <strong>Gini impurity</strong>:</p>
+
+<div class="equation">
+  <span class="eq-main">
+    Gini = 1 − Σ p<sub>k</sub><sup>2</sup>
+  </span>
+  <div>
+    Para binary classification:
+    Gini = 1 − p<sub>0</sub><sup>2</sup> − p<sub>1</sub><sup>2</sup>.
+  </div>
+</div>
+
+<div class="worked">
+  <strong>Mini ejemplo.</strong>
+  Si un node contiene 80% stayers y 20% churners:
+  <br><br>
+  Gini = 1 − 0.8² − 0.2²
+  = 1 − 0.64 − 0.04
+  = <strong>0.32</strong>.
+  <br><br>
+  Un node perfectamente puro tiene Gini = 0.
+</div>
+
+<p>
+  Random Forest construye muchos árboles en lugar de confiar en uno solo.
+  Para classification, cada árbol vota por una clase o aporta una probability,
+  y el forest agrega esos resultados:
+</p>
+
+<div class="equation">
+  <span class="eq-main">
+    p̂<sub>forest</sub>(X) = (1/B) Σ p̂<sub>b</sub>(X)
+  </span>
+  <div>
+    <strong>B</strong> es el número de árboles.
+    El averaging ayuda a reducir variance y mejorar robustness.
+  </div>
+</div>
+
+<p>
+  En este proyecto, Random Forest es seleccionado porque ofrece
+  el mejor balance general en F1 Score y ROC-AUC,
+  además de permitir feature-importance analysis.
+</p>
+
+
+<h2>11. Confusion Matrix: comprendiendo los errores de predicción</h2>
+
+<p>Todo binary classifier produce cuatro resultados básicos:</p>
+
+<table class="theory-table">
+
+<thead>
+<tr>
+  <th></th>
+  <th>Realmente hizo churn</th>
+  <th>Realmente permaneció</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr>
+  <th>Predicted churn</th>
+  <td>True Positive (TP)</td>
+  <td>False Positive (FP)</td>
+</tr>
+
+<tr>
+  <th>Predicted stay</th>
+  <td>False Negative (FN)</td>
+  <td>True Negative (TN)</td>
+</tr>
+
+</tbody>
+</table>
+
+
+<div class="metric-grid">
+
+<div class="metric-card">
+
+  <h4>Accuracy</h4>
+
+  <div class="equation">
+    <span class="eq-main">(TP + TN) / N</span>
+  </div>
+
+  <p>Fracción de todas las predicciones que fueron correctas.</p>
+
+</div>
+
+
+<div class="metric-card">
+
+  <h4>Precision</h4>
+
+  <div class="equation">
+    <span class="eq-main">TP / (TP + FP)</span>
+  </div>
+
+  <p>
+    Entre los clientes que el modelo predijo que harían churn,
+    ¿cuántos realmente hicieron churn?
+  </p>
+
+</div>
+
+
+<div class="metric-card">
+
+  <h4>Recall</h4>
+
+  <div class="equation">
+    <span class="eq-main">TP / (TP + FN)</span>
+  </div>
+
+  <p>
+    Entre los clientes que realmente hicieron churn,
+    ¿cuántos identificó el modelo?
+  </p>
+
+</div>
+
+
+<div class="metric-card">
+
+  <h4>F1 Score</h4>
+
+  <div class="equation">
+    <span class="eq-main">
+      2 × Precision × Recall / (Precision + Recall)
+    </span>
+  </div>
+
+  <p>Harmonic mean que equilibra Precision y Recall.</p>
+
+</div>
+
+</div>
+
+
+<div class="worked">
+
+  <strong>Mini ejemplo.</strong>
+
+  Supongamos que un test set contiene:
+
+  <br><br>
+
+  TP = 120,
+  FP = 40,
+  FN = 80.
+
+  <br><br>
+
+  Precision = 120/(120+40) = <strong>0.75</strong><br>
+
+  Recall = 120/(120+80) = <strong>0.60</strong><br>
+
+  F1 = 2(0.75×0.60)/(0.75+0.60)
+  ≈ <strong>0.67</strong>.
+
+  <br><br>
+
+  Este ejemplo muestra por qué una sola métrica rara vez cuenta toda la historia.
+
+</div>
+
+
+<h2>12. ROC Curve y AUC</h2>
+
+<p>
+  La <strong>Receiver Operating Characteristic (ROC)</strong> curve
+  evalúa el classifier a través de muchos probability thresholds.
+  Representa:
+</p>
+
+<div class="equation">
+
+  <span class="eq-main">
+    True Positive Rate = TP/(TP+FN)
+  </span>
+
+  <span class="eq-main">
+    False Positive Rate = FP/(FP+TN)
+  </span>
+
+</div>
+
+<p>
+  El <strong>Area Under the ROC Curve (AUC)</strong>
+  resume la capacidad de discrimination.
+  Una interpretación útil es:
+</p>
+
+<div class="equation">
+  <span class="eq-main">
+    AUC = P(score<sub>churner</sub> &gt; score<sub>non-churner</sub>)
+  </span>
+</div>
+
+<p>
+  Así, un AUC de 0.80 puede interpretarse de la siguiente manera:
+  si seleccionamos aleatoriamente un churner y un non-churner,
+  el modelo asignará el score de riesgo más alto al churner
+  aproximadamente 80% de las veces.
+</p>
+
+<div class="warning">
+  <strong>Importante:</strong>
+  AUC mide ranking discrimination.
+  No garantiza que las predicted probabilities estén bien calibrated.
+  Un modelo puede ordenar correctamente a los clientes y aun así
+  sobreestimar o subestimar la verdadera probabilidad de churn.
+</div>
+
+
+<h2>13. Por qué model evaluation debe utilizar unseen data</h2>
+
+<p>
+  Un modelo puede memorizar patrones de su training sample.
+  Por eso, evaluar performance sobre los mismos clientes utilizados para fit del modelo
+  produce una estimación optimistamente sesgada de generalization performance.
+</p>
+
+<p>
+  El proyecto mantiene un untouched test set durante model selection.
+  Solo después de seleccionar el modelo,
+  el Random Forest final se vuelve a entrenar utilizando todos los registros reales de clientes.
+  El final production fit no utiliza SMOTE,
+  de modo que sus probability estimates permanezcan alineadas con la distribución real de clases
+  en lugar de un mundo artificial 50/50.
+</p>
+
+
+<h2>14. Interpretando Feature Importance con cuidado</h2>
+
+<p>
+  Random Forest feature importance ayuda a identificar qué variables
+  contribuyen con mayor fuerza a las decisiones predictivas del forest.
+  En el proyecto, algunos predictors importantes incluyen:
+  <strong>Age, NumOfProducts, IsActiveMember, Balance</strong> y <strong>Geography</strong>.
+</p>
+
+<div class="warning">
+  <strong>Feature Importance no implica causalidad.</strong>
+  Si Age recibe alta importance,
+  significa que el modelo encontró Age útil para prediction en este dataset.
+  No demuestra que cambiar Age cause churn,
+  ni explica por sí sola el mecanismo subyacente.
+</div>
+
+
+<h2>15. End-to-end workflow representado en el repository</h2>
+
+<div class="flow">
+
+  <div>EDA & leakage checks</div>
+
+  <div>Cleaning & encoding</div>
+
+  <div>Train/Test + SMOTE</div>
+
+  <div>Model comparison</div>
+
+</div>
+
+
+<div class="flow">
+
+  <div>Select Random Forest</div>
+
+  <div>Retrain final model</div>
+
+  <div>Save model artifacts</div>
+
+  <div>Streamlit / inference module</div>
+
+</div>
+
+<p>
+  El repository está organizado como siete Jupyter notebooks secuenciales,
+  una reusable <strong>BankChurn_Module.py</strong> inference class
+  y una Streamlit application.
+  Esto convierte al proyecto en algo más que un simple ejercicio de model comparison:
+  ilustra cómo un análisis puede evolucionar hacia un reproducible prediction pipeline.
+</p>
+
+
+<h2>16. ¿Qué enseña este proyecto?</h2>
+
+<ul>
+
+<li>
+  <strong>Predictive performance comienza con data quality.</strong>
+  Data leakage puede invalidar incluso un modelo técnicamente sofisticado.
+</li>
+
+<li>
+  <strong>Class imbalance cambia la forma en que debemos interpretar las métricas.</strong>
+</li>
+
+<li>
+  <strong>Resampling debe mantenerse completamente separado del test set.</strong>
+</li>
+
+<li>
+  <strong>Diferentes algoritmos incorporan diferentes supuestos sobre la decision boundary.</strong>
+</li>
+
+<li>
+  <strong>F1 y ROC-AUC complementan Accuracy cuando la minority class es importante.</strong>
+</li>
+
+<li>
+  <strong>Prediction no es causation.</strong>
+  Una variable puede ser útil para prediction sin ser un causal driver.
+</li>
+
+<li>
+  <strong>Deployment requiere reproducible preprocessing.</strong>
+  Las mismas transformaciones utilizadas durante training
+  deben aplicarse a clientes futuros.
+</li>
+
+</ul>
+
+
+<h2>17. Repository e implementación</h2>
+
+<p>
+  Los notebooks completos, data-processing pipeline, model comparison,
+  inference module y Streamlit application están disponibles
+  en el GitHub repository.
+</p>
+
+<p>
+  <a class="btn primary"
+     href="https://github.com/alfredosaldana/Bank-Customer-Churn-Prediction"
+     target="_blank"
+     rel="noopener">
+    Ver GitHub Repository ↗
+  </a>
+</p>
+
+<div class="actions">
+  <a class="btn secondary" href="projects.html">
+    ← Volver a Proyectos
+  </a>
+</div>
+
+
+</div>
+</section>
+
+</main>
+
+
+<footer class="footer">
+
+  <div class="container">
+
+    <div class="footer-grid">
+
+      <div>
+
+        <h3>Alfredo Saldana</h3>
+
+        <p>
+          Data Scientist · Economista · Educador
+        </p>
+
+        <p>
+          Estudio, exploro y comparto ideas sobre Data Science,
+          Statistics, Machine Learning, Deep Learning y Artificial Intelligence.
+        </p>
+
+      </div>
+
+
+      <div>
+
+        <h4>Explorar</h4>
+
+        <a href="projects.html">
+          Proyectos
+        </a>
+
+        <a href="tutorials.html">
+          Recursos
+        </a>
+
+        <a href="../open-box.html">
+          Open Box
+        </a>
+
+      </div>
+
+
+      <div>
+
+        <h4>Conectar</h4>
+
+        <a href="https://github.com/alfredosaldana"
+           target="_blank"
+           rel="noopener">
+          GitHub ↗
+        </a>
+
+        <a href="https://www.linkedin.com/in/asaldanamle/"
+           target="_blank"
+           rel="noopener">
+          LinkedIn ↗
+        </a>
+
+        <a href="https://www.youtube.com/@alfredosaldana-ds"
+           target="_blank"
+           rel="noopener">
+          YouTube ↗
+        </a>
+
+        <a href="../contact.html">
+          Contacto
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+      <span>
+        © 2026 Alfredo Saldana
+      </span>
+
+    </div>
+
+  </div>
+
+</footer>
+
+
+<script src="../assets/js/script.js"></script>
+
+</body>
+</html>
