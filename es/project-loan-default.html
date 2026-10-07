@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Proyecto didáctico end-to-end de Machine Learning para Loan Default Prediction usando el dataset Home Credit, con teoría, fórmulas, model comparison, SHAP explainability y deployment.">
+<title>Loan Default Predictor — Alfredo Saldana</title>
+
+<link rel="icon" href="../assets/images/favicon.svg">
+<link rel="stylesheet" href="../assets/css/style.css">
+
+<style>
+  .learning-block{margin:30px 0;padding:24px;border:1px solid #dce6f2;border-radius:18px;background:#fbfdff}
+  .learning-block h3{margin-top:0}
+  .equation{margin:16px 0;padding:16px 18px;border-left:4px solid #2457a7;border-radius:10px;background:#f3f7fc;font-family:Georgia,"Times New Roman",serif;font-size:1.08rem;overflow-x:auto}
+  .equation .eq-main{display:block;text-align:center;font-size:1.22rem;margin:6px 0}
+  .key-idea{margin:18px 0;padding:16px 18px;border-radius:14px;background:#eef6ff;border:1px solid #cfe2fb}
+  .warning{margin:18px 0;padding:16px 18px;border-radius:14px;background:#fff8ea;border:1px solid #ead7a5}
+  .worked{margin:18px 0;padding:18px;border-radius:14px;background:#f5fbf7;border:1px solid #cfe7d4}
+  .theory-table{width:100%;border-collapse:collapse;margin:18px 0;font-size:.98rem}
+  .theory-table th,.theory-table td{padding:12px 13px;border:1px solid #dfe6ee;vertical-align:top;text-align:left}
+  .theory-table th{background:#f2f6fb;color:#13233b}
+  .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:20px 0}
+  .flow div{padding:15px 10px;border:1px solid #dce6f2;border-radius:12px;background:#fff;text-align:center;font-weight:700}
+  .metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:18px 0}
+  .metric-card{padding:18px;border:1px solid #dce6f2;border-radius:14px;background:#fff}
+  .metric-card h4{margin:0 0 8px}
+  .mini{font-size:.93rem;color:#5f6f82}
+  .section-rule{height:1px;background:#e7edf4;margin:34px 0}
+  .codebox{margin:16px 0;padding:16px 18px;border-radius:12px;background:#0f172a;color:#e2e8f0;overflow-x:auto;font-family:Consolas,Monaco,monospace;white-space:pre-wrap}
+  @media(max-width:760px){
+    .flow,.metric-grid{grid-template-columns:1fr}
+    .equation{font-size:1rem}
+    .equation .eq-main{font-size:1.08rem}
+  }
+</style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav-wrap">
+
+    <div style="display:flex;align-items:center;gap:20px;">
+      <a class="brand" href="index.html">Alfredo Saldana</a>
+
+      <div class="lang-switch"
+           style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap;">
+        <a href="../project-loan-default.html"
+           style="color:#111827;text-decoration:none;font-weight:700;">EN</a>
+        <span aria-hidden="true" style="color:#64748b;">|</span>
+        <a href="project-loan-default.html"
+           aria-current="page"
+           style="color:#2563eb;text-decoration:none;font-weight:800;">ES</a>
+      </div>
+    </div>
+
+    <button class="menu-btn" aria-label="Abrir navegación">☰</button>
+
+    <nav class="nav">
+      <a href="index.html">Inicio</a>
+      <a href="tutorials.html">Recursos</a>
+      <a href="projects.html" class="active">Proyectos</a>
+      <a href="../open-box.html">Open Box</a>
+      <a href="../about.html">Acerca de</a>
+      <a href="../contact.html">Contacto</a>
+    </nav>
+
+  </div>
+</header>
+
+<main>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="eyebrow">Machine Learning · Finance & Risk</div>
+    <h1>Loan Default Predictor</h1>
+    <p class="lead">
+      Modelado de credit risk con el dataset Home Credit:
+      desde business understanding y Exploratory Data Analysis hasta XGBoost,
+      SHAP explanations y deployment en Streamlit.
+    </p>
+    <span class="status">Proyecto educativo</span>
+  </div>
+</section>
+
+<section class="article">
+<div class="narrow">
+
+<img src="../assets/images/loan-default.png"
+     alt="Loan Default Predictor"
+     style="border-radius:24px;margin-bottom:34px">
+
+<h2>Pregunta del proyecto</h2>
+
+<p>
+  <strong>¿Podemos estimar la probabilidad de que un solicitante de préstamo incurra en default?</strong>
+  Este proyecto construye un end-to-end Machine Learning pipeline que toma información del solicitante
+  y predice credit risk de una manera didáctica y amigable para estudiantes.
+</p>
+
+<div class="key-idea">
+  <strong>Idea principal:</strong>
+  el output no es simplemente “aprobar” o “rechazar”.
+  El output más informativo es una <em>default probability</em>.
+  Esa probabilidad puede convertirse posteriormente en una lending decision
+  mediante un threshold elegido por la institución.
+</div>
+
+
+<h2>Por qué este proyecto importa</h2>
+
+<p>
+  Credit risk modeling es una de las aplicaciones clásicas de Data Science en Finance.
+  Bancos y lenders deben decidir qué solicitantes probablemente pagarán sus obligaciones
+  y cuáles presentan mayor probabilidad de default.
+  Si una institución aprueba demasiados préstamos riesgosos, aumentan las pérdidas.
+  Si rechaza demasiados buenos borrowers, pierde ingresos y aleja buenos clientes.
+</p>
+
+<div class="worked">
+  <strong>Intuición económica:</strong>
+  un solo default grande puede eliminar las ganancias obtenidas de muchos préstamos buenos.
+  Por eso classification, probability estimation e interpretability son tan importantes en credit scoring.
+</div>
+
+
+<h2>Dataset y prediction target</h2>
+
+<p>
+  El proyecto utiliza el dataset <strong>Home Credit Default Risk</strong>.
+  El principal training file contiene <strong>307,511 applicants</strong>
+  y <strong>122 variables</strong>.
+  La variable objetivo se llama <strong>TARGET</strong>:
+</p>
+
+<table class="theory-table">
+<thead>
+<tr>
+  <th>Valor</th>
+  <th>Significado</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+  <td><strong>0</strong></td>
+  <td>El applicant pagó el préstamo; no hubo default dentro del horizonte definido.</td>
+</tr>
+<tr>
+  <td><strong>1</strong></td>
+  <td>
+    El applicant incurrió en default.
+    En este dataset, la etiqueta corresponde a payment difficulties
+    que señalan credit distress relevante.
+  </td>
+</tr>
+</tbody>
+</table>
+
+<p>
+  Las features incluyen income, credit amount, annuity, age, employment time,
+  family information, housing variables y external credit-related scores como
+  <code>EXT_SOURCE_1</code>, <code>EXT_SOURCE_2</code> y <code>EXT_SOURCE_3</code>.
+</p>
+
+
+<h2>Una visión de Machine Learning del problema</h2>
+
+<p>Supongamos que cada applicant está representado por un vector de features:</p>
+
+<div class="equation">
+  <span class="eq-main">x = (x₁, x₂, …, xₚ)</span>
+  <span>
+    donde cada x<sub>j</sub> representa una característica observada,
+    como income, annuity, age o un external score.
+  </span>
+</div>
+
+<p>
+  La tarea consiste en aprender una función que transforme estos inputs
+  en una probability of default:
+</p>
+
+<div class="equation">
+  <span class="eq-main">p̂(x) = P(Y = 1 | X = x)</span>
+  <span>
+    <strong>Interpretación:</strong>
+    dadas las características x del applicant,
+    ¿cuál es la probabilidad estimada de que pertenezca a la clase default?
+  </span>
+</div>
+
+<p>Después de estimar esa probabilidad, puede aplicarse una decision rule:</p>
+
+<div class="equation">
+  <span class="eq-main">
+    ŷ = 1 si p̂(x) ≥ t; &nbsp;&nbsp; ŷ = 0 si p̂(x) &lt; t
+  </span>
+  <span>
+    Aquí <em>t</em> es el classification threshold.
+    Un lender más conservador puede usar un threshold menor
+    para marcar a más applicants como riesgosos.
+  </span>
+</div>
+
+
+<div class="section-rule"></div>
+
+<h2>El learning roadmap de cinco etapas</h2>
+
+<div class="flow">
+  <div>1. Setup & Data</div>
+  <div>2. EDA</div>
+  <div>3. Preprocessing</div>
+  <div>4. Models & Evaluation</div>
+  <div>5. SHAP & Export</div>
+</div>
+
+<p>
+  El proyecto está estructurado como una secuencia de aprendizaje paso a paso.
+  Los notebooks avanzan desde comprender los raw data,
+  hacia cleaning y feature engineering,
+  luego training y model evaluation,
+  y finalmente exportan los artifacts necesarios para deployment en una Streamlit app.
+</p>
+
+
+<div class="learning-block">
+  <h3>Stage 1 — Setup & Data</h3>
+  <p>
+    Cargar el dataset, inspeccionar dimensiones, comprender el target
+    y establecer el train/test workflow.
+    Esta etapa responde una pregunta fundamental:
+    <em>¿qué estamos prediciendo exactamente y por qué?</em>
+  </p>
+</div>
+
+
+<div class="learning-block">
+  <h3>Stage 2 — Exploratory Data Analysis (EDA)</h3>
+  <p>
+    Estudiar la distribución del target y de las predictor variables.
+    Aquí comenzamos a preguntar si income, annuity, age o external scores
+    parecen estar relacionados con default risk.
+  </p>
+</div>
+
+
+<div class="learning-block">
+  <h3>Stage 3 — Preprocessing & Feature Engineering</h3>
+  <p>
+    Tratar missing values, codificar categorical features,
+    escalar numerical variables y crear engineered ratios como
+    <strong>credit-to-income</strong> y <strong>annuity-to-income</strong>.
+  </p>
+</div>
+
+
+<div class="learning-block">
+  <h3>Stage 4 — Models & Evaluation</h3>
+  <p>
+    Entrenar tres models —Logistic Regression, Random Forest y XGBoost—
+    y compararlos utilizando metrics apropiadas para un imbalanced credit-risk problem.
+  </p>
+</div>
+
+
+<div class="learning-block">
+  <h3>Stage 5 — SHAP & Export</h3>
+  <p>
+    Explicar predictions utilizando SHAP y exportar los model artifacts
+    para que el final pipeline pueda utilizarse dentro de la Streamlit application.
+  </p>
+</div>
+
+
+<h2>Por qué Class Imbalance importa</h2>
+
+<p>
+  Solo alrededor de <strong>8.1%</strong> de los loans son defaults,
+  mientras aproximadamente <strong>91.9%</strong> son non-defaults.
+  Esto se conoce como <strong>class imbalance</strong>.
+</p>
+
+<div class="warning">
+  <strong>Advertencia importante:</strong>
+  si un model predice “no default” para cada applicant,
+  todavía tendría aproximadamente 91.9% Accuracy.
+  Ese número suena alto, pero el model fallaría completamente en el business objective,
+  porque no identificaría ningún risky borrower.
+</div>
+
+<p>
+  Por eso este proyecto no depende solamente de Accuracy.
+  También utiliza <strong>SMOTE</strong>,
+  class-aware metrics y probability-based evaluation.
+</p>
+
+<div class="equation">
+  <span class="eq-main">
+    Accuracy = (TP + TN) / (TP + TN + FP + FN)
+  </span>
+  <span>
+    Accuracy es fácil de calcular,
+    pero puede ser engañosa cuando una clase domina.
+  </span>
+</div>
+
+<div class="equation">
+  <span class="eq-main">
+    Recall = TP / (TP + FN)
+  </span>
+  <span>
+    Recall es especialmente importante en credit risk
+    porque un False Negative implica aprobar a un applicant
+    que posteriormente incurre en default.
+  </span>
+</div>
+
+
+<h2>SMOTE y resampling</h2>
+
+<p>
+  <strong>SMOTE</strong> significa
+  <em>Synthetic Minority Oversampling Technique</em>.
+  En lugar de simplemente duplicar default cases,
+  crea synthetic minority examples mediante interpolación entre
+  observaciones existentes de la minority class.
+</p>
+
+<div class="worked">
+  <strong>Pequeño ejemplo:</strong>
+  si un defaulting borrower tiene income = 30k
+  y otro tiene income = 35k,
+  SMOTE puede crear un synthetic borrower con income alrededor de 32k o 33k,
+  junto con valores interpolados correspondientes para otras features.
+  Esto ayuda al model a “ver” con mayor claridad la default region durante training.
+</div>
+
+
+<div class="section-rule"></div>
+
+<h2>Los tres models del proyecto</h2>
+
+
+<div class="learning-block">
+
+<h3>1) Logistic Regression</h3>
+
+<p>
+  Este es el baseline classification model.
+  Calcula un linear score y lo transforma mediante una sigmoid function:
+</p>
+
+<div class="equation">
+  <span class="eq-main">
+    z = β₀ + β₁x₁ + β₂x₂ + ··· + βₚxₚ
+  </span>
+
+  <span class="eq-main">
+    p̂(x) = 1 / (1 + e<sup>−z</sup>)
+  </span>
+
+  <span>
+    La sigmoid function convierte cualquier real-valued score
+    en un número entre 0 y 1,
+    que interpretamos como default probability.
+  </span>
+</div>
+
+<p>
+  <strong>Por qué es útil:</strong>
+  es simple, rápida e interpretable.
+  Si funciona bien, proporciona un benchmark sólido.
+</p>
+
+</div>
+
+
+<div class="learning-block">
+
+<h3>2) Random Forest</h3>
+
+<p>
+  Random Forest combina muchos Decision Trees.
+  Cada tree observa un bootstrap sample de los datos
+  y un random subset de features.
+  La final probability se obtiene del ensemble de trees.
+</p>
+
+<div class="equation">
+  <span class="eq-main">
+    p̂(x) = (1/B) Σ<sub>b=1</sub><sup>B</sup> T<sub>b</sub>(x)
+  </span>
+
+  <span>
+    Aquí T<sub>b</sub>(x) es la prediction del tree b,
+    y B es el número de trees.
+  </span>
+</div>
+
+<p>
+  <strong>Por qué ayuda:</strong>
+  captura nonlinear patterns e interactions
+  que Logistic Regression puede no representar adecuadamente.
+</p>
+
+</div>
+
+
+<div class="learning-block">
+
+<h3>3) XGBoost</h3>
+
+<p>
+  XGBoost es el model más fuerte del proyecto.
+  Construye trees secuencialmente,
+  donde cada nuevo tree intenta corregir los errores del ensemble anterior.
+</p>
+
+<div class="equation">
+  <span class="eq-main">
+    F<sub>M</sub>(x) = Σ<sub>m=1</sub><sup>M</sup> γ<sub>m</sub>h<sub>m</sub>(x)
+  </span>
+
+  <span>
+    En palabras: el final score es la suma de múltiples weighted weak learners.
+    Esta boosting strategy suele funcionar muy bien con structured tabular data.
+  </span>
+</div>
+
+<p>
+  En la documentación del proyecto,
+  el XGBoost model obtuvo un <strong>AUC de aproximadamente 0.76</strong>,
+  un resultado sólido para un problema real difícil.
+</p>
+
+</div>
+
+
+<h2>Evaluation Metrics e interpretación</h2>
+
+<p>
+  Debido a que esta es una credit-risk classification task,
+  utilizamos múltiples metrics en lugar de un único número.
+</p>
+
+<div class="metric-grid">
+
+<div class="metric-card">
+
+<h4>Precision</h4>
+
+<div class="equation">
+  <span class="eq-main">
+    Precision = TP / (TP + FP)
+  </span>
+</div>
+
+<p class="mini">
+  De los applicants que el model predijo que harían default,
+  ¿cuántos realmente hicieron default?
+</p>
+
+</div>
+
+
+<div class="metric-card">
+
+<h4>Recall</h4>
+
+<div class="equation">
+  <span class="eq-main">
+    Recall = TP / (TP + FN)
+  </span>
+</div>
+
+<p class="mini">
+  De todos los true defaulters,
+  ¿cuántos identificó correctamente el model?
+</p>
+
+</div>
+
+
+<div class="metric-card">
+
+<h4>F1 Score</h4>
+
+<div class="equation">
+  <span class="eq-main">
+    F1 = 2 × (Precision × Recall) / (Precision + Recall)
+  </span>
+</div>
+
+<p class="mini">
+  Equilibra Precision y Recall en una sola summary measure.
+</p>
+
+</div>
+
+
+<div class="metric-card">
+
+<h4>AUC-ROC</h4>
+
+<div class="equation">
+  <span class="eq-main">
+    AUC = P(s(X<sup>+</sup>) &gt; s(X<sup>−</sup>))
+  </span>
+</div>
+
+<p class="mini">
+  Interpretación:
+  si seleccionamos aleatoriamente un defaulting borrower
+  y un non-defaulting borrower,
+  ¿con qué frecuencia el model asigna el score más alto al defaulter?
+</p>
+
+</div>
+
+</div>
+
+
+<div class="key-idea">
+  <strong>Interpretación de negocio:</strong>
+  un False Negative suele ser uno de los errores más costosos en lending,
+  porque significa que el banco aprobó un risky borrower.
+  Por eso Recall y AUC son especialmente importantes.
+</div>
+
+
+<h2>Worked probability example</h2>
+
+<div class="worked">
+
+<p>Supongamos que el model evalúa un borrower y devuelve:</p>
+
+<div class="equation">
+  <span class="eq-main">
+    p̂(x) = 0.29
+  </span>
+</div>
+
+<p>
+  Esto significa que la estimated default probability es <strong>29%</strong>.
+  Si el lender utiliza threshold <em>t = 0.50</em>,
+  el applicant no sería marcado automáticamente como default.
+  Pero si el lender utiliza un threshold más conservador <em>t = 0.25</em>,
+  el mismo applicant sería marcado como risky.
+</p>
+
+<p>
+  <strong>Lección:</strong>
+  el model output y la business decision están relacionados,
+  pero no son idénticos.
+  El threshold representa el risk appetite de la institución.
+</p>
+
+</div>
+
+
+<div class="section-rule"></div>
+
+<h2>Preprocessing, Scaling y Feature Engineering</h2>
+
+<p>El proyecto aplica standard supervised-learning hygiene:</p>
+
+<ul>
+  <li>
+    Train/test split con stratification
+    para mantener proporciones de clase similares en ambos sets.
+  </li>
+
+  <li>
+    One-hot encoding para categorical variables.
+  </li>
+
+  <li>
+    <strong>StandardScaler</strong>
+    para numerical variables cuando corresponde.
+  </li>
+
+  <li>
+    Engineered features como
+    <code>CREDIT_INCOME_RATIO = AMT_CREDIT / AMT_INCOME_TOTAL</code>
+    y
+    <code>ANNUITY_INCOME_RATIO = AMT_ANNUITY / AMT_INCOME_TOTAL</code>.
+  </li>
+</ul>
+
+<div class="equation">
+  <span class="eq-main">
+    z = (x − μ) / σ
+  </span>
+
+  <span>
+    Esta es la standardization formula.
+    Centra una numerical variable restando su mean
+    y la reescala dividiendo entre su standard deviation.
+  </span>
+</div>
+
+<div class="warning">
+  <strong>Advertencia sobre data leakage:</strong>
+  el scaler debe hacer fit únicamente sobre el training set.
+  Si se utiliza información del test set durante preprocessing,
+  la evaluación se vuelve demasiado optimista.
+</div>
+
+
+<h2>Model Explainability con SHAP</h2>
+
+<p>
+  Las regulated financial applications necesitan más que predictive performance.
+  También necesitan explicaciones.
+  Este proyecto utiliza <strong>SHAP</strong>
+  (<strong>SHapley Additive exPlanations</strong>)
+  para explicar tanto global predictions como individual predictions.
+</p>
+
+<div class="equation">
+  <span class="eq-main">
+    f(x) = φ₀ + Σ<sub>j=1</sub><sup>p</sup> φ<sub>j</sub>
+  </span>
+
+  <span>
+    La baseline prediction es φ₀.
+    Cada feature contribution φ<sub>j</sub>
+    empuja la final prediction hacia arriba o hacia abajo.
+  </span>
+</div>
+
+<p>
+  Por ejemplo,
+  un external score bajo puede elevar el risk,
+  mientras que un stable income o una menor annuity burden
+  puede reducirlo.
+</p>
+
+<div class="key-idea">
+  <strong>Por qué un estudiante debería prestar atención:</strong>
+  SHAP es un puente entre predictive accuracy e interpretability.
+  Ayuda a responder la pregunta:
+  “¿Por qué el model produjo esta prediction?”
+</div>
+
+
+<h2>Deployment: del Notebook a una Web Application</h2>
+
+<p>
+  El proyecto no se limita a notebooks.
+  También incluye una <strong>Streamlit application</strong>
+  que carga el final model, scaler y feature names,
+  acepta user input y devuelve una predicted default probability
+  junto con una risk category.
+</p>
+
+<div class="codebox">Risk categories utilizadas en la app:
+prob &lt; 0.20              → LOW
+0.20 ≤ prob &lt; 0.50       → MEDIUM
+prob ≥ 0.50               → HIGH</div>
+
+<p>
+  Este es un elemento importante de portfolio
+  porque demuestra no solamente model training,
+  sino también packaging y comunicación de resultados
+  a un end user.
+</p>
+
+
+<h2>Qué debería aprender un estudiante de este proyecto</h2>
+
+<table class="theory-table">
+
+<thead>
+<tr>
+  <th>Tema</th>
+  <th>Qué debería comprender el estudiante</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr>
+  <td>Business framing</td>
+  <td>
+    Por qué probability of default importa
+    y cómo afecta lending decisions.
+  </td>
+</tr>
+
+<tr>
+  <td>Classification</td>
+  <td>
+    Cómo se predice un binary target
+    a partir de structured features.
+  </td>
+</tr>
+
+<tr>
+  <td>Imbalance</td>
+  <td>
+    Por qué Accuracy puede ser engañosa
+    y por qué SMOTE y threshold tuning importan.
+  </td>
+</tr>
+
+<tr>
+  <td>Model comparison</td>
+  <td>
+    Por qué Logistic Regression,
+    Random Forest y XGBoost se comportan de forma diferente.
+  </td>
+</tr>
+
+<tr>
+  <td>Evaluation</td>
+  <td>
+    Cómo Precision, Recall, F1 y AUC
+    responden preguntas diferentes.
+  </td>
+</tr>
+
+<tr>
+  <td>Interpretability</td>
+  <td>
+    Cómo SHAP descompone una prediction
+    en feature contributions.
+  </td>
+</tr>
+
+<tr>
+  <td>Deployment</td>
+  <td>
+    Cómo un trained model
+    se convierte en una interactive application.
+  </td>
+</tr>
+
+</tbody>
+
+</table>
+
+
+<h2>Conclusión final</h2>
+
+<p>
+  Este es un proyecto educativo sólido porque combina
+  <strong>Finance</strong>,
+  <strong>Machine Learning</strong>,
+  <strong>Model Evaluation</strong>,
+  <strong>Interpretability</strong>
+  y <strong>Deployment</strong>.
+  Enseña no solamente cómo hacer fit de un classifier,
+  sino cómo pensar a través de todo el lifecycle
+  de un practical Data Science system.
+</p>
+
+<p>
+  <a class="btn primary" href="projects.html">
+    ← Volver a Proyectos
+  </a>
+</p>
+
+</div>
+</section>
+
+</main>
+
+
+<footer class="footer">
+  <div class="container">
+
+    <div class="footer-grid">
+
+      <div>
+        <h3>Alfredo Saldana</h3>
+        <p>Data Scientist · Economista · Educador</p>
+        <p>
+          Estudio, exploro y comparto ideas sobre Data Science,
+          Statistics, Machine Learning, Deep Learning y Artificial Intelligence.
+        </p>
+      </div>
+
+      <div>
+        <h4>Explorar</h4>
+        <a href="projects.html">Proyectos</a>
+        <a href="tutorials.html">Recursos</a>
+        <a href="../open-box.html">Open Box</a>
+      </div>
+
+      <div>
+        <h4>Conectar</h4>
+        <a href="https://github.com/alfredosaldana"
+           target="_blank"
+           rel="noopener">GitHub ↗</a>
+
+        <a href="https://www.linkedin.com/in/asaldanamle/"
+           target="_blank"
+           rel="noopener">LinkedIn ↗</a>
+
+        <a href="https://www.youtube.com/@alfredosaldana-ds"
+           target="_blank"
+           rel="noopener">YouTube ↗</a>
+
+        <a href="../contact.html">Contacto</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Alfredo Saldana</span>
+    </div>
+
+  </div>
+</footer>
+
+<script src="../assets/js/script.js"></script>
+
+</body>
+</html>
