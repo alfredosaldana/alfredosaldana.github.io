@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Caso didáctico de Singular Value Decomposition (SVD), low-rank reconstruction, cumulative singular-value energy y PSNR aplicado al denoising de imágenes de dígitos manuscritos con ruido.">
+<title>SVD Digit Denoising — Alfredo Saldana</title>
+
+<link rel="icon" href="../assets/images/favicon.svg">
+<link rel="stylesheet" href="../assets/css/style.css">
+
+<style>
+  .svd-wrap{max-width:980px;margin:0 auto;padding:0 20px}
+  .svd-section{padding:34px 0;border-bottom:1px solid #e6ecf3}
+  .svd-section:last-child{border-bottom:0}
+  .svd-section h2{margin:0 0 14px;font-size:clamp(1.65rem,3vw,2.15rem);color:#0b1f3a}
+  .svd-section h3{margin:26px 0 10px;color:#17385f}
+  .svd-section p,.svd-section li{font-size:1.03rem;line-height:1.75}
+  .svd-section ul,.svd-section ol{padding-left:1.35rem}
+  .svd-hero-image{border-radius:24px;margin:0 0 34px;width:100%;box-shadow:0 16px 40px rgba(18,42,74,.10)}
+  .concept-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0}
+  .concept-card{background:#f7faff;border:1px solid #dce8f6;border-radius:18px;padding:18px}
+  .concept-card strong{display:block;color:#0b1f3a;margin-bottom:6px;font-size:1.03rem}
+  .formula{margin:18px 0;padding:18px 20px;border-left:4px solid #2463eb;background:#f5f8ff;border-radius:12px;font-family:Georgia,'Times New Roman',serif;font-size:1.22rem;overflow-x:auto;color:#0d2440}
+  .formula .small{display:block;font-family:Inter,system-ui,sans-serif;font-size:.9rem;color:#63758d;margin-top:8px}
+  .callout{margin:18px 0;padding:18px 20px;border-radius:16px;background:#eef8f5;border:1px solid #cfe9df}
+  .callout strong{color:#155e52}
+  .warning{background:#fff8e9;border-color:#f1dfad}
+  .warning strong{color:#7a5a00}
+  .worked{background:#f8f5ff;border-color:#ded3ff}
+  .worked strong{color:#563aa4}
+  .svd-table{width:100%;border-collapse:collapse;margin:18px 0;font-size:.97rem}
+  .svd-table th,.svd-table td{padding:12px 14px;border:1px solid #dde5ee;text-align:left;vertical-align:top}
+  .svd-table th{background:#eef4fb;color:#0b1f3a}
+  .workflow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:20px 0}
+  .workflow div{position:relative;background:#0d2748;color:#fff;border-radius:14px;padding:14px 10px;text-align:center;font-weight:700;font-size:.88rem;min-height:74px;display:flex;align-items:center;justify-content:center}
+  .workflow div:not(:last-child)::after{content:'→';position:absolute;right:-14px;color:#2463eb;font-size:1.2rem;z-index:2}
+  .metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:20px 0}
+  .metric{background:#fff;border:1px solid #dde6ef;border-radius:16px;padding:18px}
+  .metric h4{margin:0 0 8px;color:#0b1f3a}
+  .project-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+  .mini-note{font-size:.94rem;color:#5d6d82}
+  @media(max-width:800px){
+    .concept-grid,.metric-grid{grid-template-columns:1fr}
+    .workflow{grid-template-columns:1fr}
+    .workflow div:not(:last-child)::after{content:'↓';right:auto;bottom:-19px;left:50%;transform:translateX(-50%)}
+  }
+</style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav-wrap">
+
+    <div style="display:flex;align-items:center;gap:20px;">
+      <a class="brand" href="index.html">Alfredo Saldana</a>
+
+      <div class="lang-switch"
+           style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap;">
+        <a href="../project-svd.html"
+           style="color:#111827;text-decoration:none;font-weight:700;">EN</a>
+        <span aria-hidden="true" style="color:#64748b;">|</span>
+        <a href="project-svd.html"
+           aria-current="page"
+           style="color:#2563eb;text-decoration:none;font-weight:800;">ES</a>
+      </div>
+    </div>
+
+    <button class="menu-btn" aria-label="Abrir navegación">☰</button>
+
+    <nav class="nav">
+      <a href="index.html">Inicio</a>
+      <a href="tutorials.html">Recursos</a>
+      <a href="projects.html" class="active">Proyectos</a>
+      <a href="../open-box.html">Open Box</a>
+      <a href="../about.html">Acerca de</a>
+      <a href="../contact.html">Contacto</a>
+    </nav>
+
+  </div>
+</header>
+
+
+<main>
+
+<section class="page-hero">
+  <div class="container">
+
+    <div class="eyebrow">Mathematics · Data Science · Image Processing</div>
+
+    <h1>SVD Digit Denoising</h1>
+
+    <p class="lead">
+      Un estudio visual, matemático y práctico de cómo Singular Value Decomposition (SVD)
+      puede separar estructura útil de una imagen y ruido mediante low-rank reconstruction.
+    </p>
+
+    <span class="status">Completado</span>
+
+  </div>
+</section>
+
+
+<section class="article">
+<div class="svd-wrap">
+
+  <img class="svd-hero-image"
+       src="../assets/images/svd.svg"
+       alt="SVD Digit Denoising: noisy digit, low-rank reconstruction and denoised digit">
+
+
+  <section class="svd-section">
+
+    <h2>1. Pregunta del proyecto</h2>
+
+    <p>
+      <strong>
+        ¿Cuánto ruido y complejidad dimensional podemos eliminar
+        preservando al mismo tiempo la estructura reconocible de un dígito manuscrito?
+      </strong>
+    </p>
+
+    <p>
+      El proyecto utiliza imágenes tipo MNIST con ruido y trata el denoising como un problema de Linear Algebra.
+      En lugar de pedir a una Neural Network que aprenda un mapping complejo, planteamos una pregunta más fundamental:
+      <em>¿puede capturarse la estructura geométrica dominante de los datos utilizando solamente un pequeño número de direcciones?</em>
+    </p>
+
+    <div class="concept-grid">
+
+      <div class="concept-card">
+        <strong>Signal</strong>
+        La forma y estructura recurrente que permite reconocer un dígito.
+      </div>
+
+      <div class="concept-card">
+        <strong>Noise</strong>
+        Variación aleatoria a nivel de pixel que no describe consistentemente al dígito.
+      </div>
+
+      <div class="concept-card">
+        <strong>Low-rank structure</strong>
+        Una representación compacta que conserva los patrones más fuertes y descarta direcciones más débiles.
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <section class="svd-section">
+
+    <h2>2. De una imagen a una matriz de datos</h2>
+
+    <p>
+      Cada imagen MNIST tiene <strong>28 × 28 = 784 pixels</strong>.
+      Al hacer flatten de la imagen, esta se convierte en un vector con 784 valores de pixel.
+    </p>
+
+    <p>
+      En este proyecto, el dataset contiene <strong>6,131 imágenes con ruido</strong>,
+      por lo que la matriz completa de datos es:
+    </p>
+
+    <div class="formula">
+      X ∈ ℝ<sup>6131 × 784</sup>
+      <span class="small">Rows = imágenes · Columns = posiciones de pixel</span>
+    </div>
+
+    <p>
+      Esto es importante porque SVD no “ve” una imagen en el sentido humano.
+      SVD ve una matriz numérica. La tarea matemática consiste en encontrar
+      las direcciones de variación más importantes dentro de esa matriz.
+    </p>
+
+    <table class="svd-table">
+
+      <thead>
+        <tr>
+          <th>Objeto</th>
+          <th>Dimensión</th>
+          <th>Interpretación</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr>
+          <td>Una imagen</td>
+          <td>28 × 28</td>
+          <td>Un dígito manuscrito en grayscale.</td>
+        </tr>
+
+        <tr>
+          <td>Flattened image</td>
+          <td>1 × 784</td>
+          <td>Un row vector que contiene los 784 valores de pixel.</td>
+        </tr>
+
+        <tr>
+          <td>Dataset matrix X</td>
+          <td>6131 × 784</td>
+          <td>Todas las imágenes con ruido colocadas una debajo de otra.</td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </section>
+
+
+  <section class="svd-section">
+
+    <h2>3. ¿Qué es Singular Value Decomposition?</h2>
+
+    <p>
+      Singular Value Decomposition factoriza una matriz en tres matrices más simples:
+    </p>
+
+    <div class="formula">
+      X = UΣV<sup>T</sup>
+    </div>
+
+    <p>Cada componente cumple una función diferente:</p>
+
+    <table class="svd-table">
+
+      <thead>
+        <tr>
+          <th>Término</th>
+          <th>Significado</th>
+          <th>Intuición en este proyecto</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr>
+          <td><strong>U</strong></td>
+          <td>Left singular vectors</td>
+          <td>
+            Qué tan fuertemente cada imagen se alinea con las latent directions encontradas por SVD.
+          </td>
+        </tr>
+
+        <tr>
+          <td><strong>Σ</strong></td>
+          <td>Diagonal matrix of singular values</td>
+          <td>
+            La importancia o fuerza de cada latent direction.
+          </td>
+        </tr>
+
+        <tr>
+          <td><strong>V<sup>T</sup></strong></td>
+          <td>Right singular vectors</td>
+          <td>
+            Patrones en pixel space que describen estructuras dominantes a través de las imágenes.
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+    <div class="callout">
+      <strong>Idea clave:</strong>
+      SVD ordena las direcciones desde la más importante hasta la menos importante.
+      Los singular values grandes representan direcciones que explican una parte sustancial de la estructura;
+      singular values muy pequeños suelen capturar detalle fino y, en algunos casos, ruido.
+    </div>
+
+  </section>
+
+
+  <section class="svd-section">
+
+    <h2>4. Singular values: dónde vive la información</h2>
+
+    <p>Las entradas diagonales de Σ son los singular values:</p>
+
+    <div class="formula">
+      σ<sub>1</sub> ≥ σ<sub>2</sub> ≥ σ<sub>3</sub> ≥ ··· ≥ 0
+    </div>
+
+    <p>
+      El primer singular value corresponde a la dirección más fuerte en los datos;
+      el segundo corresponde a la siguiente dirección más fuerte después de considerar la primera, y así sucesivamente.
+    </p>
+
+    <p>
+      Cuando los singular values disminuyen rápidamente,
+      esto sugiere que un número relativamente pequeño de componentes puede capturar
+      gran parte de la estructura importante.
+    </p>
+
+    <div class="callout warning">
+      <strong>Importante:</strong>
+      un singular value pequeño no es automáticamente “noise”.
+      SVD solamente ordena las direcciones según su contribución a la matriz.
+      Decidir qué componentes son útiles requiere un criterio adicional.
+    </div>
+
+  </section>
+
+
+  <section class="svd-section">
+
+    <h2>5. Low-rank reconstruction</h2>
+
+    <p>
+      En lugar de reconstruir X utilizando todos los singular components,
+      conservamos solamente los primeros <em>k</em> componentes.
+    </p>
+
+    <div class="formula">
+      X<sub>k</sub> = U<sub>k</sub>Σ<sub>k</sub>V<sub>k</sub><sup>T</sup>
+    </div>
+
+    <p>Equivalentemente:</p>
+
+    <div class="formula">
+      X<sub>k</sub> =
+      Σ<sub>i=1</sub><sup>k</sup>
+      σ<sub>i</sub>u<sub>i</sub>v<sub>i</sub><sup>T</sup>
+    </div>
+
+    <p>
+      El número <strong>k</strong> es el reconstruction rank.
+      Controla el trade-off entre compression y fidelity:
+    </p>
+
+    <table class="svd-table">
+
+      <thead>
+        <tr>
+          <th>k</th>
+          <th>Efecto</th>
+          <th>Riesgo</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr>
+          <td>Muy pequeño</td>
+          <td>Alta compression y fuerte smoothing</td>
+          <td>Puede desaparecer estructura importante del dígito.</td>
+        </tr>
+
+        <tr>
+          <td>Moderado</td>
+          <td>Se conserva la estructura dominante mientras se elimina parte del ruido</td>
+          <td>Suele ser la región útil para denoising.</td>
+        </tr>
+
+        <tr>
+          <td>Muy grande</td>
+          <td>La reconstrucción se aproxima a los datos originales con ruido</td>
+          <td>El ruido puede volver a introducirse en la imagen.</td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+    <div class="callout worked">
+      <strong>Interpretación:</strong>
+      el denoising funciona porque la reconstrucción decide deliberadamente
+      no reproducir todas las direcciones presentes en los datos originales.
+      El objetivo no es copiar perfectamente la imagen con ruido,
+      sino conservar la estructura que realmente importa.
+    </div>
+
+  </section>
+
+
+  <section class="svd-section">
+
+    <h2>6. Cumulative singular-value energy</h2>
+
+    <p>
+      Una forma útil de elegir <em>k</em> es preguntar qué proporción de la energía total,
+      medida mediante los singular values al cuadrado, queda retenida por los primeros
+      <em>k</em> componentes.
+    </p>
+
+    <div class="formula">
+      Energy(k) =
+      [Σ<sub>i=1</sub><sup>k</sup> σ<sub>i</sub><sup>2</sup>]
+      /
+      [Σ<sub>i=1</sub><sup>r</sup> σ<sub>i</sub><sup>2</sup>]
+    </div>
+
+    <p>donde <em>r</em> es el full rank de la matriz.</p>
+
+    <div class="callout">
+      <strong>Ejemplo de interpretación:</strong>
+      si Energy(k) = 0.95, los primeros k singular components retienen
+      el 95% de la squared singular-value energy de la matriz.
+    </div>
+
+    <p>
+      Energy es útil, pero no cuenta toda la historia.
+      Una reconstrucción puede conservar una fracción alta de matrix energy
+      y aun así no producir el mejor resultado perceptual de denoising.
+      Por eso el proyecto también evalúa reconstruction quality.
+    </p>
+
+  </section>
+
+
+  <section class="svd-section">
+
+    <h2>7. Midiendo reconstruction quality con MSE y PSNR</h2>
+
+    <div class="metric-grid">
+
+      <div class="metric">
+
+        <h4>Mean Squared Error (MSE)</h4>
+
+        <div class="formula">
+          MSE = (1/N) Σ (I<sub>i</sub> − K<sub>i</sub>)<sup>2</sup>
+        </div>
+
+        <p>
+          Promedia las diferencias cuadráticas entre los pixels de una reference image I
+          y una reconstructed image K. Un valor menor es mejor.
+        </p>
+
+      </div>
+
+
+      <div class="metric">
+
+        <h4>Peak Signal-to-Noise Ratio (PSNR)</h4>
+
+        <div class="formula">
+          PSNR = 10 log<sub>10</sub>(MAX<sub>I</sub><sup>2</sup> / MSE)
+        </div>
+
+        <p>
+          PSNR expresa reconstruction quality en una escala logarítmica de decibels.
+          Un valor mayor es mejor cuando se compara una reconstrucción con una clean reference.
+        </p>
+
+      </div>
+
+    </div>
+
+    <p>
+      Por lo tanto, el proyecto utiliza tanto <strong>cumulative energy</strong>
+      como <strong>PSNR</strong> cuando evalúa valores candidatos de k.
+      Estas métricas ofrecen dos perspectivas complementarias:
+    </p>
+
+    <ul>
+      <li>
+        <strong>Energy:</strong>
+        ¿qué proporción de la estructura de la matriz se conserva?
+      </li>
+
+      <li>
+        <strong>PSNR:</strong>
+        ¿qué tan cerca está la reconstrucción de recuperar la señal limpia?
+      </li>
+    </ul>
+
+  </section>
+
+
+  <section class="svd-section">
+
+    <h2>8. ¿Por qué puede funcionar el denoising?</h2>
+
+    <p>
+      La intuición central es que el dígito manuscrito presenta
+      <strong>shared structure</strong>,
+      mientras que el ruido aleatorio está menos consistentemente alineado a través de las imágenes.
+    </p>
+
+    <p>
+      Si gran parte de la información útil del dígito se concentra en las singular directions más fuertes,
+      entonces una lower-rank reconstruction puede conservar la forma reconocible
+      mientras suprime componentes más débiles e irregulares.
+    </p>
+
+    <div class="workflow">
+      <div>Imágenes con ruido</div>
+      <div>Construir X</div>
+      <div>Calcular SVD</div>
+      <div>Elegir k</div>
+      <div>Reconstruir X<sub>k</sub></div>
+    </div>
+
+    <p class="mini-note">
+      Las rows reconstruidas se transforman nuevamente desde longitud 784
+      a imágenes de 28 × 28 para realizar inspección visual.
+    </p>
+
+  </section>
+
+
+  <section class="svd-section">
+
+    <h2>9. Un pequeño ejemplo conceptual</h2>
+
+    <p>
+      Imagine que una imagen contiene un fuerte patrón del dígito
+      junto con muchas pequeñas perturbaciones aleatorias de pixels.
+      Supongamos que los singular values comienzan así:
+    </p>
+
+    <div class="formula">
+      σ = [120, 70, 35, 12, 4, 2, 1, ...]
+    </div>
+
+    <p>
+      Los primeros componentes son mucho mayores que los demás.
+      Mantener los componentes más fuertes puede conservar los strokes principales del dígito
+      mientras elimina direcciones más débiles.
+      Sin embargo, si k es demasiado pequeño, la reconstrucción queda excesivamente smooth;
+      si k es demasiado grande, una mayor parte del ruido regresa.
+    </p>
+
+    <div class="callout worked">
+      <strong>Por eso k es un problema de model selection.</strong>
+      Estamos equilibrando underfitting y overfitting,
+      aunque el método sea Linear Algebra y no un modelo tradicional de supervised Machine Learning.
+    </div>
+
+  </section>
+
+
+  <section class="svd-section">
+
+    <h2>10. ¿Qué demuestra este proyecto?</h2>
+
+    <ul>
+
+      <li>
+        Cómo un dataset de imágenes puede representarse como una high-dimensional matrix.
+      </li>
+
+      <li>
+        Cómo SVD descompone esa matriz en latent directions ordenadas.
+      </li>
+
+      <li>
+        Por qué los singular values proporcionan un ranking natural de importancia de componentes.
+      </li>
+
+      <li>
+        Cómo truncated SVD produce una low-rank approximation.
+      </li>
+
+      <li>
+        Por qué cumulative energy por sí sola no es suficiente para evaluar denoising quality.
+      </li>
+
+      <li>
+        Cómo PSNR añade un criterio de image reconstruction para seleccionar k.
+      </li>
+
+      <li>
+        Cómo Linear Algebra se conecta directamente con tareas prácticas de Data Science
+        como compression, denoising y dimensionality reduction.
+      </li>
+
+    </ul>
+
+  </section>
+
+
+  <section class="svd-section">
+
+    <h2>11. Limitaciones e interpretación</h2>
+
+    <p>
+      SVD es un método lineal.
+      Es poderoso porque es transparente y matemáticamente bien definido,
+      pero no comprende automáticamente semantic image structure.
+      Un modelo no lineal puede capturar patrones más complejos,
+      mientras que SVD ofrece una forma particularmente clara de estudiar la geometría de los datos.
+    </p>
+
+    <p>
+      Por eso este proyecto debe entenderse tanto como un experimento de denoising
+      como una demostración de una idea más general:
+      <strong>
+        datos de alta dimensión pueden contener una estructura de dimensión mucho menor
+        que concentra la mayor parte de la información útil.
+      </strong>
+    </p>
+
+  </section>
+
+
+  <section class="svd-section">
+
+    <h2>12. Explorar el proyecto</h2>
+
+    <p>
+      El GitHub repository contiene el código y la implementación técnica del proyecto.
+      Los dos videos complementarios presentan el proyecto de forma visual y paso a paso.
+    </p>
+
+    <div class="project-links">
+
+      <a class="btn primary"
+         href="https://github.com/alfredosaldana/svd-digit-denoising"
+         target="_blank"
+         rel="noopener">
+        GitHub Repository ↗
+      </a>
+
+      <a class="btn secondary"
+         href="https://youtu.be/eVJ38ftDeC4"
+         target="_blank"
+         rel="noopener">
+        YouTube · Parte A ↗
+      </a>
+
+      <a class="btn secondary"
+         href="https://youtu.be/NKPLRfTOxUY"
+         target="_blank"
+         rel="noopener">
+        YouTube · Parte B ↗
+      </a>
+
+    </div>
+
+    <div class="actions" style="margin-top:24px">
+      <a class="btn secondary" href="projects.html">
+        ← Volver a Proyectos
+      </a>
+    </div>
+
+  </section>
+
+</div>
+</section>
+
+</main>
+
+
+<footer class="footer">
+
+  <div class="container">
+
+    <div class="footer-grid">
+
+      <div>
+        <h3>Alfredo Saldana</h3>
+        <p>Data Scientist · Economista · Educador</p>
+        <p>
+          Estudio, exploro y comparto ideas sobre Data Science,
+          Statistics, Machine Learning, Deep Learning y Artificial Intelligence.
+        </p>
+      </div>
+
+      <div>
+        <h4>Explorar</h4>
+        <a href="projects.html">Proyectos</a>
+        <a href="tutorials.html">Recursos</a>
+        <a href="../open-box.html">Open Box</a>
+      </div>
+
+      <div>
+        <h4>Conectar</h4>
+
+        <a href="https://github.com/alfredosaldana"
+           target="_blank"
+           rel="noopener">
+          GitHub ↗
+        </a>
+
+        <a href="https://www.linkedin.com/in/asaldanamle/"
+           target="_blank"
+           rel="noopener">
+          LinkedIn ↗
+        </a>
+
+        <a href="https://www.youtube.com/@alfredosaldana-ds"
+           target="_blank"
+           rel="noopener">
+          YouTube ↗
+        </a>
+
+        <a href="../contact.html">Contacto</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Alfredo Saldana</span>
+    </div>
+
+  </div>
+
+</footer>
+
+<script src="../assets/js/script.js"></script>
+
+</body>
+</html>
