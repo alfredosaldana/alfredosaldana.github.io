@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Ruta de aprendizaje de Mathematics for Data Science por Alfredo Saldana: vectores, matrices, transformaciones, eigenvalues, PCA, SVD, cálculo y optimización.">
+<title>Mathematics for Data Science — Alfredo Saldana</title>
+<link rel="icon" href="../../../assets/images/favicon.svg">
+<link rel="stylesheet" href="../../../assets/css/style.css">
+<style>
+.path-wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.breadcrumb{margin:0 0 18px;font-size:.94rem;color:#6b7b8f}
+.breadcrumb a{color:#245f9e;text-decoration:none;font-weight:700}
+.breadcrumb a:hover{text-decoration:underline}
+.path-intro{display:grid;grid-template-columns:1.12fr .88fr;gap:30px;align-items:center;margin:0 0 36px}
+.path-copy h2{margin:0 0 12px;color:#0b1f3a;font-size:clamp(1.7rem,3vw,2.35rem)}
+.path-copy p{margin:0 0 14px;color:#5e6f83;line-height:1.75;font-size:1.03rem}
+.path-image{width:100%;border-radius:22px;box-shadow:0 16px 38px rgba(18,42,74,.12);border:1px solid #dbe6f2}
+.path-note{margin:18px 0 0;padding:16px 18px;border-radius:15px;background:#eef6ff;border:1px solid #d2e4f7;color:#33506d;line-height:1.65}
+.section-mini{margin:0 0 10px;color:#5a6b7f;font-size:.94rem;line-height:1.65}
+.guide-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:26px}
+.guide-card{--accent:#2f6fb0;position:relative;background:#fff;border:1px solid #dfe8f2;border-radius:18px;padding:24px 20px 20px;box-shadow:0 10px 26px rgba(18,42,74,.07);display:flex;flex-direction:column;min-height:255px;overflow:hidden;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.guide-card::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:var(--accent)}
+.guide-card.group-vectors{--accent:#2563a8}
+.guide-card.group-matrices{--accent:#16847a}
+.guide-card.group-decomp{--accent:#7253a5}
+.guide-card.group-calculus{--accent:#c77a22}
+.guide-card.group-optimization{--accent:#b94d5c}
+.guide-card:hover{transform:translateY(-4px);box-shadow:0 16px 32px rgba(18,42,74,.12);border-color:#cbdced}
+.guide-status{display:inline-flex;align-self:flex-start;padding:5px 9px;border-radius:999px;font-size:.76rem;font-weight:800;letter-spacing:.02em;margin-bottom:11px;background:#f1f5f9;color:#607085}
+.guide-card h3{margin:0 0 10px;color:#0b1f3a;font-size:1.12rem;line-height:1.36}
+.guide-card p{margin:0 0 16px;color:#617287;line-height:1.62;font-size:.95rem}
+.disabled-link{margin-top:auto;color:#94a3b8;font-weight:700}
+.sequence{margin:38px 0 0;padding:22px;background:#fff;border:1px solid #dfe8f2;border-radius:18px}
+.sequence h3{margin:0 0 12px;color:#0b1f3a}
+.sequence p{color:#5f6f82;line-height:1.7;margin:0 0 12px}
+.sequence p:last-child{margin-bottom:0}
+@media(max-width:900px){.path-intro{grid-template-columns:1fr}.guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.guide-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav-wrap">
+    <div style="display:flex;align-items:center;gap:20px;">
+      <a class="brand" href="../../index.html">Alfredo Saldana</a>
+      <div class="lang-switch" style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap;">
+        <a href="../../../learn/mathematics-data-science/" style="color:#111827;text-decoration:none;font-weight:700;">EN</a>
+        <span aria-hidden="true" style="color:#64748b;">|</span>
+        <a href="index.html" aria-current="page" style="color:#2563eb;text-decoration:none;font-weight:800;">ES</a>
+      </div>
+    </div>
+    <button class="menu-btn" aria-label="Abrir navegación">☰</button>
+    <nav class="nav">
+      <a href="../../index.html">Inicio</a>
+      <a href="../../tutorials.html" class="active">Recursos</a>
+      <a href="../../projects.html">Proyectos</a>
+      <a href="../../open-box.html">Open Box</a>
+      <a href="../../about.html">Acerca de</a>
+      <a href="../../contact.html">Contacto</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page-hero">
+  <div class="container">
+    <div class="eyebrow">Recursos · Mathematics for Data Science</div>
+    <h1>Mathematics for Data Science</h1>
+    <p class="lead">Una ruta estructurada para comprender la matemática que sostiene Data Science, Machine Learning y Deep Learning desde una perspectiva visual y aplicada.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="path-wrap">
+    <div class="breadcrumb">
+      <a href="../../tutorials.html">Recursos</a> → Mathematics for Data Science
+    </div>
+
+    <div class="path-intro">
+      <div class="path-copy">
+        <h2>De vectores y matrices a optimización.</h2>
+        <p>Esta ruta comienza con Scalars, Vectors and Matrices y desarrolla gradualmente operaciones vectoriales, Matrix Multiplication, Linear Systems, Linear Transformations, Orthogonality y Least Squares.</p>
+        <p>Después conecta Eigenvalues, Covariance Matrices, PCA y SVD con la geometría de los datos, antes de introducir Calculus, Partial Derivatives, Gradients, Chain Rule y Optimization.</p>
+        <div class="path-note"><strong>Orden de aprendizaje recomendado:</strong> sigue las guías en secuencia. Cada bloque prepara las ideas matemáticas necesarias para comprender el siguiente.</div>
+      </div>
+
+      <img class="path-image" src="../../../assets/images/learn-mathematics-data-science.png" alt="Ruta de aprendizaje de Mathematics for Data Science">
+    </div>
+
+    <div class="eyebrow">Guías</div>
+    <h2 style="margin-top:8px;color:#0b1f3a;">Secuencia de aprendizaje</h2>
+    <p class="section-mini">El recorrido sigue una progresión intencional: <strong>Vectors → Matrices → Linear Systems → Projections → Eigenvalues → PCA → SVD → Calculus → Gradients → Optimization.</strong></p>
+
+    <div class="path-note" style="margin-top:20px;">
+      <strong>Guía visual:</strong> azul = vectores y fundamentos, verde = matrices y transformaciones, violeta = eigenvalues, PCA y SVD, naranja = calculus y gradients, rojo = optimization.
+    </div>
+
+    <div class="guide-grid">
+      <article class="guide-card group-vectors">
+        <span class="guide-status">Planeada · 1</span>
+        <h3>Scalars, Vectors and Matrices desde los fundamentos</h3>
+        <p>Construye el lenguaje matemático básico de Data Science: escalares, vectores, matrices, dimensiones y notación.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-vectors">
+        <span class="guide-status">Planeada · 2</span>
+        <h3>Vector Operations: suma, resta y multiplicación por escalares</h3>
+        <p>Aprende a operar vectores paso a paso y a interpretar geométricamente suma, resta y escalamiento.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-vectors">
+        <span class="guide-status">Planeada · 3</span>
+        <h3>Dot Product desde los fundamentos</h3>
+        <p>Comprende el Dot Product como cálculo numérico, medida de alineación y herramienta para proyecciones y similitud.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-vectors">
+        <span class="guide-status">Planeada · 4</span>
+        <h3>Norms and Distance Metrics</h3>
+        <p>Estudia normas, magnitud y distancias, y cómo estas ideas aparecen en optimización, clustering y Machine Learning.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-matrices">
+        <span class="guide-status">Planeada · 5</span>
+        <h3>Matrices and Matrix Operations</h3>
+        <p>Aprende suma, transposición, multiplicación por escalares y otras operaciones fundamentales con matrices.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-matrices">
+        <span class="guide-status">Planeada · 6</span>
+        <h3>Matrix Multiplication: qué significa realmente</h3>
+        <p>Comprende la multiplicación matricial desde la aritmética, la geometría y la composición de transformaciones.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-matrices">
+        <span class="guide-status">Planeada · 7</span>
+        <h3>Systems of Linear Equations</h3>
+        <p>Relaciona ecuaciones lineales, matrices y soluciones para comprender muchos problemas fundamentales de modelado.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-matrices">
+        <span class="guide-status">Planeada · 8</span>
+        <h3>Linear Independence, Span and Basis</h3>
+        <p>Construye intuición sobre independencia lineal, span y basis, y por qué estas ideas describen espacios de datos.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-matrices">
+        <span class="guide-status">Planeada · 9</span>
+        <h3>Rank and Null Space</h3>
+        <p>Comprende qué información mide el rank y qué representa el null space dentro de una transformación lineal.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-matrices">
+        <span class="guide-status">Planeada · 10</span>
+        <h3>Linear Transformations desde los fundamentos</h3>
+        <p>Interpreta una matriz como una transformación que mueve, escala, rota o proyecta vectores.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-matrices">
+        <span class="guide-status">Planeada · 11</span>
+        <h3>Determinants: qué representan y cuándo importan</h3>
+        <p>Aprende qué mide un determinante, su relación con escala y orientación, y cuándo es realmente útil.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-matrices">
+        <span class="guide-status">Planeada · 12</span>
+        <h3>Matrix Inverse and Pseudoinverse</h3>
+        <p>Comprende la idea de invertir una transformación y por qué la pseudoinversa permite resolver problemas sin inversa exacta.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-decomp">
+        <span class="guide-status">Planeada · 13</span>
+        <h3>Orthogonality and Projections</h3>
+        <p>Estudia perpendicularidad, proyecciones y descomposición de vectores, ideas centrales para regresión y reducción de dimensión.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-decomp">
+        <span class="guide-status">Planeada · 14</span>
+        <h3>Least Squares desde una perspectiva geométrica</h3>
+        <p>Conecta mínimos cuadrados con proyecciones y entiende por qué la solución aproxima datos que no encajan exactamente.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-decomp">
+        <span class="guide-status">Planeada · 15</span>
+        <h3>Eigenvalues and Eigenvectors desde los fundamentos</h3>
+        <p>Aprende cómo ciertas direcciones especiales se conservan bajo una transformación y qué información contienen sus eigenvalues.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-decomp">
+        <span class="guide-status">Planeada · 16</span>
+        <h3>Covariance Matrices and Geometric Structure</h3>
+        <p>Relaciona covarianza, dispersión y geometría de los datos mediante la covariance matrix.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-decomp">
+        <span class="guide-status">Planeada · 17</span>
+        <h3>PCA from First Principles</h3>
+        <p>Construye Principal Component Analysis desde la varianza, eigenvectors y proyecciones hacia nuevas direcciones.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-decomp">
+        <span class="guide-status">Planeada · 18</span>
+        <h3>Singular Value Decomposition (SVD) desde los fundamentos</h3>
+        <p>Comprende SVD como una descomposición fundamental de matrices y su relación con estructura, energía y compresión.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-decomp">
+        <span class="guide-status">Planeada · 19</span>
+        <h3>SVD, PCA and Low-Rank Approximation: cómo se conectan</h3>
+        <p>Integra SVD, PCA y aproximaciones de bajo rango para entender reducción de dimensión y reconstrucción.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-calculus">
+        <span class="guide-status">Planeada · 20</span>
+        <h3>Functions, Slopes and Derivatives para Data Science</h3>
+        <p>Introduce funciones, pendientes y derivadas como base matemática para comprender cambio y optimización.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-calculus">
+        <span class="guide-status">Planeada · 21</span>
+        <h3>Partial Derivatives and Multivariable Functions</h3>
+        <p>Extiende la derivada a funciones con múltiples variables y aprende a interpretar cambios parciales.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-calculus">
+        <span class="guide-status">Planeada · 22</span>
+        <h3>The Gradient Vector desde los fundamentos</h3>
+        <p>Comprende el gradient como una colección de partial derivatives que indica la dirección de mayor crecimiento.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-calculus">
+        <span class="guide-status">Planeada · 23</span>
+        <h3>The Chain Rule and Backpropagation Foundations</h3>
+        <p>Construye la Chain Rule paso a paso y conecta su lógica con las bases matemáticas de Backpropagation.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-optimization">
+        <span class="guide-status">Planeada · 24</span>
+        <h3>Optimization: Minima, Maxima and Gradient Descent</h3>
+        <p>Relaciona derivadas, gradients, mínimos y Gradient Descent dentro del proceso de optimización.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+      <article class="guide-card group-optimization">
+        <span class="guide-status">Planeada · 25</span>
+        <h3>Convexity and Optimization in Machine Learning</h3>
+        <p>Introduce convexity y explica por qué la forma de una función afecta la facilidad y confiabilidad de la optimización.</p>
+        <div class="disabled-link">Próximamente</div>
+      </article>
+    </div>
+
+    <div class="sequence">
+      <h3>¿Por qué este orden?</h3>
+      <p>Primero construimos el lenguaje geométrico de los datos mediante vectores y matrices. Después estudiamos sistemas lineales, transformaciones, independencia, rank, orthogonality y projections para comprender cómo se organiza la información en espacios vectoriales.</p>
+      <p>Con esa base, Eigenvalues, Covariance Matrices, PCA y SVD dejan de parecer técnicas aisladas: se convierten en distintas formas de describir estructura, variación y direcciones importantes en los datos.</p>
+      <p>Finalmente, Calculus, Partial Derivatives, Gradients, Chain Rule y Optimization permiten comprender matemáticamente cómo muchos modelos de Machine Learning ajustan sus parámetros y minimizan una función de pérdida.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h3>Alfredo Saldana</h3>
+        <p>Data Scientist · Economista · Educador</p>
+        <p>Estudio, exploro y comparto ideas sobre Data Science, Statistics, Machine Learning, Deep Learning y Artificial Intelligence.</p>
+      </div>
+      <div>
+        <h4>Explorar</h4>
+        <a href="../../projects.html">Proyectos</a>
+        <a href="../../tutorials.html">Recursos</a>
+        <a href="../../open-box.html">Open Box</a>
+      </div>
+      <div>
+        <h4>Conectar</h4>
+        <a href="https://github.com/alfredosaldana" target="_blank" rel="noopener">GitHub ↗</a>
+        <a href="https://www.linkedin.com/in/asaldanamle/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a href="https://www.youtube.com/@alfredosaldana-ds" target="_blank" rel="noopener">YouTube ↗</a>
+        <a href="../../contact.html">Contacto</a>
+      </div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 Alfredo Saldana</span></div>
+  </div>
+</footer>
+
+<script src="../../../assets/js/script.js"></script>
+</body>
+</html>
