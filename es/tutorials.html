@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Recursos de aprendizaje de Alfredo Saldana: Data Science Foundations, Statistics & Probability, Machine Learning, Mathematics for Data Science, Deep Learning y SQL, Python & Tools.">
+<title>Recursos — Alfredo Saldana</title>
+
+<link rel="icon" href="../assets/images/favicon.svg">
+<link rel="stylesheet" href="../assets/css/style.css">
+
+<style>
+.resources-wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.resources-intro{max-width:820px;margin:0 0 36px}
+.resources-intro p{color:#5f6f82;line-height:1.75;font-size:1.04rem}
+.resource-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.resource-card{background:#fff;border:1px solid #dfe8f2;border-radius:20px;overflow:hidden;box-shadow:0 10px 28px rgba(18,42,74,.07);display:flex;flex-direction:column;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.resource-card:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(18,42,74,.12);border-color:#cbdced}
+.resource-card img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#f5f8fc}
+.resource-body{padding:20px;display:flex;flex-direction:column;flex:1}
+.resource-body p{color:#607085;line-height:1.65;margin:0 0 18px}
+.resource-body a{margin-top:auto;text-decoration:none;color:#0b1f3a;font-weight:800}
+.resource-body a:hover{text-decoration:underline}
+.resources-note{margin-top:34px;padding:22px;border:1px solid #dbe6f2;border-radius:18px;background:#f7faff;color:#52657c;line-height:1.7}
+@media(max-width:900px){.resource-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.resource-grid{grid-template-columns:1fr}}
+</style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav-wrap">
+
+    <div style="display:flex;align-items:center;gap:20px;">
+      <a class="brand" href="index.html">Alfredo Saldana</a>
+
+      <div class="lang-switch"
+           style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap;">
+        <a href="../tutorials.html"
+           style="color:#111827;text-decoration:none;font-weight:700;">EN</a>
+        <span aria-hidden="true" style="color:#64748b;">|</span>
+        <a href="tutorials.html"
+           aria-current="page"
+           style="color:#2563eb;text-decoration:none;font-weight:800;">ES</a>
+      </div>
+    </div>
+
+    <button class="menu-btn" aria-label="Abrir navegación">☰</button>
+
+    <nav class="nav">
+      <a href="index.html">Inicio</a>
+      <a href="tutorials.html" class="active">Recursos</a>
+      <a href="projects.html">Proyectos</a>
+      <a href="open-box.html">Open Box</a>
+      <a href="about.html">Acerca de</a>
+      <a href="contact.html">Contacto</a>
+    </nav>
+
+  </div>
+</header>
+
+<main>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="eyebrow">Recursos</div>
+    <h1>Materiales de Aprendizaje</h1>
+    <p class="lead">
+      Explicaciones visuales, guías paso a paso y rutas estructuradas
+      para construir fundamentos sólidos en Data Science.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="resources-wrap">
+
+    <div class="resources-intro">
+      <div class="eyebrow">Rutas de aprendizaje</div>
+      <h2 style="margin-top:8px;color:#0b1f3a;">Aprender la idea, no solamente la sintaxis.</h2>
+      <p>
+        Cada área está organizada como una secuencia de aprendizaje.
+        La meta es conectar intuición, teoría, matemáticas, código y aplicaciones prácticas
+        para que los conceptos puedan entenderse y reutilizarse en problemas reales.
+      </p>
+    </div>
+
+    <div class="resource-grid">
+
+      <article class="resource-card">
+        <img src="../assets/images/learn-data-science-foundations.png"
+             alt="Data Science Foundations">
+        <div class="resource-body">
+          <p>
+            Métricas, validación, thresholds, model evaluation y los fundamentos
+            necesarios para comprender cómo se construyen y evalúan soluciones de Data Science.
+          </p>
+          <a href="learn/data-science-foundations/">Explorar ruta →</a>
+        </div>
+      </article>
+
+      <article class="resource-card">
+        <img src="../assets/images/learn-statistics-probability.png"
+             alt="Statistics and Probability">
+        <div class="resource-body">
+          <p>
+            Probability, distributions, sampling, statistical inference,
+            hypothesis testing y los fundamentos de la incertidumbre y la toma de decisiones con datos.
+          </p>
+          <a href="learn/statistics-probability/">Explorar ruta →</a>
+        </div>
+      </article>
+
+      <article class="resource-card">
+        <img src="../assets/images/learn-machine-learning.png"
+             alt="Machine Learning">
+        <div class="resource-body">
+          <p>
+            Features, models, training, prediction, validation, generalization
+            y el proceso completo de construir, evaluar e interpretar modelos predictivos.
+          </p>
+          <a href="learn/machine-learning/">Explorar ruta →</a>
+        </div>
+      </article>
+
+      <article class="resource-card">
+        <img src="../assets/images/learn-mathematics-data-science.png"
+             alt="Mathematics for Data Science">
+        <div class="resource-body">
+          <p>
+            Vectors, matrices, geometry, eigenvalues, PCA, SVD,
+            calculus y optimization explicados desde los fundamentos.
+          </p>
+          <a href="learn/mathematics-data-science/">Explorar ruta →</a>
+        </div>
+      </article>
+
+      <article class="resource-card">
+        <img src="../assets/images/learn-deep-learning.png"
+             alt="Deep Learning">
+        <div class="resource-body">
+          <p>
+            Tensors, neural networks, activation functions, backpropagation,
+            optimization, CNNs, RNNs, Attention y Transformers.
+          </p>
+          <a href="learn/deep-learning/">Explorar ruta →</a>
+        </div>
+      </article>
+
+      <article class="resource-card">
+        <img src="../assets/images/learn-sql-python-tools.png"
+             alt="SQL Python and Tools">
+        <div class="resource-body">
+          <p>
+            Python, NumPy, pandas, SQL, data cleaning, joins, aggregations,
+            visualization, Jupyter, Git y reproducible analysis.
+          </p>
+          <a href="learn/sql-python-tools/">Explorar ruta →</a>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="resources-note">
+      <strong>Filosofía de aprendizaje:</strong>
+      cada ruta busca comenzar con los fundamentos, explicar el porqué detrás de los métodos
+      y avanzar gradualmente hacia ejemplos, código y aplicaciones reales.
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+
+    <div class="footer-grid">
+
+      <div>
+        <h3>Alfredo Saldana</h3>
+        <p>Data Scientist · Economista · Educador</p>
+        <p>
+          Estudio, exploro y comparto ideas sobre Data Science,
+          Statistics, Machine Learning, Deep Learning y Artificial Intelligence.
+        </p>
+      </div>
+
+      <div>
+        <h4>Explorar</h4>
+        <a href="projects.html">Proyectos</a>
+        <a href="tutorials.html">Recursos</a>
+        <a href="open-box.html">Open Box</a>
+      </div>
+
+      <div>
+        <h4>Conectar</h4>
+        <a href="https://github.com/alfredosaldana" target="_blank" rel="noopener">GitHub ↗</a>
+        <a href="https://www.linkedin.com/in/asaldanamle/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a href="https://www.youtube.com/@alfredosaldana-ds" target="_blank" rel="noopener">YouTube ↗</a>
+        <a href="contact.html">Contacto</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Alfredo Saldana</span>
+    </div>
+
+  </div>
+</footer>
+
+<script src="../assets/js/script.js"></script>
+
+</body>
+</html>
