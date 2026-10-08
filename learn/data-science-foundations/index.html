@@ -1,13 +1,12 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Ruta de aprendizaje de Fundamentos de Data Science por Alfredo Saldana: conceptos esenciales sobre predicciones, evaluación de modelos, desbalance de clases, umbrales, validación, calibración y generalización.">
-<title>Fundamentos de Data Science — Alfredo Saldana</title>
+<meta name="description" content="Data Science Foundations learning path by Alfredo Saldana: predictions, model evaluation, class imbalance, thresholds, validation, calibration, and generalization.">
+<title>Data Science Foundations — Alfredo Saldana</title>
 <link rel="icon" href="../../assets/images/favicon.svg">
 <link rel="stylesheet" href="../../assets/css/style.css">
-
 <style>
   .path-wrap{
     max-width:1120px;
@@ -201,270 +200,182 @@
   }
 </style>
 </head>
-
 <body>
 
 <header class="site-header">
   <div class="container nav-wrap">
-    <a class="brand" href="../../index.html">Alfredo Saldana</a>
-    <button class="menu-btn" aria-label="Abrir navegación">☰</button>
+    <div style="display:flex;align-items:center;gap:20px;">
+      <a class="brand" href="../../index.html">Alfredo Saldana</a>
+      <div class="lang-switch" style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap;">
+        <a href="index.html" aria-current="page" style="color:#2563eb;text-decoration:none;font-weight:800;">EN</a>
+        <span aria-hidden="true" style="color:#64748b;">|</span>
+        <a href="../../es/learn/data-science-foundations/" style="color:#111827;text-decoration:none;font-weight:700;">ES</a>
+      </div>
+    </div>
+    <button class="menu-btn" aria-label="Open navigation">☰</button>
     <nav class="nav">
-      <a href="../../index.html">Inicio</a>
-      <a href="../../tutorials.html" class="active">Aprender</a>
-      <a href="../../projects.html">Proyectos</a>
+      <a href="../../index.html">Home</a>
+      <a href="../../tutorials.html" class="active">Learn</a>
+      <a href="../../projects.html">Projects</a>
       <a href="../../open-box.html">Open Box</a>
-      <a href="../../about.html">Acerca de</a>
-      <a href="../../contact.html">Contacto</a>
+      <a href="../../about.html">About</a>
+      <a href="../../contact.html">Contact</a>
     </nav>
   </div>
 </header>
 
 <main>
-
 <section class="page-hero">
   <div class="container">
-    <div class="eyebrow">Aprender · Fundamentos de Data Science</div>
-    <h1>Fundamentos de Data Science</h1>
-    <p class="lead">
-      Una ruta estructurada para aprender los conceptos fundamentales que conectan los datos, las predicciones, la evaluación y un desempeño confiable de los modelos.
-    </p>
+    <div class="eyebrow">Learn · Data Science Foundations</div>
+    <h1>Data Science Foundations</h1>
+    <p class="lead">A structured learning path for understanding the core ideas that connect data, predictions, model evaluation, and reliable model performance.</p>
   </div>
 </section>
 
 <section class="section">
   <div class="path-wrap">
-
     <div class="breadcrumb">
-      <a href="../../tutorials.html">Aprender</a> → Data Science Foundations
+      <a href="../../tutorials.html">Learn</a> → Data Science Foundations
     </div>
 
     <div class="path-intro">
       <div class="path-copy">
-        <h2>Construye las ideas que hacen que los resultados de un modelo tengan significado.</h2>
-
-        <p>
-          Antes de estudiar muchos algoritmos, necesitamos comprender con claridad qué es una predicción,
-          cómo las predicciones se convierten en clases, cómo se contabilizan los errores del modelo,
-          qué preguntas responde cada métrica y cómo evaluar un modelo de manera confiable.
-        </p>
-
-        <p>
-          Esta ruta de aprendizaje avanza desde el lenguaje más básico del aprendizaje supervisado hacia las matrices de confusión,
-          las métricas de evaluación, el desbalance de clases, los umbrales, ROC-AUC, la calibración, la división de datos,
-          la fuga de datos, la generalización y el uso de modelos de referencia.
-        </p>
-
-        <div class="path-note">
-          <strong>Orden de aprendizaje recomendado:</strong> comienza con las primeras guías y sigue la secuencia.
-          Cada tema desarrolla el lenguaje y la intuición necesarios para comprender el siguiente.
-        </div>
+        <h2>Build the ideas that make model results meaningful.</h2>
+        <p>Before studying many algorithms, we need to understand clearly what a prediction is, how predictions become classes, how model errors are counted, what questions each metric answers, and how to evaluate a model reliably.</p>
+        <p>This learning path moves from the basic language of supervised learning to Confusion Matrices, evaluation metrics, class imbalance, thresholds, ROC-AUC, calibration, data splitting, data leakage, generalization, and baseline models.</p>
+        <div class="path-note"><strong>Recommended learning order:</strong> start with the first guides and follow the sequence. Each topic builds the language and intuition needed to understand the next one.</div>
       </div>
 
-      <img class="path-image"
-           src="../../assets/images/learn-data-science-foundations.png"
-           alt="Ruta de aprendizaje de Fundamentos de Data Science">
+      <img class="path-image" src="../../assets/images/learn-data-science-foundations.png" alt="Data Science Foundations learning path">
     </div>
 
-    <div class="eyebrow">Guías</div>
-    <h2 style="margin-top:8px;color:#0b1f3a;">Secuencia de aprendizaje</h2>
-    <p class="section-mini">
-      El orden que sigue es intencional: comenzamos con <strong>datos y predicciones</strong>, continuamos con las
-      <strong>métricas</strong>, después pasamos a la <strong>evaluación basada en umbrales</strong> y finalmente
-      llegamos a la <strong>validación confiable de modelos</strong>.
-    </p>
+    <div class="eyebrow">Guides</div>
+    <h2 style="margin-top:8px;color:#0b1f3a;">Learning sequence</h2>
+    <p class="section-mini">The order is intentional: we begin with <strong>data and predictions</strong>, continue with <strong>metrics</strong>, then move into <strong>threshold-based evaluation</strong>, and finally reach <strong>reliable model validation</strong>.</p>
 
     <div class="path-note" style="margin-top:20px;">
-      <strong>Guía visual:</strong> las barras de color agrupan temas relacionados sin perder el fondo blanco y académico de las tarjetas:
-      azul = conceptos básicos, verde = métricas de clasificación, violeta = umbrales y curvas,
-      naranja = validación y confiabilidad, rojo = métricas de regresión.
+      <strong>Visual guide:</strong> blue = basic concepts, green = classification metrics, purple = thresholds and curves, orange = validation and reliability, red = regression metrics.
     </div>
 
     <div class="guide-grid">
-
       <article class="guide-card group-basics">
-        <span class="guide-status">Planeada · 1</span>
-        <h3>Variables predictoras, variable objetivo y observaciones</h3>
-        <p>
-          Aprende el lenguaje fundamental del aprendizaje supervisado: filas, columnas, variables predictoras
-          <strong>X</strong>, variable objetivo <strong>Y</strong>, observaciones, etiquetas y predicciones.
-        </p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 1</span>
+        <h3>Predictor Variables, Target Variable, and Observations</h3>
+        <p>Learn the fundamental language of supervised learning: rows, columns, predictor variables X, target variable Y, observations, labels, and predictions.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
-
       <article class="guide-card group-basics">
-        <span class="guide-status">Planeada · 2</span>
-        <h3>Probabilidad pronosticada vs. clase pronosticada</h3>
-        <p>
-          Comprende la diferencia entre un modelo que produce una probabilidad y un modelo que asigna una etiqueta de clase final.
-        </p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 2</span>
+        <h3>Predicted Probability vs. Predicted Class</h3>
+        <p>Understand the difference between a model that produces a probability and a model that assigns a final class label.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
-
       <article class="guide-card available group-basics">
-        <span class="guide-status">Disponible · 3 · Español</span>
+        <span class="guide-status">Available · 3 · English</span>
         <h3>Understanding the Confusion Matrix</h3>
-        <p>
-          Aprende los Verdaderos Positivos, Verdaderos Negativos, Falsos Positivos y Falsos Negativos desde los fundamentos,
-          con ejemplos visuales y cálculos paso a paso.
-        </p>
-        <a href="confusion-matrix-es.html">Abrir guía →</a>
+        <p>Learn True Positives, True Negatives, False Positives, and False Negatives from first principles, with visual examples and step-by-step calculations.</p>
+        <a href="confusion-matrix.html">Open guide →</a>
       </article>
-
       <article class="guide-card group-metrics">
-        <span class="guide-status">Planeada · 4</span>
-        <h3>Accuracy (Exactitud) desde los fundamentos</h3>
-        <p>
-          Aprende qué mide Accuracy (Exactitud), qué aspectos no refleja y por qué puede parecer impresionante incluso cuando un modelo no es muy útil.
-        </p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 4</span>
+        <h3>Accuracy from First Principles</h3>
+        <p>Learn what Accuracy measures, what it does not capture, and why it can look impressive even when a model is not very useful.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
-
       <article class="guide-card group-metrics">
-        <span class="guide-status">Planeada · 5</span>
-        <h3>Precision, Recall y F1 Score desde los fundamentos</h3>
-        <p>
-          Deriva las tres métricas directamente a partir de la matriz de confusión y comprende por qué cada una responde una pregunta diferente.
-        </p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 5</span>
+        <h3>Precision, Recall, and F1 Score from First Principles</h3>
+        <p>Derive all three metrics directly from the Confusion Matrix and understand why each one answers a different question.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
-
       <article class="guide-card group-metrics">
-        <span class="guide-status">Planeada · 6</span>
-        <h3>Tasa de Falsos Positivos, Tasa de Falsos Negativos, Sensibilidad y Especificidad</h3>
-        <p>
-          Completa la familia de métricas derivadas de la matriz de confusión y observa cómo cada medida enfatiza un comportamiento diferente del modelo.
-        </p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 6</span>
+        <h3>False Positive Rate, False Negative Rate, Sensitivity, and Specificity</h3>
+        <p>Complete the family of Confusion Matrix metrics and see how each measure emphasizes a different aspect of model behavior.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
-
       <article class="guide-card group-metrics">
-        <span class="guide-status">Planeada · 7</span>
-        <h3>Por qué Accuracy puede fallar con datos desbalanceados</h3>
-        <p>
-          Descubre por qué un modelo puede alcanzar una Accuracy muy alta y aun así no identificar correctamente los casos que más importan.
-        </p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 7</span>
+        <h3>Why Accuracy Can Fail with Imbalanced Data</h3>
+        <p>Discover why a model can achieve very high Accuracy and still fail to identify the cases that matter most.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
-
       <article class="guide-card group-thresholds">
-        <span class="guide-status">Planeada · 8</span>
-        <h3>Umbrales de clasificación: por qué 0.50 no siempre es la elección correcta</h3>
-        <p>
-          Comprende por qué 0.50 es solamente una regla de decisión y cómo cambiar el umbral modifica los errores y las métricas del modelo.
-        </p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 8</span>
+        <h3>Classification Thresholds: Why 0.50 Is Not Always the Right Choice</h3>
+        <p>Understand why 0.50 is only a decision rule and how changing the threshold changes model errors and metrics.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
-
       <article class="guide-card group-thresholds">
-        <span class="guide-status">Planeada · 9</span>
-        <h3>Curvas ROC y AUC desde los fundamentos</h3>
-        <p>
-          Construye la curva ROC a partir de distintos umbrales y comprende qué mide realmente el Área Bajo la Curva (AUC).
-        </p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 9</span>
+        <h3>ROC Curves and AUC from First Principles</h3>
+        <p>Build the ROC curve from different thresholds and understand what Area Under the Curve (AUC) actually measures.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
-
       <article class="guide-card group-thresholds">
-        <span class="guide-status">Planeada · 10</span>
-        <h3>Curvas Precision–Recall y Average Precision</h3>
-        <p>
-          Explora una forma de evaluación especialmente útil cuando los casos positivos son relativamente poco frecuentes.
-        </p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 10</span>
+        <h3>Precision–Recall Curves and Average Precision</h3>
+        <p>Explore an evaluation approach that is especially useful when positive cases are relatively rare.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
-
       <article class="guide-card group-thresholds">
-        <span class="guide-status">Planeada · 11</span>
-        <h3>Calibración de probabilidades: ¿puedes confiar en el 80% de un modelo?</h3>
-        <p>
-          Plantea una pregunta más profunda: si un modelo predice 80%, ¿debería el evento ocurrir realmente aproximadamente el 80% de las veces?
-        </p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 11</span>
+        <h3>Probability Calibration: Can You Trust a Model's 80%?</h3>
+        <p>Ask a deeper question: if a model predicts 80%, should the event actually occur about 80% of the time?</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
-
       <article class="guide-card group-validation">
-        <span class="guide-status">Planeada · 12</span>
-        <h3>Conjuntos de entrenamiento, validación y prueba</h3>
-        <p>
-          Comprende para qué sirve cada división del conjunto de datos, por qué es importante mantenerlas separadas y cómo una evaluación incorrecta puede producir resultados engañosos.
-        </p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 12</span>
+        <h3>Training, Validation, and Test Sets</h3>
+        <p>Understand the purpose of each data split, why they must remain separate, and how improper evaluation can produce misleading results.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
-
       <article class="guide-card group-validation">
-        <span class="guide-status">Planeada · 13</span>
-        <h3>Validación cruzada desde los fundamentos</h3>
-        <p>
-          Aprende cómo funciona la validación cruzada K-fold, qué se promedia entre los folds y cuándo proporciona una estimación más estable.
-        </p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 13</span>
+        <h3>Cross-Validation from First Principles</h3>
+        <p>Learn how K-fold Cross-Validation works, what is averaged across folds, and when it provides a more stable estimate.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
-
       <article class="guide-card group-validation">
-        <span class="guide-status">Planeada · 14</span>
-        <h3>Data Leakage: qué es la fuga de datos y por qué importa</h3>
-        <p>
-          Observa cómo la información proveniente del futuro, de la variable objetivo o del conjunto de prueba puede hacer que un modelo débil parezca irrealmente bueno.
-        </p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 14</span>
+        <h3>Data Leakage: What It Is and Why It Matters</h3>
+        <p>See how information from the future, the target variable, or the test set can make a weak model look unrealistically good.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
-
       <article class="guide-card group-validation">
-        <span class="guide-status">Planeada · 15</span>
-        <h3>Overfitting, Underfitting y Generalización</h3>
-        <p>
-          Relaciona el desempeño en entrenamiento, el desempeño en validación, la complejidad del modelo y el verdadero objetivo de aprender patrones que generalicen.
-        </p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 15</span>
+        <h3>Overfitting, Underfitting, and Generalization</h3>
+        <p>Connect training performance, validation performance, model complexity, and the true goal of learning patterns that generalize.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
-
       <article class="guide-card group-validation">
-        <span class="guide-status">Planeada · 16</span>
-        <h3>Modelos de referencia (Baseline): ¿qué debería superar tu modelo?</h3>
-        <p>
-          Aprende por qué todo modelo serio debe compararse con un baseline razonable antes de considerar que su desempeño es realmente bueno.
-        </p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 16</span>
+        <h3>Baseline Models: What Should Your Model Beat?</h3>
+        <p>Learn why every serious model should be compared with a reasonable baseline before its performance is considered genuinely good.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
-
       <article class="guide-card group-validation">
-        <span class="guide-status">Planeada · 17</span>
-        <h3>Cómo elegir la métrica de evaluación correcta</h3>
-        <p>
-          Integra todo lo aprendido comprendiendo cuándo conviene utilizar Accuracy, Recall, F1, ROC-AUC, PR-AUC o métricas de calibración.
-        </p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 17</span>
+        <h3>How to Choose the Right Evaluation Metric</h3>
+        <p>Understand when to use Accuracy, Recall, F1, ROC-AUC, PR-AUC, or calibration metrics.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
-
       <article class="guide-card group-regression">
-        <span class="guide-status">Planeada · 18</span>
-        <h3>Métricas de regresión: MAE, MSE, RMSE y R²</h3>
-        <p>
-          Extiende estos fundamentos más allá de la clasificación y aprende las principales métricas utilizadas para evaluar modelos de regresión.
-        </p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 18</span>
+        <h3>Regression Metrics: MAE, MSE, RMSE, and R²</h3>
+        <p>Extend these foundations beyond classification and learn the main metrics used to evaluate regression models.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
-
     </div>
 
     <div class="sequence">
-      <h3>¿Por qué este orden?</h3>
-      <p>
-        La secuencia comienza con el lenguaje básico de los conjuntos de datos y las predicciones. Una vez que esas ideas
-        están claras, resulta natural aprender cómo las predicciones se convierten en clases, cómo se construye la
-        matriz de confusión y cómo se derivan Accuracy, Precision, Recall y las métricas relacionadas.
-      </p>
-      <p>
-        Después de esa base, la ruta avanza hacia conceptos de evaluación más avanzados: desbalance de clases,
-        umbrales, ROC-AUC, curvas Precision–Recall y calibración.
-        Finalmente, concluye con validación, fuga de datos, generalización, modelos de referencia y selección
-        de métricas, conceptos esenciales para evaluar modelos de manera confiable en problemas reales.
-      </p>
+      <h3>Why this order?</h3>
+      <p>The sequence begins with the basic language of datasets and predictions. Once those ideas are clear, it becomes natural to learn how predictions become classes, how the Confusion Matrix is built, and how Accuracy, Precision, Recall, and related metrics are derived.</p>
+      <p>After that foundation, the path moves into more advanced evaluation concepts: class imbalance, thresholds, ROC-AUC, Precision–Recall curves, and calibration. Finally, it concludes with validation, data leakage, generalization, baseline models, and metric selection—essential concepts for evaluating models reliably in real-world problems.</p>
     </div>
-
   </div>
 </section>
-
 </main>
 
 <footer class="footer">
@@ -472,29 +383,26 @@
     <div class="footer-grid">
       <div>
         <h3>Alfredo Saldana</h3>
-        <p>Data Scientist · Economista · Educador</p>
-        <p>Estudio, exploro y comparto ideas sobre Data Science, Estadística, Machine Learning, Deep Learning e Inteligencia Artificial.</p>
+        <p>Data Scientist · Economist · Educator</p>
+        <p>I study, explore and share ideas across Data Science, Statistics, Machine Learning, Deep Learning and Artificial Intelligence.</p>
       </div>
-
       <div>
-        <h4>Explorar</h4>
-        <a href="../../projects.html">Proyectos</a>
-        <a href="../../tutorials.html">Aprender</a>
+        <h4>Explore</h4>
+        <a href="../../projects.html">Projects</a>
+        <a href="../../tutorials.html">Learn</a>
         <a href="../../open-box.html">Open Box</a>
       </div>
-
       <div>
-        <h4>Conectar</h4>
+        <h4>Connect</h4>
         <a href="https://github.com/alfredosaldana" target="_blank" rel="noopener">GitHub ↗</a>
         <a href="https://www.linkedin.com/in/asaldanamle/" target="_blank" rel="noopener">LinkedIn ↗</a>
         <a href="https://www.youtube.com/@alfredosaldana-ds" target="_blank" rel="noopener">YouTube ↗</a>
-        <a href="../../contact.html">Contacto</a>
+        <a href="../../contact.html">Contact</a>
       </div>
     </div>
-
     <div class="footer-bottom">
       <span>© 2026 Alfredo Saldana</span>
-      <span>Construido como un portafolio de aprendizaje y proyectos.</span>
+      <span>Built as a learning and project portfolio.</span>
     </div>
   </div>
 </footer>
