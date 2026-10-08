@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Rutas de aprendizaje en Data Science, Estadística, Machine Learning, Matemáticas, Deep Learning, SQL, Python y herramientas.">
-<title>Aprender — Alfredo Saldana</title>
+<meta name="description" content="Learning paths in Data Science, Statistics, Machine Learning, Mathematics, Deep Learning, SQL, Python, and practical tools.">
+<title>Learn — Alfredo Saldana</title>
 <link rel="icon" href="assets/images/favicon.svg">
 <link rel="stylesheet" href="assets/css/style.css">
 
@@ -94,15 +94,22 @@
 
 <header class="site-header">
   <div class="container nav-wrap">
-    <a class="brand" href="index.html">Alfredo Saldana</a>
-    <button class="menu-btn" aria-label="Abrir navegación">☰</button>
+    <div style="display:flex;align-items:center;gap:20px;">
+      <a class="brand" href="index.html">Alfredo Saldana</a>
+      <div class="lang-switch" style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap;">
+        <a href="tutorials.html" aria-current="page" style="color:#2563eb;text-decoration:none;font-weight:800;">EN</a>
+        <span aria-hidden="true" style="color:#64748b;">|</span>
+        <a href="es/tutorials.html" style="color:#111827;text-decoration:none;font-weight:700;">ES</a>
+      </div>
+    </div>
+    <button class="menu-btn" aria-label="Open navigation">☰</button>
     <nav class="nav">
-      <a href="index.html">Inicio</a>
-      <a href="tutorials.html" class="active">Aprender</a>
-      <a href="projects.html">Proyectos</a>
+      <a href="index.html">Home</a>
+      <a href="tutorials.html" class="active">Learn</a>
+      <a href="projects.html">Projects</a>
       <a href="open-box.html">Open Box</a>
-      <a href="about.html">Acerca de</a>
-      <a href="contact.html">Contacto</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
     </nav>
   </div>
 </header>
@@ -111,10 +118,10 @@
 
 <section class="page-hero">
   <div class="container">
-    <div class="eyebrow">Aprender</div>
-    <h1>Materiales de Aprendizaje</h1>
+    <div class="eyebrow">Learn</div>
+    <h1>Learning Materials</h1>
     <p class="lead">
-      Explicaciones visuales, guías paso a paso y rutas estructuradas para construir fundamentos sólidos en Data Science.
+      Visual explanations, step-by-step guides, and structured learning paths designed to build strong foundations in Data Science.
     </p>
   </div>
 </section>
@@ -127,52 +134,52 @@
       <article class="learn-card">
         <img src="assets/images/learn-data-science-foundations.png" alt="Data Science Foundations">
         <div class="card-body">
-          <span class="tag">Fundamentos</span>
+          <span class="tag">Foundations</span>
           <h3>Data Science Foundations</h3>
           <p>
-            Predicciones, métricas, thresholds, class imbalance, validación, calibration,
-            generalization y evaluación confiable de modelos.
+            Predictions, metrics, thresholds, class imbalance, validation, calibration,
+            generalization, and reliable model evaluation.
           </p>
-          <a href="learn/data-science-foundations/"><strong>Explorar ruta →</strong></a>
+          <a href="learn/data-science-foundations/"><strong>Explore path →</strong></a>
         </div>
       </article>
 
       <article class="learn-card">
         <img src="assets/images/learn-statistics-probability.png" alt="Statistics and Probability">
         <div class="card-body">
-          <span class="tag">Estadística</span>
+          <span class="tag">Statistics</span>
           <h3>Statistics &amp; Probability</h3>
           <p>
-            Probabilidad, distribuciones, muestreo, inferencia, confidence intervals,
-            hypothesis testing, ANOVA, correlación y regresión.
+            Probability, distributions, sampling, inference, Confidence Intervals,
+            Hypothesis Testing, ANOVA, correlation, and regression.
           </p>
-          <a href="learn/statistics-probability/"><strong>Explorar ruta →</strong></a>
+          <a href="learn/statistics-probability/"><strong>Explore path →</strong></a>
         </div>
       </article>
 
       <article class="learn-card">
         <img src="assets/images/learn-machine-learning.png" alt="Machine Learning">
         <div class="card-body">
-          <span class="tag">Modelos</span>
+          <span class="tag">Models</span>
           <h3>Machine Learning</h3>
           <p>
-            Desde los fundamentos y modelos lineales hasta trees, ensembles,
-            feature engineering, tuning, explainability y deployment.
+            From foundations and linear models to trees, ensembles,
+            Feature Engineering, tuning, explainability, and deployment.
           </p>
-          <a href="learn/machine-learning/"><strong>Explorar ruta →</strong></a>
+          <a href="learn/machine-learning/"><strong>Explore path →</strong></a>
         </div>
       </article>
 
       <article class="learn-card">
         <img src="assets/images/learn-mathematics-data-science.png" alt="Mathematics for Data Science">
         <div class="card-body">
-          <span class="tag">Matemáticas</span>
+          <span class="tag">Mathematics</span>
           <h3>Mathematics for Data Science</h3>
           <p>
             Vectors, matrices, linear systems, projections, eigenvalues, PCA, SVD,
-            calculus, gradients y optimization.
+            calculus, gradients, and optimization.
           </p>
-          <a href="learn/mathematics-data-science/"><strong>Explorar ruta →</strong></a>
+          <a href="learn/mathematics-data-science/"><strong>Explore path →</strong></a>
         </div>
       </article>
 
@@ -182,23 +189,23 @@
           <span class="tag">Neural Networks</span>
           <h3>Deep Learning</h3>
           <p>
-            Tensors, neural networks, backpropagation, optimization, CNNs, RNNs,
-            Attention, Transformers y PyTorch.
+            Tensors, Neural Networks, Backpropagation, optimization, CNNs, RNNs,
+            Attention, Transformers, and PyTorch.
           </p>
-          <a href="learn/deep-learning/"><strong>Explorar ruta →</strong></a>
+          <a href="learn/deep-learning/"><strong>Explore path →</strong></a>
         </div>
       </article>
 
       <article class="learn-card">
         <img src="assets/images/learn-sql-python-tools.png" alt="SQL Python and Tools">
         <div class="card-body">
-          <span class="tag">Herramientas</span>
+          <span class="tag">Tools</span>
           <h3>SQL, Python &amp; Tools</h3>
           <p>
-            Python, NumPy, pandas, SQL, EDA, visualización, Jupyter,
-            Git/GitHub y workflows reproducibles para Data Science.
+            Python, NumPy, pandas, SQL, EDA, visualization, Jupyter,
+            Git/GitHub, and reproducible Data Science workflows.
           </p>
-          <a href="learn/sql-python-tools/"><strong>Explorar ruta →</strong></a>
+          <a href="learn/sql-python-tools/"><strong>Explore path →</strong></a>
         </div>
       </article>
 
@@ -209,11 +216,11 @@
 
 <section class="section white">
   <div class="narrow">
-    <div class="eyebrow">Filosofía de enseñanza</div>
-    <h2>Aprender la idea, no solamente la sintaxis.</h2>
+    <div class="eyebrow">Teaching Philosophy</div>
+    <h2>Learn the idea, not only the syntax.</h2>
     <p class="lead">
-      El objetivo es avanzar desde la intuición hacia las matemáticas y luego hacia la implementación.
-      Prefiero ejemplos completos, supuestos visibles y explicaciones que permitan reproducir el razonamiento.
+      The goal is to move from intuition to mathematics and then to implementation.
+      I prefer complete examples, visible assumptions, and explanations that make the reasoning reproducible.
     </p>
   </div>
 </section>
@@ -225,32 +232,32 @@
     <div class="footer-grid">
       <div>
         <h3>Alfredo Saldana</h3>
-        <p>Data Scientist · Economista · Educador</p>
+        <p>Data Scientist · Economist · Educator</p>
         <p>
-          Estudio, exploro y comparto ideas sobre Data Science, Estadística,
-          Machine Learning, Deep Learning e Inteligencia Artificial.
+          I study, explore and share ideas across Data Science, Statistics,
+          Machine Learning, Deep Learning and Artificial Intelligence.
         </p>
       </div>
 
       <div>
-        <h4>Explorar</h4>
-        <a href="projects.html">Proyectos</a>
-        <a href="tutorials.html">Aprender</a>
+        <h4>Explore</h4>
+        <a href="projects.html">Projects</a>
+        <a href="tutorials.html">Learn</a>
         <a href="open-box.html">Open Box</a>
       </div>
 
       <div>
-        <h4>Conectar</h4>
+        <h4>Connect</h4>
         <a href="https://github.com/alfredosaldana" target="_blank" rel="noopener">GitHub ↗</a>
         <a href="https://www.linkedin.com/in/asaldanamle/" target="_blank" rel="noopener">LinkedIn ↗</a>
         <a href="https://www.youtube.com/@alfredosaldana-ds" target="_blank" rel="noopener">YouTube ↗</a>
-        <a href="contact.html">Contacto</a>
+        <a href="contact.html">Contact</a>
       </div>
     </div>
 
     <div class="footer-bottom">
       <span>© 2026 Alfredo Saldana</span>
-      <span>Construido como un portafolio de aprendizaje y proyectos.</span>
+      <span>Built as a learning and project portfolio.</span>
     </div>
   </div>
 </footer>
