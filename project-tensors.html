@@ -27,7 +27,22 @@
 </style>
 </head>
 <body>
-<header class="site-header"><div class="container nav-wrap"><a class="brand" href="index.html">Alfredo Saldana</a><button class="menu-btn" aria-label="Open navigation">☰</button><nav class="nav"><a href="index.html">Home</a><a href="tutorials.html">Learn</a><a href="projects.html">Projects</a><a href="open-box.html">Open Box</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav></div></header>
+<header class="site-header">
+  <div class="container nav-wrap">
+    <div style="display:flex;align-items:center;gap:20px;">
+      <a class="brand" href="index.html">Alfredo Saldana</a>
+      <div class="lang-switch"
+           style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap;">
+        <a href="project-tensors.html"
+           aria-current="page"
+           style="color:#2563eb;text-decoration:none;font-weight:800;">EN</a>
+        <span aria-hidden="true" style="color:#64748b;">|</span>
+        <a href="es/project-tensors.html"
+           style="color:#111827;text-decoration:none;font-weight:700;">ES</a>
+      </div>
+    </div>
+    <button class="menu-btn" aria-label="Open navigation">☰</button>
+    <nav class="nav"><a href="index.html">Home</a><a href="tutorials.html">Learn</a><a href="projects.html">Projects</a><a href="open-box.html">Open Box</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav></div></header>
 
 <main>
 <section class="page-hero"><div class="container"><div class="eyebrow">Educational Project · Deep Learning Foundations</div><h1>Tensors 101 with PyTorch</h1><p class="lead">A four-notebook educational series designed to help students understand tensors deeply—not merely use them—by connecting mathematical structure, PyTorch syntax and the way data flows through neural networks.</p><span class="status">Educational Project</span></div></section>
