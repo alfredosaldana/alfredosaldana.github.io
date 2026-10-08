@@ -1,13 +1,12 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Ruta de aprendizaje de Machine Learning por Alfredo Saldana: fundamentos, modelos lineales, árboles, ensembles, feature engineering, tuning, explainability y deployment.">
+<meta name="description" content="Machine Learning learning path by Alfredo Saldana: supervised learning, regression, classification, loss functions, gradient descent, trees, ensembles, model selection, explainability, and deployment.">
 <title>Machine Learning — Alfredo Saldana</title>
 <link rel="icon" href="../../assets/images/favicon.svg">
 <link rel="stylesheet" href="../../assets/css/style.css">
-
 <style>
   .path-wrap{max-width:1120px;margin:0 auto;padding:0 20px}
   .breadcrumb{margin:0 0 18px;font-size:.94rem;color:#6b7b8f}
@@ -66,259 +65,225 @@
   }
 </style>
 </head>
-
 <body>
 
 <header class="site-header">
   <div class="container nav-wrap">
-    <a class="brand" href="../../index.html">Alfredo Saldana</a>
-    <button class="menu-btn" aria-label="Abrir navegación">☰</button>
+    <div style="display:flex;align-items:center;gap:20px;">
+      <a class="brand" href="../../index.html">Alfredo Saldana</a>
+      <div class="lang-switch" style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap;">
+        <a href="index.html" aria-current="page" style="color:#2563eb;text-decoration:none;font-weight:800;">EN</a>
+        <span aria-hidden="true" style="color:#64748b;">|</span>
+        <a href="../../es/learn/machine-learning/" style="color:#111827;text-decoration:none;font-weight:700;">ES</a>
+      </div>
+    </div>
+    <button class="menu-btn" aria-label="Open navigation">☰</button>
     <nav class="nav">
-      <a href="../../index.html">Inicio</a>
-      <a href="../../tutorials.html" class="active">Aprender</a>
-      <a href="../../projects.html">Proyectos</a>
+      <a href="../../index.html">Home</a>
+      <a href="../../tutorials.html" class="active">Learn</a>
+      <a href="../../projects.html">Projects</a>
       <a href="../../open-box.html">Open Box</a>
-      <a href="../../about.html">Acerca de</a>
-      <a href="../../contact.html">Contacto</a>
+      <a href="../../about.html">About</a>
+      <a href="../../contact.html">Contact</a>
     </nav>
   </div>
 </header>
 
 <main>
-
 <section class="page-hero">
   <div class="container">
-    <div class="eyebrow">Aprender · Machine Learning</div>
+    <div class="eyebrow">Learn · Machine Learning</div>
     <h1>Machine Learning</h1>
-    <p class="lead">
-      Una ruta estructurada desde los fundamentos de Machine Learning hasta ensembles, tuning, explainability y deployment.
-    </p>
+    <p class="lead">A structured learning path from Machine Learning foundations to ensembles, tuning, explainability, and deployment.</p>
   </div>
 </section>
 
 <section class="section">
   <div class="path-wrap">
-
     <div class="breadcrumb">
-      <a href="../../tutorials.html">Aprender</a> → Machine Learning
+      <a href="../../tutorials.html">Learn</a> → Machine Learning
     </div>
 
     <div class="path-intro">
       <div class="path-copy">
-        <h2>Aprende cómo funcionan los modelos, no solamente cómo ejecutarlos.</h2>
-
-        <p>
-          Machine Learning no consiste únicamente en importar un algoritmo y llamar <code>fit()</code>.
-          Para trabajar con modelos de manera sólida necesitamos comprender qué problema estamos resolviendo,
-          cómo se prepara la información, cómo aprende cada familia de modelos y cómo se compara una solución con otra.
-        </p>
-
-        <p>
-          Esta ruta comienza con la formulación del problema y el workflow completo, continúa con modelos lineales,
-          preparación de features, árboles y ensembles, y termina con tuning, explainability, pipelines y el ciclo de vida del modelo.
-        </p>
-
-        <div class="path-note">
-          <strong>Orden recomendado:</strong> sigue la secuencia desde los fundamentos.
-          Los nombres de modelos, métodos y conceptos técnicos se mantienen en inglés para conservar la terminología utilizada
-          en libros, papers, documentación y cursos de Machine Learning.
-        </div>
+        <h2>Learn how models work, not only how to run them.</h2>
+        <p>Machine Learning is not just about importing an algorithm and calling <code>fit()</code>. To work with models rigorously, we need to understand what problem we are solving, how information is prepared, how each family of models learns, and how one solution should be compared with another.</p>
+        <p>This path begins with problem formulation and the complete Machine Learning workflow, continues through linear models, feature preparation, trees and ensembles, and ends with tuning, explainability, pipelines, and the model lifecycle.</p>
+        <div class="path-note"><strong>Recommended order:</strong> follow the sequence from the foundations. Each topic is designed to build directly on ideas introduced earlier.</div>
       </div>
 
-      <img class="path-image"
-           src="../../assets/images/learn-machine-learning.png"
-           alt="Ruta de aprendizaje de Machine Learning">
+      <img class="path-image" src="../../assets/images/learn-machine-learning.png" alt="Machine Learning learning path">
     </div>
 
-    <div class="eyebrow">Guías</div>
-    <h2 style="margin-top:8px;color:#0b1f3a;">Secuencia de aprendizaje</h2>
-    <p class="section-mini">
-      La ruta avanza desde <strong>problem formulation y workflow</strong> hacia
-      <strong>modelos lineales</strong>, <strong>preprocessing</strong>, <strong>trees y ensembles</strong>,
-      y termina con <strong>model selection, explainability y deployment</strong>.
-    </p>
+    <div class="eyebrow">Guides</div>
+    <h2 style="margin-top:8px;color:#0b1f3a;">Learning sequence</h2>
+    <p class="section-mini">The path moves from <strong>problem formulation and workflow</strong> to <strong>linear models</strong>, <strong>preprocessing</strong>, <strong>trees and ensembles</strong>, and finishes with <strong>model selection, explainability, pipelines, and deployment</strong>.</p>
 
     <div class="path-note" style="margin-top:20px;">
-      <strong>Guía visual:</strong> azul = fundamentos y workflow,
-      violeta = modelos lineales y optimización,
-      verde = data preparation y features,
-      naranja = trees y ensembles,
-      rojo = selection, tuning y explainability,
-      gris azulado = pipelines y lifecycle.
+      <strong>Visual guide:</strong> blue = foundations and workflow, purple = linear models and optimization, green = data preparation and features, orange = trees and ensembles, red = selection, tuning and explainability, blue-gray = pipelines and lifecycle.
     </div>
 
     <div class="guide-grid">
       <article class="guide-card group-foundations">
-        <span class="guide-status">Planeada · 1</span>
-        <h3>¿Qué es Machine Learning? Supervised vs. Unsupervised Learning</h3>
-        <p>Qué es Machine Learning, diferencias entre aprendizaje supervisado y no supervisado, clasificación, regresión y clustering.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 1</span>
+        <h3>What Is Machine Learning? Supervised vs. Unsupervised Learning</h3>
+        <p>Understand what Machine Learning is, how models learn from data, and the difference between supervised and unsupervised learning.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-foundations">
-        <span class="guide-status">Planeada · 2</span>
-        <h3>Classification vs. Regression: cómo identificar el tipo de problema</h3>
-        <p>Cómo reconocer qué tipo de problema tienes y qué cambia en la variable objetivo, las métricas y los modelos.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 2</span>
+        <h3>Classification vs. Regression</h3>
+        <p>Distinguish classification from regression based on the target variable and the kind of prediction the problem requires.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-foundations">
-        <span class="guide-status">Planeada · 3</span>
-        <h3>El workflow de Machine Learning de principio a fin</h3>
-        <p>Recorre el flujo completo: datos, limpieza, features, split, entrenamiento, evaluación, tuning, interpretación y deployment.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 3</span>
+        <h3>The Machine Learning Workflow from End to End</h3>
+        <p>Walk through the complete process: problem definition, data, preparation, training, evaluation, model selection, and use.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-models">
-        <span class="guide-status">Planeada · 4</span>
-        <h3>Linear Regression para Machine Learning</h3>
-        <p>Estudia Linear Regression desde una perspectiva predictiva: variables, coeficientes, predicción, residuos y error.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 4</span>
+        <h3>Linear Regression for Machine Learning</h3>
+        <p>Connect a linear relationship with prediction, coefficients, error, and parameter learning in a regression problem.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-models">
-        <span class="guide-status">Planeada · 5</span>
-        <h3>Logistic Regression: del linear score a la probabilidad</h3>
-        <p>Comprende el score lineal, la función sigmoid, la probabilidad, el threshold y la clasificación.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 5</span>
+        <h3>Logistic Regression: From Linear Score to Probability</h3>
+        <p>Understand how Logistic Regression transforms a linear combination of variables into a probability for classification.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-models">
-        <span class="guide-status">Planeada · 6</span>
-        <h3>Loss Functions: cómo aprenden los modelos a partir del error</h3>
-        <p>Explora MSE, MAE, log-loss y cross-entropy, y comprende por qué los modelos necesitan una función objetivo.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 6</span>
+        <h3>Loss Functions: How Models Learn from Error</h3>
+        <p>Learn how a Loss Function quantifies error and provides the signal used to adjust model parameters.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-models">
-        <span class="guide-status">Planeada · 7</span>
-        <h3>Gradient Descent desde los fundamentos</h3>
-        <p>Aprende learning rate, gradiente, iteraciones, convergencia y actualización de parámetros paso a paso.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 7</span>
+        <h3>Gradient Descent from First Principles</h3>
+        <p>Build Gradient Descent from geometric intuition to iterative parameter updates that minimize a Loss Function.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-models">
-        <span class="guide-status">Planeada · 8</span>
-        <h3>Regularization: Ridge, Lasso y Elastic Net</h3>
-        <p>Relaciona overfitting con penalizaciones L1 y L2, shrinkage y selección de variables.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 8</span>
+        <h3>Regularization: Ridge, Lasso and Elastic Net</h3>
+        <p>Understand how regularization penalizes overly complex models and compare Ridge, Lasso, and Elastic Net.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-data">
-        <span class="guide-status">Planeada · 9</span>
-        <h3>Feature Engineering desde los fundamentos</h3>
-        <p>Transformaciones, ratios, interacciones, fechas, variables categóricas y uso de domain knowledge.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 9</span>
+        <h3>Feature Engineering from First Principles</h3>
+        <p>Learn how to transform raw information into features that better represent the structure relevant to a model.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-data">
-        <span class="guide-status">Planeada · 10</span>
-        <h3>Encoding de variables categóricas</h3>
-        <p>One-Hot Encoding, Ordinal Encoding, Target Encoding y riesgos de Data Leakage.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 10</span>
+        <h3>Encoding Categorical Variables</h3>
+        <p>Study how to represent categorical variables numerically using One-Hot Encoding and other strategies.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-data">
-        <span class="guide-status">Planeada · 11</span>
-        <h3>Manejo de Missing Data en Machine Learning</h3>
-        <p>Eliminación, imputación, missing indicators y criterios para escoger una estrategia.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 11</span>
+        <h3>Handling Missing Data in Machine Learning</h3>
+        <p>Understand why data can be missing, how missingness can affect a model, and the main strategies for handling it.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-data">
-        <span class="guide-status">Planeada · 12</span>
-        <h3>Feature Scaling: Standardization y Normalization</h3>
-        <p>Comprende cuándo importa escalar variables y qué algoritmos son sensibles a la escala.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 12</span>
+        <h3>Feature Scaling: Standardization and Normalization</h3>
+        <p>Distinguish Standardization from Normalization, when to use each, and why some algorithms are sensitive to scale.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-ensembles">
-        <span class="guide-status">Planeada · 13</span>
-        <h3>Decision Trees desde los fundamentos</h3>
-        <p>Splits, nodos, hojas, Gini impurity, entropy, depth y overfitting.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 13</span>
+        <h3>Decision Trees from First Principles</h3>
+        <p>Learn how a Decision Tree splits the feature space through successive rules to produce predictions.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-ensembles">
-        <span class="guide-status">Planeada · 14</span>
-        <h3>Random Forest explicado</h3>
-        <p>Bootstrap samples, múltiples árboles, random feature selection y agregación de predicciones.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 14</span>
+        <h3>Random Forest Explained</h3>
+        <p>Understand how Random Forest combines many trees through bagging and randomness to improve stability and generalization.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-ensembles">
-        <span class="guide-status">Planeada · 15</span>
+        <span class="guide-status">Planned · 15</span>
         <h3>Bagging vs. Boosting</h3>
-        <p>Compara ensembles entrenados en paralelo frente a métodos secuenciales que corrigen errores previos.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Compare two ensemble strategies: models trained in parallel to reduce variance and sequential models that correct earlier errors.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-ensembles">
-        <span class="guide-status">Planeada · 16</span>
-        <h3>Gradient Boosting desde los fundamentos</h3>
-        <p>Aprende cómo nuevos modelos corrigen errores anteriores y cómo disminuye la loss.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 16</span>
+        <h3>Gradient Boosting from First Principles</h3>
+        <p>Build the idea of Gradient Boosting as a sequence of weak models that progressively improve predictions.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-ensembles">
-        <span class="guide-status">Planeada · 17</span>
-        <h3>XGBoost explicado</h3>
-        <p>Learning rate, tree depth, regularization, boosting rounds y la lógica que hace potente a XGBoost.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 17</span>
+        <h3>XGBoost Explained</h3>
+        <p>Understand the logic of XGBoost, regularization, sequential trees, and why it is widely used for tabular data.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-selection">
-        <span class="guide-status">Planeada · 18</span>
+        <span class="guide-status">Planned · 18</span>
         <h3>Hyperparameters vs. Model Parameters</h3>
-        <p>Distingue entre lo que aprende el modelo y lo que define el Data Scientist antes del entrenamiento.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Distinguish parameters learned directly from data from settings chosen before or during training.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-selection">
-        <span class="guide-status">Planeada · 19</span>
-        <h3>Hyperparameter Tuning: Grid Search y Random Search</h3>
-        <p>Aprende a explorar configuraciones y por qué el test set no debe utilizarse para tuning.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 19</span>
+        <h3>Hyperparameter Tuning: Grid Search and Random Search</h3>
+        <p>Learn how to compare hyperparameter configurations using Grid Search and Random Search within a validation process.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-selection">
-        <span class="guide-status">Planeada · 20</span>
-        <h3>Model Selection y Cross-Validation</h3>
-        <p>Compara modelos de manera justa y evita conclusiones basadas en una sola partición de datos.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 20</span>
+        <h3>Model Selection and Cross-Validation</h3>
+        <p>Understand how to compare models more reliably using Cross-Validation rather than relying on a single data split.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-selection">
-        <span class="guide-status">Planeada · 21</span>
-        <h3>Feature Importance: qué nos dice y qué no nos dice</h3>
-        <p>Tree-based importance, Permutation Importance y las limitaciones de interpretar importancia como causalidad.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 21</span>
+        <h3>Feature Importance: What It Tells You and What It Does Not</h3>
+        <p>Interpret Feature Importance carefully and understand its limits as an explanation of model behavior.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-selection">
-        <span class="guide-status">Planeada · 22</span>
-        <h3>Introducción a SHAP y Model Explainability</h3>
-        <p>Diferencia explicaciones locales y globales, interpreta SHAP values y contribuciones de features.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 22</span>
+        <h3>Introduction to SHAP and Model Explainability</h3>
+        <p>Introduce SHAP and the idea of explaining how features contribute to individual and global predictions.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-production">
-        <span class="guide-status">Planeada · 23</span>
-        <h3>Class Imbalance en Machine Learning</h3>
-        <p>Class weights, resampling, SMOTE, thresholds y evaluación adecuada de clases minoritarias.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 23</span>
+        <h3>Class Imbalance in Machine Learning</h3>
+        <p>Understand why a rare class can distort Accuracy and how to evaluate and address imbalanced problems.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-production">
-        <span class="guide-status">Planeada · 24</span>
-        <h3>Model Pipelines y Machine Learning reproducible</h3>
-        <p>Pipelines, preprocessing consistente, fit/transform, prevención de leakage y reproducibilidad.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 24</span>
+        <h3>Model Pipelines and Reproducible Machine Learning</h3>
+        <p>Organize preprocessing and modeling into reproducible pipelines that reduce errors and help prevent Data Leakage.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-production">
-        <span class="guide-status">Planeada · 25</span>
-        <h3>Del Notebook al Deployment: el Machine Learning Lifecycle</h3>
-        <p>Entrenamiento, serialización, inference, monitoring, drift, retraining y mantenimiento del modelo.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 25</span>
+        <h3>From Notebook to Deployment: The Machine Learning Lifecycle</h3>
+        <p>Connect experimentation, training, validation, packaging, deployment, monitoring, and maintenance in production.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
     </div>
 
     <div class="sequence">
-      <h3>¿Por qué este orden?</h3>
-      <p>
-        Primero definimos qué significa Machine Learning y qué tipo de problema estamos resolviendo.
-        Después estudiamos el workflow completo para que cada algoritmo aparezca dentro de un proceso y no como una técnica aislada.
-      </p>
-      <p>
-        Luego avanzamos desde Linear Regression y Logistic Regression hacia Loss Functions, Gradient Descent y Regularization.
-        Con esa base, entramos a Feature Engineering, preprocessing, Decision Trees, Random Forest, Bagging, Boosting y XGBoost.
-      </p>
-      <p>
-        Finalmente, la ruta aborda Hyperparameter Tuning, Model Selection, Feature Importance, SHAP, Class Imbalance,
-        reproducible Pipelines y el paso de un notebook a un modelo desplegado y monitoreado.
-      </p>
+      <h3>Why this order?</h3>
+      <p>We first define what Machine Learning means and what kind of problem we are solving. We then study the complete workflow so that every algorithm appears within a process rather than as an isolated technique.</p>
+      <p>Next, we move from Linear Regression and Logistic Regression to Loss Functions, Gradient Descent, and Regularization. With that foundation, we introduce Feature Engineering, preprocessing, Decision Trees, Random Forest, Bagging, Boosting, and XGBoost.</p>
+      <p>Finally, the path covers Hyperparameter Tuning, Model Selection, Feature Importance, SHAP, Class Imbalance, reproducible Pipelines, and the transition from a notebook to a deployed and monitored model.</p>
     </div>
-
   </div>
 </section>
-
 </main>
 
 <footer class="footer">
@@ -326,26 +291,26 @@
     <div class="footer-grid">
       <div>
         <h3>Alfredo Saldana</h3>
-        <p>Data Scientist · Economista · Educador</p>
-        <p>Estudio, exploro y comparto ideas sobre Data Science, Estadística, Machine Learning, Deep Learning e Inteligencia Artificial.</p>
+        <p>Data Scientist · Economist · Educator</p>
+        <p>I study, explore and share ideas across Data Science, Statistics, Machine Learning, Deep Learning and Artificial Intelligence.</p>
       </div>
       <div>
-        <h4>Explorar</h4>
-        <a href="../../projects.html">Proyectos</a>
-        <a href="../../tutorials.html">Aprender</a>
+        <h4>Explore</h4>
+        <a href="../../projects.html">Projects</a>
+        <a href="../../tutorials.html">Learn</a>
         <a href="../../open-box.html">Open Box</a>
       </div>
       <div>
-        <h4>Conectar</h4>
+        <h4>Connect</h4>
         <a href="https://github.com/alfredosaldana" target="_blank" rel="noopener">GitHub ↗</a>
         <a href="https://www.linkedin.com/in/asaldanamle/" target="_blank" rel="noopener">LinkedIn ↗</a>
         <a href="https://www.youtube.com/@alfredosaldana-ds" target="_blank" rel="noopener">YouTube ↗</a>
-        <a href="../../contact.html">Contacto</a>
+        <a href="../../contact.html">Contact</a>
       </div>
     </div>
     <div class="footer-bottom">
       <span>© 2026 Alfredo Saldana</span>
-      <span>Construido como un portafolio de aprendizaje y proyectos.</span>
+      <span>Built as a learning and project portfolio.</span>
     </div>
   </div>
 </footer>
