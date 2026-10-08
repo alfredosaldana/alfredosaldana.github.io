@@ -1,13 +1,12 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Ruta de aprendizaje de SQL, Python & Tools por Alfredo Saldana: Python, NumPy, pandas, SQL, EDA, visualización, Jupyter, Git/GitHub y reproducibilidad.">
+<meta name="description" content="SQL, Python & Tools learning path by Alfredo Saldana: Python, NumPy, pandas, SQL, EDA, visualization, Jupyter, Git, GitHub, and reproducibility.">
 <title>SQL, Python &amp; Tools — Alfredo Saldana</title>
 <link rel="icon" href="../../assets/images/favicon.svg">
 <link rel="stylesheet" href="../../assets/css/style.css">
-
 <style>
   .path-wrap{max-width:1120px;margin:0 auto;padding:0 20px}
   .breadcrumb{margin:0 0 18px;font-size:.94rem;color:#6b7b8f}
@@ -66,256 +65,225 @@
   }
 </style>
 </head>
-
 <body>
 
 <header class="site-header">
   <div class="container nav-wrap">
-    <a class="brand" href="../../index.html">Alfredo Saldana</a>
-    <button class="menu-btn" aria-label="Abrir navegación">☰</button>
+    <div style="display:flex;align-items:center;gap:20px;">
+      <a class="brand" href="../../index.html">Alfredo Saldana</a>
+      <div class="lang-switch" style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap;">
+        <a href="index.html" aria-current="page" style="color:#2563eb;text-decoration:none;font-weight:800;">EN</a>
+        <span aria-hidden="true" style="color:#64748b;">|</span>
+        <a href="../../es/learn/sql-python-tools/" style="color:#111827;text-decoration:none;font-weight:700;">ES</a>
+      </div>
+    </div>
+    <button class="menu-btn" aria-label="Open navigation">☰</button>
     <nav class="nav">
-      <a href="../../index.html">Inicio</a>
-      <a href="../../tutorials.html" class="active">Aprender</a>
-      <a href="../../projects.html">Proyectos</a>
+      <a href="../../index.html">Home</a>
+      <a href="../../tutorials.html" class="active">Learn</a>
+      <a href="../../projects.html">Projects</a>
       <a href="../../open-box.html">Open Box</a>
-      <a href="../../about.html">Acerca de</a>
-      <a href="../../contact.html">Contacto</a>
+      <a href="../../about.html">About</a>
+      <a href="../../contact.html">Contact</a>
     </nav>
   </div>
 </header>
 
 <main>
-
 <section class="page-hero">
   <div class="container">
-    <div class="eyebrow">Aprender · SQL, Python &amp; Tools</div>
+    <div class="eyebrow">Learn · SQL, Python &amp; Tools</div>
     <h1>SQL, Python &amp; Tools</h1>
-    <p class="lead">
-      Una ruta práctica para trabajar con datos: Python, NumPy, pandas, SQL, EDA, visualización, Jupyter y herramientas de reproducibilidad.
-    </p>
+    <p class="lead">A practical learning path for working with data: Python, NumPy, pandas, SQL, EDA, visualization, Jupyter, and reproducibility tools.</p>
   </div>
 </section>
 
 <section class="section">
   <div class="path-wrap">
-
     <div class="breadcrumb">
-      <a href="../../tutorials.html">Aprender</a> → SQL, Python &amp; Tools
+      <a href="../../tutorials.html">Learn</a> → SQL, Python &amp; Tools
     </div>
 
     <div class="path-intro">
       <div class="path-copy">
-        <h2>Aprende las herramientas que un Data Scientist utiliza todos los días.</h2>
-
-        <p>
-          Esta ruta combina programación, manipulación de datos, SQL, análisis exploratorio y herramientas de trabajo.
-          El objetivo no es memorizar sintaxis aislada, sino aprender un workflow reproducible para transformar datos crudos
-          en análisis claros, verificables y reutilizables.
-        </p>
-
-        <p>
-          Comenzamos con Python y NumPy, avanzamos hacia pandas y data cleaning, después construimos fundamentos sólidos de SQL,
-          y terminamos integrando EDA, visualización, Jupyter, Git/GitHub y gestión de environments.
-        </p>
-
-        <div class="path-note">
-          <strong>Orden recomendado:</strong> sigue la secuencia si estás construyendo tus herramientas desde cero.
-          Si ya manejas Python, puedes comenzar directamente con pandas o SQL y regresar a los fundamentos cuando necesites reforzarlos.
-        </div>
+        <h2>Learn the tools a Data Scientist uses every day.</h2>
+        <p>This path combines programming, data manipulation, SQL, exploratory analysis, and practical workflow tools. The goal is not to memorize isolated syntax, but to build a reproducible process for turning raw data into clear, verifiable, and reusable analysis.</p>
+        <p>We begin with Python and NumPy, move into pandas and data cleaning, then build solid SQL foundations, and finally integrate EDA, visualization, Jupyter, Git/GitHub, virtual environments, and dependency management.</p>
+        <div class="path-note"><strong>Recommended order:</strong> follow the sequence if you are building your toolkit from scratch. If you already know Python, you can begin with pandas or SQL and return to the foundations whenever you need reinforcement.</div>
       </div>
 
-      <img class="path-image"
-           src="../../assets/images/learn-sql-python-tools.png"
-           alt="Ruta de aprendizaje de SQL, Python y herramientas para Data Science">
+      <img class="path-image" src="../../assets/images/learn-sql-python-tools.png" alt="SQL, Python and Tools learning path">
     </div>
 
-    <div class="eyebrow">Guías</div>
-    <h2 style="margin-top:8px;color:#0b1f3a;">Secuencia de aprendizaje</h2>
-    <p class="section-mini">
-      La ruta avanza desde <strong>Python y NumPy</strong> hacia <strong>pandas y data cleaning</strong>,
-      luego <strong>SQL</strong>, y termina con <strong>EDA, visualización, Jupyter, Git/GitHub y reproducibilidad</strong>.
-    </p>
+    <div class="eyebrow">Guides</div>
+    <h2 style="margin-top:8px;color:#0b1f3a;">Learning sequence</h2>
+    <p class="section-mini">The path moves from <strong>Python and NumPy</strong> to <strong>pandas and data cleaning</strong>, then to <strong>SQL</strong>, and ends with <strong>EDA, visualization, Jupyter, Git/GitHub, and reproducibility</strong>.</p>
 
     <div class="path-note" style="margin-top:20px;">
-      <strong>Guía visual:</strong> azul = Python y NumPy,
-      verde = pandas y data manipulation,
-      violeta = SQL,
-      naranja = EDA y visualización,
-      gris azulado = Jupyter, Git/GitHub y reproducibilidad.
+      <strong>Visual guide:</strong> blue = Python and NumPy, green = pandas and data manipulation, purple = SQL, orange = EDA and visualization, blue-gray = Jupyter, Git/GitHub, and reproducibility.
     </div>
 
     <div class="guide-grid">
       <article class="guide-card group-python">
-        <span class="guide-status">Planeada · 1</span>
-        <h3>Python para Data Science: variables, tipos y estructuras básicas</h3>
-        <p>Variables, strings, integers, floats, booleans, lists, tuples, dictionaries y sets.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 1</span>
+        <h3>Python for Data Science: Variables, Types, and Basic Structures</h3>
+        <p>Learn Python syntax, variables, data types, and fundamental structures used in data analysis.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-python">
-        <span class="guide-status">Planeada · 2</span>
+        <span class="guide-status">Planned · 2</span>
         <h3>Control Flow in Python: if, for and while</h3>
-        <p>Condicionales, loops y lógica básica para automatizar tareas.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Understand how to control program flow using conditions and loops to automate repetitive tasks.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-python">
-        <span class="guide-status">Planeada · 3</span>
-        <h3>Functions in Python desde los fundamentos</h3>
-        <p>Parámetros, return values, scope y cómo escribir funciones reutilizables.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 3</span>
+        <h3>Functions in Python from First Principles</h3>
+        <p>Build reusable functions, understand parameters and return values, and organize code more clearly.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-python">
-        <span class="guide-status">Planeada · 4</span>
-        <h3>NumPy Arrays desde los fundamentos</h3>
-        <p>Arrays, shapes, dimensions, indexing, slicing y operaciones vectorizadas.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 4</span>
+        <h3>NumPy Arrays from First Principles</h3>
+        <p>Learn NumPy arrays, shapes, dimensions, indexing, slicing, and why arrays are essential for efficient numerical computing.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-python">
-        <span class="guide-status">Planeada · 5</span>
+        <span class="guide-status">Planned · 5</span>
         <h3>Vectorized Operations with NumPy</h3>
-        <p>Broadcasting, element-wise operations y por qué NumPy puede ser mucho más eficiente que loops tradicionales.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Understand vectorization, broadcasting, and how NumPy performs operations efficiently without explicit element-by-element loops.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-pandas">
-        <span class="guide-status">Planeada · 6</span>
+        <span class="guide-status">Planned · 6</span>
         <h3>pandas Series and DataFrames</h3>
-        <p>Estructura de Series y DataFrame, rows, columns, index y data types.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Learn Series and DataFrames as the central structures for tabular data analysis with pandas.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-pandas">
-        <span class="guide-status">Planeada · 7</span>
+        <span class="guide-status">Planned · 7</span>
         <h3>Selecting, Filtering and Sorting Data with pandas</h3>
-        <p>loc, iloc, boolean masks, sorting y selección de columnas.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Select columns, filter rows, sort data, and combine conditions to explore datasets effectively.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-pandas">
-        <span class="guide-status">Planeada · 8</span>
+        <span class="guide-status">Planned · 8</span>
         <h3>Data Cleaning with pandas</h3>
-        <p>Duplicates, inconsistent values, data types, whitespace, formatting y cleaning workflows.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Develop a workflow for detecting, correcting, and documenting common data-quality problems with pandas.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-pandas">
-        <span class="guide-status">Planeada · 9</span>
+        <span class="guide-status">Planned · 9</span>
         <h3>Handling Missing Data with pandas</h3>
-        <p>isna(), dropna(), fillna() e imputación básica.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Understand how to identify and handle missing values without hiding the structure of the underlying problem.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-pandas">
-        <span class="guide-status">Planeada · 10</span>
+        <span class="guide-status">Planned · 10</span>
         <h3>GroupBy, Aggregation and Summary Statistics</h3>
-        <p>groupby(), agg(), count, mean, median, sum y análisis por grupos.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Use GroupBy, aggregations, and summary statistics to transform detailed data into useful information.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-pandas">
-        <span class="guide-status">Planeada · 11</span>
+        <span class="guide-status">Planned · 11</span>
         <h3>Merging and Joining DataFrames</h3>
-        <p>merge(), join(), concat y relaciones entre tablas.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Master merge, join, and concatenation to combine DataFrames using shared keys and table relationships.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-pandas">
-        <span class="guide-status">Planeada · 12</span>
+        <span class="guide-status">Planned · 12</span>
         <h3>Working with Dates and Time in pandas</h3>
-        <p>Datetime, parsing, extracting components, time differences y time-based filtering.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Work with datetimes, parsing, component extraction, time differences, and time-based filtering.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-sql">
-        <span class="guide-status">Planeada · 13</span>
-        <h3>SQL desde los fundamentos: SELECT, FROM and WHERE</h3>
-        <p>Cómo consultar tablas, seleccionar columnas y filtrar filas.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 13</span>
+        <h3>SQL from First Principles: SELECT, FROM and WHERE</h3>
+        <p>Build basic SQL queries using SELECT, FROM, and WHERE to retrieve information from tables.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-sql">
-        <span class="guide-status">Planeada · 14</span>
+        <span class="guide-status">Planned · 14</span>
         <h3>SQL Aggregations: GROUP BY and HAVING</h3>
-        <p>COUNT, SUM, AVG, MIN, MAX y análisis agrupado.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Learn GROUP BY, aggregate functions, and HAVING to summarize data directly in SQL.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-sql">
-        <span class="guide-status">Planeada · 15</span>
-        <h3>SQL JOINs desde los fundamentos</h3>
-        <p>INNER JOIN, LEFT JOIN, RIGHT JOIN y FULL OUTER JOIN.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 15</span>
+        <h3>SQL JOINs from First Principles</h3>
+        <p>Understand INNER, LEFT, RIGHT, and FULL JOIN and how to connect tables logically.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-sql">
-        <span class="guide-status">Planeada · 16</span>
+        <span class="guide-status">Planned · 16</span>
         <h3>Subqueries and Common Table Expressions (CTEs)</h3>
-        <p>Cómo dividir queries complejas en pasos más claros y reutilizables.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Structure complex queries with subqueries and Common Table Expressions to improve clarity and reuse.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-sql">
-        <span class="guide-status">Planeada · 17</span>
+        <span class="guide-status">Planned · 17</span>
         <h3>SQL Window Functions</h3>
-        <p>ROW_NUMBER, RANK, DENSE_RANK, LAG, LEAD, running totals y PARTITION BY.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Use Window Functions for rankings, running totals, comparisons, and calculations within partitions.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-sql">
-        <span class="guide-status">Planeada · 18</span>
+        <span class="guide-status">Planned · 18</span>
         <h3>CASE WHEN and Conditional Logic in SQL</h3>
-        <p>Cómo crear reglas, categorías y lógica condicional directamente dentro de una query.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Use CASE WHEN to add conditional logic and create derived variables directly inside SQL queries.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-eda">
-        <span class="guide-status">Planeada · 19</span>
+        <span class="guide-status">Planned · 19</span>
         <h3>Exploratory Data Analysis (EDA) with Python</h3>
-        <p>Distribuciones, summary statistics, missingness, outliers y relationships.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Develop Exploratory Data Analysis using descriptive statistics, visual inspection, and structured questions about the data.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-eda">
-        <span class="guide-status">Planeada · 20</span>
+        <span class="guide-status">Planned · 20</span>
         <h3>Data Visualization with Matplotlib</h3>
-        <p>Line plots, bar charts, histograms, scatterplots y control básico de figuras.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Build clear visualizations with Matplotlib to communicate patterns, relationships, and distributions.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-eda">
-        <span class="guide-status">Planeada · 21</span>
+        <span class="guide-status">Planned · 21</span>
         <h3>Data Visualization with Seaborn</h3>
-        <p>Distribuciones, boxplots, heatmaps, pairplots y gráficos estadísticos.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Explore Seaborn as a high-level interface for fast and expressive statistical visualizations.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-tools">
-        <span class="guide-status">Planeada · 22</span>
+        <span class="guide-status">Planned · 22</span>
         <h3>Jupyter Notebook Workflow for Data Science</h3>
-        <p>Cells, Markdown, reproducibility, organización de notebooks y buenas prácticas.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Organize reproducible analysis in Jupyter Notebook through a clear sequence of loading, transformation, analysis, and results.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-tools">
-        <span class="guide-status">Planeada · 23</span>
+        <span class="guide-status">Planned · 23</span>
         <h3>Git and GitHub for Data Science Projects</h3>
-        <p>Repositories, commits, branches, README, version control y colaboración.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Understand repositories, commits, branches, README files, version control, and collaboration for Data Science projects.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-tools">
-        <span class="guide-status">Planeada · 24</span>
+        <span class="guide-status">Planned · 24</span>
         <h3>Virtual Environments, Packages and requirements.txt</h3>
-        <p>Conda, pip, environments, dependencies y cómo hacer que un proyecto sea reproducible.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Learn to manage dependencies, virtual environments, and requirements.txt so a project can be reproduced on another machine.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-tools">
-        <span class="guide-status">Planeada · 25</span>
+        <span class="guide-status">Planned · 25</span>
         <h3>From Raw Data to Reproducible Analysis</h3>
-        <p>Cómo organizar un proyecto completo: data, cleaning, transformation, analysis, visualization, outputs y documentation.</p>
-        <div class="disabled-link">Próximamente</div>
+        <p>Integrate Python, NumPy, pandas, SQL, visualization, Jupyter, and Git/GitHub into a reproducible workflow from beginning to end.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
     </div>
 
     <div class="sequence">
-      <h3>¿Por qué este orden?</h3>
-      <p>
-        Primero construimos las bases de Python y NumPy para entender cómo representar y transformar información.
-        Luego usamos pandas para trabajar con datasets tabulares, limpiar datos, agrupar, combinar tablas y manejar fechas.
-      </p>
-      <p>
-        Después introducimos SQL desde SELECT y WHERE hasta JOINs, CTEs y Window Functions, porque gran parte del trabajo real
-        de Data Science comienza extrayendo y organizando información desde bases de datos.
-      </p>
-      <p>
-        Finalmente, EDA y visualización convierten los datos en evidencia interpretable, mientras que Jupyter, Git/GitHub,
-        virtual environments y requirements.txt permiten documentar y reproducir el análisis de principio a fin.
-      </p>
+      <h3>Why this order?</h3>
+      <p>We first build the foundations of Python and NumPy to understand how information is represented and transformed. Then we use pandas to work with tabular datasets, clean data, aggregate information, combine tables, and handle dates.</p>
+      <p>Next, we introduce SQL from SELECT and WHERE through JOINs, CTEs, and Window Functions because much of real Data Science work begins by extracting and organizing information from relational databases.</p>
+      <p>Finally, EDA and visualization turn data into interpretable evidence, while Jupyter, Git/GitHub, virtual environments, and requirements.txt make the analysis easier to document, reproduce, review, and share.</p>
     </div>
-
   </div>
 </section>
-
 </main>
 
 <footer class="footer">
@@ -323,26 +291,26 @@
     <div class="footer-grid">
       <div>
         <h3>Alfredo Saldana</h3>
-        <p>Data Scientist · Economista · Educador</p>
-        <p>Estudio, exploro y comparto ideas sobre Data Science, Estadística, Machine Learning, Deep Learning e Inteligencia Artificial.</p>
+        <p>Data Scientist · Economist · Educator</p>
+        <p>I study, explore and share ideas across Data Science, Statistics, Machine Learning, Deep Learning and Artificial Intelligence.</p>
       </div>
       <div>
-        <h4>Explorar</h4>
-        <a href="../../projects.html">Proyectos</a>
-        <a href="../../tutorials.html">Aprender</a>
+        <h4>Explore</h4>
+        <a href="../../projects.html">Projects</a>
+        <a href="../../tutorials.html">Learn</a>
         <a href="../../open-box.html">Open Box</a>
       </div>
       <div>
-        <h4>Conectar</h4>
+        <h4>Connect</h4>
         <a href="https://github.com/alfredosaldana" target="_blank" rel="noopener">GitHub ↗</a>
         <a href="https://www.linkedin.com/in/asaldanamle/" target="_blank" rel="noopener">LinkedIn ↗</a>
         <a href="https://www.youtube.com/@alfredosaldana-ds" target="_blank" rel="noopener">YouTube ↗</a>
-        <a href="../../contact.html">Contacto</a>
+        <a href="../../contact.html">Contact</a>
       </div>
     </div>
     <div class="footer-bottom">
       <span>© 2026 Alfredo Saldana</span>
-      <span>Construido como un portafolio de aprendizaje y proyectos.</span>
+      <span>Built as a learning and project portfolio.</span>
     </div>
   </div>
 </footer>
