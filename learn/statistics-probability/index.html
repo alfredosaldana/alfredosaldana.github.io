@@ -1,13 +1,12 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Ruta de aprendizaje de Estadística y Probabilidad por Alfredo Saldana: probabilidad, distribuciones, muestreo, inferencia, pruebas de hipótesis, ANOVA, correlación y regresión.">
-<title>Estadística y Probabilidad — Alfredo Saldana</title>
+<meta name="description" content="Statistics & Probability learning path by Alfredo Saldana: probability, distributions, sampling, inference, hypothesis testing, ANOVA, correlation, and regression.">
+<title>Statistics & Probability — Alfredo Saldana</title>
 <link rel="icon" href="../../assets/images/favicon.svg">
 <link rel="stylesheet" href="../../assets/css/style.css">
-
 <style>
   .path-wrap{max-width:1120px;margin:0 auto;padding:0 20px}
   .breadcrumb{margin:0 0 18px;font-size:.94rem;color:#6b7b8f}
@@ -64,255 +63,224 @@
   }
 </style>
 </head>
-
 <body>
 
 <header class="site-header">
   <div class="container nav-wrap">
-    <a class="brand" href="../../index.html">Alfredo Saldana</a>
-    <button class="menu-btn" aria-label="Abrir navegación">☰</button>
+    <div style="display:flex;align-items:center;gap:20px;">
+      <a class="brand" href="../../index.html">Alfredo Saldana</a>
+      <div class="lang-switch" style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap;">
+        <a href="index.html" aria-current="page" style="color:#2563eb;text-decoration:none;font-weight:800;">EN</a>
+        <span aria-hidden="true" style="color:#64748b;">|</span>
+        <a href="../../es/learn/statistics-probability/" style="color:#111827;text-decoration:none;font-weight:700;">ES</a>
+      </div>
+    </div>
+    <button class="menu-btn" aria-label="Open navigation">☰</button>
     <nav class="nav">
-      <a href="../../index.html">Inicio</a>
-      <a href="../../tutorials.html" class="active">Aprender</a>
-      <a href="../../projects.html">Proyectos</a>
+      <a href="../../index.html">Home</a>
+      <a href="../../tutorials.html" class="active">Learn</a>
+      <a href="../../projects.html">Projects</a>
       <a href="../../open-box.html">Open Box</a>
-      <a href="../../about.html">Acerca de</a>
-      <a href="../../contact.html">Contacto</a>
+      <a href="../../about.html">About</a>
+      <a href="../../contact.html">Contact</a>
     </nav>
   </div>
 </header>
 
 <main>
-
 <section class="page-hero">
   <div class="container">
-    <div class="eyebrow">Aprender · Estadística y Probabilidad</div>
-    <h1>Estadística y Probabilidad</h1>
-    <p class="lead">
-      Una ruta estructurada desde probabilidad básica hasta inferencia, ANOVA, correlación y regresión.
-    </p>
+    <div class="eyebrow">Learn · Statistics & Probability</div>
+    <h1>Statistics & Probability</h1>
+    <p class="lead">A structured path from basic probability to inference, ANOVA, correlation, and regression.</p>
   </div>
 </section>
 
 <section class="section">
   <div class="path-wrap">
-
     <div class="breadcrumb">
-      <a href="../../tutorials.html">Aprender</a> → Estadística y Probabilidad
+      <a href="../../tutorials.html">Learn</a> → Statistics & Probability
     </div>
 
     <div class="path-intro">
       <div class="path-copy">
-        <h2>Construye la base estadística que sostiene Data Science.</h2>
-
-        <p>
-          La Estadística y la Probabilidad permiten razonar sobre incertidumbre, muestras, variabilidad y evidencia.
-          Esta ruta está diseñada para avanzar paso a paso desde los conceptos más básicos de probabilidad hasta
-          herramientas de inferencia utilizadas constantemente en Data Science.
-        </p>
-
-        <p>
-          El orden está pensado para que cada tema prepare el siguiente: primero probabilidad y variables aleatorias,
-          luego distribuciones, después muestreo y Teorema Central del Límite, y finalmente estimación, pruebas de hipótesis,
-          ANOVA, correlación y regresión.
-        </p>
-
-        <div class="path-note">
-          <strong>Orden recomendado:</strong> sigue las guías en secuencia. En particular, conviene mantener juntas
-          Distribuciones Muestrales → Teorema Central del Límite → Error Estándar → Intervalos de Confianza → Pruebas de Hipótesis,
-          porque cada concepto depende de la intuición construida anteriormente.
-        </div>
+        <h2>Build the statistical foundation that supports Data Science.</h2>
+        <p>Statistics and Probability allow us to reason about uncertainty, samples, variability, and evidence. This path is designed to move step by step from basic probability concepts to inferential tools used constantly in Data Science.</p>
+        <p>The order is intentional: first probability and random variables, then distributions, followed by sampling and the Central Limit Theorem, and finally estimation, hypothesis testing, ANOVA, correlation, and regression.</p>
+        <div class="path-note"><strong>Recommended order:</strong> follow the guides in sequence. In particular, keep Sampling Distributions → Central Limit Theorem → Standard Error → Confidence Intervals → Hypothesis Testing together because each topic depends on intuition developed earlier.</div>
       </div>
 
-      <img class="path-image"
-           src="../../assets/images/learn-statistics-probability.png"
-           alt="Ruta de aprendizaje de Estadística y Probabilidad">
+      <img class="path-image" src="../../assets/images/learn-statistics-probability.png" alt="Statistics and Probability learning path">
     </div>
 
-    <div class="eyebrow">Guías</div>
-    <h2 style="margin-top:8px;color:#0b1f3a;">Secuencia de aprendizaje</h2>
-    <p class="section-mini">
-      La ruta avanza de <strong>probabilidad</strong> a <strong>distribuciones</strong>,
-      luego a <strong>muestreo e inferencia</strong>, y termina con
-      <strong>ANOVA, asociación y regresión</strong>.
-    </p>
+    <div class="eyebrow">Guides</div>
+    <h2 style="margin-top:8px;color:#0b1f3a;">Learning sequence</h2>
+    <p class="section-mini">The path moves from <strong>probability</strong> to <strong>distributions</strong>, then to <strong>sampling and inference</strong>, and ends with <strong>ANOVA, association, and regression</strong>.</p>
 
     <div class="path-note" style="margin-top:20px;">
-      <strong>Guía visual:</strong> azul = fundamentos de probabilidad,
-      verde = distribuciones, violeta = muestreo y estimación,
-      naranja = inferencia y pruebas, rojo = asociación y regresión.
+      <strong>Visual guide:</strong> blue = probability foundations, green = distributions, purple = sampling and estimation, orange = inference and hypothesis testing, red = association and regression.
     </div>
 
     <div class="guide-grid">
       <article class="guide-card group-probability">
-        <span class="guide-status">Planeada · 1</span>
-        <h3>Probabilidad desde los fundamentos</h3>
-        <p>Eventos, espacio muestral, probabilidad, complemento, unión e intersección.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 1</span>
+        <h3>Probability from First Principles</h3>
+        <p>Events, sample spaces, probability rules, complements, unions, intersections, and an intuitive foundation for reasoning under uncertainty.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-probability">
-        <span class="guide-status">Planeada · 2</span>
-        <h3>Probabilidad condicional e independencia</h3>
-        <p>Comprende la probabilidad condicional, la independencia y por qué son conceptos relacionados pero diferentes.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 2</span>
+        <h3>Conditional Probability and Independence</h3>
+        <p>Understand how probability changes when additional information is known and what independence really means.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-probability">
-        <span class="guide-status">Planeada · 3</span>
-        <h3>Teorema de Bayes desde los fundamentos</h3>
-        <p>Deriva Bayes paso a paso y úsalo para actualizar probabilidades con nueva evidencia.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 3</span>
+        <h3>Bayes’ Theorem from First Principles</h3>
+        <p>Derive Bayes’ Theorem step by step and use it to update probabilities when new evidence appears.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-probability">
-        <span class="guide-status">Planeada · 4</span>
-        <h3>Variables aleatorias: discretas vs. continuas</h3>
-        <p>Aprende qué es una variable aleatoria y cómo distinguir variables discretas de variables continuas.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 4</span>
+        <h3>Random Variables: Discrete vs. Continuous</h3>
+        <p>Learn what a random variable is and how to distinguish discrete from continuous random variables.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-probability">
-        <span class="guide-status">Planeada · 5</span>
-        <h3>Valor esperado, varianza y desviación estándar</h3>
-        <p>Construye la intuición detrás de la esperanza matemática y las principales medidas de dispersión.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 5</span>
+        <h3>Expected Value, Variance and Standard Deviation</h3>
+        <p>Build intuition for expected value and the main measures of variability.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-distributions">
-        <span class="guide-status">Planeada · 6</span>
-        <h3>Distribuciones Bernoulli y Binomial</h3>
-        <p>Estudia ensayos de éxito/fracaso, parámetros, media, varianza y aplicaciones prácticas.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 6</span>
+        <h3>Bernoulli and Binomial Distributions</h3>
+        <p>Study success/failure experiments, parameters, mean, variance, and practical applications.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-distributions">
-        <span class="guide-status">Planeada · 7</span>
-        <h3>La distribución Normal</h3>
-        <p>Explora la forma, media, desviación estándar, propiedades y la regla 68–95–99.7.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 7</span>
+        <h3>The Normal Distribution</h3>
+        <p>Explore shape, mean, standard deviation, properties, and the 68–95–99.7 rule.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-distributions">
-        <span class="guide-status">Planeada · 8</span>
-        <h3>Z-Scores y estandarización</h3>
-        <p>Aprende a expresar observaciones en unidades de desviación estándar y a interpretar puntuaciones z.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 8</span>
+        <h3>Z-Scores and Standardization</h3>
+        <p>Learn to express observations in standard deviation units and interpret z-scores.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-distributions">
-        <span class="guide-status">Planeada · 9</span>
-        <h3>Las distribuciones t, Chi-cuadrado y F</h3>
-        <p>Comprende por qué aparecen estas tres distribuciones en inferencia estadística y cuándo se utilizan.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 9</span>
+        <h3>The t, Chi-Square and F Distributions</h3>
+        <p>Understand why these three distributions appear in statistical inference and when each is used.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-sampling">
-        <span class="guide-status">Planeada · 10</span>
-        <h3>Poblaciones, muestras, parámetros y estadísticos</h3>
-        <p>Diferencia con claridad población, muestra, parámetro y estadístico antes de entrar en inferencia.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 10</span>
+        <h3>Populations, Samples, Parameters and Statistics</h3>
+        <p>Clearly distinguish populations, samples, parameters, and statistics before moving into inference.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-sampling">
-        <span class="guide-status">Planeada · 11</span>
-        <h3>Distribuciones muestrales desde los fundamentos</h3>
-        <p>Aprende por qué la distribución de un estadístico cambia al repetir el proceso de muestreo.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 11</span>
+        <h3>Sampling Distributions from First Principles</h3>
+        <p>Learn why the distribution of a statistic changes when the sampling process is repeated.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-sampling">
-        <span class="guide-status">Planeada · 12</span>
-        <h3>El Teorema Central del Límite</h3>
-        <p>Comprende uno de los resultados más importantes de la estadística y por qué permite hacer inferencia.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 12</span>
+        <h3>The Central Limit Theorem</h3>
+        <p>Understand one of the most important results in statistics and why it makes inference possible.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-sampling">
-        <span class="guide-status">Planeada · 13</span>
-        <h3>Error estándar y estimación puntual</h3>
-        <p>Distingue desviación estándar de error estándar y comprende estimadores, precisión y variabilidad muestral.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 13</span>
+        <h3>Standard Error and Point Estimation</h3>
+        <p>Distinguish standard deviation from standard error and understand estimators, precision, and sampling variability.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-sampling">
-        <span class="guide-status">Planeada · 14</span>
-        <h3>Intervalos de confianza desde los fundamentos</h3>
-        <p>Construye e interpreta correctamente intervalos de confianza para medias y proporciones.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 14</span>
+        <h3>Confidence Intervals from First Principles</h3>
+        <p>Build and correctly interpret confidence intervals for means and proportions.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-inference">
-        <span class="guide-status">Planeada · 15</span>
-        <h3>Pruebas de hipótesis desde los fundamentos</h3>
-        <p>Aprende H₀, H₁, estadístico de prueba, región crítica, nivel de significancia y regla de decisión.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 15</span>
+        <h3>Hypothesis Testing from First Principles</h3>
+        <p>Learn the complete logic of hypothesis testing: null hypothesis, alternative hypothesis, test statistic, significance level, and decision rule.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-inference">
-        <span class="guide-status">Planeada · 16</span>
-        <h3>P-values: qué significan y qué no significan</h3>
-        <p>Aclara una de las ideas más malinterpretadas de la estadística con ejemplos y contraejemplos.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 16</span>
+        <h3>P-Values: What They Mean and What They Do Not Mean</h3>
+        <p>Clarify one of the most misunderstood ideas in statistics using examples and counterexamples.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-inference">
-        <span class="guide-status">Planeada · 17</span>
-        <h3>Error Tipo I, Error Tipo II y poder estadístico</h3>
-        <p>Relaciona α, β, potencia, tamaño de muestra y la probabilidad de detectar efectos reales.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 17</span>
+        <h3>Type I Error, Type II Error and Statistical Power</h3>
+        <p>Connect alpha, beta, power, sample size, and the probability of detecting real effects.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-inference">
-        <span class="guide-status">Planeada · 18</span>
-        <h3>t-tests de una muestra y de dos muestras</h3>
-        <p>Aprende cuándo usar cada prueba t, sus supuestos y cómo interpretar sus resultados.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 18</span>
+        <h3>One-Sample and Two-Sample t-Tests</h3>
+        <p>Learn when to use each t-test, its assumptions, and how to interpret the results.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-inference">
-        <span class="guide-status">Planeada · 19</span>
-        <h3>F-test: comparación de variabilidad</h3>
-        <p>Comprende la razón entre varianzas y cómo la distribución F prepara el camino para ANOVA.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 19</span>
+        <h3>The F-Test: Comparing Variability</h3>
+        <p>Understand variance ratios and how the F distribution leads into ANOVA.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-inference">
-        <span class="guide-status">Planeada · 20</span>
-        <h3>ANOVA desde los fundamentos</h3>
-        <p>Estudia variabilidad entre grupos y dentro de grupos, sumas de cuadrados, grados de libertad, mean squares, estadístico F y p-value.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 20</span>
+        <h3>ANOVA from First Principles</h3>
+        <p>Study between-group and within-group variability, sums of squares, degrees of freedom, mean squares, the F statistic, and the p-value.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-inference">
-        <span class="guide-status">Planeada · 21</span>
-        <h3>Pruebas post-hoc: ¿qué ocurre después de ANOVA?</h3>
-        <p>Aprende por qué ANOVA no identifica por sí solo qué grupos difieren e introduce comparaciones múltiples como Tukey HSD.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 21</span>
+        <h3>Post-Hoc Tests: What Happens After ANOVA?</h3>
+        <p>Learn why ANOVA alone does not identify which groups differ and introduce multiple-comparison methods such as Tukey HSD.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-association">
-        <span class="guide-status">Planeada · 22</span>
-        <h3>Pruebas Chi-cuadrado para datos categóricos</h3>
-        <p>Trabaja con bondad de ajuste, independencia y tablas de contingencia.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 22</span>
+        <h3>Chi-Square Tests for Categorical Data</h3>
+        <p>Work with goodness-of-fit, independence, and contingency tables.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-association">
-        <span class="guide-status">Planeada · 23</span>
-        <h3>Correlación desde los fundamentos</h3>
-        <p>Construye la intuición de covarianza y correlación de Pearson, dirección, magnitud y limitaciones.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 23</span>
+        <h3>Correlation from First Principles</h3>
+        <p>Build intuition for covariance and Pearson correlation, including direction, magnitude, assumptions, and limitations.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-association">
-        <span class="guide-status">Planeada · 24</span>
-        <h3>Correlación no implica causalidad</h3>
-        <p>Explora variables de confusión, asociaciones espurias y por qué una relación estadística no prueba causalidad.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 24</span>
+        <h3>Correlation Does Not Imply Causation</h3>
+        <p>Explore confounding variables, spurious associations, and why statistical relationships do not prove causation.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-association">
-        <span class="guide-status">Planeada · 25</span>
-        <h3>Regresión lineal simple desde una perspectiva estadística</h3>
-        <p>Estudia pendiente, intercepto, error, residuos, R², inferencia sobre coeficientes y supuestos del modelo.</p>
-        <div class="disabled-link">Próximamente</div>
+        <span class="guide-status">Planned · 25</span>
+        <h3>Simple Linear Regression from a Statistical Perspective</h3>
+        <p>Study slope, intercept, error, residuals, R², coefficient inference, and model assumptions.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
     </div>
 
     <div class="sequence">
-      <h3>¿Por qué este orden?</h3>
-      <p>
-        La secuencia comienza con probabilidad, porque necesitamos una forma formal de describir incertidumbre antes de estudiar
-        variables aleatorias y distribuciones. Después introducimos población, muestra y distribuciones muestrales para entender
-        por qué un estadístico cambia de una muestra a otra.
-      </p>
-      <p>
-        El Teorema Central del Límite conecta esa variabilidad muestral con el Error Estándar y abre la puerta a Intervalos de Confianza
-        y Pruebas de Hipótesis. Desde allí, la ruta avanza hacia t-tests, F-tests, ANOVA y Chi-cuadrado, y finalmente hacia correlación
-        y regresión lineal desde una perspectiva estadística.
-      </p>
+      <h3>Why this order?</h3>
+      <p>The sequence begins with probability because we need a formal way to describe uncertainty before studying random variables and distributions. We then introduce populations, samples, and sampling distributions to understand why a statistic changes from one sample to another.</p>
+      <p>The Central Limit Theorem connects sampling variability to Standard Error and opens the door to Confidence Intervals and Hypothesis Testing. From there, the path advances to t-tests, F-tests, ANOVA, Chi-Square tests, and finally to correlation and simple linear regression from a statistical perspective.</p>
     </div>
-
   </div>
 </section>
-
 </main>
 
 <footer class="footer">
@@ -320,26 +288,26 @@
     <div class="footer-grid">
       <div>
         <h3>Alfredo Saldana</h3>
-        <p>Data Scientist · Economista · Educador</p>
-        <p>Estudio, exploro y comparto ideas sobre Data Science, Estadística, Machine Learning, Deep Learning e Inteligencia Artificial.</p>
+        <p>Data Scientist · Economist · Educator</p>
+        <p>I study, explore and share ideas across Data Science, Statistics, Machine Learning, Deep Learning and Artificial Intelligence.</p>
       </div>
       <div>
-        <h4>Explorar</h4>
-        <a href="../../projects.html">Proyectos</a>
-        <a href="../../tutorials.html">Aprender</a>
+        <h4>Explore</h4>
+        <a href="../../projects.html">Projects</a>
+        <a href="../../tutorials.html">Learn</a>
         <a href="../../open-box.html">Open Box</a>
       </div>
       <div>
-        <h4>Conectar</h4>
+        <h4>Connect</h4>
         <a href="https://github.com/alfredosaldana" target="_blank" rel="noopener">GitHub ↗</a>
         <a href="https://www.linkedin.com/in/asaldanamle/" target="_blank" rel="noopener">LinkedIn ↗</a>
         <a href="https://www.youtube.com/@alfredosaldana-ds" target="_blank" rel="noopener">YouTube ↗</a>
-        <a href="../../contact.html">Contacto</a>
+        <a href="../../contact.html">Contact</a>
       </div>
     </div>
     <div class="footer-bottom">
       <span>© 2026 Alfredo Saldana</span>
-      <span>Construido como un portafolio de aprendizaje y proyectos.</span>
+      <span>Built as a learning and project portfolio.</span>
     </div>
   </div>
 </footer>
