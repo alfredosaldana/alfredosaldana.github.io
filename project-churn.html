@@ -29,7 +29,22 @@
 </style>
 </head>
 <body>
-<header class="site-header"><div class="container nav-wrap"><a class="brand" href="index.html">Alfredo Saldana</a><button class="menu-btn" aria-label="Open navigation">☰</button><nav class="nav"><a href="index.html">Home</a><a href="tutorials.html">Learn</a><a href="projects.html">Projects</a><a href="open-box.html">Open Box</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav></div></header>
+<header class="site-header">
+  <div class="container nav-wrap">
+    <div style="display:flex;align-items:center;gap:20px;">
+      <a class="brand" href="index.html">Alfredo Saldana</a>
+      <div class="lang-switch"
+           style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap;">
+        <a href="project-churn.html"
+           aria-current="page"
+           style="color:#2563eb;text-decoration:none;font-weight:800;">EN</a>
+        <span aria-hidden="true" style="color:#64748b;">|</span>
+        <a href="es/project-churn.html"
+           style="color:#111827;text-decoration:none;font-weight:700;">ES</a>
+      </div>
+    </div>
+    <button class="menu-btn" aria-label="Open navigation">☰</button>
+    <nav class="nav"><a href="index.html">Home</a><a href="tutorials.html">Learn</a><a href="projects.html">Projects</a><a href="open-box.html">Open Box</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav></div></header>
 
 <main>
 <section class="page-hero"><div class="container"><div class="eyebrow">Machine Learning · Classification</div><h1>Bank Customer Churn Prediction</h1><p class="lead">An end-to-end machine learning case study that asks whether customer attributes can be used to identify elevated churn risk while preserving a rigorous train/test workflow.</p><span class="status">Completed</span></div></section>
