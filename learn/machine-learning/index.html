@@ -3,11 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Machine Learning learning path by Alfredo Saldana: supervised learning, regression, classification, loss functions, gradient descent, trees, ensembles, model selection, explainability, and deployment.">
-<title>Machine Learning — Alfredo Saldana</title>
+<meta name="description" content="A complete 33-guide Machine Learning course by Alfredo Saldana, progressing from foundations and mathematical learning to classical models, ensembles, unsupervised learning, reinforcement learning, explainability, reproducibility, and deployment.">
+<title>Machine Learning Course — Alfredo Saldana</title>
 <link rel="icon" href="../../assets/images/favicon.svg">
 <link rel="stylesheet" href="../../assets/css/style.css">
 <style>
+
   .path-wrap{max-width:1120px;margin:0 auto;padding:0 20px}
   .breadcrumb{margin:0 0 18px;font-size:.94rem;color:#6b7b8f}
   .breadcrumb a{color:#245f9e;text-decoration:none;font-weight:700}
@@ -32,16 +33,18 @@
     box-shadow:0 10px 26px rgba(18,42,74,.07);
     display:flex;
     flex-direction:column;
-    min-height:255px;
+    min-height:270px;
     overflow:hidden;
     transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease
   }
   .guide-card::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:var(--accent)}
+
   .guide-card.group-foundations{--accent:#2563a8}
-  .guide-card.group-models{--accent:#7253a5}
-  .guide-card.group-data{--accent:#16847a}
+  .guide-card.group-core{--accent:#7253a5}
+  .guide-card.group-classical{--accent:#16847a}
   .guide-card.group-ensembles{--accent:#c77a22}
-  .guide-card.group-selection{--accent:#b94d5c}
+  .guide-card.group-neural-unsupervised{--accent:#8b5fbf}
+  .guide-card.group-sequential{--accent:#b94d5c}
   .guide-card.group-production{--accent:#53657a}
 
   .guide-card:hover{transform:translateY(-4px);box-shadow:0 16px 32px rgba(18,42,74,.12);border-color:#cbdced}
@@ -62,7 +65,9 @@
   }
   @media(max-width:620px){
     .guide-grid{grid-template-columns:1fr}
+    .guide-card{min-height:0}
   }
+
 </style>
 </head>
 <body>
@@ -94,7 +99,7 @@
   <div class="container">
     <div class="eyebrow">Learn · Machine Learning</div>
     <h1>Machine Learning</h1>
-    <p class="lead">A structured learning path from Machine Learning foundations to ensembles, tuning, explainability, and deployment.</p>
+    <p class="lead">A complete 33-guide course designed to build Machine Learning understanding from first principles through modern modeling, evaluation, interpretability, reproducibility, and deployment.</p>
   </div>
 </section>
 
@@ -106,181 +111,230 @@
 
     <div class="path-intro">
       <div class="path-copy">
-        <h2>Learn how models work, not only how to run them.</h2>
-        <p>Machine Learning is not just about importing an algorithm and calling <code>fit()</code>. To work with models rigorously, we need to understand what problem we are solving, how information is prepared, how each family of models learns, and how one solution should be compared with another.</p>
-        <p>This path begins with problem formulation and the complete Machine Learning workflow, continues through linear models, feature preparation, trees and ensembles, and ends with tuning, explainability, pipelines, and the model lifecycle.</p>
-        <div class="path-note"><strong>Recommended order:</strong> follow the sequence from the foundations. Each topic is designed to build directly on ideas introduced earlier.</div>
+        <h2>Learn how Machine Learning works—from foundations to complete systems.</h2>
+        <p>This 33-guide course is organized as a cumulative academic sequence. It begins by defining learning problems and the end-to-end workflow, then develops the mathematical and data foundations required to understand how models fit, optimize, generalize and fail.</p>
+        <p>The course then progresses through linear and probabilistic models, similarity methods, Support Vector Machines, trees and ensembles, Neural Networks, unsupervised learning, Time Series and Reinforcement Learning. The final guides connect model interpretation, responsible reproducibility and the complete production lifecycle.</p>
+        <div class="path-note"><strong>Recommended order:</strong> follow Guides 1–33 sequentially. Each guide is designed to deepen ideas introduced earlier while preparing the prerequisites for later topics.</div>
       </div>
 
-      <img class="path-image" src="../../assets/images/learn-machine-learning.png" alt="Machine Learning learning path">
+      <img class="path-image" src="../../assets/images/learn-machine-learning.png" alt="Machine Learning course learning path">
     </div>
 
-    <div class="eyebrow">Guides</div>
+    <div class="eyebrow">33-Guide Course</div>
     <h2 style="margin-top:8px;color:#0b1f3a;">Learning sequence</h2>
-    <p class="section-mini">The path moves from <strong>problem formulation and workflow</strong> to <strong>linear models</strong>, <strong>preprocessing</strong>, <strong>trees and ensembles</strong>, and finishes with <strong>model selection, explainability, pipelines, and deployment</strong>.</p>
+    <p class="section-mini">The course advances through <strong>foundations and workflow</strong>, <strong>mathematical and statistical learning</strong>, <strong>classical supervised models</strong>, <strong>trees and ensembles</strong>, <strong>Neural Networks and unsupervised learning</strong>, <strong>sequential decision problems</strong>, and finally <strong>interpretability, reproducibility and production</strong>.</p>
 
     <div class="path-note" style="margin-top:20px;">
-      <strong>Visual guide:</strong> blue = foundations and workflow, purple = linear models and optimization, green = data preparation and features, orange = trees and ensembles, red = selection, tuning and explainability, blue-gray = pipelines and lifecycle.
+      <strong>Visual guide:</strong> blue = foundations and workflow; purple = mathematical, optimization and generalization foundations; teal = classical supervised models; amber = trees, ensembles and model selection; violet = Neural Networks and unsupervised learning; red = Time Series and Reinforcement Learning; blue-gray = interpretability, reproducibility and production.
     </div>
 
     <div class="guide-grid">
       <article class="guide-card group-foundations">
         <span class="guide-status">Planned · 1</span>
         <h3>What Is Machine Learning? Supervised vs. Unsupervised Learning</h3>
-        <p>Understand what Machine Learning is, how models learn from data, and the difference between supervised and unsupervised learning.</p>
-        <a href="what-is-machine-learning-supervised-vs-unsupervised-learning.html"><strong>Open guide →</strong></a>
+        <p>Understand how models learn, what separates supervised and unsupervised approaches, and which methods address which tasks. Detailed examples across industries with calculations you can verify step by step.</p>
+        <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-foundations">
         <span class="guide-status">Planned · 2</span>
-        <h3>Classification vs. Regression</h3>
-        <p>Distinguish classification from regression based on the target variable and the kind of prediction the problem requires.</p>
+        <h3>Classification vs. Regression: Understanding Prediction Problems</h3>
+        <p>Learn how to distinguish Classification and Regression by the meaning of the target. Complete worked retail and healthcare datasets, model fitting, probabilities, metrics, thresholds, practical pitfalls, and explained exercises.</p>
         <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-foundations">
         <span class="guide-status">Planned · 3</span>
         <h3>The Machine Learning Workflow from End to End</h3>
-        <p>Walk through the complete process: problem definition, data, preparation, training, evaluation, model selection, and use.</p>
+        <p>Build a trustworthy Machine Learning workflow step by step through a synthetic telecommunications churn project: problem definition, chronological splits, EDA, baselines, model selection, evaluation, leakage, deployment, and…</p>
         <div class="disabled-link">Coming soon</div>
       </article>
-      <article class="guide-card group-models">
+      <article class="guide-card group-foundations">
         <span class="guide-status">Planned · 4</span>
-        <h3>Linear Regression for Machine Learning</h3>
-        <p>Connect a linear relationship with prediction, coefficients, error, and parameter learning in a regression problem.</p>
+        <h3>Mathematical Foundations for Machine Learning</h3>
+        <p>Develop the mathematics of Machine Learning from first principles using a predictive-maintenance example: vectors, matrices, linear scores, scaling, derivatives, gradients, optimization, probability, Bayes’ Theorem, and statistical…</p>
         <div class="disabled-link">Coming soon</div>
       </article>
-      <article class="guide-card group-models">
+      <article class="guide-card group-foundations">
         <span class="guide-status">Planned · 5</span>
-        <h3>Logistic Regression: From Linear Score to Probability</h3>
-        <p>Understand how Logistic Regression transforms a linear combination of variables into a probability for classification.</p>
+        <h3>Data Preparation and Feature Engineering for Machine Learning</h3>
+        <p>Learn how raw hospital records become dependable Machine Learning Features: a complete 12-patient teaching dataset, missing-value calculations, categorical Encoding, Feature Scaling, temporal Feature Engineering, leakage-safe…</p>
         <div class="disabled-link">Coming soon</div>
       </article>
-      <article class="guide-card group-models">
+      <article class="guide-card group-foundations">
         <span class="guide-status">Planned · 6</span>
-        <h3>Loss Functions: How Models Learn from Error</h3>
-        <p>Learn how a Loss Function quantifies error and provides the signal used to adjust model parameters.</p>
+        <h3>Training, Validation, Cross-Validation and Data Leakage</h3>
+        <p>Learn to build a trustworthy Machine Learning evaluation through a logistics example: Training and Test, fully worked Cross-Validation, stratification, grouped and temporal splits, model selection, and Data Leakage prevention.</p>
         <div class="disabled-link">Coming soon</div>
       </article>
-      <article class="guide-card group-models">
+      <article class="guide-card group-core">
         <span class="guide-status">Planned · 7</span>
-        <h3>Gradient Descent from First Principles</h3>
-        <p>Build Gradient Descent from geometric intuition to iterative parameter updates that minimize a Loss Function.</p>
+        <h3>Linear Regression from First Principles</h3>
+        <p>Derive Linear Regression from first principles with a complete energy-consumption example: OLS coefficients, residuals, evaluation, assumptions, matrix notation and reproducible calculations.</p>
         <div class="disabled-link">Coming soon</div>
       </article>
-      <article class="guide-card group-models">
+      <article class="guide-card group-core">
         <span class="guide-status">Planned · 8</span>
-        <h3>Regularization: Ridge, Lasso and Elastic Net</h3>
-        <p>Understand how regularization penalizes overly complex models and compare Ridge, Lasso, and Elastic Net.</p>
+        <h3>Loss Functions: Measuring and Learning from Prediction Errors</h3>
+        <p>From the meaning of prediction error to the mathematics of learning: work through every calculation, choose a defensible objective and understand when different losses favor different models.</p>
         <div class="disabled-link">Coming soon</div>
       </article>
-      <article class="guide-card group-data">
+      <article class="guide-card group-core">
         <span class="guide-status">Planned · 9</span>
-        <h3>Feature Engineering from First Principles</h3>
-        <p>Learn how to transform raw information into features that better represent the structure relevant to a model.</p>
+        <h3>Gradient Descent from First Principles</h3>
+        <p>Learn Gradient Descent from first principles with derivatives, Chain Rule, three complete numeric updates, Learning Rate, convergence, Batch/SGD/Mini-Batch, graphs and reproducible Python.</p>
         <div class="disabled-link">Coming soon</div>
       </article>
-      <article class="guide-card group-data">
+      <article class="guide-card group-core">
         <span class="guide-status">Planned · 10</span>
-        <h3>Encoding Categorical Variables</h3>
-        <p>Study how to represent categorical variables numerically using One-Hot Encoding and other strategies.</p>
+        <h3>Logistic Regression: From Linear Scores to Probabilities</h3>
+        <p>Understand Logistic Regression step by step: Linear Scores, Sigmoid, Odds, Maximum Likelihood, Log Loss, Gradient Descent, Decision Thresholds, Calibration and hotel booking examples.</p>
         <div class="disabled-link">Coming soon</div>
       </article>
-      <article class="guide-card group-data">
+      <article class="guide-card group-core">
         <span class="guide-status">Planned · 11</span>
-        <h3>Handling Missing Data in Machine Learning</h3>
-        <p>Understand why data can be missing, how missingness can affect a model, and the main strategies for handling it.</p>
+        <h3>Generalized Linear Models and Probabilistic Foundations</h3>
+        <p>Learn Generalized Linear Models from first principles: exponential families, Gaussian, Bernoulli and Poisson outcomes, links, exposure offsets, maximum likelihood, gradients and evaluation using a public transit alert example.</p>
         <div class="disabled-link">Coming soon</div>
       </article>
-      <article class="guide-card group-data">
+      <article class="guide-card group-core">
         <span class="guide-status">Planned · 12</span>
-        <h3>Feature Scaling: Standardization and Normalization</h3>
-        <p>Distinguish Standardization from Normalization, when to use each, and why some algorithms are sensitive to scale.</p>
+        <h3>Model Evaluation: Metrics, Thresholds and Error Analysis</h3>
+        <p>Learn Model Evaluation through fully worked Confusion Matrices, Precision, Recall, Class Imbalance, ROC-AUC, Average Precision, Calibration, Brier, Log Loss, MAE, RMSE and R² in water-system and aviation examples.</p>
         <div class="disabled-link">Coming soon</div>
       </article>
-      <article class="guide-card group-ensembles">
+      <article class="guide-card group-core">
         <span class="guide-status">Planned · 13</span>
-        <h3>Decision Trees from First Principles</h3>
-        <p>Learn how a Decision Tree splits the feature space through successive rules to produce predictions.</p>
+        <h3>Overfitting, Underfitting, Bias–Variance and Regularization</h3>
+        <p>Understand why low Training Error may fail to generalize; calculate Bias–Variance and derive Ridge, Lasso and Elastic Net using fully worked agricultural-quality examples.</p>
         <div class="disabled-link">Coming soon</div>
       </article>
-      <article class="guide-card group-ensembles">
+      <article class="guide-card group-core">
         <span class="guide-status">Planned · 14</span>
-        <h3>Random Forest Explained</h3>
-        <p>Understand how Random Forest combines many trees through bagging and randomness to improve stability and generalization.</p>
+        <h3>Statistical Learning Theory and Generalization</h3>
+        <p>Understand why empirical success is not a guarantee of future performance. Calculate risk, derive concentration and finite-class generalization bounds, and prove VC Dimension with worked cybersecurity examples.</p>
         <div class="disabled-link">Coming soon</div>
       </article>
-      <article class="guide-card group-ensembles">
+      <article class="guide-card group-classical">
         <span class="guide-status">Planned · 15</span>
-        <h3>Bagging vs. Boosting</h3>
-        <p>Compare two ensemble strategies: models trained in parallel to reduce variance and sequential models that correct earlier errors.</p>
+        <h3>k-Nearest Neighbors: Learning from Similarity</h3>
+        <p>Learn how k-Nearest Neighbors turns feature similarity into classification and regression predictions. Calculate every distance, select k using Validation, and understand scaling, dimensionality and practical limitations.</p>
         <div class="disabled-link">Coming soon</div>
       </article>
-      <article class="guide-card group-ensembles">
+      <article class="guide-card group-classical">
         <span class="guide-status">Planned · 16</span>
-        <h3>Gradient Boosting from First Principles</h3>
-        <p>Build the idea of Gradient Boosting as a sequence of weak models that progressively improve predictions.</p>
+        <h3>Naive Bayes: Classification with Probability</h3>
+        <p>Learn why a probability-based model can classify text: calculate Priors, Likelihoods, Laplace Smoothing and Posteriors, then compare three Naive Bayes variants and evaluate their decisions.</p>
+        <div class="disabled-link">Coming soon</div>
+      </article>
+      <article class="guide-card group-classical">
+        <span class="guide-status">Planned · 17</span>
+        <h3>Generative vs. Discriminative Learning</h3>
+        <p>Two approaches to the same prediction: build a joint probability model or learn a conditional probability directly. Derive, fit, compare and evaluate every step.</p>
+        <div class="disabled-link">Coming soon</div>
+      </article>
+      <article class="guide-card group-classical">
+        <span class="guide-status">Planned · 18</span>
+        <h3>Support Vector Machines: Margins, Boundaries and Kernels</h3>
+        <p>Derive the maximum-margin boundary, understand Support Vectors and Soft Margin, then build nonlinear decisions with Kernels using complete numerical examples.</p>
         <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-ensembles">
-        <span class="guide-status">Planned · 17</span>
-        <h3>XGBoost Explained</h3>
-        <p>Understand the logic of XGBoost, regularization, sequential trees, and why it is widely used for tabular data.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-selection">
-        <span class="guide-status">Planned · 18</span>
-        <h3>Hyperparameters vs. Model Parameters</h3>
-        <p>Distinguish parameters learned directly from data from settings chosen before or during training.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-selection">
         <span class="guide-status">Planned · 19</span>
-        <h3>Hyperparameter Tuning: Grid Search and Random Search</h3>
-        <p>Learn how to compare hyperparameter configurations using Grid Search and Random Search within a validation process.</p>
+        <h3>Decision Trees from First Principles</h3>
+        <p>Learn why trees split: calculate Gini, Entropy and Information Gain, construct Classification and Regression Trees, and evaluate pruning and generalization with complete numerical examples.</p>
         <div class="disabled-link">Coming soon</div>
       </article>
-      <article class="guide-card group-selection">
+      <article class="guide-card group-ensembles">
         <span class="guide-status">Planned · 20</span>
-        <h3>Model Selection and Cross-Validation</h3>
-        <p>Understand how to compare models more reliably using Cross-Validation rather than relying on a single data split.</p>
+        <h3>Random Forest and Bagging: Learning with Multiple Trees</h3>
+        <p>Rebuild three Bootstrap trees by hand, verify their votes and Out-of-Bag predictions, derive ensemble variance, and evaluate a reproducible Random Forest without data leakage.</p>
         <div class="disabled-link">Coming soon</div>
       </article>
-      <article class="guide-card group-selection">
+      <article class="guide-card group-ensembles">
         <span class="guide-status">Planned · 21</span>
-        <h3>Feature Importance: What It Tells You and What It Does Not</h3>
-        <p>Interpret Feature Importance carefully and understand its limits as an explanation of model behavior.</p>
+        <h3>Boosting: AdaBoost, Gradient Boosting and XGBoost</h3>
+        <p>Calculate AdaBoost, Gradient Boosting and XGBoost updates from first principles, then compare and evaluate them without data leakage.</p>
         <div class="disabled-link">Coming soon</div>
       </article>
-      <article class="guide-card group-selection">
+      <article class="guide-card group-ensembles">
         <span class="guide-status">Planned · 22</span>
-        <h3>Introduction to SHAP and Model Explainability</h3>
-        <p>Introduce SHAP and the idea of explaining how features contribute to individual and global predictions.</p>
+        <h3>Model Selection and Hyperparameter Tuning</h3>
+        <p>Learn to choose models fairly using Cross-Validation, Grid/Random Search and Nested CV, with every result independently verifiable.</p>
         <div class="disabled-link">Coming soon</div>
       </article>
-      <article class="guide-card group-production">
+      <article class="guide-card group-neural-unsupervised">
         <span class="guide-status">Planned · 23</span>
-        <h3>Class Imbalance in Machine Learning</h3>
-        <p>Understand why a rare class can distort Accuracy and how to evaluate and address imbalanced problems.</p>
+        <h3>Neural Networks and Backpropagation from First Principles</h3>
+        <p>Build a neural network from a forward pass through the Chain Rule and complete Backpropagation, then evaluate a nonlinear MLP without data leakage.</p>
         <div class="disabled-link">Coming soon</div>
       </article>
-      <article class="guide-card group-production">
+      <article class="guide-card group-neural-unsupervised">
         <span class="guide-status">Planned · 24</span>
-        <h3>Model Pipelines and Reproducible Machine Learning</h3>
-        <p>Organize preprocessing and modeling into reproducible pipelines that reduce errors and help prevent Data Leakage.</p>
+        <h3>Clustering from First Principles: k-Means, Hierarchical Clustering and DBSCAN</h3>
+        <p>Calculate clusters from actual distances, understand three different definitions of similarity, and evaluate retail segments without inventing labels.</p>
+        <div class="disabled-link">Coming soon</div>
+      </article>
+      <article class="guide-card group-neural-unsupervised">
+        <span class="guide-status">Planned · 25</span>
+        <h3>Dimensionality Reduction from First Principles: PCA, t-SNE and UMAP</h3>
+        <p>Derive PCA from real calculations, reconstruct measurements, and compare PCA, t-SNE and UMAP without mistaking variance for predictive value.</p>
+        <div class="disabled-link">Coming soon</div>
+      </article>
+      <article class="guide-card group-neural-unsupervised">
+        <span class="guide-status">Planned · 26</span>
+        <h3>Gaussian Mixture Models and Expectation–Maximization from First Principles</h3>
+        <p>Compute responsibilities, derive every EM update, verify likelihood improvement, and evaluate mixture complexity responsibly.</p>
+        <div class="disabled-link">Coming soon</div>
+      </article>
+      <article class="guide-card group-neural-unsupervised">
+        <span class="guide-status">Planned · 27</span>
+        <h3>Anomaly Detection and Association Rule Mining from First Principles</h3>
+        <p>Detect unusual readings without claiming faults, and discover recurring baskets without confusing association with causation: eight sensor readings, twelve receipts and fully worked arithmetic.</p>
+        <div class="disabled-link">Coming soon</div>
+      </article>
+      <article class="guide-card group-sequential">
+        <span class="guide-status">Planned · 28</span>
+        <h3>Time Series Forecasting with Machine Learning</h3>
+        <p>Forecast electricity demand without looking into the future: Lags, Rolling Features, Seasonality, learned Parameters, honest evaluation, and two fully reproducible experiments.</p>
+        <div class="disabled-link">Coming soon</div>
+      </article>
+      <article class="guide-card group-sequential">
+        <span class="guide-status">Planned · 29</span>
+        <h3>Reinforcement Learning from First Principles: Markov Decision Processes and Bellman Equations</h3>
+        <p>Learn how an agent makes sequential decisions using states, rewards, policies, Bellman equations and value iteration—with complete worked mathematics and reproducible simulations.</p>
+        <div class="disabled-link">Coming soon</div>
+      </article>
+      <article class="guide-card group-sequential">
+        <span class="guide-status">Planned · 30</span>
+        <h3>Reinforcement Learning II: Q-Learning, SARSA and Learning Optimal Policies</h3>
+        <p>Learn Q-Learning and SARSA from first principles: temporal-difference targets, exploration, fully worked arithmetic, optimal policies and reproducible Python labs.</p>
         <div class="disabled-link">Coming soon</div>
       </article>
       <article class="guide-card group-production">
-        <span class="guide-status">Planned · 25</span>
-        <h3>From Notebook to Deployment: The Machine Learning Lifecycle</h3>
-        <p>Connect experimentation, training, validation, packaging, deployment, monitoring, and maintenance in production.</p>
+        <span class="guide-status">Planned · 31</span>
+        <h3>Model Interpretability and Explainable Machine Learning</h3>
+        <p>Understand Feature Importance, Permutation Importance, PDP, ICE, SHAP and LIME from first principles, with reproducible calculations and responsible interpretation.</p>
+        <div class="disabled-link">Coming soon</div>
+      </article>
+      <article class="guide-card group-production">
+        <span class="guide-status">Planned · 32</span>
+        <h3>Machine Learning Pipelines, Reproducibility and Responsible Modeling</h3>
+        <p>Build reproducible, leakage-safe Pipelines with ColumnTransformer; verify every transformation, evaluate and audit subgroup errors, and document responsible model releases.</p>
+        <div class="disabled-link">Coming soon</div>
+      </article>
+      <article class="guide-card group-production">
+        <span class="guide-status">Planned · 33</span>
+        <h3>From Notebook to Deployment: The Complete Machine Learning Lifecycle</h3>
+        <p>Build, evaluate, package, serve, monitor and safely maintain a complete reproducible Machine Learning prediction system—from first principles to rollback.</p>
         <div class="disabled-link">Coming soon</div>
       </article>
     </div>
 
     <div class="sequence">
       <h3>Why this order?</h3>
-      <p>We first define what Machine Learning means and what kind of problem we are solving. We then study the complete workflow so that every algorithm appears within a process rather than as an isolated technique.</p>
-      <p>Next, we move from Linear Regression and Logistic Regression to Loss Functions, Gradient Descent, and Regularization. With that foundation, we introduce Feature Engineering, preprocessing, Decision Trees, Random Forest, Bagging, Boosting, and XGBoost.</p>
-      <p>Finally, the path covers Hyperparameter Tuning, Model Selection, Feature Importance, SHAP, Class Imbalance, reproducible Pipelines, and the transition from a notebook to a deployed and monitored model.</p>
+      <p>Guides 1–6 establish the language of Machine Learning, distinguish prediction problems, introduce the complete workflow, and build the mathematical, data-preparation and evaluation foundations needed to avoid misleading results.</p>
+      <p>Guides 7–14 develop the mechanics of statistical learning: Linear Regression, Loss Functions, Gradient Descent, Logistic Regression, Generalized Linear Models, evaluation, Regularization and the theory of generalization. Guides 15–22 then compare major classical model families and ensemble strategies under a common evaluation framework.</p>
+      <p>Guides 23–27 extend the course to Neural Networks and unsupervised learning, including Clustering, Dimensionality Reduction, Gaussian Mixture Models, Anomaly Detection and Association Rules. Guides 28–30 introduce temporal forecasting and sequential decision-making, where ordinary random splitting and static prediction assumptions no longer suffice.</p>
+      <p>The final three guides focus on understanding model behavior, building reproducible and responsible Pipelines, and connecting a validated notebook to deployment, Monitoring, maintenance and safe rollback. The goal is not merely to know algorithms, but to understand how a complete Machine Learning system is reasoned about, evaluated and maintained.</p>
     </div>
   </div>
 </section>
