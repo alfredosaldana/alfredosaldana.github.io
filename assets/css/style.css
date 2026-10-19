@@ -10,3 +10,7 @@
 .project-links a:last-child { color: var(--accent); }
 .project-card a strong, .learn-card a strong { transition: color .2s ease; }
 .project-card a:hover strong, .learn-card a:hover strong { color: var(--accent-dark); }
+
+/* Active language indicator for bilingual study guides. */
+.site-header .lang-switch a[lang]{color:#111827;font-weight:700}
+.site-header .lang-switch a[lang][aria-current="page"]{color:var(--blue);font-weight:800}
