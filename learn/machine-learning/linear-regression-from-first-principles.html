@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><meta content="Derive Linear Regression from first principles with a complete energy-consumption example: OLS coefficients, residuals, evaluation, assumptions, matrix notation and reproducible calculations." name="description"/><title>Linear Regression from First Principles</title>
+<link href="/assets/css/style.css" rel="stylesheet"/><link href="/es/learn/machine-learning/linear-regression-from-first-principles-es.html" hreflang="es" rel="alternate"/>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>
+.guide-hero{padding:56px 0 38px;background:#fff;border-bottom:1px solid var(--line)}.guide-hero h1{font-size:clamp(2.15rem,4.5vw,3.65rem);max-width:980px;line-height:1.14}.guide-hero .lead{max-width:840px}.guide-meta{color:var(--muted);font-size:.88rem}.guide-main{padding:38px 0 80px}.guide-article{width:min(900px,calc(100% - 32px));margin:auto}.guide-section{background:white;border:1px solid var(--line);border-left:5px solid #3178b9;border-radius:0 17px 17px 0;padding:28px 34px;margin:0 0 22px;box-shadow:0 3px 12px rgba(11,31,58,.025)}.guide-section.teal{border-left-color:#15957e}.guide-section.purple{border-left-color:#8c69ba}.guide-section.amber{border-left-color:#d59a32}.guide-section h2{font-size:clamp(1.55rem,3vw,2.1rem);line-height:1.2;margin:0 0 18px}.guide-section h3{font-size:1.27rem;line-height:1.25;margin:26px 0 12px}.guide-section p{font-size:1.035rem;line-height:1.8}.callout{padding:20px 22px;border-left:4px solid #3178b9;background:#eff6ff;border-radius:0 12px 12px 0;margin:22px 0}.callout h3:first-child{margin-top:0}.callout p:last-child{margin-bottom:0}.callout.teal{background:#effaf7;border-color:#15957e}.callout.purple{background:#f6f1fd;border-color:#8c69ba}.callout.amber{background:#fff8e8;border-color:#d59a32}.formula{text-align:center;background:#f6f1fd;border:1px solid #e3d7f3;border-radius:12px;padding:22px 16px;font-size:clamp(1.35rem,3vw,1.85rem);overflow-x:auto;margin:20px 0}.table-wrap{overflow-x:auto;margin:24px 0}table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:500px}caption{text-align:left;font-weight:650;padding-bottom:10px;color:#536276}th,td{padding:12px 14px;text-align:left;border-bottom:1px solid #e1e9f1}th{background:#eaf2ff;color:#0b1f3a}tbody tr:nth-child(even){background:#f8fafc}.diagram{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:27px 0}.diagram div{background:#eaf2ff;border:1px solid #d9e6fa;border-radius:12px;padding:14px 10px;text-align:center;flex:1;min-width:105px;font-size:.82rem;font-weight:700;color:#0b1f3a}.diagram small{font-size:.76rem;font-weight:400}.diagram span{color:#2563eb;font-weight:700}.plot{margin:25px auto;max-width:680px}.plot svg{display:block;width:100%;height:auto;background:#fbfdff;border:1px solid #e5eaf1;border-radius:12px}.plot figcaption{font-size:.83rem;color:#526175;margin-top:10px;line-height:1.5}.steps{padding-left:22px}.steps li{padding:8px 0;line-height:1.75}.cluster-viz{display:flex;align-items:center;gap:12px;justify-content:space-around;padding:22px;background:#f6fafc;border-radius:12px;flex-wrap:wrap}.cluster-viz span{min-width:60px;text-align:center;border:2px solid #15957e;border-radius:22px;background:#dff5ed;padding:9px;font-weight:700}.cluster-viz .last{border-color:#8c69ba;background:#eee5fa}details{border:1px solid #dfe8f0;padding:16px 19px;border-radius:12px;margin:12px 0;background:#fbfdff}summary{font-weight:700;cursor:pointer;line-height:1.6}details p{padding-top:14px;margin:0}.glossary{display:grid;grid-template-columns:1fr 1fr;gap:12px}.glossary div{background:#f8fafc;border:1px solid #e5eaf1;border-radius:12px;padding:14px}.glossary dt{font-weight:700;color:#0b1f3a}.glossary dd{margin:5px 0 0;color:#506178;line-height:1.6}.guide-links{display:flex;gap:15px;flex-wrap:wrap;margin-top:20px}.guide-links a{color:#2563eb;font-weight:700}.guide-footer{background:#071426;color:#c4d2e2;padding:30px 0}.guide-footer a{color:white}.skip{position:absolute;top:-200px}.skip:focus{top:10px;left:10px;z-index:999;background:white;padding:12px}@media(max-width:650px){.guide-section{padding:22px 19px}.glossary{grid-template-columns:1fr}.diagram{gap:6px}.diagram div{min-width:115px}.diagram span{display:none}.guide-hero{padding:36px 0 30px}.guide-main{padding-top:22px}}
+
+.guide-section .table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.guide-section .table-wrap table{width:100%;font-variant-numeric:tabular-nums}.guide-section .formula{line-height:1.7}.guide-section .callout .formula{background:#fff}.guide-section h3{line-height:1.3}.guide-section p+ .formula{margin-top:14px}@media(max-width:650px){.guide-section .formula{font-size:1.05rem;padding:16px 10px}.guide-section .table-wrap th,.guide-section .table-wrap td{padding:10px 12px;white-space:nowrap;font-size:.9rem}}
+
+.guide-section .note-inline{font-size:.88rem;color:#526175}.guide-section .mini-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:22px 0}.mini-grid .tile{background:#f8fafc;border:1px solid #dfe8f0;border-radius:12px;padding:16px}.mini-grid .tile strong{display:block;color:#0b1f3a;margin-bottom:7px}.guide-section .mini-grid p{font-size:.91rem;line-height:1.55;margin:0}.guide-section .math-caption{font-size:.9rem;color:#536276;margin-top:-8px}.guide-section .table-wrap td{vertical-align:top}.guide-section .source-list li{padding:6px 0;line-height:1.7}.guide-section .source-list a{color:#2563eb;text-decoration:underline;text-underline-offset:3px}.guide-section .formula{overflow-wrap:normal}.guide-section svg text{font-family:Inter,Arial,sans-serif}.guide-section .section-intro{font-size:1.12rem;color:#42526a}.guide-section .algorithm{border-top:1px solid #e2eaf3;padding-top:7px;margin-top:20px}.guide-section .algorithm h3{margin-top:12px}.guide-section .algorithm p:last-child{margin-bottom:10px}@media(max-width:650px){.guide-section .mini-grid{grid-template-columns:1fr}.guide-section .formula{overflow-x:auto;white-space:normal}.guide-section .plot{overflow-x:auto}}
+
+.guide-section .inline-math{white-space:normal}.guide-section .plot-svg{margin:22px 0 26px}.guide-section .plot-svg svg{display:block;width:100%;height:auto;border:1px solid #dce6ef;border-radius:12px;background:#fbfdff}.guide-section .plot-svg figcaption{color:#526175;font-size:.88rem;line-height:1.65;margin-top:9px}.guide-section .table-wrap table{min-width:530px}.guide-section .diagram{justify-content:center}.guide-section .diagram div{min-width:120px}.guide-section details p{font-size:1rem;line-height:1.75}.guide-section details summary{color:#0b1f3a}.guide-section h3{scroll-margin-top:90px}.guide-section{scroll-margin-top:90px}.guide-section .formula{max-width:100%;overflow:auto}.guide-section .MathJax{max-width:100%}.guide-section .formula mjx-container[display="true"]{margin:0!important;min-width:max-content}.guide-section .table-wrap{max-width:100%}@media(max-width:650px){.guide-section .plot-svg figcaption{font-size:.82rem}.guide-section .formula{font-size:1.02rem}}
+
+/* Guide charts remain legible on narrow screens: scroll the figure, not the page. */
+@media(max-width:650px){.guide-main{overflow-x:clip}.guide-section .plot-svg{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.guide-section .plot-svg svg{width:660px;max-width:none}.guide-section .plot-svg figcaption{max-width:100%;font-size:.9rem}}
+
+/* Guide 3: scoped additions consistent with existing brand typography and colors. */
+.guide-section .code-sample{background:#0b1f3a;color:#ebf5ff;padding:20px 22px;border-radius:12px;overflow-x:auto;font-size:.9rem;line-height:1.65;margin:24px 0;tab-size:4}
+.guide-section .code-sample code{white-space:pre;font-family:Consolas,"Courier New",monospace}
+.guide-section code:not(.code-sample code){font-size:.92em;background:#eef4fa;padding:1px 4px;border-radius:4px}
+.guide-section .mistake{padding:5px 0 8px;border-bottom:1px solid #e6edf4}
+.guide-section .mistake h3{color:#794f1b;margin:18px 0 8px}
+.guide-section .mistake p{margin-bottom:10px}
+.guide-section ul li{margin:7px 0;line-height:1.7}
+.guide-section .plot-svg svg{font-family:Inter,Arial,sans-serif}
+.guide-section .plot-svg figcaption{display:block;font-weight:400}
+.guide-section .answer p{margin:12px 0 0}
+@media (max-width:650px){.guide-section .plot-svg{overflow-x:auto}.guide-section .plot-svg svg{width:770px;max-width:none}.guide-section .code-sample{padding:14px 15px;font-size:.78rem}.guide-section{overflow-wrap:break-word}}
+
+
+/* Guide 4 mathematical foundations additions. */
+.guide-section .learning-figure{margin:25px 0 28px;max-width:100%;}
+.guide-section .learning-figure svg{display:block;width:100%;height:auto;border:1px solid #dce6ef;border-radius:12px;background:#fcfdff}
+.guide-section .learning-figure figcaption{color:#526175;font-size:.91rem;line-height:1.68;margin-top:9px}
+.guide-section .mistake h3{margin:18px 0 8px;font-size:1.12rem}
+.guide-section .knowledge-check{margin:14px 0}
+.guide-section .knowledge-check p{margin:8px 0 12px;font-size:1.01rem}
+.guide-section .knowledge-check .answer-start{color:#176c5c;font-weight:700}
+.guide-section .code-sample{white-space:pre;overflow-x:auto;background:#0b1f3a;color:#eef7ff;border-radius:12px;padding:19px 21px;font-size:.85rem;line-height:1.65;margin:20px 0}
+.guide-section .code-sample code{background:none!important;color:inherit!important;font-family:Consolas,'Courier New',monospace;white-space:pre}
+.guide-section p{overflow-wrap:break-word}
+.guide-section .formula{font-size:1.19rem;line-height:1.5}
+.guide-section .formula mjx-container{max-width:none!important}
+.guide-section .table-wrap table{min-width:520px}
+@media(max-width:650px){.guide-section .learning-figure{overflow-x:auto;-webkit-overflow-scrolling:touch}.guide-section .learning-figure svg{width:690px;max-width:none}.guide-section .learning-figure figcaption{position:sticky;left:0;font-size:.89rem}.guide-section .formula{font-size:1.02rem}.guide-section .code-sample{font-size:.76rem;padding:14px}}
+
+/* Guide 5 component adjustments */
+.guide-section .work-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:22px 0}
+.guide-section .work-grid>div{padding:17px;border:1px solid #dce6ef;border-radius:12px;background:#f8fbfd}
+.guide-section .work-grid h4{color:#0b1f3a;margin:0 0 8px;font-size:1rem}
+.guide-section .work-grid p{font-size:.94rem;line-height:1.65}
+.guide-section .code-sample{background:#0b1f3a;color:#edf4ff;padding:19px 21px;border-radius:12px;overflow-x:auto;margin:22px 0;line-height:1.55;font-size:.87rem;tab-size:4}
+.guide-section .code-sample code{font-family:Consolas,monospace;white-space:pre}
+.guide-section :not(pre)>code{background:#eef4fa;color:#163e6a;border-radius:4px;padding:2px 4px;font-size:.92em}
+.guide-section .mistake{padding:9px 0 12px;border-bottom:1px solid #e7edf4}
+.guide-section .mistake h3{color:#81591c;margin:17px 0 8px}
+.guide-section .source-list a{color:#2563eb;text-decoration:underline;text-underline-offset:3px}
+.guide-section .answer p{margin-top:12px}
+.guide-section .plot-svg svg{display:block;width:100%;height:auto;max-width:100%;border:1px solid #dce6ef;border-radius:12px}
+.guide-section .plot-svg figcaption{margin-top:8px;font-size:.88rem;color:#526175;line-height:1.6}
+@media(max-width:650px){.guide-section .work-grid{grid-template-columns:1fr}.guide-section .code-sample{padding:13px 12px;font-size:.76rem}.guide-section .plot-svg svg{width:720px;max-width:none}.guide-section .plot-svg{overflow-x:auto;max-width:100%;}.guide-main{overflow-x:clip}}
+
+/* Guide 6: computed SVG teaching visuals and fold-by-fold explanation */
+.guide-section .fold-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:20px 0}
+.guide-section .fold-steps>div{border:1px solid #dbe7f0;background:#f7faff;border-radius:12px;padding:16px}
+.guide-section .fold-steps strong{display:block;color:#0b1f3a}.guide-section .fold-steps p{font-size:.9rem;margin:5px 0 0;line-height:1.5}
+.guide-section .plot-svg svg{background:#fff;max-width:100%;height:auto}.guide-section .plot-svg figcaption{max-width:100%;line-height:1.6}
+.guide-section .mistake-block{border-bottom:1px solid #e5ecf2;padding:12px 0}.guide-section .mistake-block p{margin:0}
+.guide-section .guide-answer{margin-top:14px;line-height:1.7}
+.guide-section .formula{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.guide-section .code-sample{white-space:pre;overflow-x:auto}
+.guide-section .table-wrap table{min-width:600px}.guide-section .table-wrap caption{caption-side:top}
+@media(max-width:650px){.guide-section .fold-steps{grid-template-columns:1fr}.guide-section .plot-svg svg{width:760px;max-width:none}.guide-section .plot-svg{max-width:100%;overflow-x:auto}.guide-section .table-wrap{max-width:100%;overflow-x:auto}}
+
+/* Guide 7: accessible figures and bilingual academic typography */
+.guide-section .plot-svg{margin:24px 0 28px;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.guide-section .plot-svg svg{display:block;width:100%;height:auto;min-width:590px;max-width:none;background:#fbfdff;border:1px solid #dce6ef;border-radius:12px}
+.guide-section .plot-svg figcaption{color:#526175;font-size:.9rem;line-height:1.65;margin-top:10px;max-width:740px}
+.guide-section .formula{overflow-x:auto;max-width:100%}
+.guide-section .formula mjx-container[display="true"]{min-width:max-content;margin:0!important}
+.guide-section details p{margin:10px 0 0;line-height:1.75}
+.guide-section blockquote{background:#eff6ff;padding:15px 22px;border-left:4px solid #3178b9;margin:22px 0;border-radius:0 12px 12px 0}
+.guide-section pre{background:#0b1f3a;color:#eaf2fd;padding:21px;border-radius:12px;overflow-x:auto;line-height:1.62;font-size:.85rem}
+.guide-section pre code{white-space:pre;font-family:Consolas,Monaco,monospace;color:inherit}
+.guide-section :not(pre)>code{background:#eff3f8;padding:1px 4px;border-radius:4px}
+.guide-section .table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.guide-section th{white-space:normal;vertical-align:bottom}
+.guide-section td{vertical-align:top}
+.guide-section details{background:#fbfdff}
+.guide-section .math{overflow-x:auto}
+@media(max-width:650px){.guide-section{padding:22px 18px}.guide-section .plot-svg svg{width:690px;min-width:690px}.guide-section pre{font-size:.77rem;padding:15px}.guide-section .formula{font-size:1.05rem;padding:16px 11px}.guide-section .plot-svg::before{display:block;color:#526175;font-size:.78rem;padding:3px 0 9px}html[lang="en"] .guide-section .plot-svg::before{content:"Swipe chart horizontally to see all values ↔"}html[lang="es"] .guide-section .plot-svg::before{content:"Desliza el gráfico horizontalmente para ver todos los valores ↔"}}
+
+/* Guide 7 revision: ensure numerical tables remain real tables and readable on mobile. */
+.guide-section .table-wrap tfoot{background:#eaf2ff;color:#0b1f3a;font-weight:700}
+.guide-section .table-wrap tfoot td,.guide-section .table-wrap tfoot th{border-top:2px solid #b9cfe5}
+.guide-section .table-wrap caption{line-height:1.55}
+@media(max-width:650px){.guide-section .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}.guide-section .table-wrap table{min-width:560px}.guide-section .formula{max-width:100%;overflow-x:auto}}
+</style></head><body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header"><div class="container nav-wrap"><div style="display:flex;align-items:center;gap:20px"><a class="brand" href="/index.html">Alfredo Saldana</a><div class="lang-switch" style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap"><a href="/learn/machine-learning/linear-regression-from-first-principles.html" lang="en" aria-current="page">EN</a><span aria-hidden="true"> | </span><a href="/es/learn/machine-learning/linear-regression-from-first-principles-es.html" lang="es">ES</a></div></div><button class="menu-btn" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Toggle navigation">☰</button><nav class="nav" id="site-nav" aria-label="Main navigation"><a href="/index.html">Home</a><a href="/tutorials.html" class="active">Learn</a><a href="/projects.html">Projects</a><a href="/open-box.html">Open Box</a><a href="/about.html">About</a><a href="/contact.html">Contact</a></nav></div></header>
+<section class="guide-hero"><div class="narrow"><div class="eyebrow">LEARN · MACHINE LEARNING</div><h1>Linear Regression from First Principles</h1><p class="lead">Derive Linear Regression from first principles with a complete energy-consumption example: OLS coefficients, residuals, evaluation, assumptions, matrix notation and reproducible calculations.</p><p class="guide-meta">Machine Learning · Guide 7 of 33 · Theory, calculations and applications</p><div class="guide-links"><a href="/es/learn/machine-learning/linear-regression-from-first-principles-es.html" lang="es">Leer en español ↗</a><a href="/tutorials.html">Back to Learn ↗</a></div></div></section>
+<main class="guide-main" id="main"><article class="guide-article">
+<section class="guide-section blue" id="section-1">
+<h2>1. From a business question to a numerical prediction</h2>
+<p>A factory wants to estimate <strong>weekly electricity consumption</strong> before scheduling its machines. It knows how many total machine-hours it plans to operate, but not the electricity it will consume. The question is: <em>For a planned level of operating activity, how much electricity should we expect to use?</em> This is <strong>Regression</strong>: the Target is a numerical quantity, rather than a category such as “high consumption.”</p>
+<p>A <strong>Feature</strong> is information available when the prediction is made. Our first Feature is machine operating time. We measure it in <strong>hundreds of machine-hours</strong>: <span class="math">\(x=3\)</span> means 300 machine-hours. The <strong>Target</strong>, <span class="math">\(y\)</span>, is weekly electricity usage measured in <strong>megawatt-hours (MWh)</strong>. A megawatt-hour is an amount of energy, not an instantaneous rate of power. In this example, all weeks refer to the same facility and comparable reporting windows.</p>
+<p>The goal is to learn a relationship from earlier weeks, then predict electricity use for weeks whose outcomes were not used during fitting. We will deliberately start with one Feature and a small constructed dataset. The numbers are <strong>synthetic for teaching</strong>; they are not measurements from a real factory. They let us verify every calculation and later identify what this simple model cannot tell us.</p>
+<blockquote>
+<p><strong>Central distinction.</strong> Predicting energy usage conditional on operating hours does not show that adding hours <em>causes</em> an exact increase in energy consumption. Ambient temperature, equipment types, maintenance, production mix and measurement errors can influence both variables. Statistical association is not automatically a controlled experiment.</p>
+</blockquote>
+<p>By the end of the chapter, you should be able to translate the practical question into a mathematical model, derive its coefficients from all Training rows, explain a residual, assess predictions on held-out weeks, extend the model to two Features and recognize when its assumptions are questionable.</p>
+</section><section class="guide-section teal" id="section-2">
+<h2>2. Read every observation before fitting anything</h2>
+<p>We divide our nine illustrative weeks into <strong>five Training weeks, two Validation weeks and two Test weeks</strong>. Training estimates coefficients. Validation checks a model decision without fitting on Validation outcomes. Test is reserved for an evaluation after choices are frozen. The tiny samples are for transparent arithmetic, not reliable real-world claims.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Set</th>
+<th>Week</th>
+<th style="text-align:right">Operating time, <span class="math">\(x\)</span> (100 h)</th>
+<th style="text-align:right">Energy, <span class="math">\(y\)</span> (MWh)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Training</td>
+<td>T1</td>
+<td style="text-align:right">1.0</td>
+<td style="text-align:right">4.0</td>
+</tr>
+<tr>
+<td>Training</td>
+<td>T2</td>
+<td style="text-align:right">2.0</td>
+<td style="text-align:right">4.0</td>
+</tr>
+<tr>
+<td>Training</td>
+<td>T3</td>
+<td style="text-align:right">3.0</td>
+<td style="text-align:right">6.0</td>
+</tr>
+<tr>
+<td>Training</td>
+<td>T4</td>
+<td style="text-align:right">4.0</td>
+<td style="text-align:right">8.0</td>
+</tr>
+<tr>
+<td>Training</td>
+<td>T5</td>
+<td style="text-align:right">5.0</td>
+<td style="text-align:right">8.0</td>
+</tr>
+<tr>
+<td>Validation</td>
+<td>V1</td>
+<td style="text-align:right">2.5</td>
+<td style="text-align:right">5.7</td>
+</tr>
+<tr>
+<td>Validation</td>
+<td>V2</td>
+<td style="text-align:right">4.5</td>
+<td style="text-align:right">7.5</td>
+</tr>
+<tr>
+<td>Test</td>
+<td>E1</td>
+<td style="text-align:right">6.0</td>
+<td style="text-align:right">9.4</td>
+</tr>
+<tr>
+<td>Test</td>
+<td>E2</td>
+<td style="text-align:right">7.0</td>
+<td style="text-align:right">11.4</td>
+</tr>
+</tbody>
+</table></div>
+<p>Our Training sample contains <strong>five pairs</strong> <span class="math">\((x_i,y_i)\)</span>: <span class="math">\((1,4),(2,4),(3,6),(4,8),(5,8)\)</span>. Notice that T1 and T2 consume the same amount despite different operating times. Realistic measurements do not need to fall exactly on one line: a model describes a pattern, not an infallible physical law. The Validation weeks lie <strong>inside</strong> the Training range of <span class="math">\(x=1\)</span> to <span class="math">\(5\)</span>; the Test weeks lie <strong>outside</strong> it. That difference will matter when we discuss interpolation and extrapolation.</p>
+<figure aria-label="scatter" class="plot-svg" role="group"><svg aria-label="Regression fitted line and held-out points" role="img" viewbox="0 0 760 370" xmlns="http://www.w3.org/2000/svg"><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="277.7" y2="277.7"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="281.7">2</text><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="237.0" y2="237.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="241.0">4</text><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="196.3" y2="196.3"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="200.3">6</text><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="155.6" y2="155.6"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="159.6">8</text><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="114.9" y2="114.9"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="118.9">10</text><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="74.3" y2="74.3"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="78.3">12</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="118.2" y="321.0">1</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="210.7" y="321.0">2</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="303.2" y="321.0">3</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="395.6" y="321.0">4</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="488.1" y="321.0">5</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="580.6" y="321.0">6</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="673.0" y="321.0">7</text><line stroke="#51657d" stroke-width="1.5" x1="72.0" x2="710.0" y1="298.0" y2="298.0"></line><line stroke="#51657d" stroke-width="1.5" x1="72.0" x2="72.0" y1="58.0" y2="298.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="400" text-anchor="middle" x="391.0" y="348.0">Operating time (hundreds of machine-hours)</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="700" text-anchor="start" x="18.0" y="71.0">MWh</text><polyline fill="none" points="81.2,254.9 502.0,143.8" stroke="#8c69ba" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></polyline><polyline fill="none" points="502.0,143.8 691.5,93.8" stroke="#8c69ba" stroke-dasharray="7 4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6"></polyline><line stroke="#d59a32" stroke-dasharray="4 3" stroke-width="2" x1="118.2" x2="118.2" y1="237.0" y2="245.1"></line><circle cx="118.2" cy="237.0" fill="#3178b9" r="6" stroke="white" stroke-width="1.6"></circle><line stroke="#d59a32" stroke-dasharray="4 3" stroke-width="2" x1="210.7" x2="210.7" y1="237.0" y2="220.7"></line><circle cx="210.7" cy="237.0" fill="#3178b9" r="6" stroke="white" stroke-width="1.6"></circle><line stroke="#d59a32" stroke-dasharray="4 3" stroke-width="2" x1="303.2" x2="303.2" y1="196.3" y2="196.3"></line><circle cx="303.2" cy="196.3" fill="#3178b9" r="6" stroke="white" stroke-width="1.6"></circle><line stroke="#d59a32" stroke-dasharray="4 3" stroke-width="2" x1="395.6" x2="395.6" y1="155.6" y2="171.9"></line><circle cx="395.6" cy="155.6" fill="#3178b9" r="6" stroke="white" stroke-width="1.6"></circle><line stroke="#d59a32" stroke-dasharray="4 3" stroke-width="2" x1="488.1" x2="488.1" y1="155.6" y2="147.5"></line><circle cx="488.1" cy="155.6" fill="#3178b9" r="6" stroke="white" stroke-width="1.6"></circle><circle cx="256.9" cy="202.4" fill="#15957e" r="6" stroke="white" stroke-width="1.6"></circle><circle cx="441.9" cy="165.8" fill="#15957e" r="6" stroke="white" stroke-width="1.6"></circle><circle cx="580.6" cy="127.2" fill="#d59a32" r="6" stroke="white" stroke-width="1.6"></circle><circle cx="673.0" cy="86.5" fill="#d59a32" r="6" stroke="white" stroke-width="1.6"></circle><text fill="#0b1f3a" font-family="Inter,Arial,sans-serif" font-size="18" font-weight="700" text-anchor="start" x="72.0" y="32.0">Synthetic data: OLS line and held-out weeks</text><circle cx="425.0" cy="35.0" fill="#3178b9" r="5" stroke="white" stroke-width="1.6"></circle><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="11" font-weight="400" text-anchor="start" x="435.0" y="39.0">Training</text><circle cx="520.0" cy="35.0" fill="#15957e" r="5" stroke="white" stroke-width="1.6"></circle><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="11" font-weight="400" text-anchor="start" x="530.0" y="39.0">Validation</text><circle cx="615.0" cy="35.0" fill="#d59a32" r="5" stroke="white" stroke-width="1.6"></circle><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="11" font-weight="400" text-anchor="start" x="625.0" y="39.0">Test</text></svg><figcaption>Blue points are Training, green Validation and amber Test. The purple line is fitted only on Training. Vertical segments mark Training residuals; the dashed continuation extends beyond the Training range.</figcaption></figure>
+<p>Before fitting, check units, missing observations, timestamps, duplicate weeks and whether energy meters capture the same equipment. We also need to define the real prediction timestamp. The nine rows are displayed together for learning, but <strong>only T1–T5 may influence coefficient estimation</strong>. Reading Validation or Test outcomes to redesign the relationship would undermine the intended evaluation.</p>
+</section><section class="guide-section purple" id="section-3">
+<h2>3. What does a straight-line model actually say?</h2>
+<p><strong>Simple Linear Regression</strong> uses one predictor and represents the estimated mean response with a straight line:</p>
+<div class="formula">\[\widehat y_i=b_0+b_1x_i.\]</div>
+<p>Here <span class="math">\(\widehat y_i\)</span> (pronounced “y-hat”) is the <strong>predicted</strong> energy for week <span class="math">\(i\)</span>, <span class="math">\(b_0\)</span> is the <strong>intercept</strong>, and <span class="math">\(b_1\)</span> is the <strong>slope</strong>. Both coefficients will be estimated from Training. We use <span class="math">\(b_0,b_1\)</span> for fitted values; the symbols <span class="math">\(\beta_0,\beta_1\)</span> often denote unknown population-level coefficients in a statistical model.</p>
+<p>The slope says how much the fitted prediction changes when <span class="math">\(x\)</span> increases by one unit. Because one unit of <span class="math">\(x\)</span> equals <strong>100 machine-hours</strong>, a fitted slope of 1.2 would mean <strong>1.2 additional MWh per additional 100 machine-hours</strong>, holding the simple fitted relationship fixed. It would <em>not</em> mean 1.2 MWh for every additional hour.</p>
+<p>What does “estimated mean response” mean? Imagine repeating many comparable weeks with exactly 300 machine-hours. Electricity use could still vary because weather, equipment mix and random disturbances differ. Linear Regression aims to describe the <strong>central average pattern conditional on the recorded Feature</strong>, not to force every week to consume exactly the line's value. We do not have repeated observations at every <span class="math">\(x\)</span> in our tiny dataset; the straight-line assumption connects the different observed hours to estimate that pattern.</p>
+<p>The intercept is the fitted prediction when <span class="math">\(x=0\)</span>. It may approximate baseline consumption (lighting, cooling, idle equipment), but <strong>zero operating hours are outside our observed Training range</strong>. We should not interpret the intercept as a reliably measured zero-activity bill.</p>
+<p>An important distinction is that the <strong>model is linear in its coefficients</strong> <span class="math">\(b_0,b_1\)</span>, not necessarily that every useful predictor is raw <span class="math">\(x\)</span>. For example, <span class="math">\(b_0+b_1x+b_2x^2\)</span> is a linear regression in the coefficients although its fitted curve can bend with <span class="math">\(x\)</span>. We will return to that difference in the limitations section.</p>
+<h3>Prediction is not the same as observation</h3>
+<p>For a week with <span class="math">\(x=3\)</span>, the model generates <span class="math">\(\widehat y\)</span>, whereas the measured <span class="math">\(y\)</span> is observed after the week ends. The difference between the two is called a <strong>residual</strong>:</p>
+<div class="formula">\[e_i=y_i-\widehat y_i.\]</div>
+<p>A positive residual means the actual consumption exceeded the prediction; a negative residual means the model predicted too much. Residuals are measured in MWh, the same unit as the Target. A fitted model generally has a residual for every Training row, because the line need not pass through every observed point.</p>
+</section><section class="guide-section amber" id="section-4">
+<h2>4. From five observations to the Ordinary Least Squares objective</h2>
+<p>There are infinitely many possible lines. For example, <span class="math">\(\widehat y=2+1x\)</span> and <span class="math">\(\widehat y=1+2x\)</span> make different predictions for the same operating hours. How do we choose coefficients using <strong>all five Training observations</strong>, rather than drawing a line through two convenient points?</p>
+<p><strong>Ordinary Least Squares (OLS)</strong> chooses the coefficients that minimize the <strong>Sum of Squared Errors (SSE)</strong> over Training:</p>
+<div class="formula">\[SSE(b_0,b_1)=\sum_{i=1}^{n}\left[y_i-(b_0+b_1x_i)\right]^2.\]</div>
+<p>In this expression, <span class="math">\(n=5\)</span> is the number of Training observations; the <span class="math">\(\sum\)</span> symbol means “add up,” and the superscript 2 means square each residual before adding. If a prediction misses by <span class="math">\(+2\)</span> MWh, its squared error is 4 MWh²; if it misses by <span class="math">\(-2\)</span> MWh, it is <em>also</em> 4 MWh². Squaring prevents positive and negative errors from canceling and penalizes larger misses more strongly.</p>
+<p>Why not minimize the raw sum of residuals? Because a <span class="math">\(+2\)</span> error and a <span class="math">\(-2\)</span> error sum to zero even though both predictions are wrong. Why not always use absolute errors? <strong>Least Absolute Deviations</strong> is a valid alternative with different properties, but the smooth squared-error objective makes OLS especially convenient mathematically. OLS does not guarantee the best model for every business cost or every distribution.</p>
+<h3>Compare two candidate lines by hand</h3>
+<p>Before estimating the optimum, consider a baseline line that always predicts 6 MWh, the Training mean. Its five residuals are <span class="math">\(-2,-2,0,+2,+2\)</span>; the squared errors are <span class="math">\(4,4,0,4,4\)</span>, so <strong>SSE = 16 MWh²</strong>. Another line, <span class="math">\(\widehat y=2+1.2x\)</span>, predicts <span class="math">\(3.2,4.4,5.6,6.8,8.0\)</span> MWh. Its squared errors are <span class="math">\(0.64,0.16,0.16,1.44,0\)</span>, giving <strong>SSE = 2.40 MWh²</strong>. This second candidate is better by squared Training error, but we still have not proved it is the <em>best</em> possible line. The next section derives the optimal one using the entire dataset.</p>
+</section><section class="guide-section blue" id="section-5">
+<h2>5. Estimate both coefficients from first principles</h2>
+<p>For <strong>Simple Linear Regression with an intercept</strong>, the OLS slope can be calculated from Training as</p>
+<div class="formula">\[b_1=\frac{\sum_i(x_i-\bar x)(y_i-\bar y)}{\sum_i(x_i-\bar x)^2},\qquad b_0=\bar y-b_1\bar x.\]</div>
+<p>A bar denotes the sample mean. The numerator measures how <span class="math">\(x\)</span> and <span class="math">\(y\)</span> vary together around their means. The denominator measures how much <span class="math">\(x\)</span> varies. <strong>If every Training <span class="math">\(x\)</span> were identical, the denominator would be zero; we could not estimate a unique slope.</strong></p>
+<p><strong>Step 1 — Calculate both means.</strong></p>
+<div class="formula">\[\bar x=\frac{1+2+3+4+5}{5}=3,\qquad
+\bar y=\frac{4+4+6+8+8}{5}=6.\]</div>
+<p><strong>Step 2 — Show every deviation and product.</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Week</th>
+<th style="text-align:right"><span class="math">\(x_i\)</span></th>
+<th style="text-align:right"><span class="math">\(y_i\)</span></th>
+<th style="text-align:right"><span class="math">\(x_i-3\)</span></th>
+<th style="text-align:right"><span class="math">\(y_i-6\)</span></th>
+<th style="text-align:right">Product</th>
+<th style="text-align:right"><span class="math">\((x_i-3)^2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">−2</td>
+<td style="text-align:right">−2</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">4</td>
+</tr>
+<tr>
+<td>T2</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">−1</td>
+<td style="text-align:right">−2</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td>T3</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td>T4</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td>T5</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">4</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td style="text-align:right"></td>
+<td style="text-align:right"></td>
+<td style="text-align:right"><strong>0</strong></td>
+<td style="text-align:right"><strong>0</strong></td>
+<td style="text-align:right"><strong>12</strong></td>
+<td style="text-align:right"><strong>10</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Step 3 — Substitute the totals.</strong></p>
+<div class="formula">\[b_1=\frac{12}{10}=1.2\ \frac{\mathrm{MWh}}{100\ \mathrm{machine\ hours}},\qquad
+b_0=6-1.2(3)=2.4\ \mathrm{MWh}.\]</div>
+<p>The fitted equation is therefore</p>
+<div class="formula">\[\boxed{\widehat y=2.4+1.2x}\quad\text{(energy in MWh; }x\text{ in 100 machine-hours).}\]</div>
+<p><strong>Step 4 — Interpret it.</strong> At 300 machine-hours (<span class="math">\(x=3\)</span>), predicted consumption is <span class="math">\(2.4+1.2(3)=6.0\)</span> MWh. At 400 machine-hours (<span class="math">\(x=4\)</span>), the fitted prediction is <span class="math">\(2.4+1.2(4)=7.2\)</span> MWh. That is 1.2 MWh higher when the Feature rises by 100 machine-hours. These are model-based predictions, not guaranteed meter readings or causal effects.</p>
+<p>The method is called <em>least squares</em> because these estimates minimize the sum of squared Training residuals among all straight lines with an intercept. We will verify the minimum mathematically rather than asking you to accept the formula on faith.</p>
+</section><section class="guide-section teal" id="section-6"><h2>6. Build predictions and Residuals for every Training observation</h2><p>A Residual is the observed value minus the fitted value for a specific Training observation. Before summarizing the errors with a metric, inspect every observation and its sign: a positive residual indicates underprediction; a negative residual indicates overprediction.</p><p>Apply <span class="math">\(\widehat y=2.4+1.2x\)</span> to <strong>every Training row</strong>. Do not round the coefficients before calculating predictions; here they happen to be exact decimal values.</p><p class="note-inline"><strong>Mobile table:</strong> On a phone, swipe this table horizontally to see the residual, absolute error and squared error columns.</p><div class="table-wrap"><table>
+<caption>All five Training predictions and their errors. Energy and absolute errors are in MWh; squared errors are in MWh².</caption>
+<thead><tr><th scope="col">Week</th><th scope="col">Observed \(y\)</th><th scope="col">Predicted \(\widehat y\)</th><th scope="col">Residual \(e=y-\widehat y\)</th><th scope="col">\(|e|\)</th><th scope="col">\(e^2\)</th></tr></thead>
+<tbody>
+<tr><th scope="row">T1</th><td>4.0</td><td>3.6</td><td>+0.4</td><td>0.4</td><td>0.16</td></tr>
+<tr><th scope="row">T2</th><td>4.0</td><td>4.8</td><td>−0.8</td><td>0.8</td><td>0.64</td></tr>
+<tr><th scope="row">T3</th><td>6.0</td><td>6.0</td><td>0.0</td><td>0.0</td><td>0.00</td></tr>
+<tr><th scope="row">T4</th><td>8.0</td><td>7.2</td><td>+0.8</td><td>0.8</td><td>0.64</td></tr>
+<tr><th scope="row">T5</th><td>8.0</td><td>8.4</td><td>−0.4</td><td>0.4</td><td>0.16</td></tr>
+</tbody><tfoot><tr><th scope="row">Total</th><td>—</td><td>—</td><td><strong>0.0</strong></td><td><strong>2.4</strong></td><td><strong>1.60</strong></td></tr></tfoot>
+</table></div><p><strong>Check one row instead of memorizing the table.</strong> For T2, \(x=2\) gives \(\widehat y=2.4+1.2(2)=4.8\) MWh. The observed value is 4.0 MWh, so \(e=4.0-4.8=-0.8\) MWh, \(|e|=0.8\) MWh and \(e^2=(-0.8)^2=0.64\) MWh². Repeat that procedure for every row; the table totals then follow directly.</p><p>The last row serves as an arithmetic checkpoint: residuals sum to zero, absolute residuals sum to 2.4 MWh, and squared residuals sum to 1.60 MWh². We will divide those totals by the five observations to calculate MAE and MSE.</p><figure aria-label="residuals" class="plot-svg" role="group"><svg aria-label="Residuals for five Training weeks" role="img" viewbox="0 0 760 370" xmlns="http://www.w3.org/2000/svg"><line stroke="#e0e9f2" stroke-dasharray="4 4" stroke-width="1" x1="72.0" x2="710.0" y1="278.0" y2="278.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="62.0" y="282.0">-1.0</text><line stroke="#e0e9f2" stroke-dasharray="4 4" stroke-width="1" x1="72.0" x2="710.0" y1="228.0" y2="228.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="62.0" y="232.0">-0.50</text><line stroke="#e0e9f2" stroke-width="1" x1="72.0" x2="710.0" y1="178.0" y2="178.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="62.0" y="182.0">0.0</text><line stroke="#e0e9f2" stroke-dasharray="4 4" stroke-width="1" x1="72.0" x2="710.0" y1="128.0" y2="128.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="62.0" y="132.0">0.50</text><line stroke="#e0e9f2" stroke-dasharray="4 4" stroke-width="1" x1="72.0" x2="710.0" y1="78.0" y2="78.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="62.0" y="82.0">1.0</text><line stroke="#51657d" stroke-width="1.5" x1="72.0" x2="710.0" y1="298.0" y2="298.0"></line><line stroke="#15957e" stroke-width="7" x1="135.8" x2="135.8" y1="178.0" y2="138.0"></line><circle cx="135.8" cy="138.0" fill="#15957e" r="5" stroke="white" stroke-width="1.6"></circle><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="135.8" y="322.0">T1</text><line stroke="#d59a32" stroke-width="7" x1="263.4" x2="263.4" y1="178.0" y2="258.0"></line><circle cx="263.4" cy="258.0" fill="#d59a32" r="5" stroke="white" stroke-width="1.6"></circle><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="263.4" y="322.0">T2</text><line stroke="#15957e" stroke-width="7" x1="391.0" x2="391.0" y1="178.0" y2="178.0"></line><circle cx="391.0" cy="178.0" fill="#15957e" r="5" stroke="white" stroke-width="1.6"></circle><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="391.0" y="322.0">T3</text><line stroke="#15957e" stroke-width="7" x1="518.6" x2="518.6" y1="178.0" y2="98.0"></line><circle cx="518.6" cy="98.0" fill="#15957e" r="5" stroke="white" stroke-width="1.6"></circle><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="518.6" y="322.0">T4</text><line stroke="#d59a32" stroke-width="7" x1="646.2" x2="646.2" y1="178.0" y2="218.0"></line><circle cx="646.2" cy="218.0" fill="#d59a32" r="5" stroke="white" stroke-width="1.6"></circle><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="646.2" y="322.0">T5</text><text fill="#0b1f3a" font-family="Inter,Arial,sans-serif" font-size="18" font-weight="700" text-anchor="start" x="72.0" y="36.0">Residuals = observed − fitted (MWh)</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="400" text-anchor="middle" x="391.0" y="346.0">Training weeks</text></svg><figcaption>Actual residuals for the five Training rows: +0.4, −0.8, 0, +0.8, −0.4 MWh. Positive means higher observed consumption than predicted; negative means lower.</figcaption></figure><h3>Why is the sum of Training residuals zero?</h3><p>With an intercept, OLS satisfies <span class="math">\(\sum_i e_i=0\)</span> on the data used to fit the line. In our table, <span class="math">\(0.4-0.8+0+0.8-0.4=0\)</span>. This is a mathematical property of the fitted optimum, <strong>not evidence that the predictions are unbiased in future weeks</strong>. The sum of residuals on Validation or Test need not be zero.</p></section><section class="guide-section purple" id="section-7"><h2>7. From Residuals to MAE, MSE, RMSE and R²</h2><p>We now have five Residuals, their absolute values, and their squares. The next question is how to summarize five errors without losing sight of what each summary measures. All the following metrics are computed on Training; they are not yet estimates of future prediction performance.</p><p>The <strong>Mean Absolute Error (MAE)</strong> is the average size of the misses in MWh. The <strong>Mean Squared Error (MSE)</strong> is the mean of squared residuals in MWh²; taking its square root gives <strong>Root Mean Squared Error (RMSE)</strong> in MWh.</p><div class="formula">\[\mathrm{MAE}_{\mathrm{train}}=\frac{2.4}{5}=0.48\ \mathrm{MWh}.\]</div><div class="formula">\[\mathrm{MSE}_{\mathrm{train}}=\frac{1.60}{5}=0.32\ \mathrm{MWh}^2.\]</div><div class="formula">\[\begin{aligned}\mathrm{RMSE}_{\mathrm{train}}&amp;=\sqrt{0.32}\\&amp;\approx0.566\ \mathrm{MWh}.\end{aligned}\]</div><p>Why does squaring emphasize larger mistakes? Compare T2 with T1: the absolute miss at T2 (0.8 MWh) is twice the miss at T1 (0.4 MWh), but its squared contribution is 0.64 rather than 0.16 MWh²—four times as large. This is a property of the loss measure, not evidence that T2 was a more important week for the business.</p><p>RMSE exceeds MAE here because squaring weights larger residuals more heavily. Neither number proves that errors will be equally small on new weeks: <strong>these are in-sample Training diagnostics</strong>.</p><h3>Explain <span class="math">\(R^2\)</span> without making it a magic score</h3><p><span class="math">\(R^2\)</span> compares the fitted Training SSE with the squared error from simply predicting the Training mean <span class="math">\(\bar y=6\)</span> for every Training week. We already calculated that mean-only SSE as <strong>16</strong>. Thus</p><div class="formula">\[\begin{aligned}R^2_{\mathrm{train}}&amp;=1-\frac{SSE_{\mathrm{model}}}{SSE_{\mathrm{mean}}}\\&amp;=1-\frac{1.6}{16}=0.90.\end{aligned}\]</div><p>On this Training dataset, the line reduces the squared-error sum by <strong>90% relative to the constant-mean prediction</strong>. It does not mean “90% of future predictions are correct,” and it is not a causal measure. Outside the fitting sample, <span class="math">\(R^2\)</span> can even be negative when a model performs worse than the test-set mean benchmark.</p></section><section class="guide-section amber" id="section-8">
+<h2>8. Why does the OLS formula find the best-fitting line?</h2>
+<p>We can derive the coefficient formulas by treating SSE as a function of <span class="math">\(b_0\)</span> and <span class="math">\(b_1\)</span>. A <strong>partial derivative</strong> measures how SSE changes as one coefficient changes while the other is held fixed. At an unconstrained minimum of this smooth objective, the derivatives are zero.</p>
+<div class="formula">\[\frac{\partial SSE}{\partial b_0}=-2\sum_i(y_i-b_0-b_1x_i)=0.\]</div>
+<p>Rearrange: <span class="math">\(\sum_i y_i=nb_0+b_1\sum_i x_i\)</span>. Divide by <span class="math">\(n\)</span> to obtain <span class="math">\(\bar y=b_0+b_1\bar x\)</span>, hence <span class="math">\(b_0=\bar y-b_1\bar x\)</span>. This is why our fitted line passes through the point <span class="math">\((\bar x,\bar y)=(3,6)\)</span>.</p>
+<p>The derivative with respect to the slope is</p>
+<div class="formula">\[\frac{\partial SSE}{\partial b_1}=-2\sum_i x_i(y_i-b_0-b_1x_i)=0.\]</div>
+<p><strong>Do not skip the algebra between the derivatives and the slope formula.</strong> From the intercept condition we already have \(b_0=\bar y-b_1\bar x\). Therefore, for any row the fitted residual can be rearranged as follows:</p>
+<div class="formula">\[y_i-b_0-b_1x_i=(y_i-\bar y)-b_1(x_i-\bar x).\]</div>
+<p>Now substitute that expression into the slope condition \(\sum_i x_i(y_i-b_0-b_1x_i)=0\). Since deviations from a mean always sum to zero, \(\sum_i(y_i-\bar y)=0\) and \(\sum_i(x_i-\bar x)=0\), we can center the factor \(x_i\) too. The equation then becomes:</p>
+<div class="formula">\[\begin{aligned}
+        0&amp;=\sum_i(x_i-\bar x)\big[(y_i-\bar y)-b_1(x_i-\bar x)\big]\\
+        &amp;=\sum_i(x_i-\bar x)(y_i-\bar y)-b_1\sum_i(x_i-\bar x)^2.
+        \end{aligned}\]</div>
+<p>Move the second term to the right and divide by the strictly positive sum of squared \(x\)-deviations. We recover \(b_1=S_{xy}/S_{xx}=12/10=1.2\), then \(b_0=6-1.2(3)=2.4\). This derivation explains <em>why</em> the estimates depend on the two totals calculated in Section 5.</p>
+<div class="formula">\[\sum_i(x_i-\bar x)(y_i-\bar y)=b_1\sum_i(x_i-\bar x)^2.\]</div>
+<p>Dividing by the positive denominator gives the slope formula used in Section 5. For our five observations, <span class="math">\(S_{xx}=10\)</span> and <span class="math">\(S_{xy}=12\)</span>. The fitted SSE for any proposed slope <span class="math">\(b_1\)</span>, after choosing its best compatible intercept <span class="math">\(b_0=6-3b_1\)</span>, simplifies to</p>
+<div class="formula">\[SSE(b_1)=1.6+10(b_1-1.2)^2.\]</div>
+<figure aria-label="loss" class="plot-svg" role="group"><svg aria-label="Squared-error objective across slopes" role="img" viewbox="0 0 760 370" xmlns="http://www.w3.org/2000/svg"><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="283.0" y2="283.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="287.0">2</text><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="238.0" y2="238.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="242.0">5</text><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="193.0" y2="193.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="197.0">8</text><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="148.0" y2="148.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="152.0">11</text><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="103.0" y2="103.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="107.0">14</text><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="58.0" y2="58.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="62.0">17</text><line stroke="#526175" stroke-width="1" x1="72.0" x2="710.0" y1="298.0" y2="298.0"></line><line stroke="#526175" stroke-width="1" x1="72.0" x2="72.0" y1="58.0" y2="298.0"></line><polyline fill="none" points="72.0,73.0 74.7,76.6 77.3,80.1 80.0,83.7 82.6,87.2 85.3,90.6 88.0,94.1 90.6,97.5 93.3,100.8 95.9,104.2 98.6,107.5 101.2,110.8 103.9,114.0 106.6,117.3 109.2,120.5 111.9,123.6 114.5,126.8 117.2,129.9 119.8,132.9 122.5,136.0 125.2,139.0 127.8,142.0 130.5,144.9 133.1,147.9 135.8,150.8 138.5,153.6 141.1,156.5 143.8,159.3 146.4,162.0 149.1,164.8 151.8,167.5 154.4,170.2 157.1,172.8 159.7,175.5 162.4,178.1 165.0,180.6 167.7,183.2 170.4,185.7 173.0,188.1 175.7,190.6 178.3,193.0 181.0,195.4 183.6,197.7 186.3,200.1 189.0,202.4 191.6,204.6 194.3,206.9 196.9,209.1 199.6,211.2 202.3,213.4 204.9,215.5 207.6,217.6 210.2,219.6 212.9,221.7 215.6,223.7 218.2,225.6 220.9,227.6 223.5,229.5 226.2,231.3 228.8,233.2 231.5,235.0 234.2,236.8 236.8,238.5 239.5,240.3 242.1,242.0 244.8,243.6 247.5,245.3 250.1,246.9 252.8,248.4 255.4,250.0 258.1,251.5 260.7,253.0 263.4,254.4 266.1,255.9 268.7,257.3 271.4,258.6 274.0,260.0 276.7,261.3 279.4,262.5 282.0,263.8 284.7,265.0 287.3,266.2 290.0,267.3 292.6,268.5 295.3,269.6 298.0,270.6 300.6,271.7 303.3,272.7 305.9,273.6 308.6,274.6 311.2,275.5 313.9,276.4 316.6,277.2 319.2,278.1 321.9,278.9 324.5,279.6 327.2,280.4 329.9,281.1 332.5,281.7 335.2,282.4 337.8,283.0 340.5,283.6 343.2,284.1 345.8,284.7 348.5,285.2 351.1,285.6 353.8,286.1 356.4,286.5 359.1,286.8 361.8,287.2 364.4,287.5 367.1,287.8 369.7,288.0 372.4,288.3 375.1,288.5 377.7,288.6 380.4,288.8 383.0,288.9 385.7,288.9 388.3,289.0 391.0,289.0 393.7,289.0 396.3,288.9 399.0,288.9 401.6,288.8 404.3,288.6 406.9,288.5 409.6,288.3 412.3,288.0 414.9,287.8 417.6,287.5 420.2,287.2 422.9,286.8 425.6,286.5 428.2,286.1 430.9,285.6 433.5,285.2 436.2,284.7 438.8,284.1 441.5,283.6 444.2,283.0 446.8,282.4 449.5,281.7 452.1,281.1 454.8,280.4 457.5,279.6 460.1,278.9 462.8,278.1 465.4,277.2 468.1,276.4 470.8,275.5 473.4,274.6 476.1,273.6 478.7,272.7 481.4,271.7 484.0,270.6 486.7,269.6 489.4,268.5 492.0,267.3 494.7,266.2 497.3,265.0 500.0,263.8 502.7,262.5 505.3,261.3 508.0,260.0 510.6,258.6 513.3,257.3 515.9,255.9 518.6,254.4 521.3,253.0 523.9,251.5 526.6,250.0 529.2,248.4 531.9,246.9 534.5,245.3 537.2,243.6 539.9,242.0 542.5,240.3 545.2,238.5 547.8,236.8 550.5,235.0 553.2,233.2 555.8,231.3 558.5,229.5 561.1,227.6 563.8,225.6 566.5,223.7 569.1,221.7 571.8,219.6 574.4,217.6 577.1,215.5 579.7,213.4 582.4,211.2 585.1,209.1 587.7,206.9 590.4,204.6 593.0,202.4 595.7,200.1 598.4,197.7 601.0,195.4 603.7,193.0 606.3,190.6 609.0,188.1 611.6,185.7 614.3,183.2 617.0,180.6 619.6,178.1 622.3,175.5 624.9,172.8 627.6,170.2 630.3,167.5 632.9,164.8 635.6,162.0 638.2,159.3 640.9,156.5 643.5,153.6 646.2,150.8 648.9,147.9 651.5,144.9 654.2,142.0 656.8,139.0 659.5,136.0 662.2,132.9 664.8,129.9 667.5,126.8 670.1,123.6 672.8,120.5 675.4,117.3 678.1,114.0 680.8,110.8 683.4,107.5 686.1,104.2 688.7,100.8 691.4,97.5 694.0,94.1 696.7,90.6 699.4,87.2 702.0,83.7 704.7,80.1 707.3,76.6 710.0,73.0" stroke="#8c69ba" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></polyline><circle cx="391.0" cy="289.0" fill="#15957e" r="7" stroke="white" stroke-width="1.6"></circle><line stroke="#15957e" stroke-dasharray="5 5" stroke-width="1.2" x1="391.0" x2="391.0" y1="58.0" y2="298.0"></line><text fill="#15957e" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="700" text-anchor="start" x="403.0" y="278.0">Minimum (1.2, 1.6)</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="72.0" y="321.0">0.0</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="178.3" y="321.0">0.40</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="284.7" y="321.0">0.80</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="391.0" y="321.0">1.20</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="497.3" y="321.0">1.60</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="603.7" y="321.0">2.0</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="710.0" y="321.0">2.40</text><text fill="#0b1f3a" font-family="Inter,Arial,sans-serif" font-size="18" font-weight="700" text-anchor="start" x="72.0" y="36.0">Training SSE as the slope changes</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="400" text-anchor="middle" x="391.0" y="348.0">Proposed slope b₁</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="400" text-anchor="start" x="20.0" y="67.0">SSE</text></svg><figcaption>Calculated, not decorative: SSE(b₁)=1.6+10(b₁−1.2)² using the best intercept for each slope. The minimum is at b₁=1.2.</figcaption></figure>
+<p>This expression cannot be smaller than <strong>1.6</strong>, because a square is never negative. It equals 1.6 precisely at <span class="math">\(b_1=1.2\)</span>. That is a direct check of the global minimum for this example. If you try slope 0.8, the SSE becomes <span class="math">\(1.6+10(0.8-1.2)^2=3.2\)</span>. If you try slope 1.6, it is also 3.2. The graph of SSE against the slope is a convex parabola.</p>
+<p><strong>Connection to future topics.</strong> In more complex models, we may not have a convenient closed-form coefficient expression. Methods such as <strong>Gradient Descent</strong> use derivatives to adjust the parameters iteratively. OLS here demonstrates the objective and the optimum before those optimization methods are introduced in depth.</p>
+</section><section class="guide-section blue" id="section-9">
+<h2>9. Correlation, covariance and the slope: related, not interchangeable</h2>
+<p>The numerator <span class="math">\(S_{xy}=\sum(x_i-\bar x)(y_i-\bar y)=12\)</span> is an <em>unscaled</em> cross-deviation total. When divided by <span class="math">\(n-1\)</span> it becomes the sample <strong>Covariance</strong>: <span class="math">\(s_{xy}=12/4=3\)</span> (units: 100 machine-hours × MWh). Sample variance of <span class="math">\(x\)</span> is <span class="math">\(s_x^2=10/4=2.5\)</span> (units: squared hundreds of machine-hours). Therefore,</p>
+<div class="formula">\[b_1=\frac{s_{xy}}{s_x^2}=\frac{3}{2.5}=1.2.\]</div>
+<p><strong>Correlation</strong> standardizes covariance by both standard deviations: <span class="math">\(r=s_{xy}/(s_xs_y)\)</span>. Since <span class="math">\(S_{yy}=\sum(y_i-6)^2=16\)</span>, the sample standard deviations are <span class="math">\(s_x=\sqrt{2.5}\)</span> and <span class="math">\(s_y=\sqrt{16/4}=2\)</span>. Consequently</p>
+<div class="formula">\[r=\frac{3}{\sqrt{2.5}\times2}\approx0.9487.\]</div>
+<p>Intuitively, a correlation near <span class="math">\(+1\)</span> means observations tend to rise together in an approximately straight-line pattern; a value near <span class="math">\(-1\)</span> indicates an approximately straight descending pattern. Values near zero indicate weak <strong>linear</strong> association, not necessarily no relationship at all: a U-shaped relationship can have small correlation. Changing energy from MWh to kWh changes covariance and slope numerically, but not correlation, because the scaling cancels in the ratio.</p>
+<p>Correlation is unitless and indicates a strong positive linear association <strong>in these five synthetic Training observations</strong>. Slope has physical units and quantifies the fitted change in energy per increment of operating time. A correlation of 0.9487 does not mean a slope of 0.9487. With an intercept and one Feature, <strong>Training</strong> <span class="math">\(R^2=r^2\approx0.90\)</span>; this identity does not automatically extend to Multiple Regression or arbitrary held-out evaluations.</p>
+</section><section class="guide-section teal" id="section-10">
+<h2>10. Evaluate on Validation and Test without refitting</h2>
+<p>The coefficients <span class="math">\(b_0=2.4\)</span> and <span class="math">\(b_1=1.2\)</span> have been calculated from <strong>Training only</strong>. We now apply the <em>same unchanged equation</em> to Validation. This is <code>transform/predict with frozen settings</code> in practice: we do not recalculate the slope after reading new outcomes.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Validation week</th>
+<th style="text-align:right"><span class="math">\(x\)</span></th>
+<th style="text-align:right">Actual <span class="math">\(y\)</span></th>
+<th style="text-align:right">Fitted <span class="math">\(\widehat y\)</span></th>
+<th style="text-align:right">Residual</th>
+<th style="text-align:right">Absolute error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V1</td>
+<td style="text-align:right">2.5</td>
+<td style="text-align:right">5.7</td>
+<td style="text-align:right"><span class="math">\(2.4+1.2(2.5)=5.4\)</span></td>
+<td style="text-align:right">+0.3</td>
+<td style="text-align:right">0.3</td>
+</tr>
+<tr>
+<td>V2</td>
+<td style="text-align:right">4.5</td>
+<td style="text-align:right">7.5</td>
+<td style="text-align:right"><span class="math">\(2.4+1.2(4.5)=7.8\)</span></td>
+<td style="text-align:right">−0.3</td>
+<td style="text-align:right">0.3</td>
+</tr>
+</tbody>
+</table></div>
+<p>Thus <span class="math">\(MAE_{validation}=(0.3+0.3)/2=\boxed{0.30\ \mathrm{MWh}}\)</span>. The <strong>baseline</strong> predicts the Training mean of 6.0 MWh for both weeks, not the Validation mean; it has errors <span class="math">\(|5.7-6|=0.3\)</span> and <span class="math">\(|7.5-6|=1.5\)</span>, for <span class="math">\(MAE_{baseline}=0.90\)</span> MWh. On these two illustrative weeks, the fitted line improves upon this baseline.</p>
+<p>Only after model choices are frozen do we evaluate Test:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Test week</th>
+<th style="text-align:right"><span class="math">\(x\)</span></th>
+<th style="text-align:right">Actual <span class="math">\(y\)</span></th>
+<th style="text-align:right">Frozen model <span class="math">\(\widehat y\)</span></th>
+<th style="text-align:right">Absolute error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E1</td>
+<td style="text-align:right">6.0</td>
+<td style="text-align:right">9.4</td>
+<td style="text-align:right">9.6</td>
+<td style="text-align:right">0.2</td>
+</tr>
+<tr>
+<td>E2</td>
+<td style="text-align:right">7.0</td>
+<td style="text-align:right">11.4</td>
+<td style="text-align:right">10.8</td>
+<td style="text-align:right">0.6</td>
+</tr>
+</tbody>
+</table></div>
+<div class="formula">\[MAE_{test}=\frac{0.2+0.6}{2}=\boxed{0.40\ \mathrm{MWh}}.\]</div>
+<p>The fixed Training-mean baseline predicts 6 MWh and would have Test MAE <span class="math">\([|9.4-6|+|11.4-6|]/2=(3.4+5.4)/2=4.40\)</span> MWh. Our sample looks favorable but includes only two Test weeks. These figures are <strong>not a credible estimate of industrial deployment accuracy</strong>.</p>
+<figure aria-label="extrapolate" class="plot-svg" role="group"><svg aria-label="Interpolation and extrapolation zones" role="img" viewbox="0 0 760 370" xmlns="http://www.w3.org/2000/svg"><rect fill="#e8f3fd" height="240" opacity=".65" width="369.9" x="118.2" y="58"></rect><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="277.7" y2="277.7"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="281.7">2</text><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="237.0" y2="237.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="241.0">4</text><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="196.3" y2="196.3"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="200.3">6</text><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="155.6" y2="155.6"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="159.6">8</text><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="114.9" y2="114.9"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="118.9">10</text><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="74.3" y2="74.3"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="78.3">12</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="118.2" y="321.0">1</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="210.7" y="321.0">2</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="303.2" y="321.0">3</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="395.6" y="321.0">4</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="488.1" y="321.0">5</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="580.6" y="321.0">6</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="673.0" y="321.0">7</text><line stroke="#51657d" stroke-width="1.5" x1="72.0" x2="710.0" y1="298.0" y2="298.0"></line><line stroke="#51657d" stroke-width="1.5" x1="72.0" x2="72.0" y1="58.0" y2="298.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="400" text-anchor="middle" x="391.0" y="348.0">Operating time (hundreds of machine-hours)</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="700" text-anchor="start" x="18.0" y="71.0">MWh</text><polyline fill="none" points="81.2,254.9 488.1,147.5" stroke="#3178b9" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></polyline><polyline fill="none" points="488.1,147.5 700.8,91.4" stroke="#d59a32" stroke-dasharray="6 4" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></polyline><line stroke="#d59a32" stroke-dasharray="5 5" stroke-width="1.8" x1="488.1" x2="488.1" y1="58.0" y2="298.0"></line><text fill="#3178b9" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="400" text-anchor="middle" x="303.2" y="77.0">Training: x = 1–5</text><text fill="#d59a32" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="400" text-anchor="middle" x="589.8" y="78.0">Extrapolation</text><circle cx="256.9" cy="202.4" fill="#15957e" r="7" stroke="white" stroke-width="1.6"></circle><circle cx="441.9" cy="165.8" fill="#15957e" r="7" stroke="white" stroke-width="1.6"></circle><circle cx="580.6" cy="127.2" fill="#d59a32" r="7" stroke="white" stroke-width="1.6"></circle><circle cx="673.0" cy="86.5" fill="#d59a32" r="7" stroke="white" stroke-width="1.6"></circle><text fill="#0b1f3a" font-family="Inter,Arial,sans-serif" font-size="18" font-weight="700" text-anchor="start" x="72.0" y="32.0">Interpolation versus Extrapolation</text></svg><figcaption>Validation weeks (green) are within Training range [1,5]. Test weeks (amber) use x=6 and 7 and therefore require extrapolation.</figcaption></figure>
+<h3>Interpolation versus extrapolation</h3>
+<p>Validation <span class="math">\(x=2.5\)</span> and <span class="math">\(4.5\)</span> lie within the observed Training interval <span class="math">\([1,5]\)</span>: predicting there is <strong>interpolation</strong>. Test <span class="math">\(x=6\)</span> and <span class="math">\(7\)</span> lie beyond that interval: this is <strong>extrapolation</strong>. Although we can insert any <span class="math">\(x\)</span> into the equation, we cannot assume the fitted physical relationship persists indefinitely. A production facility may hit capacity limits, switch equipment or become less efficient under heavy load. Extrapolation demands special scrutiny—even when these two synthetic Test errors happen to be small.</p>
+</section><section class="guide-section purple" id="section-11">
+<h2>11. Interpret coefficients correctly when units or scales change</h2>
+<p>Our Feature <span class="math">\(x\)</span> counts hundreds of machine-hours. If we instead define <span class="math">\(h=100x\)</span> as <strong>individual machine-hours</strong>, substitute <span class="math">\(x=h/100\)</span>:</p>
+<div class="formula">\[\widehat y=2.4+1.2\left(\frac{h}{100}\right)=2.4+0.012h\quad\text{MWh}.\]</div>
+<p>Now the slope is <strong>0.012 MWh per machine-hour</strong>, or <strong>12 kWh per machine-hour</strong> because 1 MWh = 1,000 kWh. The predictions have not changed; only the unit of the input and the numerical slope have changed. If the output is also converted to kWh, multiply the entire equation by 1,000: <span class="math">\(\widehat y_{kWh}=2400+12h\)</span>. Using <span class="math">\(h=300\)</span> gives <span class="math">\(2400+12(300)=6000\)</span> kWh = 6 MWh, consistent with the original equation.</p>
+<p>This is a <strong>fixed unit conversion</strong>. Unlike fitting the slope from data, changing machine-hours into hundreds of machine-hours does not learn parameters from Validation or Test. Mixing units between fitting and prediction, however, can produce wildly wrong outputs. A prediction system must specify its schema and check units.</p>
+<h3>Why a positive slope is not automatically causal</h3>
+<p>We observed that higher operating hours tend to accompany higher electricity use. Yet weeks with more operating hours may also involve a different product mix or more cooling demand. The slope does not prove what energy would change <em>if we intervened to increase hours while holding everything else constant</em>. A causal claim requires additional assumptions or an appropriate experimental or quasi-experimental design.</p>
+</section><section class="guide-section amber" id="section-12"><h2>12. Multiple Linear Regression: from raw data to the Design Matrix</h2><p><strong>A new task, not a new algorithmic shortcut.</strong> We will use a separate four-row example and keep its predictions and coefficients distinct from the earlier five-row Simple Linear Regression fit. First represent the data mathematically, then estimate the coefficients, and finally interpret and test the solution.</p><p>The previous model used only operating time. In practice, electricity use may also depend on whether cooling equipment was running. <strong>Multiple Linear Regression</strong> connects a numerical Target to two or more Features while remaining <em>linear in the coefficients</em>:</p><div class="formula">\[\widehat y=b_0+b_1x_1+b_2x_2+\cdots+b_px_p.\]</div><p>Here \(p\) is the number of predictor Features, \(b_0\) is the Intercept and each \(b_j\) is a coefficient. For example, \(b_1\) is the fitted change in \(\widehat y\) for one additional unit of \(x_1\) <strong>when the other included Features are held fixed</strong>. This is a conditional model interpretation, not by itself a causal effect.</p><h3>Step 1 — Examine a separate, complete four-row dataset</h3><p>We introduce a <strong>new illustrative dataset</strong>, independent of the nine weeks used for Simple Linear Regression. It is deliberately small so every matrix calculation can be reproduced by hand.</p><div class="table-wrap"><table><caption>Four factory observations; cooling is a binary indicator (1 = on, 0 = off).</caption><thead><tr><th scope="col">Observation</th><th scope="col">Operating time \(x_1\)</th><th scope="col">Cooling \(x_2\)</th><th scope="col">Observed energy \(y\) (MWh)</th></tr></thead><tbody><tr><th scope="row">A</th><td>1</td><td>0</td><td>4</td></tr><tr><th scope="row">B</th><td>1</td><td>1</td><td>5</td></tr><tr><th scope="row">C</th><td>2</td><td>0</td><td>6</td></tr><tr><th scope="row">D</th><td>2</td><td>1</td><td>7</td></tr></tbody></table></div><p>With \(x_1\) fixed at 1, activating cooling changes observed consumption from 4 to 5 MWh. With cooling fixed at 0, increasing \(x_1\) from 1 to 2 changes consumption from 4 to 6 MWh. These comparisons suggest coefficients of 1 for cooling and 2 for operating time, but <strong>we will calculate the coefficients rather than assume them</strong>.</p><h3>Step 2 — Build the Design Matrix and explain its dimensions</h3><p>Each observation becomes one row. We add a column containing 1 in every row so matrix multiplication can include the Intercept. The next columns store operating time and cooling. The response vector contains the observed energy values.</p><div class="formula">\[X=\begin{bmatrix}1&amp;1&amp;0\\1&amp;1&amp;1\\1&amp;2&amp;0\\1&amp;2&amp;1\end{bmatrix},\qquad
+\mathbf y=\begin{bmatrix}4\\5\\6\\7\end{bmatrix},\qquad
+\mathbf b=\begin{bmatrix}b_0\\b_1\\b_2\end{bmatrix}.\]</div><p>The matrix \(X\) has <strong>4 rows × 3 columns</strong>. The coefficient vector \(\mathbf b\) has 3 rows × 1 column. Thus \(X\mathbf b\) produces four predictions: one for each observation. For example, row A multiplies to \(1b_0+1b_1+0b_2=b_0+b_1\), and row D to \(b_0+2b_1+b_2\).</p><div class="formula">\[\widehat{\mathbf y}=X\mathbf b=\begin{bmatrix}b_0+b_1\\b_0+b_1+b_2\\b_0+2b_1\\b_0+2b_1+b_2\end{bmatrix}.\]</div><p class="note-inline">The first stage is complete: we have represented the observations and shown that Xb computes one prediction per row. We still have to choose b₀, b₁ and b₂; the next section shows the full estimation, not merely its final answer.</p></section><section class="guide-section blue" id="section-13"><h2>13. Derive and solve the Normal Equations, step by step</h2><p>The Design Matrix tells us how to calculate predictions for any proposed coefficients. It does not yet tell us which coefficients are best. The Normal Equations are the conditions obtained by minimizing the same squared-error objective that we already used for the one-Feature line.</p><h3>Step 3 — Derive the Normal Equations from the same OLS objective</h3><p class="note-inline">On a phone, swipe horizontally inside the mathematical blocks to read the entire equation.</p><p>Just as before, OLS minimizes the squared differences between actual and predicted values. In matrix notation the objective is \(SSE(\mathbf b)=(\mathbf y-X\mathbf b)^T(\mathbf y-X\mathbf b)\). Setting its gradient with respect to the coefficients to zero gives:</p><div class="formula">\[\nabla_{\mathbf b}SSE=-2X^T(\mathbf y-X\mathbf b)=\mathbf 0
+\quad\Longrightarrow\quad X^TX\mathbf b=X^T\mathbf y.\]</div><p>To see why three conditions arise, define the residual for row i as \(e_i=y_i-(b_0+b_1x_{i1}+b_2x_{i2})\). A change in the intercept affects every prediction; changing either slope affects predictions in proportion to the corresponding Feature value. Differentiating SSE with respect to each coefficient and setting each derivative to zero gives:</p><div class="formula">\[\begin{aligned}
+0&amp;=\frac{\partial SSE}{\partial b_0}=-2\sum_i e_i,\\
+0&amp;=\frac{\partial SSE}{\partial b_1}=-2\sum_i x_{i1}e_i,\\
+0&amp;=\frac{\partial SSE}{\partial b_2}=-2\sum_i x_{i2}e_i.
+\end{aligned}\]</div><p>These three familiar derivative conditions are precisely the three components of \(X^T(\mathbf y-X\mathbf b)=\mathbf 0\). Matrix notation collects the conditions; it does not replace the reasoning behind them.</p><p>The superscript \(T\) means <strong>transpose</strong>: swap the rows and columns. The equation on the right is called the <strong>Normal Equation system</strong>. It is not a magic formula: it is the multi-Feature counterpart of the two derivative conditions we solved in Section 8.</p><h3>Step 4 — Calculate \(X^TX\) and \(X^T\mathbf y\), rather than only showing them</h3><p>The three columns of \(X\) are \(\mathbf c_0=(1,1,1,1)^T\), \(\mathbf c_1=(1,1,2,2)^T\) and \(\mathbf c_2=(0,1,0,1)^T\). Each cell in \(X^TX\) is a <strong>Dot Product</strong> between two of these columns:</p><div class="table-wrap"><table><caption>Build the distinct entries of \(X^TX\) from column products.</caption><thead><tr><th scope="col">Matrix entry</th><th scope="col">Arithmetic</th><th scope="col">Value</th></tr></thead><tbody>
+<tr><th scope="row">\(\mathbf c_0\cdot\mathbf c_0\)</th><td>1 + 1 + 1 + 1</td><td>4</td></tr>
+<tr><th scope="row">\(\mathbf c_0\cdot\mathbf c_1\)</th><td>1 + 1 + 2 + 2</td><td>6</td></tr>
+<tr><th scope="row">\(\mathbf c_0\cdot\mathbf c_2\)</th><td>0 + 1 + 0 + 1</td><td>2</td></tr>
+<tr><th scope="row">\(\mathbf c_1\cdot\mathbf c_1\)</th><td>1 + 1 + 4 + 4</td><td>10</td></tr>
+<tr><th scope="row">\(\mathbf c_1\cdot\mathbf c_2\)</th><td>0 + 1 + 0 + 2</td><td>3</td></tr>
+<tr><th scope="row">\(\mathbf c_2\cdot\mathbf c_2\)</th><td>0 + 1 + 0 + 1</td><td>2</td></tr>
+</tbody></table></div><p>The off-diagonal products repeat symmetrically, so \(X^TX\) is a 3 × 3 symmetric matrix. For \(X^T\mathbf y\), multiply each predictor column by the observed responses and add: \(\mathbf c_0\cdot\mathbf y=4+5+6+7=22\), \(\mathbf c_1\cdot\mathbf y=4+5+2(6)+2(7)=35\), and \(\mathbf c_2\cdot\mathbf y=0+5+0+7=12\).</p><div class="formula">\[X^TX=\begin{bmatrix}4&amp;6&amp;2\\6&amp;10&amp;3\\2&amp;3&amp;2\end{bmatrix},\qquad
+X^T\mathbf y=\begin{bmatrix}22\\35\\12\end{bmatrix}.\]</div><h3>Step 5 — Solve for all three coefficients by elimination</h3><p>Substituting the numbers into \(X^TX\mathbf b=X^T\mathbf y\) produces <strong>three equations with three unknown coefficients</strong>:</p><div class="formula">\[\begin{cases}4b_0+6b_1+2b_2=22,\\6b_0+10b_1+3b_2=35,\\2b_0+3b_1+2b_2=12.\end{cases}\]</div><p><strong>First isolate \(b_2\).</strong> Multiply the third equation by 2, obtaining \(4b_0+6b_1+4b_2=24\). Subtract the first equation, \(4b_0+6b_1+2b_2=22\). The \(b_0\) and \(b_1\) terms cancel:</p><div class="formula">\[(4b_0+6b_1+4b_2)-(4b_0+6b_1+2b_2)=24-22
+\quad\Rightarrow\quad 2b_2=2\Rightarrow\boxed{b_2=1}.\]</div><p><strong>Next solve for \(b_0\) and \(b_1\).</strong> Replace \(b_2\) by 1 in the first two equations, then divide each by 2. This leaves \(2b_0+3b_1=10\) and \(3b_0+5b_1=16\). Multiply the first by 3 and the second by 2; subtract:</p><div class="formula">\[\begin{aligned}6b_0+9b_1&amp;=30,\\6b_0+10b_1&amp;=32
+\end{aligned}\qquad\Longrightarrow\qquad b_1=32-30=\boxed{2}.\]</div><p>Substitute \(b_1=2\) back into \(2b_0+3b_1=10\): \(2b_0+6=10\), so \(2b_0=4\) and \(\boxed{b_0=2}\). We have now <em>derived</em> all the coefficients.</p><p class="note-inline">This is the estimated solution, not a guess: b₀ = 2, b₁ = 2 and b₂ = 1. The next section independently verifies it with the inverse of XᵀX and translates the numbers back into predicted electricity consumption.</p></section><section class="guide-section teal" id="section-14"><h2>14. Verify the matrix solution, interpret coefficients and recognize limitations</h2><p>The elimination method in the previous section has already given all three coefficients. We now check the same answer through a matrix operation, apply it to every row, and distinguish an exact arithmetic fit from evidence of useful generalization.</p><h3>Step 6 — Verify the explicit matrix-inverse solution</h3><p class="note-inline">On a phone, swipe horizontally inside long matrix formulas to see the entire expression.</p><p>Because these three predictor columns are linearly independent, \(X^TX\) is invertible (its determinant is 4, not zero). The closed-form matrix solution can therefore also be written \(\widehat{\mathbf b}=(X^TX)^{-1}X^T\mathbf y\). For this small example, the inverse and multiplication are:</p><div class="formula">\[(X^TX)^{-1}=\begin{bmatrix}\frac{11}{4}&amp;-\frac32&amp;-\frac12\\-\frac32&amp;1&amp;0\\-\frac12&amp;0&amp;1\end{bmatrix}.\]</div><p>How do we obtain an inverse? For an invertible square matrix \(A=X^TX\), Gauss–Jordan elimination begins with the augmented matrix \([A\mid I]\). Row operations reduce the left side to \(I\), and the right side becomes \(A^{-1}\). We show the resulting inverse, then verify two entries of \(AA^{-1}\) by ordinary multiplication:</p><div class="formula">\[\begin{aligned}
+(AA^{-1})_{11}&amp;=4\left(\frac{11}{4}\right)+6\left(-\frac32\right)+2\left(-\frac12\right)=1,\\
+(AA^{-1})_{12}&amp;=4\left(-\frac32\right)+6(1)+2(0)=0.
+\end{aligned}\]</div><p>The first check produces a diagonal 1 and the second an off-diagonal 0, as expected for the Identity Matrix. Checking every entry gives \(AA^{-1}=I_3\). The separate elimination method already showed how to solve for \(\mathbf b\) without requiring the inverse.</p><div class="formula">\[\widehat{\mathbf b}=
+\begin{bmatrix}\frac{11}{4}&amp;-\frac32&amp;-\frac12\\-\frac32&amp;1&amp;0\\-\frac12&amp;0&amp;1\end{bmatrix}
+\begin{bmatrix}22\\35\\12\end{bmatrix}
+=\begin{bmatrix}\frac{11}{4}(22)-\frac32(35)-\frac12(12)\\-\frac32(22)+35\\-\frac12(22)+12\end{bmatrix}
+=\boxed{\begin{bmatrix}2\\2\\1\end{bmatrix}}.\]</div><p><strong>Make the matrix multiplication readable row by row:</strong> the first row gives \(b_0=\frac{11}{4}(22)-\frac32(35)-\frac12(12)=60.5-52.5-6=2\); the second gives \(b_1=-\frac32(22)+35=-33+35=2\); the third gives \(b_2=-\frac12(22)+12=-11+12=1\). Each coefficient comes from a row–column Dot Product, not from guessing the final vector.</p><p>Both methods—elimination and matrix inversion—give the same result. Software normally uses more numerically stable factorizations such as QR or SVD rather than explicitly computing \((X^TX)^{-1}\), particularly when predictors are nearly dependent.</p><h3>Step 7 — Make every prediction and interpret the answer</h3><div class="formula">\[\boxed{\widehat y=2+2x_1+1x_2}\qquad
+X\widehat{\mathbf b}=\begin{bmatrix}4\\5\\6\\7\end{bmatrix}=\mathbf y.\]</div><p>For observation A, the prediction is \(2+2(1)+1(0)=4\) MWh; for B it is \(2+2(1)+1(1)=5\); for C, \(2+2(2)+0=6\); and for D, \(2+2(2)+1=7\). Every residual is zero, so the Training SSE is \(0^2+0^2+0^2+0^2=0\) MWh².</p><div class="callout teal"><strong>How to interpret the coefficients.</strong> With cooling held fixed, moving from \(x_1=1\) to \(x_1=2\) increases fitted energy by 2 MWh. At the same operating time, switching cooling from 0 to 1 increases it by 1 MWh. The Intercept 2 MWh is the equation's prediction at \(x_1=x_2=0\), which is outside these four observed combinations. These are conditional fitted differences, not established causal effects.</div><p><strong>Why this perfect result is not a modeling triumph:</strong> the four responses were chosen to lie exactly on an additive linear equation. Real measurements contain noise, the predictors may interact and four observations cannot establish reliable future performance. If columns were exactly redundant, the coefficients would not have a unique inverse-based solution; a least-squares prediction might still be computable through a pseudoinverse, but coefficient interpretation would require special care.</p><p class="note-inline">The stages are intentionally separated: understanding the Design Matrix, solving the Normal Equations, and interpreting the fitted model are related but distinct learning objectives.</p>
+<h3>Counterexample — perfect collinearity makes coefficients nonunique</h3>
+<p>Our original three columns (intercept, operating time and cooling) were independent, and that is why the inverse existed. Now suppose someone adds a fourth column \(x_3=2x_1\), which converts every operating-time value into a doubled measure. The new matrix has four rows and four columns:</p>
+<div class="formula">\[X_{new}=\begin{bmatrix}1&amp;1&amp;0&amp;2\\1&amp;1&amp;1&amp;2\\1&amp;2&amp;0&amp;4\\1&amp;2&amp;1&amp;4\end{bmatrix}.\]</div>
+<p>The fourth column is <strong>exactly twice the second</strong>. Hence \(\operatorname{rank}(X_{new})=3\), not 4, and \(\det(X_{new}^{T}X_{new})=0\). There is no inverse for this normal-equation matrix. The issue is not that the computer needs more precision; the data cannot separately identify both time coefficients.</p>
+<p>We can verify the ambiguity without guessing. Keep the coefficient order \((b_0,b_1,b_2,b_3)\). Both vectors</p>
+<div class="formula">\[\mathbf b^{(A)}=\begin{bmatrix}2\\2\\1\\0\end{bmatrix},\qquad \mathbf b^{(B)}=\begin{bmatrix}2\\0\\1\\1\end{bmatrix}\]</div>
+<p>produce the same four predictions \((4,5,6,7)^T\). At observation B (\(x_1=1,x_2=1,x_3=2\)), model A gives \(2+2(1)+1(1)+0(2)=5\), while model B gives \(2+0(1)+1(1)+1(2)=5\). At observation C (\(x_1=2,x_2=0,x_3=4\)), both give 6. Because \(2x_1=x_3\) in <em>every</em> row, the equivalence extends to A and D as well. Thus a zero Training SSE does not imply <em>unique or interpretable</em> individual coefficients.</p>
+<div class="callout teal"><strong>Correct remedy.</strong> Remove the redundant Feature or justify a new model constraint. Numerical tools may use a pseudoinverse to select one coefficient vector, but they cannot create information absent from the data. Near-collinearity, rather than exact equality, can also destabilize coefficients; more digits do not solve the underlying design problem. Regularization is treated later in the curriculum.</div>
+</section><section class="guide-section purple" id="section-15">
+<h2>15. What assumptions does OLS need—and for which conclusions?</h2>
+<p>It helps to separate <strong>computing coefficients</strong> from <strong>trusting interpretation and statistical inference</strong>. OLS will still calculate a best-fitting line for many imperfect datasets. But unbiased coefficient claims, conventional standard errors, hypothesis tests or reliable forecasts require additional conditions.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>What it means</th>
+<th>What can go wrong</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linear conditional mean</td>
+<td>The mean response is reasonably represented by the chosen linear-in-coefficients terms.</td>
+<td>Systematic curvature remains in residuals.</td>
+</tr>
+<tr>
+<td>Exogeneity / zero conditional mean</td>
+<td>Unobserved influences have conditional mean zero given included Features.</td>
+<td>Omitted correlated influences can bias coefficients.</td>
+</tr>
+<tr>
+<td>Independence / error dependence</td>
+<td>Observations and disturbances may be related across time or equipment.</td>
+<td>Conventional uncertainty estimates may be wrong.</td>
+</tr>
+<tr>
+<td>Constant variance (homoskedasticity)</td>
+<td>Error variance is similar across predictor levels.</td>
+<td>Standard textbook standard errors may fail without adjustment.</td>
+</tr>
+<tr>
+<td>Full column rank</td>
+<td>No predictor is a perfect linear combination of others.</td>
+<td>Coefficients may not be uniquely identified.</td>
+</tr>
+<tr>
+<td>Normal errors (for some finite-sample inference)</td>
+<td>A distributional assumption used for certain exact small-sample tests.</td>
+<td>Without it, OLS predictions can still be computed; inference requires care.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Consider a concrete <strong>omitted-variable</strong> concern. On hotter weeks, a factory may both run machinery longer and use more electricity for cooling. If we fit only operating hours, the slope may partly absorb cooling demand. Including a valid temperature Feature could improve predictions and alter the hours coefficient. But even then, a causal interpretation would require checking whether the relevant influences have been adequately addressed. The assumption about mean-zero disturbances matters especially when we try to interpret a coefficient beyond mere prediction.</p>
+<p>A common misconception is that <em>all</em> these assumptions must be perfectly true for an algorithm to produce any prediction. They do not. Their importance depends on the objective: point predictions, interpretation of a slope, causal interpretation or formal confidence intervals are different tasks.</p>
+<h3>Residual diagnostics are questions, not magic pass/fail tests</h3>
+<p>Plot residuals against fitted values or operating hours. If residuals fan out as <span class="math">\(x\)</span> grows, the error spread may depend on activity. If residuals bend systematically, a straight line may miss curvature. In our five-point Training sample, the residual pattern is too small to diagnose much. A real analysis would use many more weeks, domain knowledge and appropriate diagnostics, possibly robust uncertainty estimates or alternative models.</p>
+<h3>What is the difference between RMSE and a residual standard error?</h3>
+<p>Training RMSE uses the denominator <span class="math">\(n\)</span>, here <span class="math">\(\sqrt{1.6/5}\approx0.566\)</span> MWh. In a simple OLS model with an intercept and slope, a conventional <strong>residual standard error</strong> estimates noise using <span class="math">\(n-2\)</span> degrees of freedom:</p>
+<div class="formula">\[s=\sqrt{\frac{SSE}{n-2}}=\sqrt{\frac{1.6}{3}}\approx0.730\ \mathrm{MWh}.\]</div>
+<p>The different denominators answer different questions. RMSE summarizes average in-sample squared prediction error; the residual standard error accounts for fitting two coefficients when estimating an error standard deviation under model assumptions. Do not label them interchangeably.</p>
+
+<h3>Residuals versus fitted values: draw the actual diagnostic, not an imagined pattern</h3>
+<p>A diagnostic plot puts the <strong>fitted prediction on the horizontal axis</strong> and the <strong>Training residual on the vertical axis</strong>. Both axes have MWh units, unlike the original residual-by-week plot. It helps ask whether mistakes grow with predicted consumption or bend systematically. Here are the exact five points calculated in Section 6; for example T2 contributes \((\widehat y,e)=(4.8,-0.8)\) MWh.</p>
+<figure aria-label="Training residual diagnostic" class="plot guide07-residual-visual" role="group"><svg aria-label="Training residual diagnostic" height="405" role="img" viewbox="0 0 760 405" width="760" xmlns="http://www.w3.org/2000/svg"><rect fill="#fbfdff" height="405" rx="12" width="760" x="0" y="0"></rect><text fill="#0b1f3a" font-family="Inter,Arial,sans-serif" font-size="20" font-weight="700" text-anchor="middle" x="380" y="32">Training residual diagnostic</text><line stroke="#e3ebf3" stroke-width="1" x1="90" x2="700" y1="310.0" y2="310.0"></line><text fill="#46576c" font-family="Inter,Arial,sans-serif" font-size="12" text-anchor="end" x="75" y="314.0">-1.0</text><line stroke="#e3ebf3" stroke-width="1" x1="90" x2="700" y1="255.0" y2="255.0"></line><text fill="#46576c" font-family="Inter,Arial,sans-serif" font-size="12" text-anchor="end" x="75" y="259.0">-0.5</text><line stroke="#58728c" stroke-dasharray="5,4" stroke-width="2" x1="90" x2="700" y1="200.0" y2="200.0"></line><text fill="#46576c" font-family="Inter,Arial,sans-serif" font-size="12" text-anchor="end" x="75" y="204.0">+0.0</text><line stroke="#e3ebf3" stroke-width="1" x1="90" x2="700" y1="145.0" y2="145.0"></line><text fill="#46576c" font-family="Inter,Arial,sans-serif" font-size="12" text-anchor="end" x="75" y="149.0">+0.5</text><line stroke="#e3ebf3" stroke-width="1" x1="90" x2="700" y1="90.0" y2="90.0"></line><text fill="#46576c" font-family="Inter,Arial,sans-serif" font-size="12" text-anchor="end" x="75" y="94.0">+1.0</text><line stroke="#eff3f8" x1="90.0" x2="90.0" y1="90" y2="310"></line><text fill="#46576c" font-family="Inter,Arial,sans-serif" font-size="12" text-anchor="middle" x="90.0" y="330">3</text><line stroke="#eff3f8" x1="191.7" x2="191.7" y1="90" y2="310"></line><text fill="#46576c" font-family="Inter,Arial,sans-serif" font-size="12" text-anchor="middle" x="191.7" y="330">4</text><line stroke="#eff3f8" x1="293.3" x2="293.3" y1="90" y2="310"></line><text fill="#46576c" font-family="Inter,Arial,sans-serif" font-size="12" text-anchor="middle" x="293.3" y="330">5</text><line stroke="#eff3f8" x1="395.0" x2="395.0" y1="90" y2="310"></line><text fill="#46576c" font-family="Inter,Arial,sans-serif" font-size="12" text-anchor="middle" x="395.0" y="330">6</text><line stroke="#eff3f8" x1="496.7" x2="496.7" y1="90" y2="310"></line><text fill="#46576c" font-family="Inter,Arial,sans-serif" font-size="12" text-anchor="middle" x="496.7" y="330">7</text><line stroke="#eff3f8" x1="598.3" x2="598.3" y1="90" y2="310"></line><text fill="#46576c" font-family="Inter,Arial,sans-serif" font-size="12" text-anchor="middle" x="598.3" y="330">8</text><line stroke="#eff3f8" x1="700.0" x2="700.0" y1="90" y2="310"></line><text fill="#46576c" font-family="Inter,Arial,sans-serif" font-size="12" text-anchor="middle" x="700.0" y="330">9</text><line stroke="#46576c" stroke-width="1.5" x1="90" x2="700" y1="310" y2="310"></line><text fill="#294963" font-family="Inter,Arial,sans-serif" font-size="14" font-weight="700" text-anchor="middle" x="395" y="365">Fitted energy (MWh)</text><text fill="#294963" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="700" text-anchor="middle" transform="translate(25 200) rotate(-90)">Residual: observed − fitted (MWh)</text><circle cx="151.0" cy="156.0" fill="#15957e" r="7" stroke="#fff" stroke-width="2"></circle><text fill="#20435b" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="151.0" y="141.0">T1</text><circle cx="273.0" cy="288.0" fill="#15957e" r="7" stroke="#fff" stroke-width="2"></circle><text fill="#20435b" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="273.0" y="273.0">T2</text><circle cx="395.0" cy="200.0" fill="#15957e" r="7" stroke="#fff" stroke-width="2"></circle><text fill="#20435b" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="395.0" y="185.0">T3</text><circle cx="517.0" cy="112.0" fill="#15957e" r="7" stroke="#fff" stroke-width="2"></circle><text fill="#20435b" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="517.0" y="97.0">T4</text><circle cx="639.0" cy="244.0" fill="#15957e" r="7" stroke="#fff" stroke-width="2"></circle><text fill="#20435b" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="700" text-anchor="middle" x="639.0" y="229.0">T5</text></svg><figcaption>Coordinates (fitted MWh, residual MWh): T1 (3.6,+0.4), T2 (4.8,−0.8), T3 (6.0,0), T4 (7.2,+0.8), T5 (8.4,−0.4). Points use Training only; five residuals cannot establish model adequacy.</figcaption></figure>
+<p>The dots alternate around zero. With only five Training observations, <strong>do not conclude homoskedasticity, independence or correct functional form</strong> from this appearance. Such conditions require additional data and domain scrutiny. A residual plot can reveal a concern; failing to see a pattern in a miniature educational dataset is not proof that assumptions hold.</p>
+</section><section class="guide-section amber" id="section-16">
+<h2>16. Outliers, leverage and why one unusual week matters</h2>
+<p>An <strong>outlier in the response</strong> has an unusually large vertical residual. A <strong>high-leverage observation</strong> has an unusual predictor value, far from the average <span class="math">\(x\)</span>. For example, if most Training weeks have <span class="math">\(x\)</span> from 1 through 5 but one new week has <span class="math">\(x=20\)</span>, that week would have <strong>high leverage</strong> because its operating time is far from the others; it need not have a large vertical residual. An ordinary <span class="math">\(x=3\)</span> week with unusually high energy might have a large residual but relatively low leverage. <strong>Influence</strong> concerns how much the fitted coefficients change when an observation is included or excluded.</p>
+<p>A point with both high leverage and a substantial residual can exert considerable influence on the fitted slope. These are related but different ideas.</p>
+<p>Watch how changing just <strong>T5 energy from 8 to 14 MWh</strong> affects OLS, while keeping its <span class="math">\(x=5\)</span> value unchanged. This is a deliberately altered scenario, not our original dataset. The new response mean is <span class="math">\((4+4+6+8+14)/5=7.2\)</span>; since T5 has <span class="math">\(x-\bar x=+2\)</span> and its <span class="math">\(y\)</span> increased by 6, the cross-deviation total grows from 12 to <span class="math">\(12+2(6)=24\)</span>. The denominator remains 10:</p>
+<div class="formula">\[b_1^{new}=\frac{24}{10}=2.4,\qquad
+b_0^{new}=7.2-2.4(3)=0.\]</div>
+<figure aria-label="outlier" class="plot-svg" role="group"><svg aria-label="Effect of changed last observation" role="img" viewbox="0 0 760 370" xmlns="http://www.w3.org/2000/svg"><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="266.0" y2="266.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="270.0">2</text><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="234.0" y2="234.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="238.0">4</text><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="202.0" y2="202.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="206.0">6</text><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="170.0" y2="170.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="174.0">8</text><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="138.0" y2="138.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="142.0">10</text><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="106.0" y2="106.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="110.0">12</text><line stroke="#e2eaf3" stroke-width="1" x1="72.0" x2="710.0" y1="74.0" y2="74.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="end" x="60.0" y="78.0">14</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="135.8" y="321.0">1</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="263.4" y="321.0">2</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="391.0" y="321.0">3</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="518.6" y="321.0">4</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="646.2" y="321.0">5</text><line stroke="#51657d" stroke-width="1.5" x1="72.0" x2="710.0" y1="298.0" y2="298.0"></line><line stroke="#51657d" stroke-width="1.5" x1="72.0" x2="72.0" y1="58.0" y2="298.0"></line><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="400" text-anchor="middle" x="391.0" y="348.0">Operating time (hundreds of machine-hours)</text><text fill="#526175" font-family="Inter,Arial,sans-serif" font-size="13" font-weight="700" text-anchor="start" x="18.0" y="71.0">MWh</text><polyline fill="none" points="97.5,246.2 684.5,157.8" stroke="#3178b9" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></polyline><polyline fill="none" points="97.5,271.1 684.5,94.5" stroke="#8c69ba" stroke-dasharray="7 4" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></polyline><circle cx="135.8" cy="234.0" fill="#3178b9" r="6" stroke="white" stroke-width="1.6"></circle><circle cx="263.4" cy="234.0" fill="#3178b9" r="6" stroke="white" stroke-width="1.6"></circle><circle cx="391.0" cy="202.0" fill="#3178b9" r="6" stroke="white" stroke-width="1.6"></circle><circle cx="518.6" cy="170.0" fill="#3178b9" r="6" stroke="white" stroke-width="1.6"></circle><circle cx="646.2" cy="170.0" fill="#3178b9" r="6" stroke="white" stroke-width="1.6"></circle><circle cx="646.2" cy="74.0" fill="#b85d65" r="7" stroke="white" stroke-width="1.6"></circle><text fill="#0b1f3a" font-family="Inter,Arial,sans-serif" font-size="17" font-weight="700" text-anchor="start" x="72.0" y="32.0">Outlier influence: T5 from 8 to 14 MWh</text><text fill="#3178b9" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="410.0" y="60.0">Original: b₁ = 1.2</text><text fill="#8c69ba" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle" x="580.0" y="60.0">Modified: b₁ = 2.4</text></svg><figcaption>The blue line uses original data (b₁=1.2); the purple line uses a modified T5 of 14 MWh (b₁=2.4). The other four observations are unchanged.</figcaption></figure>
+<p>The fitted prediction at <span class="math">\(x=3\)</span> changes from 6 MWh to <span class="math">\(0+2.4(3)=7.2\)</span> MWh even though <strong>T3 itself did not change</strong>. This is why squared-error methods are sensitive to large deviations. Before deleting a suspicious observation, check whether it is a meter error, a genuine surge, a unit mismatch, or a previously unrecorded operating condition. Removing valid extremes can be just as misleading as keeping erroneous ones.</p>
+<p>With sufficiently varied operating conditions, we might compare robust regression, transformations, additional relevant Features or separate operational regimes. Those choices must be validated on separate development data; do not optimize a model by selectively deleting the Test mistakes.</p>
+</section><section class="guide-section blue" id="section-17">
+<h2>17. Reproduce the calculation in Python—without hiding the learning process</h2>
+<p>The code below reconstructs the <strong>five Training observations</strong>, checks the hand-derived coefficients, uses the frozen model for Validation and Test, and compares it with the Training-mean baseline. It does not fetch external data or need a notebook-specific file path.</p>
+<pre><code class="language-python">import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+x_train = np.array([1, 2, 3, 4, 5], dtype=float).reshape(-1, 1)
+y_train = np.array([4, 4, 6, 8, 8], dtype=float)
+x_val = np.array([2.5, 4.5]).reshape(-1, 1)
+y_val = np.array([5.7, 7.5])
+x_test = np.array([6, 7]).reshape(-1, 1)
+y_test = np.array([9.4, 11.4])
+
+x = x_train.ravel()
+b1 = np.sum((x - x.mean()) * (y_train - y_train.mean())) / np.sum((x - x.mean()) ** 2)
+b0 = y_train.mean() - b1 * x.mean()
+print("Hand coefficients:", round(b0, 4), round(b1, 4))
+
+model = LinearRegression().fit(x_train, y_train)
+print("Library coefficients:", model.intercept_, model.coef_[0])
+
+for split, features, actual in [("Training", x_train, y_train), ("Validation", x_val, y_val), ("Test", x_test, y_test)]:
+    predicted = model.predict(features)
+    print(split, "MAE:", round(mean_absolute_error(actual, predicted), 4),
+          "RMSE:", round(np.sqrt(mean_squared_error(actual, predicted)), 4))
+
+print("Training R²:", round(r2_score(y_train, model.predict(x_train)), 4))
+print("Validation baseline MAE:", mean_absolute_error(y_val, np.full(len(y_val), y_train.mean())))
+print("Test baseline MAE:", mean_absolute_error(y_test, np.full(len(y_test), y_train.mean())))
+</code></pre>
+<p><strong>Expected checks:</strong> hand and library coefficients are 2.4 and 1.2; Training MAE is 0.48, Training RMSE ≈ 0.5657, Training <span class="math">\(R^2=0.90\)</span>, Validation MAE = 0.30, Test MAE = 0.40, and the Validation/Test baseline MAEs are 0.90 and 4.40. If your output disagrees, inspect the row order, units and whether you accidentally fitted on Validation.</p>
+<h3>What <code>fit()</code> actually learned here</h3>
+<p><code>fit(x_train,y_train)</code> used Training to estimate the <strong>intercept and slope</strong>. <code>predict(x_val)</code> and <code>predict(x_test)</code> simply insert new <span class="math">\(x\)</span> values into that already fitted equation; they <strong>do not relearn the coefficients</strong>. This is the same Training-versus-evaluation discipline introduced for imputers and scalers in Guide 5. In a more elaborate workflow, preprocessing would also be fitted inside Training (or the appropriate Cross-Validation fold).</p>
+
+<h3>Independent computational check: a new dataset and a rank-deficient matrix</h3>
+<p>The following standalone cell deliberately starts from fresh data rather than relying on variables from the previous code block. It reproduces the municipal-water calculations and checks two distinct coefficient vectors that yield the same predictions under exact collinearity. NumPy and scikit-learn are required; no external dataset is downloaded.</p>
+<pre><code class="language-python"># Second, independent OLS exercise: synthetic municipal water-filtration days.
+import numpy as np
+from sklearn.linear_model import LinearRegression
+
+runtime_train = np.array([1., 2., 3., 4.])
+volume_train = np.array([5., 7., 8., 12.])  # units: hundreds of cubic metres
+runtime_eval = np.array([5.])
+volume_eval = np.array([14.])
+
+xm, ym = runtime_train.mean(), volume_train.mean()
+sxy = np.sum((runtime_train - xm) * (volume_train - ym))
+sxx = np.sum((runtime_train - xm)**2)
+slope = sxy / sxx
+intercept = ym - slope*xm
+pred_train = intercept + slope*runtime_train
+residuals = volume_train - pred_train
+sse = np.sum(residuals**2)
+mae = np.mean(np.abs(residuals))
+rmse = np.sqrt(np.mean(residuals**2))
+r2 = 1. - sse / np.sum((volume_train - ym)**2)
+
+assert np.isclose((xm,ym), (2.5,8.)).all()
+assert np.isclose([sxy,sxx,slope,intercept],[11.,5.,2.2,2.5]).all()
+assert np.allclose(pred_train,[4.7,6.9,9.1,11.3])
+assert np.allclose(residuals,[.3,.1,-1.1,.7])
+assert np.allclose([sse,mae,rmse,r2],[1.8,.55,np.sqrt(.45),1-1.8/26])
+assert np.isclose(np.sum(residuals), 0.)
+assert np.isclose(np.dot(runtime_train, residuals), 0.)
+lib_model = LinearRegression().fit(runtime_train.reshape(-1,1),volume_train)
+assert np.allclose([lib_model.intercept_,lib_model.coef_[0]],[2.5,2.2])
+assert np.isclose(lib_model.predict(runtime_eval.reshape(-1,1))[0],13.5)
+assert np.isclose(np.abs(volume_eval[0]-13.5), .5)
+
+# Exhibit nonuniqueness with two coefficient vectors and a redundant column.
+X = np.array([[1.,1.,0.],[1.,1.,1.],[1.,2.,0.],[1.,2.,1.]])
+X_aug = np.column_stack((X, 2*X[:,1]))
+coef_a = np.array([2.,2.,1.,0.])
+coef_b = np.array([2.,0.,1.,1.])
+assert np.linalg.matrix_rank(X_aug) == 3
+assert np.allclose(X_aug@coef_a,[4.,5.,6.,7.])
+assert np.allclose(X_aug@coef_b,[4.,5.,6.,7.])
+assert np.isclose(np.linalg.det(X_aug.T@X_aug), 0., atol=1e-10)
+print("Water slope, intercept:", slope, intercept)
+print("Water train SSE, MAE, RMSE, R2:", sse, mae, round(rmse,4), round(r2,4))
+print("Water frozen evaluation prediction:", 13.5, "(100 m3)")
+print("Redundant design rank:",np.linalg.matrix_rank(X_aug),"of",X_aug.shape[1])
+</code></pre>
+<p>The independently checkable output is: water slope 2.2 and intercept 2.5; Training SSE 1.8, MAE 0.55, RMSE 0.6708 and \(R^2\approx0.9308\); frozen evaluation prediction 13.5 hundreds of m³; augmented design rank <strong>3 of 4</strong>. Every assertion must pass before using the result as teaching evidence.</p>
+</section><section class="guide-section teal" id="section-18">
+<h2>18. Interpret decisions, recognize limitations and prepare for the next topic</h2>
+<p>Imagine a manager asks whether 700 machine-hours will consume exactly 10.8 MWh. The correct answer is <strong>no</strong>: 10.8 MWh is this fitted line's predicted value at <span class="math">\(x=7\)</span>, and the actual synthetic Test outcome was 11.4 MWh. A prediction is not a physical guarantee. In a real operation, we would report uncertainty, check equipment and weather conditions, and avoid making high-impact energy decisions from five fitted observations.</p>
+<p>A manager might also ask whether lowering operating hours by 100 will certainly save 1.2 MWh. The slope is a <em>predictive association</em>. We would need stronger assumptions or designed operational comparisons to estimate a causal saving. Finally, the negative effects of missed operational variables might appear as patterns in residuals or drift after deployment.</p>
+<p><strong>Decision checklist:</strong> define the unit and time horizon; establish a credible baseline; split data before fitting; calculate OLS using Training only; examine residuals and appropriate metrics; interpret coefficient units; check extrapolation and assumptions; test independently; document what can and cannot be concluded. A complicated method does not compensate for mistakes in these foundations.</p>
+<p>The next guides deepen <strong>Loss Functions</strong> and <strong>Gradient Descent</strong>. This chapter has already given them a concrete motivation: choose an objective such as SSE, measure how it changes with coefficients, and find the parameters that make it small. In later chapters, we will analyze these choices in greater generality rather than repeating today's derivations.</p>
+
+<h3>Transfer case — a municipal water-filtration facility, solved from beginning to end</h3>
+<p>Transfer the method to a <strong>different operation</strong>, not just new numbers on the factory graph. A municipal facility records daily filtration runtime \(x\) in <strong>hours</strong> and treated-water volume \(y\) in <strong>hundreds of cubic metres</strong> (100 m³). Our entire synthetic Training dataset consists of four days, and a fifth day is reserved for a one-observation evaluation:</p>
+<div class="table-wrap"><table><caption>Complete, invented water-filtration dataset; one hundred cubic metres = 100 m³</caption><thead><tr><th>Set / day</th><th>Runtime \(x\) (h)</th><th>Treated water \(y\) (100 m³)</th><th>Use</th></tr></thead><tbody><tr><td>Training W1</td><td>1</td><td>5</td><td>Fit</td></tr><tr><td>Training W2</td><td>2</td><td>7</td><td>Fit</td></tr><tr><td>Training W3</td><td>3</td><td>8</td><td>Fit</td></tr><tr><td>Training W4</td><td>4</td><td>12</td><td>Fit</td></tr><tr><td>Evaluation W5</td><td>5</td><td>14</td><td>Freeze model; evaluate only</td></tr></tbody></table></div>
+<p><strong>Step 1 — Means.</strong> \(\bar x=(1+2+3+4)/4=2.5\) hours and \(\bar y=(5+7+8+12)/4=8\) hundreds of m³. The last row is excluded from both means.</p>
+<p><strong>Step 2 — Calculate both OLS sums row by row.</strong> The deviations of \(x\) are \((-1.5,-0.5,0.5,1.5)\); those of \(y\) are \((-3,-1,0,4)\). Multiply paired deviations to obtain \((4.5,0.5,0,6)\), so \(S_{xy}=4.5+0.5+0+6=11\) h·(100 m³). Square the \(x\)-deviations to obtain \((2.25,0.25,0.25,2.25)\), so \(S_{xx}=5\) h².</p>
+<div class="formula">\[b_1=\frac{11}{5}=2.2\ \frac{100\,\mathrm{m}^3}{\mathrm h},\qquad b_0=8-2.2(2.5)=2.5\ (100\,\mathrm{m}^3).\]</div>
+<p>The fitted Training equation is \(\widehat y=2.5+2.2x\). This means a fitted increase of <strong>220 m³ for one additional filtration hour</strong>, not a proven causal effect. The intercept is an extrapolation to zero filtration hours, outside Training; background flow or tank storage could make that interpretation misleading.</p>
+<p><strong>Step 3 — Predict each Training row, then calculate all residuals.</strong> Do not skip substitutions: \(2.5+2.2(1)=4.7\); \(2.5+2.2(2)=6.9\); \(2.5+2.2(3)=9.1\); \(2.5+2.2(4)=11.3\), each in hundreds of m³.</p>
+<div class="table-wrap"><table><caption>Every Training prediction, residual and squared error</caption><thead><tr><th>Day</th><th>Actual</th><th>Predicted</th><th>Residual \(y-\widehat y\)</th><th>\(|e|\)</th><th>\(e^2\)</th></tr></thead><tbody><tr><td>W1</td><td>5.0</td><td>4.7</td><td>+0.3</td><td>0.3</td><td>0.09</td></tr><tr><td>W2</td><td>7.0</td><td>6.9</td><td>+0.1</td><td>0.1</td><td>0.01</td></tr><tr><td>W3</td><td>8.0</td><td>9.1</td><td>−1.1</td><td>1.1</td><td>1.21</td></tr><tr><td>W4</td><td>12.0</td><td>11.3</td><td>+0.7</td><td>0.7</td><td>0.49</td></tr><tr><td>Total</td><td>—</td><td>—</td><td>0.0</td><td>2.2</td><td>1.80</td></tr></tbody></table></div>
+<p><strong>Step 4 — Summarize errors and check the optimum.</strong> \(MAE=2.2/4=0.55\) hundreds of m³ = 55 m³; \(MSE=1.80/4=0.45\) (hundreds of m³)²; \(RMSE=\sqrt{0.45}\approx0.6708\) hundreds of m³ = 67.08 m³. The constant-mean Training prediction 8 has \(SST=(5-8)^2+(7-8)^2+(8-8)^2+(12-8)^2=9+1+0+16=26\). Thus \(R^2=1-1.8/26\approx0.9308\). Check \(\sum e_i=0\) and \(\sum x_ie_i=1(0.3)+2(0.1)+3(-1.1)+4(0.7)=0\), matching both normal-equation conditions.</p>
+<p><strong>Step 5 — Evaluate without refitting.</strong> For W5, \(x=5\) h gives \(\widehat y=2.5+2.2(5)=13.5\) hundreds of m³, compared with the observed 14. The absolute error is \(|14-13.5|=0.5\) hundreds of m³ = 50 m³. The frozen baseline 8 would err by \(|14-8|=6\) hundreds of m³. But <strong>one evaluation row is not a trustworthy generalization estimate</strong>, and five hours is beyond the Training range of one through four: this is extrapolation. It would be wrong to refit with W5 and then claim an independent error of 50 m³.</p>
+<div class="callout amber"><strong>Student transfer question.</strong> If the manager plans six hours, what is the mathematical prediction and what is <em>not</em> justified? Substitute \(x=6\): \(2.5+2.2(6)=15.7\) hundreds of m³ = 1,570 m³. This is further extrapolation: it is not a guaranteed physical capacity or a causal estimate of treatment gained by lengthening operations.</div>
+</section><section class="guide-section purple" id="section-19">
+<h2>19. Common mistakes and why they are mistakes</h2>
+<p><strong>Mistake 1 — Treating Regression as any relationship between variables.</strong> Linear Regression estimates a numerical Target conditional on Features. A scatterplot showing association is useful, but it is not the same as defining, fitting and evaluating a predictive model. State the Target and prediction time before choosing the method.</p>
+<p><strong>Mistake 2 — Drawing a line through two convenient points.</strong> Two points can determine a line, but OLS generally considers <em>all Training rows</em>. Our coefficient calculation used five complete pairs and minimized their combined SSE.</p>
+<p><strong>Mistake 3 — Saying the intercept must be a real physical baseline.</strong> The intercept is a fitted prediction at <span class="math">\(x=0\)</span>. Because we trained only on <span class="math">\(1\le x\le5\)</span>, interpreting <span class="math">\(x=0\)</span> requires extrapolation and knowledge of the facility.</p>
+<p><strong>Mistake 4 — Forgetting units.</strong> Here <span class="math">\(x=3\)</span> means 300 machine-hours. A slope of 1.2 MWh per 100 hours becomes 0.012 MWh per hour; treating it as 1.2 MWh per hour multiplies the implied effect by 100.</p>
+<p><strong>Mistake 5 — Interpreting <span class="math">\(R^2=0.90\)</span> as 90% correct predictions.</strong> <span class="math">\(R^2\)</span> compares squared errors with a reference. It is not Accuracy for a Classification problem, and Training <span class="math">\(R^2\)</span> says little by itself about future reliability.</p>
+<p><strong>Mistake 6 — Assuming residuals are the same as unknown future errors.</strong> Training residuals use outcomes already observed during fitting. A future prediction error is not observable until the corresponding outcome arrives, and it need not have the same distribution.</p>
+<p><strong>Mistake 7 — Believing a positive slope proves causation.</strong> Other factors can accompany operating time. Conditional association does not identify an intervention effect without appropriate causal assumptions.</p>
+<p><strong>Mistake 8 — Re-estimating coefficients using Validation or Test.</strong> That contaminates the evaluation. The correct procedure here calculates <span class="math">\(2.4\)</span> and <span class="math">\(1.2\)</span> from Training, then freezes them for both held-out sets.</p>
+<p><strong>Mistake 9 — Treating a good Test score on two observations as deployment evidence.</strong> A single extra error could greatly change the mean. Use representative independent data and uncertainty assessment before operational claims.</p>
+<p><strong>Mistake 10 — Assuming extrapolation is as safe as interpolation.</strong> Weeks at <span class="math">\(x=6\)</span> or 7 are outside the Training range. Equipment limits or changing regimes could invalidate the linear extension.</p>
+<p><strong>Mistake 11 — Confusing RMSE with residual standard error.</strong> RMSE uses <span class="math">\(n\)</span> in our diagnostic; the conventional estimated error standard deviation in simple OLS uses <span class="math">\(n-2\)</span> degrees of freedom. Both require explicit definitions.</p>
+<p><strong>Mistake 12 — Believing a tiny <span class="math">\(p\)</span>-value automatically means a useful or causal model.</strong> Statistical evidence about a coefficient, predictive performance, effect size and causal interpretation are distinct. A good model report explains all relevant goals and limitations.</p>
+<p><strong>Mistake 13 — Deleting every outlier to obtain a cleaner line.</strong> A distant point may be valid and operationally important. Investigate records, decide a defensible policy using development data, then evaluate it without looking for convenient Test results.</p>
+<p><strong>Mistake 14 — Assuming “linear” means we can never use curved predictors.</strong> The model is linear in coefficients. Terms such as <span class="math">\(x^2\)</span> may be included as Features, although flexibility raises overfitting and extrapolation concerns.</p>
+</section><section class="guide-section amber" id="section-20">
+<h2>20. Knowledge checks: show your reasoning</h2>
+<details><summary>1. A week has 350 machine-hours. What is <span class="math">\(x\)</span>, and why?</summary><p>Because the Feature is measured in groups of 100 machine-hours, <span class="math">\(x=350/100=3.5\)</span>. Substituting 350 directly into the fitted <span class="math">\(2.4+1.2x\)</span> equation would confuse units and produce a nonsensical prediction. Using the correct <span class="math">\(x\)</span>, predicted energy is <span class="math">\(2.4+1.2(3.5)=6.6\)</span> MWh.</p></details>
+<details><summary>2. Define an observed value, predicted value and residual for T4.</summary><p>T4 has <span class="math">\(x=4\)</span> and observed energy <span class="math">\(y=8\)</span> MWh. The fitted prediction is <span class="math">\(\widehat y=2.4+1.2(4)=7.2\)</span> MWh. Its residual is <span class="math">\(e=y-\widehat y=8-7.2=+0.8\)</span> MWh: actual energy exceeded the predicted amount.</p></details>
+<details><summary>3. Recalculate the OLS slope from <span class="math">\(S_{xy}=12\)</span> and <span class="math">\(S_{xx}=10\)</span>.</summary><p>Use <span class="math">\(b_1=S_{xy}/S_{xx}=12/10=1.2\)</span> MWh per 100 machine-hours. Then the intercept is <span class="math">\(b_0=\bar y-b_1\bar x=6-1.2(3)=2.4\)</span> MWh. Both coefficients require the sample means and all five rows.</p></details>
+<details><summary>4. Why does a negative residual not mean negative energy?</summary><p>A negative residual is a *difference*: <span class="math">\(y-\widehat y&lt;0\)</span> means the prediction exceeded the measured energy. In T2, actual energy is 4 MWh and the prediction is 4.8 MWh, giving <span class="math">\(-0.8\)</span> MWh. Neither actual energy nor fitted energy is negative.</p></details>
+<details><summary>5. Calculate Training MAE from absolute residuals <span class="math">\(0.4,0.8,0,0.8,0.4\)</span>.</summary><p>Add the five absolute values: <span class="math">\(0.4+0.8+0+0.8+0.4=2.4\)</span> MWh. Divide by <span class="math">\(n=5\)</span> to obtain <span class="math">\(MAE=0.48\)</span> MWh. This summarizes average *Training* absolute error, not future performance.</p></details>
+<details><summary>6. Calculate Training MSE and RMSE from <span class="math">\(SSE=1.60\)</span>.</summary><p><span class="math">\(MSE=SSE/n=1.60/5=0.32\)</span> MWh². <span class="math">\(RMSE=\sqrt{0.32}\approx0.5657\)</span> MWh. The square root restores the response units; both metrics come from the same Training residuals.</p></details>
+<details><summary>7. What does Training <span class="math">\(R^2=0.90\)</span> mean?</summary><p>The constant Training-mean prediction has SSE 16; the OLS line has SSE 1.6. Thus <span class="math">\(R^2=1-1.6/16=0.90\)</span>: the line reduces squared Training error by 90% compared with predicting 6 MWh for every Training observation. It is not 90% Classification Accuracy, nor evidence of causality.</p></details>
+<details><summary>8. Why do we hold the coefficients fixed for Validation?</summary><p>Validation is meant to test a model choice not estimated from its own outcomes. We compute <span class="math">\(b_0=2.4\)</span> and <span class="math">\(b_1=1.2\)</span> from T1–T5. The Validation predictions are then <span class="math">\(5.4\)</span> and <span class="math">\(7.8\)</span> MWh. Refitting using V1 or V2 would let evaluation information influence what is being evaluated.</p></details>
+<details><summary>9. Compare the Validation MAE of our model and the constant baseline.</summary><p>Model errors: <span class="math">\(|5.7-5.4|=0.3\)</span> and <span class="math">\(|7.5-7.8|=0.3\)</span>, so MAE is 0.3 MWh. Baseline predicts the Training mean 6: errors <span class="math">\(0.3\)</span> and <span class="math">\(1.5\)</span>, so MAE is 0.9 MWh. Our fitted line does better on these two cases, but two observations are insufficient for reliable model selection.</p></details>
+<details><summary>10. Are Test values at <span class="math">\(x=6\)</span> and <span class="math">\(x=7\)</span> interpolations?</summary><p>No. Training x-values range from 1 through 5, so 6 and 7 require extrapolation. The equation returns 9.6 and 10.8 MWh, but outside-range predictions could be poor if the factory changes its operating regime. Evaluate this risk explicitly.</p></details>
+<details><summary>11. Convert the slope into kWh per machine-hour.</summary><p>Our slope is 1.2 MWh per 100 machine-hours. Divide by 100 to obtain 0.012 MWh per machine-hour; multiply by 1,000 to convert energy to kWh: <span class="math">\(0.012\times1000=12\)</span> kWh per machine-hour. This is a unit conversion, not a new model fit.</p></details>
+<details class="knowledge-check"><summary>12. Solve the three Multiple Regression coefficients without guessing them.</summary><p>The Normal Equations for the four observations are \(4b_0+6b_1+2b_2=22\), \(6b_0+10b_1+3b_2=35\), and \(2b_0+3b_1+2b_2=12\). Double the third equation and subtract the first: \(2b_2=2\), so \(b_2=1\). Substitute into the first two equations and divide by 2 to get \(2b_0+3b_1=10\) and \(3b_0+5b_1=16\). Multiply the first by 3 and the second by 2: subtract \(6b_0+9b_1=30\) from \(6b_0+10b_1=32\) to find \(b_1=2\). Finally, \(2b_0+3(2)=10\) gives \(b_0=2\). The fitted equation is \(\widehat y=2+2x_1+x_2\); verify the predictions \((4,5,6,7)\) and Training SSE = 0. The exact fit was engineered for teaching, not expected in real-world data.</p></details>
+<details><summary>13. If T5 changes from 8 to 14 MWh, what happens to the slope?</summary><p>The response mean changes from 6 to 7.2. Because T5 lies 2 x-units above the x-mean and rises by 6 MWh, <span class="math">\(S_{xy}\)</span> increases from 12 to 24. With <span class="math">\(S_{xx}=10\)</span>, the slope doubles to 2.4; the intercept becomes <span class="math">\(7.2-2.4(3)=0\)</span>. This is a concrete illustration of outlier influence.</p></details>
+<details><summary>14. Explain the difference between Training RMSE and residual standard error.</summary><p>Training RMSE divides the squared-residual total by all five observations: <span class="math">\(\sqrt{1.6/5}\approx0.566\)</span> MWh. A conventional simple-OLS residual standard error divides by <span class="math">\(n-2=3\)</span> because fitting an intercept and slope uses two degrees of freedom: <span class="math">\(\sqrt{1.6/3}\approx0.730\)</span> MWh. Their purposes differ.</p></details>
+<details><summary>15. Does a fitted 1.2-MWh slope prove savings from reducing hours by 100?</summary><p>No. The slope describes conditional fitted association in the sample. If cooling demand, production mix or equipment differs across weeks, changing operating hours may also change these conditions. Causal savings require a credible intervention comparison or stronger assumptions.</p></details>
+<details><summary>16. Is <span class="math">\(\widehat y=b_0+b_1x+b_2x^2\)</span> a linear regression?</summary><p>Yes, it is *linear in the coefficients* <span class="math">\(b_0,b_1,b_2\)</span>, even though the curve can be nonlinear in <span class="math">\(x\)</span>. The squared Feature may capture curvature, but its value and risk of overfitting must be evaluated with proper held-out data.</p></details>
+
+<h3>Transfer checks: explain a fresh problem without copying the factory answers</h3>
+<details><summary>17. From filtration runtimes 1–4 hours and volumes 5, 7, 8, 12 (100 m³), reconstruct both OLS coefficients. Show the sums.</summary><p>Training means are \(\bar x=2.5\) and \(\bar y=8\). The paired deviations yield \(S_{xy}=(-1.5)(-3)+(-0.5)(-1)+(0.5)(0)+(1.5)(4)=4.5+0.5+0+6=11\). Squared x deviations yield \(S_{xx}=2.25+0.25+0.25+2.25=5\). Thus \(b_1=11/5=2.2\) hundreds of m³ per hour and \(b_0=8-2.2(2.5)=2.5\) hundreds of m³. Predictions \((4.7,6.9,9.1,11.3)\) imply residuals \((0.3,0.1,-1.1,0.7)\), SSE \(0.09+0.01+1.21+0.49=1.80\), MAE \(2.2/4=0.55\) and RMSE \(\sqrt{1.8/4}=0.6708\). These are Training diagnostics; no Validation or Test outcome was used for fitting.</p></details>
+<details><summary>18. For the held-out filtration day with five runtime hours and 14 (100 m³) observed, compare the frozen model and Training-mean baseline.</summary><p>Model prediction: \(2.5+2.2(5)=13.5\), so absolute error \(|14-13.5|=0.5\) hundreds of m³ = 50 m³. Frozen Training baseline: \(\bar y=8\), so \(|14-8|=6\) hundreds of m³ = 600 m³. The model wins <em>on this row</em>; one row and an extrapolated x do not support a reliable deployment claim. Never use this observed 14 to refit before reporting the held-out comparison.</p></details>
+<details><summary>19. A colleague appends x₃=2x₁ to the factory Design Matrix. Does the 4×4 inverse exist? Provide two solutions.</summary><p>No. Because column four equals twice column two, the matrix has rank 3 rather than 4, so \(X^TX\) is singular. Coefficients \((2,2,1,0)\) and \((2,0,1,1)\) each predict \((4,5,6,7)\). For example at \((x_1,x_2,x_3)=(2,1,4)\), they give \(2+2(2)+1=7\) and \(2+1+4=7\). Training fit alone cannot identify which operating-time coefficient is the correct individual effect.</p></details>
+<details><summary>20. What does the new residual-versus-fitted chart show, and what can it not prove?</summary><p>The five plotted coordinates are (3.6,+0.4), (4.8,−0.8), (6,0), (7.2,+0.8), (8.4,−0.4), all in MWh. Points on both sides of zero show that errors have different signs; their sizes describe in-sample misses. With only five Training points, the apparent lack of a strong pattern does <em>not</em> establish constant error variance, independence, correct specification or reliable future error.</p></details>
+</section><section class="guide-section blue" id="section-21">
+<h2>21. Glossary and synthesis</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning in this chapter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Target</td>
+<td>Numerical quantity to predict; here weekly electricity usage (MWh).</td>
+</tr>
+<tr>
+<td>Feature</td>
+<td>Measured input known at prediction time; here operating time.</td>
+</tr>
+<tr>
+<td>Simple Linear Regression</td>
+<td>A model with one Feature and an intercept and slope.</td>
+</tr>
+<tr>
+<td>Multiple Linear Regression</td>
+<td>A linear-in-parameters model using several Features.</td>
+</tr>
+<tr>
+<td>Parameter</td>
+<td>Coefficient estimated from Training observations, such as <span class="math">\(b_0\)</span> or <span class="math">\(b_1\)</span>.</td>
+</tr>
+<tr>
+<td>Intercept</td>
+<td>Fitted value at <span class="math">\(x=0\)</span>; not automatically a reliable physical baseline.</td>
+</tr>
+<tr>
+<td>Slope</td>
+<td>Fitted change in <span class="math">\(\widehat y\)</span> per one-unit change in <span class="math">\(x\)</span>.</td>
+</tr>
+<tr>
+<td>Prediction (<span class="math">\(\widehat y\)</span>)</td>
+<td>Value calculated by the fitted model before observing the true response.</td>
+</tr>
+<tr>
+<td>Residual</td>
+<td>Observed minus fitted response on an observed row.</td>
+</tr>
+<tr>
+<td>OLS</td>
+<td>Ordinary Least Squares; chooses coefficients minimizing Training SSE.</td>
+</tr>
+<tr>
+<td>SSE</td>
+<td>Sum of squared residuals, with squared Target units.</td>
+</tr>
+<tr>
+<td>MAE</td>
+<td>Mean absolute error, in the Target's units.</td>
+</tr>
+<tr>
+<td>MSE</td>
+<td>Mean squared error, in squared Target units.</td>
+</tr>
+<tr>
+<td>RMSE</td>
+<td>Square root of MSE, restoring Target units.</td>
+</tr>
+<tr>
+<td><span class="math">\(R^2\)</span></td>
+<td>Proportional improvement in squared error against a mean-only reference on the evaluated set.</td>
+</tr>
+<tr>
+<td>Covariance</td>
+<td>Scale-dependent measure of how two variables vary together.</td>
+</tr>
+<tr>
+<td>Correlation</td>
+<td>Unitless standardized linear association.</td>
+</tr>
+<tr>
+<td>Interpolation</td>
+<td>Predicting within the observed predictor range.</td>
+</tr>
+<tr>
+<td>Extrapolation</td>
+<td>Predicting beyond the observed predictor range.</td>
+</tr>
+<tr>
+<td>Exogeneity</td>
+<td>Condition relating omitted disturbances to included predictors; important for coefficient interpretation.</td>
+</tr>
+<tr>
+<td>Homoskedasticity</td>
+<td>Similar conditional error variance across predictor values.</td>
+</tr>
+<tr>
+<td>Multicollinearity</td>
+<td>Strong relationships among predictors that can undermine coefficient stability; exact collinearity prevents uniqueness.</td>
+</tr>
+<tr>
+<td>Leverage</td>
+<td>How unusual a predictor combination is relative to the fitted design.</td>
+</tr>
+<tr>
+<td>Overfitting</td>
+<td>Learning patterns specific to Training that do not generalize reliably.</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Final synthesis.</strong> Linear Regression links a numerical prediction to a transparent coefficient model and an explicit optimization objective. In our complete example, the five Training points imply <span class="math">\(\widehat y=2.4+1.2x\)</span>; every predicted value, residual, metric and limitation can be checked. The trustworthy workflow does not stop at finding a line: it checks units, holds coefficients fixed during evaluation, examines extrapolation and distinguishes prediction from causation. Those habits transfer directly to more complex Machine Learning methods.</p>
+</section>
+</article></main>
+<footer class="guide-footer"><div class="container"><p>Educational guide · Synthetic dataset · © Alfredo Saldana</p><a href="/tutorials.html">Learn</a></div></footer>
+<script>(function(){var b=document.querySelector('.menu-btn'),n=document.querySelector('#site-nav');if(b&&n){b.addEventListener('click',function(){var o=n.classList.toggle('open');b.setAttribute('aria-expanded',o?'true':'false');});}})();</script>
+</body></html>

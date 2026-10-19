@@ -1,0 +1,2985 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="Aprende a calcular las actualizaciones de AdaBoost, Gradient Boosting y XGBoost desde sus datos; comprueba sus diferencias y selecciona modelos sin Data Leakage." name="description"/><title>Boosting: AdaBoost, Gradient Boosting and XGBoost</title><link href="/assets/css/style.css" rel="stylesheet"/><link href="/learn/machine-learning/boosting-adaboost-gradient-boosting-and-xgboost.html" hreflang="en" rel="alternate"/><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script><style>
+.guide-hero{padding:56px 0 38px;background:#fff;border-bottom:1px solid var(--line)}.guide-hero h1{font-size:clamp(2.15rem,4.5vw,3.65rem);max-width:980px;line-height:1.14}.guide-hero .lead{max-width:840px}.guide-meta{color:var(--muted);font-size:.88rem}.guide-main{padding:38px 0 80px}.guide-article{width:min(900px,calc(100% - 32px));margin:auto}.guide-section{background:white;border:1px solid var(--line);border-left:5px solid #3178b9;border-radius:0 17px 17px 0;padding:28px 34px;margin:0 0 22px;box-shadow:0 3px 12px rgba(11,31,58,.025)}.guide-section.teal{border-left-color:#15957e}.guide-section.purple{border-left-color:#8c69ba}.guide-section.amber{border-left-color:#d59a32}.guide-section h2{font-size:clamp(1.55rem,3vw,2.1rem);line-height:1.2;margin:0 0 18px}.guide-section h3{font-size:1.27rem;line-height:1.25;margin:26px 0 12px}.guide-section p{font-size:1.035rem;line-height:1.8}.callout{padding:20px 22px;border-left:4px solid #3178b9;background:#eff6ff;border-radius:0 12px 12px 0;margin:22px 0}.callout h3:first-child{margin-top:0}.callout p:last-child{margin-bottom:0}.callout.teal{background:#effaf7;border-color:#15957e}.callout.purple{background:#f6f1fd;border-color:#8c69ba}.callout.amber{background:#fff8e8;border-color:#d59a32}.formula{text-align:center;background:#f6f1fd;border:1px solid #e3d7f3;border-radius:12px;padding:22px 16px;font-size:clamp(1.35rem,3vw,1.85rem);overflow-x:auto;margin:20px 0}.table-wrap{overflow-x:auto;margin:24px 0}table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:500px}caption{text-align:left;font-weight:650;padding-bottom:10px;color:#536276}th,td{padding:12px 14px;text-align:left;border-bottom:1px solid #e1e9f1}th{background:#eaf2ff;color:#0b1f3a}tbody tr:nth-child(even){background:#f8fafc}.diagram{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:27px 0}.diagram div{background:#eaf2ff;border:1px solid #d9e6fa;border-radius:12px;padding:14px 10px;text-align:center;flex:1;min-width:105px;font-size:.82rem;font-weight:700;color:#0b1f3a}.diagram small{font-size:.76rem;font-weight:400}.diagram span{color:#2563eb;font-weight:700}.plot{margin:25px auto;max-width:680px}.plot svg{display:block;width:100%;height:auto;background:#fbfdff;border:1px solid #e5eaf1;border-radius:12px}.plot figcaption{font-size:.83rem;color:#526175;margin-top:10px;line-height:1.5}.steps{padding-left:22px}.steps li{padding:8px 0;line-height:1.75}.cluster-viz{display:flex;align-items:center;gap:12px;justify-content:space-around;padding:22px;background:#f6fafc;border-radius:12px;flex-wrap:wrap}.cluster-viz span{min-width:60px;text-align:center;border:2px solid #15957e;border-radius:22px;background:#dff5ed;padding:9px;font-weight:700}.cluster-viz .last{border-color:#8c69ba;background:#eee5fa}details{border:1px solid #dfe8f0;padding:16px 19px;border-radius:12px;margin:12px 0;background:#fbfdff}summary{font-weight:700;cursor:pointer;line-height:1.6}details p{padding-top:14px;margin:0}.glossary{display:grid;grid-template-columns:1fr 1fr;gap:12px}.glossary div{background:#f8fafc;border:1px solid #e5eaf1;border-radius:12px;padding:14px}.glossary dt{font-weight:700;color:#0b1f3a}.glossary dd{margin:5px 0 0;color:#506178;line-height:1.6}.guide-links{display:flex;gap:15px;flex-wrap:wrap;margin-top:20px}.guide-links a{color:#2563eb;font-weight:700}.guide-footer{background:#071426;color:#c4d2e2;padding:30px 0}.guide-footer a{color:white}.skip{position:absolute;top:-200px}.skip:focus{top:10px;left:10px;z-index:999;background:white;padding:12px}@media(max-width:650px){.guide-section{padding:22px 19px}.glossary{grid-template-columns:1fr}.diagram{gap:6px}.diagram div{min-width:115px}.diagram span{display:none}.guide-hero{padding:36px 0 30px}.guide-main{padding-top:22px}}
+
+.guide-section .table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.guide-section .table-wrap table{width:100%;font-variant-numeric:tabular-nums}.guide-section .formula{line-height:1.7}.guide-section .callout .formula{background:#fff}.guide-section h3{line-height:1.3}.guide-section p+ .formula{margin-top:14px}@media(max-width:650px){.guide-section .formula{font-size:1.05rem;padding:16px 10px}.guide-section .table-wrap th,.guide-section .table-wrap td{padding:10px 12px;white-space:nowrap;font-size:.9rem}}
+
+.guide-section .note-inline{font-size:.88rem;color:#526175}.guide-section .mini-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:22px 0}.mini-grid .tile{background:#f8fafc;border:1px solid #dfe8f0;border-radius:12px;padding:16px}.mini-grid .tile strong{display:block;color:#0b1f3a;margin-bottom:7px}.guide-section .mini-grid p{font-size:.91rem;line-height:1.55;margin:0}.guide-section .math-caption{font-size:.9rem;color:#536276;margin-top:-8px}.guide-section .table-wrap td{vertical-align:top}.guide-section .source-list li{padding:6px 0;line-height:1.7}.guide-section .source-list a{color:#2563eb;text-decoration:underline;text-underline-offset:3px}.guide-section .formula{overflow-wrap:normal}.guide-section svg text{font-family:Inter,Arial,sans-serif}.guide-section .section-intro{font-size:1.12rem;color:#42526a}.guide-section .algorithm{border-top:1px solid #e2eaf3;padding-top:7px;margin-top:20px}.guide-section .algorithm h3{margin-top:12px}.guide-section .algorithm p:last-child{margin-bottom:10px}@media(max-width:650px){.guide-section .mini-grid{grid-template-columns:1fr}.guide-section .formula{overflow-x:auto;white-space:normal}.guide-section .plot{overflow-x:auto}}
+
+.guide-section .inline-math{white-space:normal}.guide-section .plot-svg{margin:22px 0 26px}.guide-section .plot-svg svg{display:block;width:100%;height:auto;border:1px solid #dce6ef;border-radius:12px;background:#fbfdff}.guide-section .plot-svg figcaption{color:#526175;font-size:.88rem;line-height:1.65;margin-top:9px}.guide-section .table-wrap table{min-width:530px}.guide-section .diagram{justify-content:center}.guide-section .diagram div{min-width:120px}.guide-section details p{font-size:1rem;line-height:1.75}.guide-section details summary{color:#0b1f3a}.guide-section h3{scroll-margin-top:90px}.guide-section{scroll-margin-top:90px}.guide-section .formula{max-width:100%;overflow:auto}.guide-section .MathJax{max-width:100%}.guide-section .formula mjx-container[display="true"]{margin:0!important;min-width:max-content}.guide-section .table-wrap{max-width:100%}@media(max-width:650px){.guide-section .plot-svg figcaption{font-size:.82rem}.guide-section .formula{font-size:1.02rem}}
+
+/* Guide charts remain legible on narrow screens: scroll the figure, not the page. */
+@media(max-width:650px){.guide-main{overflow-x:clip}.guide-section .plot-svg{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.guide-section .plot-svg svg{width:660px;max-width:none}.guide-section .plot-svg figcaption{max-width:100%;font-size:.9rem}}
+
+/* Guide 3: scoped additions consistent with existing brand typography and colors. */
+.guide-section .code-sample{background:#0b1f3a;color:#ebf5ff;padding:20px 22px;border-radius:12px;overflow-x:auto;font-size:.9rem;line-height:1.65;margin:24px 0;tab-size:4}
+.guide-section .code-sample code{white-space:pre;font-family:Consolas,"Courier New",monospace}
+.guide-section code:not(.code-sample code){font-size:.92em;background:#eef4fa;padding:1px 4px;border-radius:4px}
+.guide-section .mistake{padding:5px 0 8px;border-bottom:1px solid #e6edf4}
+.guide-section .mistake h3{color:#794f1b;margin:18px 0 8px}
+.guide-section .mistake p{margin-bottom:10px}
+.guide-section ul li{margin:7px 0;line-height:1.7}
+.guide-section .plot-svg svg{font-family:Inter,Arial,sans-serif}
+.guide-section .plot-svg figcaption{display:block;font-weight:400}
+.guide-section .answer p{margin:12px 0 0}
+@media (max-width:650px){.guide-section .plot-svg{overflow-x:auto}.guide-section .plot-svg svg{width:770px;max-width:none}.guide-section .code-sample{padding:14px 15px;font-size:.78rem}.guide-section{overflow-wrap:break-word}}
+
+
+/* Guide 4 mathematical foundations additions. */
+.guide-section .learning-figure{margin:25px 0 28px;max-width:100%;}
+.guide-section .learning-figure svg{display:block;width:100%;height:auto;border:1px solid #dce6ef;border-radius:12px;background:#fcfdff}
+.guide-section .learning-figure figcaption{color:#526175;font-size:.91rem;line-height:1.68;margin-top:9px}
+.guide-section .mistake h3{margin:18px 0 8px;font-size:1.12rem}
+.guide-section .knowledge-check{margin:14px 0}
+.guide-section .knowledge-check p{margin:8px 0 12px;font-size:1.01rem}
+.guide-section .knowledge-check .answer-start{color:#176c5c;font-weight:700}
+.guide-section .code-sample{white-space:pre;overflow-x:auto;background:#0b1f3a;color:#eef7ff;border-radius:12px;padding:19px 21px;font-size:.85rem;line-height:1.65;margin:20px 0}
+.guide-section .code-sample code{background:none!important;color:inherit!important;font-family:Consolas,'Courier New',monospace;white-space:pre}
+.guide-section p{overflow-wrap:break-word}
+.guide-section .formula{font-size:1.19rem;line-height:1.5}
+.guide-section .formula mjx-container{max-width:none!important}
+.guide-section .table-wrap table{min-width:520px}
+@media(max-width:650px){.guide-section .learning-figure{overflow-x:auto;-webkit-overflow-scrolling:touch}.guide-section .learning-figure svg{width:690px;max-width:none}.guide-section .learning-figure figcaption{position:sticky;left:0;font-size:.89rem}.guide-section .formula{font-size:1.02rem}.guide-section .code-sample{font-size:.76rem;padding:14px}}
+
+/* Guide 5 component adjustments */
+.guide-section .work-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:22px 0}
+.guide-section .work-grid>div{padding:17px;border:1px solid #dce6ef;border-radius:12px;background:#f8fbfd}
+.guide-section .work-grid h4{color:#0b1f3a;margin:0 0 8px;font-size:1rem}
+.guide-section .work-grid p{font-size:.94rem;line-height:1.65}
+.guide-section .code-sample{background:#0b1f3a;color:#edf4ff;padding:19px 21px;border-radius:12px;overflow-x:auto;margin:22px 0;line-height:1.55;font-size:.87rem;tab-size:4}
+.guide-section .code-sample code{font-family:Consolas,monospace;white-space:pre}
+.guide-section :not(pre)>code{background:#eef4fa;color:#163e6a;border-radius:4px;padding:2px 4px;font-size:.92em}
+.guide-section .mistake{padding:9px 0 12px;border-bottom:1px solid #e7edf4}
+.guide-section .mistake h3{color:#81591c;margin:17px 0 8px}
+.guide-section .source-list a{color:#2563eb;text-decoration:underline;text-underline-offset:3px}
+.guide-section .answer p{margin-top:12px}
+.guide-section .plot-svg svg{display:block;width:100%;height:auto;max-width:100%;border:1px solid #dce6ef;border-radius:12px}
+.guide-section .plot-svg figcaption{margin-top:8px;font-size:.88rem;color:#526175;line-height:1.6}
+@media(max-width:650px){.guide-section .work-grid{grid-template-columns:1fr}.guide-section .code-sample{padding:13px 12px;font-size:.76rem}.guide-section .plot-svg svg{width:720px;max-width:none}.guide-section .plot-svg{overflow-x:auto;max-width:100%;}.guide-main{overflow-x:clip}}
+
+/* Guide 6: computed SVG teaching visuals and fold-by-fold explanation */
+.guide-section .fold-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:20px 0}
+.guide-section .fold-steps>div{border:1px solid #dbe7f0;background:#f7faff;border-radius:12px;padding:16px}
+.guide-section .fold-steps strong{display:block;color:#0b1f3a}.guide-section .fold-steps p{font-size:.9rem;margin:5px 0 0;line-height:1.5}
+.guide-section .plot-svg svg{background:#fff;max-width:100%;height:auto}.guide-section .plot-svg figcaption{max-width:100%;line-height:1.6}
+.guide-section .mistake-block{border-bottom:1px solid #e5ecf2;padding:12px 0}.guide-section .mistake-block p{margin:0}
+.guide-section .guide-answer{margin-top:14px;line-height:1.7}
+.guide-section .formula{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.guide-section .code-sample{white-space:pre;overflow-x:auto}
+.guide-section .table-wrap table{min-width:600px}.guide-section .table-wrap caption{caption-side:top}
+@media(max-width:650px){.guide-section .fold-steps{grid-template-columns:1fr}.guide-section .plot-svg svg{width:760px;max-width:none}.guide-section .plot-svg{max-width:100%;overflow-x:auto}.guide-section .table-wrap{max-width:100%;overflow-x:auto}}
+
+/* Guide 7: accessible figures and bilingual academic typography */
+.guide-section .plot-svg{margin:24px 0 28px;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.guide-section .plot-svg svg{display:block;width:100%;height:auto;min-width:590px;max-width:none;background:#fbfdff;border:1px solid #dce6ef;border-radius:12px}
+.guide-section .plot-svg figcaption{color:#526175;font-size:.9rem;line-height:1.65;margin-top:10px;max-width:740px}
+.guide-section .formula{overflow-x:auto;max-width:100%}
+.guide-section .formula mjx-container[display="true"]{min-width:max-content;margin:0!important}
+.guide-section details p{margin:10px 0 0;line-height:1.75}
+.guide-section blockquote{background:#eff6ff;padding:15px 22px;border-left:4px solid #3178b9;margin:22px 0;border-radius:0 12px 12px 0}
+.guide-section pre{background:#0b1f3a;color:#eaf2fd;padding:21px;border-radius:12px;overflow-x:auto;line-height:1.62;font-size:.85rem}
+.guide-section pre code{white-space:pre;font-family:Consolas,Monaco,monospace;color:inherit}
+.guide-section :not(pre)>code{background:#eff3f8;padding:1px 4px;border-radius:4px}
+.guide-section .table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.guide-section th{white-space:normal;vertical-align:bottom}
+.guide-section td{vertical-align:top}
+.guide-section details{background:#fbfdff}
+.guide-section .math{overflow-x:auto}
+@media(max-width:650px){.guide-section{padding:22px 18px}.guide-section .plot-svg svg{width:690px;min-width:690px}.guide-section pre{font-size:.77rem;padding:15px}.guide-section .formula{font-size:1.05rem;padding:16px 11px}.guide-section .plot-svg::before{display:block;color:#526175;font-size:.78rem;padding:3px 0 9px}html[lang="en"] .guide-section .plot-svg::before{content:"Swipe chart horizontally to see all values ↔"}html[lang="es"] .guide-section .plot-svg::before{content:"Desliza el gráfico horizontalmente para ver todos los valores ↔"}}
+
+/* Guide 7 revision: ensure numerical tables remain real tables and readable on mobile. */
+.guide-section .table-wrap tfoot{background:#eaf2ff;color:#0b1f3a;font-weight:700}
+.guide-section .table-wrap tfoot td,.guide-section .table-wrap tfoot th{border-top:2px solid #b9cfe5}
+.guide-section .table-wrap caption{line-height:1.55}
+@media(max-width:650px){.guide-section .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}.guide-section .table-wrap table{min-width:560px}.guide-section .formula{max-width:100%;overflow-x:auto}}
+
+/* Guide 8: readable independent blocks, equation scrolling, charts and accessible answers. */
+.guide-section{scroll-margin-top:76px}.guide-section p{overflow-wrap:break-word}.guide-section strong{color:#0b1f3a}
+.guide-section blockquote{background:#eff6ff;border-left:4px solid #3178b9;margin:23px 0;padding:14px 21px;border-radius:0 10px 10px 0}
+.guide-section blockquote p{margin:0;line-height:1.75}
+.guide-section .formula{overflow-x:auto;max-width:100%;padding:20px 13px;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.guide-section .formula mjx-container[display="true"]{min-width:max-content!important;margin:.2em 0!important}
+.guide-section .table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.guide-section table{border-collapse:collapse;min-width:550px;max-width:none;font-size:.93rem}
+.guide-section td,.guide-section th{padding:11px 12px;vertical-align:top}
+.guide-section .plot-svg{margin:26px 0;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.guide-section .plot-svg svg{display:block;width:100%;height:auto;border:1px solid #dbe6f0;border-radius:12px;background:#fbfdff}
+.guide-section .plot-svg figcaption{font-size:.9rem;font-weight:400;line-height:1.6;color:#526175;margin-top:10px}
+.guide-section pre{padding:18px 20px;border-radius:12px;overflow-x:auto;background:#0b1f3a;color:#e8f2fd;font-size:.87rem;line-height:1.55}
+.guide-section pre code{background:transparent!important;color:inherit!important;padding:0!important;white-space:pre;font-family:Consolas,"Courier New",monospace}
+.guide-section details{background:#fbfdff;border:1px solid #dfe8f0;padding:16px 18px;border-radius:12px;margin:11px 0}
+.guide-section details summary{cursor:pointer;font-weight:700;color:#0b1f3a;line-height:1.55}
+.guide-section details .answer{padding:7px 0 1px}.guide-section details .answer p{margin:9px 0;font-size:.99rem}
+.guide-section ul li,.guide-section ol li{line-height:1.7;margin:5px 0}
+.guide-section h3{margin:25px 0 10px}
+.guide-section .math{overflow-wrap:normal}
+@media(max-width:650px){.guide-section{padding:21px 18px}.guide-section p{font-size:1rem;line-height:1.72}.guide-section .table-wrap table{min-width:590px}.guide-section .plot-svg svg{width:700px;max-width:none}.guide-section .formula{font-size:1.05rem}.guide-section pre{font-size:.75rem;padding:13px 14px}}
+
+
+/* Guide 9: legibility and accessibility additions, matching the existing study guide identity. */
+.guide-section .formula{font-size:clamp(1.02rem,1.75vw,1.25rem);line-height:1.7;padding:20px 14px;overflow-x:auto;max-width:100%}
+.guide-section .plot-svg{margin:25px auto 32px;max-width:100%;}
+.guide-section .plot-scroll{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #dce6ef;border-radius:12px;background:#fbfdff}
+.guide-section .plot-scroll svg{display:block;width:100%;height:auto;max-width:none;border:0;border-radius:0;}
+.guide-section .plot-svg figcaption{font-size:.9rem;line-height:1.7;margin-top:10px}
+.guide-section .plot-svg figcaption strong{color:#0b1f3a}
+.mobile-hint{display:none}
+.guide-section .code-sample{white-space:normal}
+.guide-section .code-sample code{white-space:pre;display:block}
+.guide-section .table-wrap th,.guide-section .table-wrap td{vertical-align:top}
+.guide-section .table-wrap th{white-space:normal}
+.guide-toc{margin-top:20px;border:1px solid #dce7f4;border-radius:14px;padding:20px 22px;background:#f7fbff}
+.guide-toc strong{display:block;margin-bottom:10px}
+.guide-toc .toc-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 19px}
+.guide-toc a{font-size:.85rem;color:#24579b;text-decoration:underline;text-underline-offset:3px}
+.math-mobile-note{display:none}
+.guide-section .formula{scrollbar-width:thin;scrollbar-color:#8c69ba #f6f1fd}
+.guide-section details{overflow-wrap:anywhere}
+@media(max-width:650px){
+ .guide-section{padding:22px 17px}
+ .guide-section .plot-scroll svg{width:690px;min-width:690px}
+ .guide-section .plot-svg .mobile-hint{display:inline;color:#62768a;font-style:italic}
+ .guide-section .formula{font-size:1.02rem;padding:16px 11px}
+ .guide-toc .toc-links{grid-template-columns:1fr}
+ .math-mobile-note{display:block;margin:12px 0 0;color:#62768a;font-size:.83rem;line-height:1.55}
+ .guide-section .table-wrap table{min-width:560px}
+}
+
+
+/* Guide 10: derived from the approved academic visual system. */
+.guide-section .formula{font-size:clamp(1rem,1.8vw,1.27rem);line-height:1.75;padding:20px 14px;overflow-x:auto;max-width:100%}
+.guide-section .plot-svg{margin:25px 0 30px;max-width:100%}
+.guide-section .plot-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #dce6ef;border-radius:12px;background:#fbfdff;max-width:100%}
+.guide-section .plot-scroll svg{width:100%;max-width:none;height:auto;display:block;border:0}
+.guide-section .plot-svg figcaption{font-size:.9rem;line-height:1.7;margin-top:10px}
+.guide-section .plot-svg figcaption strong{color:#0b1f3a}
+.guide-section .code-sample{overflow-x:auto;font-size:.85rem;line-height:1.65}
+.guide-section .code-sample code{white-space:pre;display:block}
+.guide-section .table-wrap th,.guide-section .table-wrap td{vertical-align:top}
+.guide-section .table-wrap table{min-width:565px}
+.guide-section details{overflow-wrap:anywhere}
+.guide-section details p{font-size:.98rem}
+.mobile-hint{display:none}
+.guide-toc{margin-top:22px;border:1px solid #dce7f4;border-radius:14px;padding:20px 22px;background:#f7fbff}
+.guide-toc strong{display:block;margin-bottom:11px}
+.guide-toc .toc-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 20px}
+.guide-toc a{font-size:.88rem;color:#24579b;text-decoration:underline;text-underline-offset:3px}
+.math-mobile-note{display:none}
+@media(max-width:650px){
+.guide-section{padding:22px 17px}
+.guide-section .plot-scroll svg{min-width:680px;width:680px}
+.guide-section .plot-svg .mobile-hint{display:inline;color:#62768a;font-style:italic}
+.guide-section .formula{font-size:1rem;padding:17px 10px}
+.guide-toc .toc-links{grid-template-columns:1fr}
+.math-mobile-note{display:block;margin:12px 0 0;color:#62768a;font-size:.83rem;line-height:1.55}
+}
+
+/* Guide 12: accessible reference tables and policy comparison */.guide-section .table-wrap table{min-width:590px}.guide-section .plot-scroll svg{min-width:0}.guide-section details summary{line-height:1.55}.guide-section .formula{overflow-x:auto}@media(max-width:650px){.guide-section .plot-scroll svg{min-width:670px}}
+
+/* Guide 13: headings and figures remain consistent with the published Learn theme. */
+.guide-toc{margin-top:30px;background:#f7faff;padding:19px 23px;border:1px solid #dce8f4;border-radius:14px;max-width:1030px}
+.guide-toc strong{display:block;margin-bottom:12px;font-size:.92rem;color:#153555}
+.toc-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:18px;row-gap:9px}
+.toc-links a{font-size:.82rem;line-height:1.45;color:#2563eb;text-decoration:none}
+.guide-section .plot-scroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}
+.guide-section .plot-scroll svg{width:100%;min-width:590px;max-width:none;height:auto;display:block}
+.guide-section .plot-svg{max-width:100%}
+.guide-section .plot-svg figcaption{font-size:.86rem;line-height:1.65;color:#536276}
+.guide-section .formula{max-width:100%;overflow:auto;line-height:1.75;text-align:center}
+.guide-section .formula mjx-container{min-width:max-content}
+.guide-section table{border-collapse:collapse}
+.guide-section .table-wrap{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}
+.guide-section details{overflow-wrap:anywhere}
+.guide-section details summary{font-weight:700}
+.guide-section .code-sample{overflow-x:auto}
+.guide-section p{overflow-wrap:break-word}
+@media(max-width:680px){.toc-links{grid-template-columns:1fr}.guide-toc{padding:16px}.guide-section .plot-scroll svg{width:650px}.guide-hero h1{overflow-wrap:break-word}.guide-section .formula{padding:17px 10px;font-size:1rem}.guide-section .table-wrap table{min-width:510px}}
+
+
+.guide-toc{margin-top:30px;background:#f7faff;padding:19px 23px;border:1px solid #dce8f4;border-radius:14px;max-width:1030px}
+.guide-toc strong{display:block;margin-bottom:12px;font-size:.92rem;color:#153555}
+.toc-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:18px;row-gap:9px}
+.toc-links a{font-size:.82rem;line-height:1.45;color:#2563eb;text-decoration:none}
+.guide-section .plot-scroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}
+.guide-section .plot-scroll svg{width:100%;min-width:580px;max-width:none;height:auto;display:block}
+.guide-section .plot-svg{max-width:100%}
+.guide-section .plot-svg figcaption{font-size:.86rem;line-height:1.65;color:#536276}
+.guide-section .formula{max-width:100%;overflow:auto;line-height:1.7;text-align:center}
+.guide-section .formula mjx-container{min-width:max-content}
+.guide-section table{border-collapse:collapse}
+.guide-section .table-wrap{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}
+.guide-section details{overflow-wrap:anywhere}
+.guide-section details summary{font-weight:700}
+.guide-section .code-sample{overflow-x:auto}
+.guide-section p{overflow-wrap:break-word}
+@media(max-width:680px){.toc-links{grid-template-columns:1fr}.guide-toc{padding:16px}.guide-section .plot-scroll svg{width:660px}.guide-hero h1{overflow-wrap:break-word}.guide-section .formula{padding:17px 10px;font-size:1rem}.guide-section .table-wrap table{min-width:510px}}
+
+
+.guide-toc{margin-top:30px;background:#f7faff;padding:19px 23px;border:1px solid #dce8f4;border-radius:14px;max-width:1030px}
+.guide-toc strong{display:block;margin-bottom:12px;font-size:.92rem;color:#153555}
+.toc-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:18px;row-gap:9px}
+.toc-links a{font-size:.82rem;line-height:1.45;color:#2563eb;text-decoration:none}
+.guide-section .plot-scroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}
+.guide-section .plot-scroll svg{width:100%;min-width:550px;max-width:none;height:auto;display:block}
+.guide-section .plot-svg{max-width:100%}
+.guide-section .plot-svg figcaption{font-size:.86rem;line-height:1.65;color:#536276}
+.guide-section .formula{max-width:100%;overflow:auto;line-height:1.7;text-align:center;-webkit-overflow-scrolling:touch}
+.guide-section .formula mjx-container{min-width:max-content}
+.guide-section .table-wrap{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}
+.guide-section .table-wrap table{min-width:480px;border-collapse:collapse}
+.guide-section details{overflow-wrap:anywhere}
+.guide-section details summary{font-weight:700}
+.guide-section .code-sample{overflow-x:auto}
+.guide-section p{overflow-wrap:break-word}
+@media(max-width:680px){.toc-links{grid-template-columns:1fr}.guide-toc{padding:16px}.guide-section .plot-scroll svg{width:665px}.guide-hero h1{overflow-wrap:break-word}.guide-section .formula{padding:16px 10px;font-size:1rem}.guide-section .table-wrap table{min-width:530px}}
+
+
+.guide-article{overflow-wrap:break-word}.guide-section .plot-svg svg{width:100%;max-width:100%;height:auto}.guide-section .formula{max-width:100%;box-sizing:border-box;overflow-x:auto;-webkit-overflow-scrolling:touch}.guide-section .table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.guide-toc{margin-top:25px;background:#f4f8fc;border:1px solid #dbe6ef;border-radius:14px;padding:18px}.guide-toc .toc-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 16px;margin-top:14px}.guide-toc .toc-links a{font-size:.85rem;color:#235e9b;line-height:1.35;text-decoration:none}.guide-toc .toc-links a:hover{text-decoration:underline}.guide-section .mistake-list{display:grid;gap:12px}.guide-section .mistake{background:#fff8e8;border-left:3px solid #c18430;padding:14px 18px;border-radius:0 10px 10px 0}.guide-section .mistake h3{font-size:1rem;margin:0 0 6px}.guide-section .mistake p{font-size:.96rem;line-height:1.65;margin:0}.guide-section .answer{margin-top:8px;padding:6px 0;border-top:1px solid #e6edf5}.guide-section pre{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;background:#0b1f3a;color:#e7f0fa;border-radius:12px;padding:18px;font-size:.84rem;line-height:1.6;tab-size:4}.guide-section pre code{white-space:pre}.guide-section blockquote{border-left:4px solid #15957e;padding:14px 19px;background:#effaf7;margin:18px 0}.guide-section p,.guide-section li{overflow-wrap:break-word}.guide-section .plot-svg figcaption{line-height:1.55}.guide-section p>span.inline-math{display:inline}.guide-section .glossary div{min-width:0}@media(max-width:700px){.guide-toc .toc-links{grid-template-columns:1fr}.guide-section{padding:22px 17px}.guide-section pre{font-size:.76rem;padding:13px}.guide-section .formula{padding:12px 8px}.guide-hero .narrow{width:min(100% - 32px, 920px)}}
+
+/* Guide 17: narrow mathematical exposition and verifiable embedded figures. */
+.guide-section .plot-scroll svg{min-width:0;width:100%}.guide-section .plot-svg figcaption{line-height:1.65}
+.guide-section .formula{overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.guide-section .formula mjx-container[display="true"]{max-width:none;min-width:max-content}
+.guide-section .table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.guide-section .table-wrap td,.guide-section .table-wrap th{font-variant-numeric:tabular-nums}
+.guide-section .plot-scroll{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.guide-section .mistake{padding:4px 0 10px}.guide-section .mistake h3{font-size:1.08rem}
+.guide-section .knowledge-check summary{line-height:1.6}.guide-section details .answer p{line-height:1.75}
+@media(max-width:650px){.guide-section .plot-scroll svg{width:680px;min-width:680px}.guide-section .formula{padding:15px 11px}.guide-article{width:min(900px,calc(100% - 24px))}}
+
+/* Guide 18 dedicated responsive and teaching enhancements */
+.guide-section blockquote{background:#f0f7ff;border-left:4px solid #3178b9;border-radius:0 12px 12px 0;padding:16px 20px;margin:20px 0}.guide-section blockquote p{margin:0}.guide-section .knowledge-check{border:1px solid #dfe8f0;border-radius:12px;margin:14px 0;padding:15px 18px;background:#fbfdff}.guide-section details summary{cursor:pointer}.guide-section .knowledge-check .answer{margin:14px 0 2px;padding:12px 14px;background:#effaf7;border-radius:9px}.guide-section .knowledge-check .answer p{margin:0 0 10px}.guide-section .learning-figure{overflow-x:auto}.guide-section .learning-figure svg{max-width:100%;height:auto}.guide-section .learning-figure figcaption{max-width:100%}.guide-section .formula{overflow-x:auto;max-width:100%;}.guide-section .code-sample{overflow-x:auto;white-space:pre;max-width:100%}.guide-section .table-wrap{width:100%;max-width:100%;overflow-x:auto}html{overflow-x:clip}@media(max-width:650px){.guide-section .learning-figure svg{width:680px;max-width:none}.guide-section .learning-figure figcaption{max-width:100%}.guide-section{min-width:0}.guide-section .formula{font-size:1rem}}
+/* Guide 20: accessible visual and mathematical wrappers. */
+.guide-section .chartbox{margin:26px 0;max-width:100%;}
+.guide-section .chart-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;border-radius:14px;border:1px solid #e1e8f0;background:#fff}
+.guide-section .chart-scroll svg{display:block;max-width:100%;height:auto;margin:0 auto}
+.guide-section .chartbox figcaption{color:#506176;font-size:.88rem;line-height:1.65;margin:9px 4px}
+.guide-section .data-note{background:#effaf7;border-left:4px solid #15957e;padding:14px 18px;border-radius:0 10px 10px 0}
+.guide-section .formula{overflow-x:auto;max-width:100%;white-space:normal}
+.guide-section .table-wrap{overflow-x:auto;max-width:100%}
+.guide-section .table-wrap table{min-width:550px}
+.guide-section details{margin:12px 0;padding:14px 18px}
+.guide-section details[open] .answer{border-top:1px solid #dce5ee;margin-top:12px;padding-top:10px}
+.guide-section .formula mjx-container{max-width:none}
+@media(max-width:650px){.guide-section .chart-scroll svg{width:690px;max-width:none}.guide-section .formula{padding:13px 9px}.guide-section .table-wrap td,.guide-section .table-wrap th{white-space:nowrap}}
+
+/* Guide 21 independent refinements */
+.guide-section figure.learning-figure{margin:24px 0;max-width:100%}.guide-section figure.learning-figure .chart-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px;border:1px solid #dce6ef;background:white}.guide-section figure.learning-figure svg{display:block;width:100%;height:auto}.guide-section figure.learning-figure figcaption{color:#526175;font-size:.89rem;line-height:1.62;margin:9px 3px}.guide-section .table-wrap{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.guide-section .table-wrap table{border-collapse:collapse;min-width:620px}.guide-section .formula{overflow-x:auto;max-width:100%;font-size:1.12rem;line-height:1.8}.guide-section .formula mjx-container[display=true]{margin:0!important}.guide-section .guide-check{border-left:4px solid #15957e;background:#effaf7;border-radius:8px;padding:14px 18px}.guide-section .exercise-answer{padding:0 4px}.guide-section pre.code-sample{background:#0b1f3a;color:#e5f2ff;overflow-x:auto;font-size:.82rem}.guide-section .exercise-answer p{font-size:.98rem;line-height:1.74}.guide-section h3{margin-top:25px}.guide-section .table-wrap th{white-space:normal}@media(max-width:650px){.guide-section figure.learning-figure svg{width:680px;max-width:none}.guide-section .formula{font-size:.95rem;padding:13px 10px}.guide-section{padding:22px 17px}.guide-section .table-wrap td{white-space:normal;min-width:80px}.guide-section figure.learning-figure figcaption{position:sticky;left:0}}
+
+/* Guide 21 focused instructional additions (preserves global CSS) */
+.compare-math-table{overflow-x:auto;margin:22px 0}
+.compare-math-table table{min-width:620px}
+.learning-figure.curve-figure .chart-scroll{overflow-x:auto}
+.learning-figure.curve-figure svg{display:block;min-width:620px;width:100%;height:auto}
+.guide-section .understanding-bridge{border-left:4px solid #15957e;background:#effaf7;padding:17px 19px;border-radius:0 12px 12px 0;margin:23px 0}
+.guide-section .understanding-bridge p:last-child{margin-bottom:0}
+</style></head><body><a class="skip" href="#main">Saltar al contenido</a><header class="site-header"><div class="container nav-wrap"><div style="display:flex;align-items:center;gap:20px"><a class="brand" href="/es/index.html">Alfredo Saldana</a><div class="lang-switch" style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap"><a href="/learn/machine-learning/boosting-adaboost-gradient-boosting-and-xgboost.html" lang="en">EN</a><span aria-hidden="true"> | </span><a href="/es/learn/machine-learning/boosting-adaboost-gradient-boosting-and-xgboost-es.html" lang="es" aria-current="page">ES</a></div></div><button class="menu-btn" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Abrir navegación">☰</button><nav class="nav" id="site-nav" aria-label="Navegación principal"><a href="/es/index.html">Inicio</a><a href="/es/tutorials.html" class="active">Recursos</a><a href="/es/projects.html">Proyectos</a><a href="/es/open-box.html">Open Box</a><a href="/es/about.html">Acerca de</a><a href="/es/contact.html">Contacto</a></nav></div></header><section class="guide-hero"><div class="narrow"><div class="eyebrow">LEARN · MACHINE LEARNING</div><h1>Boosting: AdaBoost, Gradient Boosting and XGBoost</h1><p class="lead">Aprende a calcular las actualizaciones de AdaBoost, Gradient Boosting y XGBoost desde sus datos; comprueba sus diferencias y selecciona modelos sin Data Leakage.</p><p class="guide-meta">Machine Learning · Guía 21 de 33 · Master Standard 3.0</p><div class="guide-links"><a href="/learn/machine-learning/boosting-adaboost-gradient-boosting-and-xgboost.html" lang="en">Read in English ↗</a><a href="/es/tutorials.html">Volver a Learn ↗</a><a href="/es/learn/machine-learning/random-forest-and-bagging-learning-with-multiple-trees-es.html">Guía 20: Random Forest ↗</a></div><nav aria-label="Ruta de aprendizaje" class="guide-toc"><strong>Ruta de aprendizaje · 29</strong><div class="toc-links"><a href="#section-1">1. ¿Por qué debería un segundo modelo corregir al primero?</a><a href="#section-2">2. Objetivos verificables, conocimientos previos y ruta de aprendizaje</a><a href="#section-3">3. Dos preguntas de seguros y el límite temporal de la información</a><a href="#section-4">4. Bagging y Boosting: idea común, entrenamiento distinto</a><a href="#section-5">5. La estructura matemática común: construir el modelo por etapas</a><a href="#section-6">6. Datos de AdaBoost y primer Decision Stump</a><a href="#section-7">7. AdaBoost, ronda 1: error ponderado e influencia del modelo</a><a href="#section-8">8. AdaBoost, ronda 1: actualizar uno por uno los pesos</a><a href="#section-9">9. AdaBoost, ronda 2: otro Stump y actualización completa</a><a href="#section-10">10. Combinar modelos AdaBoost no equivale a una votación simple</a><a href="#section-11">11. La Exponential Loss de AdaBoost y sus limitaciones</a><a href="#section-12">12. Nuevo Target: importe final en miles de dólares</a><a href="#section-13">13. Gradient Boosting comienza con la mejor constante</a><a href="#section-14">14. Ajustar el primer Regression Stump probando todos los umbrales</a><a href="#section-15">15. Learning Rate: actualizar y volver a calcular cada error</a><a href="#section-16">16. Ronda 2 de Gradient Boosting: cálculo completo de nuevos Residuals</a><a href="#section-17">17. Regla general de Gradient Boosting: ¿por qué Negative Gradients?</a><a href="#section-18">18. Binary Log Loss: los Pseudo-Residuals no son Residuals ordinarios</a><a href="#section-19">19. XGBoost: desde el objetivo exacto a una aproximación de segundo orden</a><a href="#section-20">20. Derivar los pesos de XGBoost y calcular su Split Gain</a><a href="#section-21">21. Diferenciar Gamma, Lambda, Learning Rate y profundidad</a><a href="#section-22">22. Comparación rigurosa de los tres métodos de Boosting</a><a href="#section-23">23. De cálculos manuales a un experimento justo con 180 reclamos</a><a href="#section-24">24. Python reproducible: generar, ajustar, seleccionar y evaluar una vez</a><a href="#section-25">25. Early Stopping, Overfitting y significado de la curva de Loss</a><a href="#section-26">26. Feature Importance, Missing Data, equidad y límites de despliegue</a><a href="#section-27">27. Comprobaciones de comprensión y errores comunes</a><a href="#section-28">28. Ejercicios con soluciones desarrolladas</a><a href="#section-29">29. Síntesis, glosario y laboratorio futuro</a></div></nav></div></section><main class="guide-main" id="main"><article class="guide-article"><section class="guide-section" id="section-1"><h2>1. ¿Por qué debería un segundo modelo corregir al primero?</h2><p>Un Decision Tree es fácil de inspeccionar, pero su primera división puede dejar sin representar relaciones que se vuelven evidentes después de observar las predicciones iniciales. <strong>Boosting</strong> construye una predicción aditiva entrenando modelos secuencialmente. En lugar de crear muestras independientes como Bagging, cada nuevo modelo responde a una deficiencia del conjunto anterior. Es una estrategia para <em>reducir una Loss elegida</em>, no una promesa de menor error sobre Test.</p>
+<p>Estudiaremos tres construcciones relacionadas, pero distintas. <strong>AdaBoost</strong> cambia la importancia de las observaciones de Training clasificadas incorrectamente; <strong>Gradient Boosting</strong> ajusta un nuevo modelo en la dirección que reduce una Loss diferenciable; y <strong>XGBoost</strong> utiliza una aproximación de segundo orden y regularización para decidir cómo agregar árboles. Comparten una estructura aditiva, pero sus reglas de actualización no son intercambiables.</p>
+<p>El problema central será el de una aseguradora que decide qué reclamos requieren investigación adicional y estima el importe final de un reclamo. Todos los datos numéricos son <strong>sintéticos</strong>: permiten aprender operaciones, no calcular ahorros reales de una aseguradora. Un error de Classification y un error en el importe de un reclamo tienen unidades y consecuencias diferentes. Emplearemos ambos problemas, explicaremos por qué y nunca cambiaremos el Target sin indicarlo.</p>
+<figure class="learning-figure"><div class="chart-scroll"><svg data-generated-height="169.6pt" data-generated-width="680.8pt" version="1.1" viewbox="0 0 680.8 169.6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="g21_1es_figure_1">
+<g id="g21_1es_patch_1">
+<path d="M 0 169.6 
+L 680.8 169.6 
+L 680.8 0 
+L 0 0 
+z
+" style="fill: #ffffff"></path>
+</g>
+<g id="g21_1es_axes_1">
+<g id="g21_1es_text_1">
+<g id="g21_1es_patch_2">
+<path d="M 58.030703 91.296302 
+L 146.809297 91.296302 
+Q 155.609297 91.296302 155.609297 82.496302 
+L 155.609297 71.850365 
+Q 155.609297 63.050365 146.809297 63.050365 
+L 58.030703 63.050365 
+Q 49.230703 63.050365 49.230703 71.850365 
+L 49.230703 82.496302 
+Q 49.230703 91.296302 58.030703 91.296302 
+z
+" style="fill: #f0f8fc; stroke: #15957e; stroke-width: 2; stroke-linejoin: miter"></path>
+</g>
+<text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" transform="rotate(-0 102.42 80.208646)" x="102.42" y="80.208646">Datos + pesos</text>
+</g>
+<g id="g21_1es_text_2">
+<g id="g21_1es_patch_3">
+<path d="M 296.031328 91.296302 
+L 384.768672 91.296302 
+Q 393.568672 91.296302 393.568672 82.496302 
+L 393.568672 71.850365 
+Q 393.568672 63.050365 384.768672 63.050365 
+L 296.031328 63.050365 
+Q 287.231328 63.050365 287.231328 71.850365 
+L 287.231328 82.496302 
+Q 287.231328 91.296302 296.031328 91.296302 
+z
+" style="fill: #f0f8fc; stroke: #8c69ba; stroke-width: 2; stroke-linejoin: miter"></path>
+</g>
+<text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" transform="rotate(-0 340.4 80.208646)" x="340.4" y="80.208646">Nuevo modelo</text>
+</g>
+<g id="g21_1es_text_3">
+<g id="g21_1es_patch_4">
+<path d="M 523.395469 91.296302 
+L 633.364531 91.296302 
+Q 642.164531 91.296302 642.164531 82.496302 
+L 642.164531 71.850365 
+Q 642.164531 63.050365 633.364531 63.050365 
+L 523.395469 63.050365 
+Q 514.595469 63.050365 514.595469 71.850365 
+L 514.595469 82.496302 
+Q 514.595469 91.296302 523.395469 91.296302 
+z
+" style="fill: #f0f8fc; stroke: #3178b9; stroke-width: 2; stroke-linejoin: miter"></path>
+</g>
+<text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" transform="rotate(-0 578.38 80.208646)" x="578.38" y="80.208646">Score actualizado</text>
+</g>
+<g id="g21_1es_patch_5">
+<path d="M 185.921486 77.173333 
+Q 218.150863 77.173333 247.808763 77.173333 
+" style="fill: none; stroke: #d59a32; stroke-width: 2.3; stroke-linecap: round"></path>
+<path d="M 243.808763 75.173333 
+L 247.808763 77.173333 
+L 243.808763 79.173333 
+" style="fill: none; stroke: #d59a32; stroke-width: 2.3; stroke-linecap: round"></path>
+</g>
+<g id="g21_1es_patch_6">
+<path d="M 433.680491 77.173333 
+Q 467.542368 77.173333 498.832767 77.173333 
+" style="fill: none; stroke: #d59a32; stroke-width: 2.3; stroke-linecap: round"></path>
+<path d="M 494.832767 75.173333 
+L 498.832767 77.173333 
+L 494.832767 79.173333 
+" style="fill: none; stroke: #d59a32; stroke-width: 2.3; stroke-linecap: round"></path>
+</g>
+<g id="g21_1es_text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 340.4 133.493333)" x="340.4" y="133.493333">El siguiente modelo depende de los errores actuales</text>
+</g>
+</g>
+</g>
+</svg>
+</div><figcaption>Boosting es secuencial: el nuevo ajuste responde al conjunto actual. Desliza horizontalmente el gráfico en un teléfono.</figcaption></figure>
+</section><section class="guide-section teal" id="section-2"><h2>2. Objetivos verificables, conocimientos previos y ruta de aprendizaje</h2><p>Al finalizar deberás ser capaz de <strong>calcular</strong> dos rondas de AdaBoost, con todos sus pesos; <strong>derivar</strong> la regla del Negative Gradient y construir dos etapas de Boosting para Regression; <strong>obtener</strong> un peso de hoja y un Split Gain de XGBoost; <strong>comparar</strong> Bagging con Boosting sin confundir sus propósitos; y <strong>auditar</strong> decisiones sobre Validation, Test, Regularization y Early Stopping.</p>
+<p>Necesitarás medias de conjuntos pequeños, Squared Error, logaritmos, exponenciales, derivadas elementales y un <strong>Decision Stump</strong>, es decir, un árbol con una sola división. Un <em>Weak Learner</em> es un modelo sencillo capaz de aportar información predictiva; no significa necesariamente un modelo que siempre funcione peor que uno complejo. Una <em>Stage</em> o <em>Round</em> es un nuevo modelo añadido. El <strong>Learning Rate</strong> determina cuánto contribuye.</p>
+<p>La secuencia no es casual: empezaremos con Classification y seis observaciones, pasaremos a Regression con otras seis, construiremos el modelo de segundo orden y terminaremos con un experimento reproducible. Usamos Targets diferentes porque AdaBoost para Classification y Gradient Boosting para Regression optimizan objetivos distintos; mostraremos íntegramente cada dataset pequeño.</p>
+</section><section class="guide-section purple" id="section-3"><h2>3. Dos preguntas de seguros y el límite temporal de la información</h2><p>Un analista de seguros puede preguntar <strong>Claim Risk:</strong> ¿es probable que un reclamo necesite una investigación manual? El Target será una etiqueta binaria \(y\in{-1,+1}\), donde \(+1\) indica mayor riesgo. Otra pregunta distinta es <strong>Claim Severity:</strong> ¿cuánto costará finalmente el reclamo, medido en miles de dólares? Aquí \(y\geq0\) es numérico. Son <em>predicciones diferentes</em>: una etiqueta de riesgo no es un importe en dólares.</p>
+<p>En los ejemplos pequeños, \(x\) representa un índice sintético de exposición, ordenado de 1 a 6. En un proyecto real, ese índice tendría que construirse exclusivamente con datos conocidos cuando se abre el reclamo. Utilizar el importe final de liquidación, el hallazgo posterior de fraude o ajustes realizados en el futuro como Input produciría <strong>Data Leakage</strong>, aunque Validation mostrara una Accuracy extraordinaria.</p>
+<p>Los ejemplos se han diseñado para transparentar la aritmética, no para afirmar que una sola Feature determina el riesgo o el costo. En el experimento de 180 reclamos agregaremos otras variables: antigüedad, incidentes previos, exposición climática y canal de reporte. Ese conjunto también es sintético y su generación estará explícita en Python.</p>
+</section><section class="guide-section amber" id="section-4"><h2>4. Bagging y Boosting: idea común, entrenamiento distinto</h2><p>En <strong>Bagging</strong>, distintas muestras obtenidas por Bootstrap producen modelos \(T_1,\ldots,T_M\), que se combinan mediante promedios o votaciones. Sus entrenamientos pueden realizarse en paralelo. El promedio resulta especialmente útil cuando los errores individuales no están muy correlacionados. En <strong>Boosting</strong>, el modelo \(h_m\) depende de las predicciones realizadas por el conjunto anterior \(F_{m-1}\); el entrenamiento es secuencial.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pregunta</th>
+<th>Bagging / Random Forest</th>
+<th>Boosting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>¿Cómo se entrena el siguiente modelo?</td>
+<td>Nueva muestra Bootstrap y quizá un subconjunto aleatorio de Features</td>
+<td>Con pesos, Residuals o Gradients determinados por los modelos anteriores</td>
+</tr>
+<tr>
+<td>¿Cómo se combinan?</td>
+<td>Habitualmente promedio o voto no ponderado</td>
+<td>Score aditivo ponderado o corrección secuencial</td>
+</tr>
+<tr>
+<td>¿Cuál es el mecanismo central?</td>
+<td>Estabilizar modelos con alta variabilidad</td>
+<td>Reducir iterativamente una función objetivo</td>
+</tr>
+<tr>
+<td>¿Qué ajustes son importantes?</td>
+<td>Correlación entre árboles y muestreo</td>
+<td>Número de etapas, Learning Rate, profundidad y regularización</td>
+</tr>
+<tr>
+<td>¿Garantiza mejor Test?</td>
+<td>No</td>
+<td>No</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Una precisión:</strong> ni «Bagging reduce Variance» ni «Boosting reduce Bias» son leyes universales de todas las implementaciones. Según el algoritmo, la Loss, el ruido y los ajustes, Boosting también puede reducir Variance o incurrir en Overfitting. Compararemos resultados reales del ejercicio sobre datos reservados, en lugar de usar estos lemas como demostración.</p>
+</section><section class="guide-section" id="section-5"><h2>5. La estructura matemática común: construir el modelo por etapas</h2><p>Para Regression, un conjunto aditivo tiene la forma \(F_M(x)=F_0(x)+\sum_{m=1}^{M}\nu h_m(x)\), donde \(F_0\) es la predicción inicial, \(h_m\) el modelo incorporado en la etapa \(m\), y \(\nu\) (nu) el Learning Rate. La sumatoria no representa una votación: cada función nueva añade una corrección numérica a la predicción actual.</p>
+<div aria-label="Fórmula matemática" class="formula" role="group">\[F_m(x)=F_{m-1}(x)+\nu h_m(x).\]</div>
+<p>Para AdaBoost de Classification, una estructura similar es el <strong>score</strong> \(S_M(x)=\sum_m\alpha_m h_m(x)\), donde cada Stump predice \(-1\) o \(+1\), y \(\alpha_m\) establece cuánto influye. La clase final es \(\operatorname{sign}(S_M(x))\); conocer únicamente el signo no produce una probabilidad calibrada.</p>
+<p><strong>Comprueba tu comprensión.</strong> Si el modelo predice 5, el árbol nuevo devuelve \(-2\), y \(\nu=0.2\), la predicción actualizada es \(5+0.2(-2)=4.6\), no 3. Esta operación elemental es lo que Gradient Boosting repite continuamente.</p>
+</section><section class="guide-section teal" id="section-6"><h2>6. Datos de AdaBoost y primer Decision Stump</h2><p>Considera seis reclamos hipotéticos. La etiqueta \(+1\) indica que requiere investigación adicional; \(-1\), revisión ordinaria. Empezamos asignando el mismo peso a todos: \(w_i^{(1)}=1/6\). Un Stump puede preguntar si \(x\leq t\) y asignar etiquetas diferentes a ambos lados.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Reclamo</th>
+<th style="text-align:right">Índice \(x\)</th>
+<th style="text-align:right">Etiqueta real \(y\)</th>
+<th style="text-align:right">Peso inicial</th>
+<th style="text-align:right">Stump 1 en \(t=2.5\)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">−1</td>
+<td style="text-align:right">1/6</td>
+<td style="text-align:right">−1</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">−1</td>
+<td style="text-align:right">1/6</td>
+<td style="text-align:right">−1</td>
+</tr>
+<tr>
+<td>C</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">+1</td>
+<td style="text-align:right">1/6</td>
+<td style="text-align:right">+1</td>
+</tr>
+<tr>
+<td>D</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">+1</td>
+<td style="text-align:right">1/6</td>
+<td style="text-align:right">+1</td>
+</tr>
+<tr>
+<td>E</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">−1</td>
+<td style="text-align:right">1/6</td>
+<td style="text-align:right">+1</td>
+</tr>
+<tr>
+<td>F</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">+1</td>
+<td style="text-align:right">1/6</td>
+<td style="text-align:right">+1</td>
+</tr>
+</tbody>
+</table></div>
+<p>Para elegir el Stump, comparamos los errores ponderados de los umbrales y sus orientaciones. La regla con umbral 2.5, izquierda \(-1\) y derecha \(+1\), se equivoca únicamente en E: su error ponderado es \(1/6\). El siguiente mejor error entre los demás Stumps de umbral simple es \(1/3\). Por tanto, esta es la mejor primera regla entre las candidatas examinadas.</p>
+<figure class="learning-figure"><div class="chart-scroll"><svg data-generated-height="269.809375pt" data-generated-width="622.780313pt" version="1.1" viewbox="0 0 622.780313 269.809375" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="g21_2es_figure_1">
+<g id="g21_2es_patch_1">
+<path d="M 0 269.809375 
+L 622.780313 269.809375 
+L 622.780313 0 
+L 0 0 
+z
+" style="fill: #ffffff"></path>
+</g>
+<g id="g21_2es_axes_1">
+<g id="g21_2es_patch_2">
+<path d="M 49.820312 223.4 
+L 608.380312 223.4 
+L 608.380312 14.4 
+L 49.820312 14.4 
+z
+" style="fill: #fbfdff"></path>
+</g>
+<g id="g21_2es_matplotlib.axis_1">
+<g id="g21_2es_xtick_1">
+<g id="g21_2es_line2d_1">
+<path clip-path="url(#g21_2es_p9d989f5c2d)" d="M 96.366979 223.4 
+L 96.366979 14.4 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.18; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g21_2es_line2d_2">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="g21_2es_mc786ef9966" style="stroke: #526175; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="96.366979" xlink:href="#g21_2es_mc786ef9966" y="223.4"></use>
+</g>
+</g>
+<g id="g21_2es_text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 96.366979 237.998437)" x="96.366979" y="237.998437">1</text>
+</g>
+</g>
+<g id="g21_2es_xtick_2">
+<g id="g21_2es_line2d_3">
+<path clip-path="url(#g21_2es_p9d989f5c2d)" d="M 189.460312 223.4 
+L 189.460312 14.4 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.18; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g21_2es_line2d_4">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="189.460312" xlink:href="#g21_2es_mc786ef9966" y="223.4"></use>
+</g>
+</g>
+<g id="g21_2es_text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 189.460312 237.998437)" x="189.460312" y="237.998437">2</text>
+</g>
+</g>
+<g id="g21_2es_xtick_3">
+<g id="g21_2es_line2d_5">
+<path clip-path="url(#g21_2es_p9d989f5c2d)" d="M 282.553646 223.4 
+L 282.553646 14.4 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.18; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g21_2es_line2d_6">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="282.553646" xlink:href="#g21_2es_mc786ef9966" y="223.4"></use>
+</g>
+</g>
+<g id="g21_2es_text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 282.553646 237.998437)" x="282.553646" y="237.998437">3</text>
+</g>
+</g>
+<g id="g21_2es_xtick_4">
+<g id="g21_2es_line2d_7">
+<path clip-path="url(#g21_2es_p9d989f5c2d)" d="M 375.646979 223.4 
+L 375.646979 14.4 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.18; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g21_2es_line2d_8">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="375.646979" xlink:href="#g21_2es_mc786ef9966" y="223.4"></use>
+</g>
+</g>
+<g id="g21_2es_text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 375.646979 237.998437)" x="375.646979" y="237.998437">4</text>
+</g>
+</g>
+<g id="g21_2es_xtick_5">
+<g id="g21_2es_line2d_9">
+<path clip-path="url(#g21_2es_p9d989f5c2d)" d="M 468.740312 223.4 
+L 468.740312 14.4 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.18; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g21_2es_line2d_10">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="468.740312" xlink:href="#g21_2es_mc786ef9966" y="223.4"></use>
+</g>
+</g>
+<g id="g21_2es_text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 468.740312 237.998437)" x="468.740312" y="237.998437">5</text>
+</g>
+</g>
+<g id="g21_2es_xtick_6">
+<g id="g21_2es_line2d_11">
+<path clip-path="url(#g21_2es_p9d989f5c2d)" d="M 561.833646 223.4 
+L 561.833646 14.4 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.18; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g21_2es_line2d_12">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="561.833646" xlink:href="#g21_2es_mc786ef9966" y="223.4"></use>
+</g>
+</g>
+<g id="g21_2es_text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 561.833646 237.998437)" x="561.833646" y="237.998437">6</text>
+</g>
+</g>
+<g id="g21_2es_text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" transform="rotate(-0 329.100312 253.329687)" x="329.100312" y="253.329687">Índice de exposición x</text>
+</g>
+</g>
+<g id="g21_2es_matplotlib.axis_2">
+<g id="g21_2es_ytick_1">
+<g id="g21_2es_line2d_13">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="g21_2es_m1b8002aa8c" style="stroke: #526175; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="49.820312" xlink:href="#g21_2es_m1b8002aa8c" y="186.319355"></use>
+</g>
+</g>
+<g id="g21_2es_text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 42.820312 190.118574)" x="42.820312" y="190.118574">−1</text>
+</g>
+</g>
+<g id="g21_2es_ytick_2">
+<g id="g21_2es_line2d_14">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="49.820312" xlink:href="#g21_2es_m1b8002aa8c" y="51.480645"></use>
+</g>
+</g>
+<g id="g21_2es_text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 42.820312 55.279864)" x="42.820312" y="55.279864">1</text>
+</g>
+</g>
+<g id="g21_2es_text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" transform="rotate(-90 21.998438 118.9)" x="21.998438" y="118.9">Etiqueta real</text>
+</g>
+</g>
+<g id="g21_2es_line2d_15">
+<path clip-path="url(#g21_2es_p9d989f5c2d)" d="M 236.006979 223.4 
+L 236.006979 14.4 
+" style="fill: none; stroke-dasharray: 7.4,3.2; stroke-dashoffset: 0; stroke: #d59a32; stroke-width: 2"></path>
+</g>
+<g id="g21_2es_patch_3">
+<path d="M 49.820312 223.4 
+L 49.820312 14.4 
+" style="fill: none; stroke: #adbccf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g21_2es_patch_4">
+<path d="M 49.820312 223.4 
+L 608.380312 223.4 
+" style="fill: none; stroke: #adbccf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g21_2es_PathCollection_1">
+<defs>
+<path d="M 0 6.519202 
+C 1.728913 6.519202 3.387246 5.832298 4.609772 4.609772 
+C 5.832298 3.387246 6.519202 1.728913 6.519202 0 
+C 6.519202 -1.728913 5.832298 -3.387246 4.609772 -4.609772 
+C 3.387246 -5.832298 1.728913 -6.519202 0 -6.519202 
+C -1.728913 -6.519202 -3.387246 -5.832298 -4.609772 -4.609772 
+C -5.832298 -3.387246 -6.519202 -1.728913 -6.519202 0 
+C -6.519202 1.728913 -5.832298 3.387246 -4.609772 4.609772 
+C -3.387246 5.832298 -1.728913 6.519202 0 6.519202 
+z
+" id="g21_2es_m63b0206a12" style="stroke: #3178b9"></path>
+</defs>
+<g clip-path="url(#g21_2es_p9d989f5c2d)">
+<use style="fill: #3178b9; stroke: #3178b9" x="96.366979" xlink:href="#g21_2es_m63b0206a12" y="186.319355"></use>
+<use style="fill: #3178b9; stroke: #3178b9" x="189.460312" xlink:href="#g21_2es_m63b0206a12" y="186.319355"></use>
+<use style="fill: #3178b9; stroke: #3178b9" x="468.740312" xlink:href="#g21_2es_m63b0206a12" y="186.319355"></use>
+</g>
+</g>
+<g id="g21_2es_PathCollection_2">
+<defs>
+<path d="M 0 6.519202 
+C 1.728913 6.519202 3.387246 5.832298 4.609772 4.609772 
+C 5.832298 3.387246 6.519202 1.728913 6.519202 0 
+C 6.519202 -1.728913 5.832298 -3.387246 4.609772 -4.609772 
+C 3.387246 -5.832298 1.728913 -6.519202 0 -6.519202 
+C -1.728913 -6.519202 -3.387246 -5.832298 -4.609772 -4.609772 
+C -5.832298 -3.387246 -6.519202 -1.728913 -6.519202 0 
+C -6.519202 1.728913 -5.832298 3.387246 -4.609772 4.609772 
+C -3.387246 5.832298 -1.728913 6.519202 0 6.519202 
+z
+" id="g21_2es_m814cb9ab0d" style="stroke: #15957e"></path>
+</defs>
+<g clip-path="url(#g21_2es_p9d989f5c2d)">
+<use style="fill: #15957e; stroke: #15957e" x="282.553646" xlink:href="#g21_2es_m814cb9ab0d" y="51.480645"></use>
+<use style="fill: #15957e; stroke: #15957e" x="375.646979" xlink:href="#g21_2es_m814cb9ab0d" y="51.480645"></use>
+<use style="fill: #15957e; stroke: #15957e" x="561.833646" xlink:href="#g21_2es_m814cb9ab0d" y="51.480645"></use>
+</g>
+</g>
+<g id="g21_2es_patch_5">
+<path d="M 408.833644 152.738276 
+Q 437.914924 169.039979 466.020944 184.794995 
+" style="fill: none; stroke: #c45d6e; stroke-linecap: round"></path>
+<path d="M 463.760819 181.464554 
+L 466.020944 184.794995 
+L 462.000516 184.60483 
+" style="fill: none; stroke: #c45d6e; stroke-linecap: round"></path>
+</g>
+<g id="g21_2es_text_11">
+<text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #c45d6e" transform="rotate(-0 343.064312 147.890323)" x="343.064312" y="147.890323">Solo E está equivocado</text>
+</g>
+<g id="g21_2es_PathCollection_3">
+<path clip-path="url(#g21_2es_p9d989f5c2d)" d="M 468.740312 196.566306 
+C 471.457836 196.566306 474.064422 195.486622 475.986001 193.565043 
+C 477.90758 191.643464 478.987263 189.036878 478.987263 186.319355 
+C 478.987263 183.601832 477.90758 180.995245 475.986001 179.073666 
+C 474.064422 177.152087 471.457836 176.072404 468.740312 176.072404 
+C 466.022789 176.072404 463.416203 177.152087 461.494624 179.073666 
+C 459.573045 180.995245 458.493362 183.601832 458.493362 186.319355 
+C 458.493362 189.036878 459.573045 191.643464 461.494624 193.565043 
+C 463.416203 195.486622 466.022789 196.566306 468.740312 196.566306 
+L 468.740312 196.566306 
+z
+" style="fill: none; stroke: #c45d6e; stroke-width: 2.3"></path>
+</g>
+<g id="g21_2es_legend_1">
+<g id="g21_2es_patch_6">
+<path d="M 505.26 218.9 
+L 602.080312 218.9 
+Q 603.880312 218.9 603.880312 217.1 
+L 603.880312 178.369062 
+Q 603.880312 176.569062 602.080312 176.569062 
+L 505.26 176.569062 
+Q 503.46 176.569062 503.46 178.369062 
+L 503.46 217.1 
+Q 503.46 218.9 505.26 218.9 
+z
+" style="fill: #fbfdff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"></path>
+</g>
+<g id="g21_2es_PathCollection_4">
+<g>
+<use style="fill: #3178b9; stroke: #3178b9" x="516.06" xlink:href="#g21_2es_m63b0206a12" y="184.645156"></use>
+</g>
+</g>
+<g id="g21_2es_text_12">
+<text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" transform="rotate(-0 532.26 187.007656)" x="532.26" y="187.007656">Ordinario (−1)</text>
+</g>
+<g id="g21_2es_PathCollection_5">
+<g>
+<use style="fill: #15957e; stroke: #15957e" x="516.06" xlink:href="#g21_2es_m814cb9ab0d" y="197.855469"></use>
+</g>
+</g>
+<g id="g21_2es_text_13">
+<text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" transform="rotate(-0 532.26 200.217969)" x="532.26" y="200.217969">Investigar (+1)</text>
+</g>
+<g id="g21_2es_line2d_16">
+<path d="M 507.06 210.278281 
+L 516.06 210.278281 
+L 525.06 210.278281 
+" style="fill: none; stroke-dasharray: 7.4,3.2; stroke-dashoffset: 0; stroke: #d59a32; stroke-width: 2"></path>
+</g>
+<g id="g21_2es_text_14">
+<text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" transform="rotate(-0 532.26 213.428281)" x="532.26" y="213.428281">Umbral = 2.5</text>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="g21_2es_p9d989f5c2d">
+<rect height="209" width="558.56" x="49.820312" y="14.4"></rect>
+</clippath>
+</defs>
+</svg>
+</div><figcaption>Seis reclamos etiquetados y primer Stump. El punto E señalado es el único error. Desliza horizontalmente el gráfico en un teléfono.</figcaption></figure>
+<p>El algoritmo no ha aprendido una probabilidad; ha aprendido una regla binaria usando los pesos actuales. El error en E es precisamente el que nos permitirá comprender cómo reacciona el segundo modelo.</p>
+</section><section class="guide-section purple" id="section-7"><h2>7. AdaBoost, ronda 1: error ponderado e influencia del modelo</h2><p>Para AdaBoost binario con etiquetas y predicciones \({-1,+1}\), definimos \(\varepsilon_m=\sum_iw_i^{(m)}\mathbf1[y_i\ne h_m(x_i)]\); los pesos suman uno. La influencia del Stump es</p>
+<div aria-label="Fórmula matemática" class="formula" role="group">\[\alpha_m=\frac12\ln\left(\frac{1-\varepsilon_m}{\varepsilon_m}\right).\]</div>
+<p>Sustituyendo el error observado:</p>
+<div aria-label="Fórmula matemática" class="formula" role="group">\[\alpha_1=\frac12\ln\left(\frac{5/6}{1/6}\right)=\frac12\ln 5=0.804719.\]</div>
+<p>¿Por qué aparece un logaritmo? La regla de actualización de pesos es exponencial y este valor minimiza la constante normalizadora de Exponential Loss para el Stump elegido. Un modelo con error apenas inferior a 0.5 obtiene un peso positivo pequeño; con error 0.5, obtiene cero. Si el error es cero, la fórmula diverge y hace falta un tratamiento especial: una implementación práctica puede detenerse o regularizar, pero no debe calcular \(\ln(1/0)\).</p>
+<p>Con un solo Stump, el score es \(S_1(x)=0.804719h_1(x)\). Sus signos coinciden con las clases del Stump, y solo E está mal clasificado. Eso equivale a <strong>5/6 de Training Accuracy</strong>, pero la actualización de AdaBoost utiliza pesos ponderados, no simplemente Accuracy.</p>
+</section><section class="guide-section amber" id="section-8"><h2>8. AdaBoost, ronda 1: actualizar uno por uno los pesos</h2><p>AdaBoost actualiza los pesos así:</p>
+<div aria-label="Fórmula matemática" class="formula" role="group">\[\widetilde w_i^{(2)}=w_i^{(1)}\exp[-\alpha_1 y_i h_1(x_i)],\qquad w_i^{(2)}=\frac{\widetilde w_i^{(2)}}{\sum_j\widetilde w_j^{(2)}}.\]</div>
+<p>Cuando el modelo acierta, \(y_ih_1(x_i)=+1\), y el peso sin normalizar se multiplica por \(e^{-0.804719}=1/\sqrt5\). Si falla, el producto es \(-1\), y se multiplica por \(e^{+0.804719}=\sqrt5\). El multiplicador de un error es cinco veces el de un acierto.</p>
+<p>La constante de normalización es</p>
+<div aria-label="Fórmula matemática" class="formula" role="group">\[Z_1=\frac56\frac1{\sqrt5}+\frac16\sqrt5=0.745356.\]</div>
+<p>Cada observación acertada recibe \([(1/6)(1/\sqrt5)]/Z_1=0.1\); el reclamo E recibe \([(1/6)\sqrt5]/Z_1=0.5\). Por tanto, los nuevos pesos son <strong>0.1, 0.1, 0.1, 0.1, 0.5 y 0.1</strong>. Suman 1 y destinan la mitad de toda la importancia al reclamo que el primer Stump no supo clasificar. Ese es el mecanismo de atención de AdaBoost; no se han creado observaciones adicionales.</p>
+<figure class="learning-figure"><div class="chart-scroll"><svg data-generated-height="269.998125pt" data-generated-width="651.66125pt" version="1.1" viewbox="0 0 651.66125 269.998125" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="g21_3es_figure_1">
+<g id="g21_3es_patch_1">
+<path d="M -0 269.998125 
+L 651.66125 269.998125 
+L 651.66125 0 
+L -0 0 
+z
+" style="fill: #ffffff"></path>
+</g>
+<g id="g21_3es_axes_1">
+<g id="g21_3es_patch_2">
+<path d="M 50.98125 238.92 
+L 637.26125 238.92 
+L 637.26125 14.4 
+L 50.98125 14.4 
+z
+" style="fill: #fbfdff"></path>
+</g>
+<g id="g21_3es_patch_3">
+<path clip-path="url(#g21_3es_p188b88b342)" d="M 77.630341 238.92 
+L 110.357295 238.92 
+L 110.357295 173.270877 
+L 77.630341 173.270877 
+z
+" style="fill: #3178b9"></path>
+</g>
+<g id="g21_3es_patch_4">
+<path clip-path="url(#g21_3es_p188b88b342)" d="M 171.135923 238.92 
+L 203.862877 238.92 
+L 203.862877 173.270877 
+L 171.135923 173.270877 
+z
+" style="fill: #3178b9"></path>
+</g>
+<g id="g21_3es_patch_5">
+<path clip-path="url(#g21_3es_p188b88b342)" d="M 264.641505 238.92 
+L 297.368459 238.92 
+L 297.368459 173.270877 
+L 264.641505 173.270877 
+z
+" style="fill: #3178b9"></path>
+</g>
+<g id="g21_3es_patch_6">
+<path clip-path="url(#g21_3es_p188b88b342)" d="M 358.147087 238.92 
+L 390.874041 238.92 
+L 390.874041 173.270877 
+L 358.147087 173.270877 
+z
+" style="fill: #3178b9"></path>
+</g>
+<g id="g21_3es_patch_7">
+<path clip-path="url(#g21_3es_p188b88b342)" d="M 451.652669 238.92 
+L 484.379623 238.92 
+L 484.379623 173.270877 
+L 451.652669 173.270877 
+z
+" style="fill: #3178b9"></path>
+</g>
+<g id="g21_3es_patch_8">
+<path clip-path="url(#g21_3es_p188b88b342)" d="M 545.158252 238.92 
+L 577.885205 238.92 
+L 577.885205 173.270877 
+L 545.158252 173.270877 
+z
+" style="fill: #3178b9"></path>
+</g>
+<g id="g21_3es_patch_9">
+<path clip-path="url(#g21_3es_p188b88b342)" d="M 110.357295 238.92 
+L 143.084248 238.92 
+L 143.084248 199.530526 
+L 110.357295 199.530526 
+z
+" style="fill: #8c69ba"></path>
+</g>
+<g id="g21_3es_patch_10">
+<path clip-path="url(#g21_3es_p188b88b342)" d="M 203.862877 238.92 
+L 236.589831 238.92 
+L 236.589831 199.530526 
+L 203.862877 199.530526 
+z
+" style="fill: #8c69ba"></path>
+</g>
+<g id="g21_3es_patch_11">
+<path clip-path="url(#g21_3es_p188b88b342)" d="M 297.368459 238.92 
+L 330.095413 238.92 
+L 330.095413 199.530526 
+L 297.368459 199.530526 
+z
+" style="fill: #8c69ba"></path>
+</g>
+<g id="g21_3es_patch_12">
+<path clip-path="url(#g21_3es_p188b88b342)" d="M 390.874041 238.92 
+L 423.600995 238.92 
+L 423.600995 199.530526 
+L 390.874041 199.530526 
+z
+" style="fill: #8c69ba"></path>
+</g>
+<g id="g21_3es_patch_13">
+<path clip-path="url(#g21_3es_p188b88b342)" d="M 484.379623 238.92 
+L 517.106577 238.92 
+L 517.106577 41.972632 
+L 484.379623 41.972632 
+z
+" style="fill: #8c69ba"></path>
+</g>
+<g id="g21_3es_patch_14">
+<path clip-path="url(#g21_3es_p188b88b342)" d="M 577.885205 238.92 
+L 610.612159 238.92 
+L 610.612159 199.530526 
+L 577.885205 199.530526 
+z
+" style="fill: #8c69ba"></path>
+</g>
+<g id="g21_3es_matplotlib.axis_1">
+<g id="g21_3es_xtick_1">
+<g id="g21_3es_line2d_1">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="g21_3es_m36fefd7a4d" style="stroke: #526175; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="110.357295" xlink:href="#g21_3es_m36fefd7a4d" y="238.92"></use>
+</g>
+</g>
+<g id="g21_3es_text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 110.357295 253.518437)" x="110.357295" y="253.518437">A</text>
+</g>
+</g>
+<g id="g21_3es_xtick_2">
+<g id="g21_3es_line2d_2">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="203.862877" xlink:href="#g21_3es_m36fefd7a4d" y="238.92"></use>
+</g>
+</g>
+<g id="g21_3es_text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 203.862877 253.518437)" x="203.862877" y="253.518437">B</text>
+</g>
+</g>
+<g id="g21_3es_xtick_3">
+<g id="g21_3es_line2d_3">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="297.368459" xlink:href="#g21_3es_m36fefd7a4d" y="238.92"></use>
+</g>
+</g>
+<g id="g21_3es_text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 297.368459 253.518437)" x="297.368459" y="253.518437">C</text>
+</g>
+</g>
+<g id="g21_3es_xtick_4">
+<g id="g21_3es_line2d_4">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="390.874041" xlink:href="#g21_3es_m36fefd7a4d" y="238.92"></use>
+</g>
+</g>
+<g id="g21_3es_text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 390.874041 253.518437)" x="390.874041" y="253.518437">D</text>
+</g>
+</g>
+<g id="g21_3es_xtick_5">
+<g id="g21_3es_line2d_5">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="484.379623" xlink:href="#g21_3es_m36fefd7a4d" y="238.92"></use>
+</g>
+</g>
+<g id="g21_3es_text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 484.379623 253.518437)" x="484.379623" y="253.518437">E</text>
+</g>
+</g>
+<g id="g21_3es_xtick_6">
+<g id="g21_3es_line2d_6">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="577.885205" xlink:href="#g21_3es_m36fefd7a4d" y="238.92"></use>
+</g>
+</g>
+<g id="g21_3es_text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 577.885205 253.518437)" x="577.885205" y="253.518437">F</text>
+</g>
+</g>
+</g>
+<g id="g21_3es_matplotlib.axis_2">
+<g id="g21_3es_ytick_1">
+<g id="g21_3es_line2d_7">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="g21_3es_m7584321b70" style="stroke: #526175; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="50.98125" xlink:href="#g21_3es_m7584321b70" y="238.92"></use>
+</g>
+</g>
+<g id="g21_3es_text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 43.98125 242.719219)" x="43.98125" y="242.719219">0.0</text>
+</g>
+</g>
+<g id="g21_3es_ytick_2">
+<g id="g21_3es_line2d_8">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="50.98125" xlink:href="#g21_3es_m7584321b70" y="199.530526"></use>
+</g>
+</g>
+<g id="g21_3es_text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 43.98125 203.329745)" x="43.98125" y="203.329745">0.1</text>
+</g>
+</g>
+<g id="g21_3es_ytick_3">
+<g id="g21_3es_line2d_9">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="50.98125" xlink:href="#g21_3es_m7584321b70" y="160.141053"></use>
+</g>
+</g>
+<g id="g21_3es_text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 43.98125 163.940271)" x="43.98125" y="163.940271">0.2</text>
+</g>
+</g>
+<g id="g21_3es_ytick_4">
+<g id="g21_3es_line2d_10">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="50.98125" xlink:href="#g21_3es_m7584321b70" y="120.751579"></use>
+</g>
+</g>
+<g id="g21_3es_text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 43.98125 124.550798)" x="43.98125" y="124.550798">0.3</text>
+</g>
+</g>
+<g id="g21_3es_ytick_5">
+<g id="g21_3es_line2d_11">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="50.98125" xlink:href="#g21_3es_m7584321b70" y="81.362105"></use>
+</g>
+</g>
+<g id="g21_3es_text_11">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 43.98125 85.161324)" x="43.98125" y="85.161324">0.4</text>
+</g>
+</g>
+<g id="g21_3es_ytick_6">
+<g id="g21_3es_line2d_12">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="50.98125" xlink:href="#g21_3es_m7584321b70" y="41.972632"></use>
+</g>
+</g>
+<g id="g21_3es_text_12">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 43.98125 45.77185)" x="43.98125" y="45.77185">0.5</text>
+</g>
+</g>
+<g id="g21_3es_text_13">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" transform="rotate(-90 21.998438 126.66)" x="21.998438" y="126.66">Peso normalizado de observación</text>
+</g>
+</g>
+<g id="g21_3es_line2d_13">
+<path clip-path="url(#g21_3es_p188b88b342)" d="M 50.98125 41.972632 
+L 637.26125 41.972632 
+" style="fill: none; stroke-dasharray: 1.5,2.475; stroke-dashoffset: 0; stroke: #c45d6e; stroke-opacity: 0.4; stroke-width: 1.5"></path>
+</g>
+<g id="g21_3es_patch_15">
+<path d="M 50.98125 238.92 
+L 50.98125 14.4 
+" style="fill: none; stroke: #adbccf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g21_3es_patch_16">
+<path d="M 50.98125 238.92 
+L 637.26125 238.92 
+" style="fill: none; stroke: #adbccf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g21_3es_legend_1">
+<g id="g21_3es_patch_17">
+<path d="M 57.28125 141.400312 
+L 176.376563 141.400312 
+Q 178.176563 141.400312 178.176563 139.600312 
+L 178.176563 113.719687 
+Q 178.176563 111.919687 176.376563 111.919687 
+L 57.28125 111.919687 
+Q 55.48125 111.919687 55.48125 113.719687 
+L 55.48125 139.600312 
+Q 55.48125 141.400312 57.28125 141.400312 
+z
+" style="fill: #fbfdff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"></path>
+</g>
+<g id="g21_3es_patch_18">
+<path d="M 59.08125 122.358281 
+L 77.08125 122.358281 
+L 77.08125 116.058281 
+L 59.08125 116.058281 
+z
+" style="fill: #3178b9"></path>
+</g>
+<g id="g21_3es_text_14">
+<text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" transform="rotate(-0 84.28125 122.358281)" x="84.28125" y="122.358281">Antes de ronda 1</text>
+</g>
+<g id="g21_3es_patch_19">
+<path d="M 59.08125 135.928594 
+L 77.08125 135.928594 
+L 77.08125 129.628594 
+L 59.08125 129.628594 
+z
+" style="fill: #8c69ba"></path>
+</g>
+<g id="g21_3es_text_15">
+<text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" transform="rotate(-0 84.28125 135.928594)" x="84.28125" y="135.928594">Después de ronda 1</text>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="g21_3es_p188b88b342">
+<rect height="224.52" width="586.28" x="50.98125" y="14.4"></rect>
+</clippath>
+</defs>
+</svg>
+</div><figcaption>Pesos antes y después de la primera actualización AdaBoost; E recibe la mitad de la importancia. Desliza horizontalmente el gráfico en un teléfono.</figcaption></figure>
+</section><section class="guide-section" id="section-9"><h2>9. AdaBoost, ronda 2: otro Stump y actualización completa</h2><p>Usando los pesos nuevos, probemos el umbral \(x\leq5.5\), con \(-1\) a la izquierda y \(+1\) a la derecha. Se equivoca en C y D, ambos con peso 0.1, pero clasifica correctamente a E, cuyo peso es 0.5. El error ponderado es \(\varepsilon_2=0.1+0.1=0.2\), el menor entre los Stumps de umbral sobre estos seis índices.</p>
+<div aria-label="Fórmula matemática" class="formula" role="group">\[\alpha_2=\frac12\ln\left(\frac{0.8}{0.2}\right)=\frac12\ln4=0.693147.\]</div>
+<p>La segunda actualización multiplica pesos correctos por \(e^{-\alpha_2}=0.5\) y pesos incorrectos por \(e^{\alpha_2}=2\). Antes de normalizar obtenemos \((0.05,0.05,0.20,0.20,0.25,0.05)\), cuya suma es 0.8. Dividiendo por 0.8 llegamos a <strong>(0.0625, 0.0625, 0.25, 0.25, 0.3125, 0.0625)</strong>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Reclamo</th>
+<th style="text-align:right">Peso antes de ronda 2</th>
+<th>¿Acertó Stump 2?</th>
+<th style="text-align:right">Nuevo peso normalizado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align:right">0.10</td>
+<td>Sí</td>
+<td style="text-align:right">0.0625</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align:right">0.10</td>
+<td>Sí</td>
+<td style="text-align:right">0.0625</td>
+</tr>
+<tr>
+<td>C</td>
+<td style="text-align:right">0.10</td>
+<td>No</td>
+<td style="text-align:right">0.2500</td>
+</tr>
+<tr>
+<td>D</td>
+<td style="text-align:right">0.10</td>
+<td>No</td>
+<td style="text-align:right">0.2500</td>
+</tr>
+<tr>
+<td>E</td>
+<td style="text-align:right">0.50</td>
+<td>Sí</td>
+<td style="text-align:right">0.3125</td>
+</tr>
+<tr>
+<td>F</td>
+<td style="text-align:right">0.10</td>
+<td>Sí</td>
+<td style="text-align:right">0.0625</td>
+</tr>
+</tbody>
+</table></div>
+<p>Observa que E sigue siendo importante aun después de corregirse. Los pesos recuerdan la secuencia de errores y aciertos; no regresan automáticamente a \(1/6\).</p>
+</section><section class="guide-section teal" id="section-10"><h2>10. Combinar modelos AdaBoost no equivale a una votación simple</h2><p>Después de dos rondas, \(S_2(x)=0.804719h_1(x)+0.693147h_2(x)\). Para E, el primer Stump predice \(+1\) y el segundo \(-1\): \(S_2(E)=0.804719-0.693147=+0.111572\), de modo que E <strong>sigue clasificado incorrectamente</strong> como \(+1\). Es natural esperar que el segundo modelo lo corrija; el cálculo demuestra por qué esa expectativa no se cumple todavía.</p>
+<p>En C también hay predicciones opuestas: \(S_2(C)=0.804719-0.693147=+0.111572\), que sí corresponde a la etiqueta real \(+1\). En A, ambos Stumps predicen \(-1\), por lo que \(S_2(A)=-1.497866\). La magnitud \(|S_2(x)|\) funciona como un <strong>score relacionado con el margen</strong>, no como una probabilidad calibrada. Después de dos rondas tenemos todavía cinco de seis clasificaciones correctas.</p>
+<p>Esto permite diferenciar tres objetos: <strong>los pesos de observaciones</strong> guían el <em>siguiente modelo</em>; <strong>los pesos de modelos</strong> \(\alpha_m\) determinan su importancia en la suma; y <strong>las etiquetas predichas</strong> se obtienen con el signo del score. Confundirlos produce errores aun si el logaritmo está bien calculado.</p>
+<figure class="learning-figure"><div class="chart-scroll"><svg data-generated-height="277.198125pt" data-generated-width="644.470937pt" version="1.1" viewbox="0 0 644.470937 277.198125" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="g21_4es_figure_1">
+<g id="g21_4es_patch_1">
+<path d="M 0 277.198125 
+L 644.470937 277.198125 
+L 644.470937 0 
+L 0 0 
+z
+" style="fill: #ffffff"></path>
+</g>
+<g id="g21_4es_axes_1">
+<g id="g21_4es_patch_2">
+<path d="M 59.360938 246.12 
+L 630.070938 246.12 
+L 630.070938 14.4 
+L 59.360938 14.4 
+z
+" style="fill: #fbfdff"></path>
+</g>
+<g id="g21_4es_patch_3">
+<path clip-path="url(#g21_4es_p90f602b1d2)" d="M 85.302301 130.26 
+L 156.864684 130.26 
+L 156.864684 229.427297 
+L 85.302301 229.427297 
+z
+" style="fill: #15957e; opacity: 0.92"></path>
+</g>
+<g id="g21_4es_patch_4">
+<path clip-path="url(#g21_4es_p90f602b1d2)" d="M 174.755279 130.26 
+L 246.317662 130.26 
+L 246.317662 229.427297 
+L 174.755279 229.427297 
+z
+" style="fill: #15957e; opacity: 0.92"></path>
+</g>
+<g id="g21_4es_patch_5">
+<path clip-path="url(#g21_4es_p90f602b1d2)" d="M 264.208257 130.26 
+L 335.77064 130.26 
+L 335.77064 122.873311 
+L 264.208257 122.873311 
+z
+" style="fill: #15957e; opacity: 0.92"></path>
+</g>
+<g id="g21_4es_patch_6">
+<path clip-path="url(#g21_4es_p90f602b1d2)" d="M 353.661235 130.26 
+L 425.223618 130.26 
+L 425.223618 122.873311 
+L 353.661235 122.873311 
+z
+" style="fill: #15957e; opacity: 0.92"></path>
+</g>
+<g id="g21_4es_patch_7">
+<path clip-path="url(#g21_4es_p90f602b1d2)" d="M 443.114213 130.26 
+L 514.676596 130.26 
+L 514.676596 122.873311 
+L 443.114213 122.873311 
+z
+" style="fill: #c45d6e; opacity: 0.92"></path>
+</g>
+<g id="g21_4es_patch_8">
+<path clip-path="url(#g21_4es_p90f602b1d2)" d="M 532.567191 130.26 
+L 604.129574 130.26 
+L 604.129574 31.092703 
+L 532.567191 31.092703 
+z
+" style="fill: #15957e; opacity: 0.92"></path>
+</g>
+<g id="g21_4es_matplotlib.axis_1">
+<g id="g21_4es_xtick_1">
+<g id="g21_4es_line2d_1">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="g21_4es_m79f925a869" style="stroke: #526175; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="121.083492" xlink:href="#g21_4es_m79f925a869" y="246.12"></use>
+</g>
+</g>
+<g id="g21_4es_text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 121.083492 260.718437)" x="121.083492" y="260.718437">A</text>
+</g>
+</g>
+<g id="g21_4es_xtick_2">
+<g id="g21_4es_line2d_2">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="210.53647" xlink:href="#g21_4es_m79f925a869" y="246.12"></use>
+</g>
+</g>
+<g id="g21_4es_text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 210.53647 260.718437)" x="210.53647" y="260.718437">B</text>
+</g>
+</g>
+<g id="g21_4es_xtick_3">
+<g id="g21_4es_line2d_3">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="299.989448" xlink:href="#g21_4es_m79f925a869" y="246.12"></use>
+</g>
+</g>
+<g id="g21_4es_text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 299.989448 260.718437)" x="299.989448" y="260.718437">C</text>
+</g>
+</g>
+<g id="g21_4es_xtick_4">
+<g id="g21_4es_line2d_4">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="389.442427" xlink:href="#g21_4es_m79f925a869" y="246.12"></use>
+</g>
+</g>
+<g id="g21_4es_text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 389.442427 260.718437)" x="389.442427" y="260.718437">D</text>
+</g>
+</g>
+<g id="g21_4es_xtick_5">
+<g id="g21_4es_line2d_5">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="478.895405" xlink:href="#g21_4es_m79f925a869" y="246.12"></use>
+</g>
+</g>
+<g id="g21_4es_text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 478.895405 260.718437)" x="478.895405" y="260.718437">E</text>
+</g>
+</g>
+<g id="g21_4es_xtick_6">
+<g id="g21_4es_line2d_6">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="568.348383" xlink:href="#g21_4es_m79f925a869" y="246.12"></use>
+</g>
+</g>
+<g id="g21_4es_text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 568.348383 260.718437)" x="568.348383" y="260.718437">F</text>
+</g>
+</g>
+</g>
+<g id="g21_4es_matplotlib.axis_2">
+<g id="g21_4es_ytick_1">
+<g id="g21_4es_line2d_7">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="g21_4es_m73db3a5a38" style="stroke: #526175; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="59.360938" xlink:href="#g21_4es_m73db3a5a38" y="229.568571"></use>
+</g>
+</g>
+<g id="g21_4es_text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 52.360938 233.36779)" x="52.360938" y="233.36779">−1.5</text>
+</g>
+</g>
+<g id="g21_4es_ytick_2">
+<g id="g21_4es_line2d_8">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="59.360938" xlink:href="#g21_4es_m73db3a5a38" y="196.465714"></use>
+</g>
+</g>
+<g id="g21_4es_text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 52.360938 200.264933)" x="52.360938" y="200.264933">−1.0</text>
+</g>
+</g>
+<g id="g21_4es_ytick_3">
+<g id="g21_4es_line2d_9">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="59.360938" xlink:href="#g21_4es_m73db3a5a38" y="163.362857"></use>
+</g>
+</g>
+<g id="g21_4es_text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 52.360938 167.162076)" x="52.360938" y="167.162076">−0.5</text>
+</g>
+</g>
+<g id="g21_4es_ytick_4">
+<g id="g21_4es_line2d_10">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="59.360938" xlink:href="#g21_4es_m73db3a5a38" y="130.26"></use>
+</g>
+</g>
+<g id="g21_4es_text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 52.360938 134.059219)" x="52.360938" y="134.059219">0.0</text>
+</g>
+</g>
+<g id="g21_4es_ytick_5">
+<g id="g21_4es_line2d_11">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="59.360938" xlink:href="#g21_4es_m73db3a5a38" y="97.157143"></use>
+</g>
+</g>
+<g id="g21_4es_text_11">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 52.360938 100.956362)" x="52.360938" y="100.956362">0.5</text>
+</g>
+</g>
+<g id="g21_4es_ytick_6">
+<g id="g21_4es_line2d_12">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="59.360938" xlink:href="#g21_4es_m73db3a5a38" y="64.054286"></use>
+</g>
+</g>
+<g id="g21_4es_text_12">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 52.360938 67.853504)" x="52.360938" y="67.853504">1.0</text>
+</g>
+</g>
+<g id="g21_4es_ytick_7">
+<g id="g21_4es_line2d_13">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="59.360938" xlink:href="#g21_4es_m73db3a5a38" y="30.951429"></use>
+</g>
+</g>
+<g id="g21_4es_text_13">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 52.360938 34.750647)" x="52.360938" y="34.750647">1.5</text>
+</g>
+</g>
+<g id="g21_4es_text_14">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" transform="rotate(-90 21.998438 130.26)" x="21.998438" y="130.26">Score ponderado del conjunto</text>
+</g>
+</g>
+<g id="g21_4es_line2d_14">
+<path clip-path="url(#g21_4es_p90f602b1d2)" d="M 59.360938 130.26 
+L 630.070938 130.26 
+" style="fill: none; stroke: #0b1f3a; stroke-width: 1.2; stroke-linecap: square"></path>
+</g>
+<g id="g21_4es_patch_9">
+<path d="M 59.360938 246.12 
+L 59.360938 14.4 
+" style="fill: none; stroke: #adbccf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g21_4es_patch_10">
+<path d="M 59.360937 246.12 
+L 630.070938 246.12 
+" style="fill: none; stroke: #adbccf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g21_4es_text_15">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #c45d6e" transform="rotate(-0 478.895405 93.846857)" x="478.895405" y="93.846857">E continúa incorrecto</text>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="g21_4es_p90f602b1d2">
+<rect height="231.72" width="570.71" x="59.360938" y="14.4"></rect>
+</clippath>
+</defs>
+</svg>
+</div><figcaption>Scores AdaBoost después de dos rondas; el color indica si la predicción es correcta. Desliza horizontalmente el gráfico en un teléfono.</figcaption></figure>
+</section><section class="guide-section purple" id="section-11"><h2>11. La Exponential Loss de AdaBoost y sus limitaciones</h2><p>Podemos interpretar AdaBoost como minimización de \(\sum_i\exp[-y_iS_M(x_i)]\), la <strong>Exponential Loss</strong>. Una observación con margen positivo grande \(y_iS_M(x_i)\) aporta poco; una predicción muy equivocada tiene margen negativo y aporta exponencialmente más. Esto explica la sensibilidad del método a errores persistentes.</p>
+<p>En E, después de dos rondas, \(y_E=-1\) y \(S_2(E)=+0.111572\), así que su contribución es \(e^{+0.111572}\approx1.118\). Para A, el margen es \((-1)(-1.497866)=1.497866\), y la contribución \(e^{-1.497866}\approx0.224\). Ambas observaciones intervienen en el objetivo, pero la equivocada pesa mucho más en la Loss.</p>
+<p>Esta sensibilidad ayuda cuando los ejemplos difíciles contienen señal, pero puede perjudicar si las etiquetas están equivocadas, hay demasiado ruido o Training no representa la población. Con Stumps sencillos podemos entender cada etapa, pero el conjunto final puede ser más difícil de interpretar que un solo árbol. La secuencia de correcciones tampoco establece causalidad.</p>
+</section><section class="guide-section amber" id="section-12"><h2>12. Nuevo Target: importe final en miles de dólares</h2><p>Pasamos explícitamente de Classification binaria a <strong>Regression</strong>. Los seis importes sintéticos de liquidación siguientes están medidos en <strong>miles de dólares</strong>. Minimizaremos Squared Error, no errores ponderados de Classification. La variable \(x\) sigue siendo un índice de exposición observado antes de la liquidación.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Reclamo</th>
+<th style="text-align:right">Exposición \(x\)</th>
+<th style="text-align:right">Importe \(y\) (miles de USD)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>C</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">5</td>
+</tr>
+<tr>
+<td>D</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">6</td>
+</tr>
+<tr>
+<td>E</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">8</td>
+</tr>
+<tr>
+<td>F</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">11</td>
+</tr>
+</tbody>
+</table></div>
+<p>Los importes suman \(2+3+5+6+8+11=35\) miles de dólares; la media es \(35/6=5.833333\). Un Regression Stump produce una predicción constante a cada lado de un umbral. Tenemos pocos datos para comparar las cinco divisiones posibles; el propósito es comprender <em>cómo se ajusta</em> el árbol y no solamente observar una curva final.</p>
+</section><section class="guide-section" id="section-13"><h2>13. Gradient Boosting comienza con la mejor constante</h2><p>Definamos la Loss para seis observaciones como \(L(F)=\frac12\sum_i(y_i-F(x_i))^2\). El factor \(1/2\) simplifica la derivada y <strong>no cambia el modelo minimizador</strong>. Si el modelo inicial predice siempre \(F(x)=c\), derivamos:</p>
+<div aria-label="Fórmula matemática" class="formula" role="group">\[\frac{dL}{dc}=\sum_i(c-y_i)=6c-35.\]</div>
+<p>Igualamos a cero y obtenemos \(c=35/6=5.833333\). La segunda derivada es 6, positiva, de modo que es un mínimo. Nuestra predicción inicial es \(F_0(x)=5.833333\) para todos los reclamos.</p>
+<p>Los seis <strong>Residuals</strong>, definidos como \(r_i=y_i-F_0(x_i)\), son aproximadamente \((-3.833333,-2.833333,-0.833333,0.166667,2.166667,5.166667)\). Suman cero. La suma de cuadrados de los errores es \(54.833333\) en (miles de USD)², y el MSE es \(54.833333/6=9.138889\) (miles de USD)². Tenemos un modelo inicial completamente definido; no usamos parámetros misteriosos.</p>
+<figure class="learning-figure"><div class="chart-scroll"><svg data-generated-height="262.798125pt" data-generated-width="644.470312pt" version="1.1" viewbox="0 0 644.470312 262.798125" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="g21_5es_figure_1">
+<g id="g21_5es_patch_1">
+<path d="M 0 262.798125 
+L 644.470312 262.798125 
+L 644.470312 0 
+L 0 0 
+z
+" style="fill: #ffffff"></path>
+</g>
+<g id="g21_5es_axes_1">
+<g id="g21_5es_patch_2">
+<path d="M 49.820313 231.72 
+L 630.070312 231.72 
+L 630.070312 14.4 
+L 49.820313 14.4 
+z
+" style="fill: #fbfdff"></path>
+</g>
+<g id="g21_5es_patch_3">
+<path clip-path="url(#g21_5es_p34799e71cc)" d="M 76.195312 137.694343 
+L 148.953933 137.694343 
+L 148.953933 221.841818 
+L 76.195312 221.841818 
+z
+" style="fill: #c45d6e"></path>
+</g>
+<g id="g21_5es_patch_4">
+<path clip-path="url(#g21_5es_p34799e71cc)" d="M 167.143588 137.694343 
+L 239.902209 137.694343 
+L 239.902209 199.890303 
+L 167.143588 199.890303 
+z
+" style="fill: #c45d6e"></path>
+</g>
+<g id="g21_5es_patch_5">
+<path clip-path="url(#g21_5es_p34799e71cc)" d="M 258.091864 137.694343 
+L 330.850485 137.694343 
+L 330.850485 155.987273 
+L 258.091864 155.987273 
+z
+" style="fill: #c45d6e"></path>
+</g>
+<g id="g21_5es_patch_6">
+<path clip-path="url(#g21_5es_p34799e71cc)" d="M 349.04014 137.694343 
+L 421.798761 137.694343 
+L 421.798761 134.035758 
+L 349.04014 134.035758 
+z
+" style="fill: #15957e"></path>
+</g>
+<g id="g21_5es_patch_7">
+<path clip-path="url(#g21_5es_p34799e71cc)" d="M 439.988416 137.694343 
+L 512.747037 137.694343 
+L 512.747037 90.132727 
+L 439.988416 90.132727 
+z
+" style="fill: #15957e"></path>
+</g>
+<g id="g21_5es_patch_8">
+<path clip-path="url(#g21_5es_p34799e71cc)" d="M 530.936692 137.694343 
+L 603.695312 137.694343 
+L 603.695312 24.278182 
+L 530.936692 24.278182 
+z
+" style="fill: #15957e"></path>
+</g>
+<g id="g21_5es_matplotlib.axis_1">
+<g id="g21_5es_xtick_1">
+<g id="g21_5es_line2d_1">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="g21_5es_m6ca61f64b9" style="stroke: #526175; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="112.574623" xlink:href="#g21_5es_m6ca61f64b9" y="231.72"></use>
+</g>
+</g>
+<g id="g21_5es_text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 112.574623 246.318437)" x="112.574623" y="246.318437">A</text>
+</g>
+</g>
+<g id="g21_5es_xtick_2">
+<g id="g21_5es_line2d_2">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="203.522899" xlink:href="#g21_5es_m6ca61f64b9" y="231.72"></use>
+</g>
+</g>
+<g id="g21_5es_text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 203.522899 246.318437)" x="203.522899" y="246.318437">B</text>
+</g>
+</g>
+<g id="g21_5es_xtick_3">
+<g id="g21_5es_line2d_3">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="294.471175" xlink:href="#g21_5es_m6ca61f64b9" y="231.72"></use>
+</g>
+</g>
+<g id="g21_5es_text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 294.471175 246.318437)" x="294.471175" y="246.318437">C</text>
+</g>
+</g>
+<g id="g21_5es_xtick_4">
+<g id="g21_5es_line2d_4">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="385.41945" xlink:href="#g21_5es_m6ca61f64b9" y="231.72"></use>
+</g>
+</g>
+<g id="g21_5es_text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 385.41945 246.318437)" x="385.41945" y="246.318437">D</text>
+</g>
+</g>
+<g id="g21_5es_xtick_5">
+<g id="g21_5es_line2d_5">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="476.367726" xlink:href="#g21_5es_m6ca61f64b9" y="231.72"></use>
+</g>
+</g>
+<g id="g21_5es_text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 476.367726 246.318437)" x="476.367726" y="246.318437">E</text>
+</g>
+</g>
+<g id="g21_5es_xtick_6">
+<g id="g21_5es_line2d_6">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="567.316002" xlink:href="#g21_5es_m6ca61f64b9" y="231.72"></use>
+</g>
+</g>
+<g id="g21_5es_text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 567.316002 246.318437)" x="567.316002" y="246.318437">F</text>
+</g>
+</g>
+</g>
+<g id="g21_5es_matplotlib.axis_2">
+<g id="g21_5es_ytick_1">
+<g id="g21_5es_line2d_7">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="g21_5es_meded776c49" style="stroke: #526175; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="49.820313" xlink:href="#g21_5es_meded776c49" y="225.500404"></use>
+</g>
+</g>
+<g id="g21_5es_text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 42.820313 229.299623)" x="42.820313" y="229.299623">−4</text>
+</g>
+</g>
+<g id="g21_5es_ytick_2">
+<g id="g21_5es_line2d_8">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="49.820313" xlink:href="#g21_5es_meded776c49" y="181.597374"></use>
+</g>
+</g>
+<g id="g21_5es_text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 42.820313 185.396592)" x="42.820313" y="185.396592">−2</text>
+</g>
+</g>
+<g id="g21_5es_ytick_3">
+<g id="g21_5es_line2d_9">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="49.820313" xlink:href="#g21_5es_meded776c49" y="137.694343"></use>
+</g>
+</g>
+<g id="g21_5es_text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 42.820313 141.493562)" x="42.820313" y="141.493562">0</text>
+</g>
+</g>
+<g id="g21_5es_ytick_4">
+<g id="g21_5es_line2d_10">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="49.820313" xlink:href="#g21_5es_meded776c49" y="93.791313"></use>
+</g>
+</g>
+<g id="g21_5es_text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 42.820313 97.590532)" x="42.820313" y="97.590532">2</text>
+</g>
+</g>
+<g id="g21_5es_ytick_5">
+<g id="g21_5es_line2d_11">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="49.820313" xlink:href="#g21_5es_meded776c49" y="49.888283"></use>
+</g>
+</g>
+<g id="g21_5es_text_11">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 42.820313 53.687502)" x="42.820313" y="53.687502">4</text>
+</g>
+</g>
+<g id="g21_5es_text_12">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" transform="rotate(-90 21.998438 123.06)" x="21.998438" y="123.06">Residual (miles de USD)</text>
+</g>
+</g>
+<g id="g21_5es_line2d_12">
+<path clip-path="url(#g21_5es_p34799e71cc)" d="M 49.820313 137.694343 
+L 630.070312 137.694343 
+" style="fill: none; stroke: #0b1f3a; stroke-linecap: square"></path>
+</g>
+<g id="g21_5es_patch_9">
+<path d="M 49.820313 231.72 
+L 49.820313 14.4 
+" style="fill: none; stroke: #adbccf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g21_5es_patch_10">
+<path d="M 49.820313 231.72 
+L 630.070312 231.72 
+" style="fill: none; stroke: #adbccf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g21_5es_text_13">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #526175" transform="rotate(-0 73.030313 35.037637)" x="73.030313" y="35.037637">Predicción inicial = 5.8333</text>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="g21_5es_p34799e71cc">
+<rect height="217.32" width="580.25" x="49.820313" y="14.4"></rect>
+</clippath>
+</defs>
+</svg>
+</div><figcaption>Residuals con signo respecto de la mejor constante inicial de 5.8333 miles de USD. Desliza horizontalmente el gráfico en un teléfono.</figcaption></figure>
+</section><section class="guide-section teal" id="section-14"><h2>14. Ajustar el primer Regression Stump probando todos los umbrales</h2><p>Para cada umbral posible, asignamos a las observaciones de la izquierda la media de su grupo y a las de la derecha la media del otro grupo. Después calculamos SSE. ¿Por qué usamos medias? En una hoja \(R\), al derivar \(\sum_{i\in R}(y_i-c)^2\), obtenemos \(2\sum_{i\in R}(c-y_i)=0\), de donde \(c\) debe ser la media de la hoja.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Umbral</th>
+<th style="text-align:right">Predicción izquierda</th>
+<th style="text-align:right">Predicción derecha</th>
+<th style="text-align:right">SSE total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.5</td>
+<td style="text-align:right">2.0</td>
+<td style="text-align:right">6.6</td>
+<td style="text-align:right">37.2000</td>
+</tr>
+<tr>
+<td>2.5</td>
+<td style="text-align:right">2.5</td>
+<td style="text-align:right">7.5</td>
+<td style="text-align:right">21.5000</td>
+</tr>
+<tr>
+<td>3.5</td>
+<td style="text-align:right">3.3333</td>
+<td style="text-align:right">8.3333</td>
+<td style="text-align:right">17.3333</td>
+</tr>
+<tr>
+<td><strong>4.5</strong></td>
+<td style="text-align:right"><strong>4.0</strong></td>
+<td style="text-align:right"><strong>9.5</strong></td>
+<td style="text-align:right"><strong>14.5000</strong></td>
+</tr>
+<tr>
+<td>5.5</td>
+<td style="text-align:right">4.8</td>
+<td style="text-align:right">11.0</td>
+<td style="text-align:right">22.8000</td>
+</tr>
+</tbody>
+</table></div>
+<p>Con \(t=4.5\), los cuatro importes de la izquierda tienen media \((2+3+5+6)/4=4\); los dos de la derecha, \((8+11)/2=9.5\). La SSE es \((2-4)^2+(3-4)^2+(5-4)^2+(6-4)^2+(8-9.5)^2+(11-9.5)^2=10+4.5=14.5\).</p>
+<p>Como los Residuals difieren de \(y\) por una misma constante \(F_0\), el mejor Stump sobre Residuals utiliza también este umbral, con correcciones \(4-5.833333=-1.833333\) y \(9.5-5.833333=+3.666667\). <strong>Son correcciones</strong>, no importes finales predichos.</p>
+<figure class="learning-figure"><div class="chart-scroll"><svg data-generated-height="262.39625pt" data-generated-width="608.433125pt" version="1.1" viewbox="0 0 608.433125 262.39625" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="g21_6es_figure_1">
+<g id="g21_6es_patch_1">
+<path d="M -0 262.39625 
+L 608.433125 262.39625 
+L 608.433125 0 
+L -0 0 
+z
+" style="fill: #ffffff"></path>
+</g>
+<g id="g21_6es_axes_1">
+<g id="g21_6es_patch_2">
+<path d="M 47.803125 217.64 
+L 594.033125 217.64 
+L 594.033125 14.4 
+L 47.803125 14.4 
+z
+" style="fill: #fbfdff"></path>
+</g>
+<g id="g21_6es_patch_3">
+<path clip-path="url(#g21_6es_p0ade899a0b)" d="M 72.631761 217.64 
+L 155.393883 217.64 
+L 155.393883 41.813767 
+L 72.631761 41.813767 
+z
+" style="fill: #96b7d6"></path>
+</g>
+<g id="g21_6es_patch_4">
+<path clip-path="url(#g21_6es_p0ade899a0b)" d="M 176.084413 217.64 
+L 258.846534 217.64 
+L 258.846534 116.02 
+L 176.084413 116.02 
+z
+" style="fill: #96b7d6"></path>
+</g>
+<g id="g21_6es_patch_5">
+<path clip-path="url(#g21_6es_p0ade899a0b)" d="M 279.537064 217.64 
+L 362.299186 217.64 
+L 362.299186 135.713798 
+L 279.537064 135.713798 
+z
+" style="fill: #96b7d6"></path>
+</g>
+<g id="g21_6es_patch_6">
+<path clip-path="url(#g21_6es_p0ade899a0b)" d="M 382.989716 217.64 
+L 465.751837 217.64 
+L 465.751837 149.105581 
+L 382.989716 149.105581 
+z
+" style="fill: #15957e"></path>
+</g>
+<g id="g21_6es_patch_7">
+<path clip-path="url(#g21_6es_p0ade899a0b)" d="M 486.442367 217.64 
+L 569.204489 217.64 
+L 569.204489 109.875535 
+L 486.442367 109.875535 
+z
+" style="fill: #96b7d6"></path>
+</g>
+<g id="g21_6es_matplotlib.axis_1">
+<g id="g21_6es_xtick_1">
+<g id="g21_6es_line2d_1">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="g21_6es_m60cc3ec000" style="stroke: #526175; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="114.012822" xlink:href="#g21_6es_m60cc3ec000" y="217.64"></use>
+</g>
+</g>
+<g id="g21_6es_text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 114.012822 232.238438)" x="114.012822" y="232.238438">1.5</text>
+</g>
+</g>
+<g id="g21_6es_xtick_2">
+<g id="g21_6es_line2d_2">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="217.465473" xlink:href="#g21_6es_m60cc3ec000" y="217.64"></use>
+</g>
+</g>
+<g id="g21_6es_text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 217.465473 232.238438)" x="217.465473" y="232.238438">2.5</text>
+</g>
+</g>
+<g id="g21_6es_xtick_3">
+<g id="g21_6es_line2d_3">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="320.918125" xlink:href="#g21_6es_m60cc3ec000" y="217.64"></use>
+</g>
+</g>
+<g id="g21_6es_text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 320.918125 232.238438)" x="320.918125" y="232.238438">3.5</text>
+</g>
+</g>
+<g id="g21_6es_xtick_4">
+<g id="g21_6es_line2d_4">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="424.370777" xlink:href="#g21_6es_m60cc3ec000" y="217.64"></use>
+</g>
+</g>
+<g id="g21_6es_text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 424.370777 232.238438)" x="424.370777" y="232.238438">4.5</text>
+</g>
+</g>
+<g id="g21_6es_xtick_5">
+<g id="g21_6es_line2d_5">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="527.823428" xlink:href="#g21_6es_m60cc3ec000" y="217.64"></use>
+</g>
+</g>
+<g id="g21_6es_text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 527.823428 232.238438)" x="527.823428" y="232.238438">5.5</text>
+</g>
+</g>
+<g id="g21_6es_text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" transform="rotate(-0 320.918125 245.916562)" x="320.918125" y="245.916562">Umbral candidato</text>
+</g>
+</g>
+<g id="g21_6es_matplotlib.axis_2">
+<g id="g21_6es_ytick_1">
+<g id="g21_6es_line2d_6">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="g21_6es_m72ab970368" style="stroke: #526175; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="47.803125" xlink:href="#g21_6es_m72ab970368" y="217.64"></use>
+</g>
+</g>
+<g id="g21_6es_text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 40.803125 221.439219)" x="40.803125" y="221.439219">0</text>
+</g>
+</g>
+<g id="g21_6es_ytick_2">
+<g id="g21_6es_line2d_7">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="47.803125" xlink:href="#g21_6es_m72ab970368" y="194.007442"></use>
+</g>
+</g>
+<g id="g21_6es_text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 40.803125 197.806661)" x="40.803125" y="197.806661">5</text>
+</g>
+</g>
+<g id="g21_6es_ytick_3">
+<g id="g21_6es_line2d_8">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="47.803125" xlink:href="#g21_6es_m72ab970368" y="170.374884"></use>
+</g>
+</g>
+<g id="g21_6es_text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 40.803125 174.174102)" x="40.803125" y="174.174102">10</text>
+</g>
+</g>
+<g id="g21_6es_ytick_4">
+<g id="g21_6es_line2d_9">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="47.803125" xlink:href="#g21_6es_m72ab970368" y="146.742326"></use>
+</g>
+</g>
+<g id="g21_6es_text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 40.803125 150.541544)" x="40.803125" y="150.541544">15</text>
+</g>
+</g>
+<g id="g21_6es_ytick_5">
+<g id="g21_6es_line2d_10">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="47.803125" xlink:href="#g21_6es_m72ab970368" y="123.109767"></use>
+</g>
+</g>
+<g id="g21_6es_text_11">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 40.803125 126.908986)" x="40.803125" y="126.908986">20</text>
+</g>
+</g>
+<g id="g21_6es_ytick_6">
+<g id="g21_6es_line2d_11">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="47.803125" xlink:href="#g21_6es_m72ab970368" y="99.477209"></use>
+</g>
+</g>
+<g id="g21_6es_text_12">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 40.803125 103.276428)" x="40.803125" y="103.276428">25</text>
+</g>
+</g>
+<g id="g21_6es_ytick_7">
+<g id="g21_6es_line2d_12">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="47.803125" xlink:href="#g21_6es_m72ab970368" y="75.844651"></use>
+</g>
+</g>
+<g id="g21_6es_text_13">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 40.803125 79.64387)" x="40.803125" y="79.64387">30</text>
+</g>
+</g>
+<g id="g21_6es_ytick_8">
+<g id="g21_6es_line2d_13">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="47.803125" xlink:href="#g21_6es_m72ab970368" y="52.212093"></use>
+</g>
+</g>
+<g id="g21_6es_text_14">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 40.803125 56.011312)" x="40.803125" y="56.011312">35</text>
+</g>
+</g>
+<g id="g21_6es_ytick_9">
+<g id="g21_6es_line2d_14">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="47.803125" xlink:href="#g21_6es_m72ab970368" y="28.579535"></use>
+</g>
+</g>
+<g id="g21_6es_text_15">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 40.803125 32.378754)" x="40.803125" y="32.378754">40</text>
+</g>
+</g>
+<g id="g21_6es_text_16">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" transform="rotate(-90 21.998438 116.02)" x="21.998438" y="116.02">SSE dentro de las hojas</text>
+</g>
+</g>
+<g id="g21_6es_patch_8">
+<path d="M 47.803125 217.64 
+L 47.803125 14.4 
+" style="fill: none; stroke: #adbccf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g21_6es_patch_9">
+<path d="M 47.803125 217.64 
+L 594.033125 217.64 
+" style="fill: none; stroke: #adbccf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g21_6es_text_17">
+<text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" transform="rotate(-0 114.012822 38.032558)" x="114.012822" y="38.032558">37.2</text>
+</g>
+<g id="g21_6es_text_18">
+<text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" transform="rotate(-0 217.465473 112.238791)" x="217.465473" y="112.238791">21.5</text>
+</g>
+<g id="g21_6es_text_19">
+<text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" transform="rotate(-0 320.918125 131.932589)" x="320.918125" y="131.932589">17.3</text>
+</g>
+<g id="g21_6es_text_20">
+<text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" transform="rotate(-0 424.370777 145.324372)" x="424.370777" y="145.324372">14.5</text>
+</g>
+<g id="g21_6es_text_21">
+<text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" transform="rotate(-0 527.823428 106.094326)" x="527.823428" y="106.094326">22.8</text>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="g21_6es_p0ade899a0b">
+<rect height="203.24" width="546.23" x="47.803125" y="14.4"></rect>
+</clippath>
+</defs>
+</svg>
+</div><figcaption>El umbral 4.5 minimiza la SSE entre los cinco umbrales candidatos de Regression. Desliza horizontalmente el gráfico en un teléfono.</figcaption></figure>
+</section><section class="guide-section purple" id="section-15"><h2>15. Learning Rate: actualizar y volver a calcular cada error</h2><p>Utilicemos \(\nu=0.5\). El primer Stump sobre Residuals produce \(h_1(x)=-1.833333\) si \(x\leq4.5\), y \(+3.666667\) en caso contrario. Entonces</p>
+<div aria-label="Fórmula matemática" class="formula" role="group">\[F_1(x)=F_0(x)+0.5h_1(x).\]</div>
+<p>Las nuevas predicciones son <strong>4.916667</strong> para A–D y <strong>7.666667</strong> para E–F, ambas en miles de dólares. Los Residuals pasan a \((-2.916667,-1.916667,+0.083333,+1.083333,+0.333333,+3.333333)\). Sus cuadrados suman \(24.583333\), por lo que el nuevo MSE es \(24.583333/6=4.097222\). Disminuimos el Training MSE de 9.138889 a 4.097222 sin modificar ningún importe observado.</p>
+<p>Si \(\nu=1\), la primera etapa predeciría directamente las medias de hojas 4 y 9.5, con SSE 14.5. Un Learning Rate menor efectúa un <strong>paso parcial</strong>; puede requerir más rondas y favorecer un aprendizaje controlado. No significa que siempre produzca menor Test Error. Elegirlo requiere Validation y un conjunto predefinido de candidatos.</p>
+</section><section class="guide-section amber" id="section-16"><h2>16. Ronda 2 de Gradient Boosting: cálculo completo de nuevos Residuals</h2><p>En la segunda ronda no reutilizamos los Residuals iniciales. Los nuevos Targets para el Stump son \(y_i-F_1(x_i)\): \((-2.916667,-1.916667,+0.083333,+1.083333,+0.333333,+3.333333)\).</p>
+<p>Al comprobar sus cinco particiones, la SSE residual vale 14.3750, <strong>7.0625</strong>, 9.5417, 14.5000 y 11.2500 para umbrales 1.5, 2.5, 3.5, 4.5 y 5.5. El segundo Stump divide en <strong>2.5</strong>. La media izquierda es \((-2.916667-1.916667)/2=-2.416667\); la derecha es \((0.083333+1.083333+0.333333+3.333333)/4=1.208333\).</p>
+<p>Aplicando de nuevo Learning Rate 0.5:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Reclamo</th>
+<th style="text-align:right">Observado \(y\)</th>
+<th style="text-align:right">\(F_1\)</th>
+<th style="text-align:right">Corrección \(0.5h_2\)</th>
+<th style="text-align:right">\(F_2\)</th>
+<th style="text-align:right">Residual final</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">4.9167</td>
+<td style="text-align:right">−1.2083</td>
+<td style="text-align:right">3.7083</td>
+<td style="text-align:right">−1.7083</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">4.9167</td>
+<td style="text-align:right">−1.2083</td>
+<td style="text-align:right">3.7083</td>
+<td style="text-align:right">−0.7083</td>
+</tr>
+<tr>
+<td>C</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">4.9167</td>
+<td style="text-align:right">+0.6042</td>
+<td style="text-align:right">5.5208</td>
+<td style="text-align:right">−0.5208</td>
+</tr>
+<tr>
+<td>D</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">4.9167</td>
+<td style="text-align:right">+0.6042</td>
+<td style="text-align:right">5.5208</td>
+<td style="text-align:right">+0.4792</td>
+</tr>
+<tr>
+<td>E</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">7.6667</td>
+<td style="text-align:right">+0.6042</td>
+<td style="text-align:right">8.2708</td>
+<td style="text-align:right">−0.2708</td>
+</tr>
+<tr>
+<td>F</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">7.6667</td>
+<td style="text-align:right">+0.6042</td>
+<td style="text-align:right">8.2708</td>
+<td style="text-align:right">+2.7292</td>
+</tr>
+</tbody>
+</table></div>
+<p>Con precisión completa, la SSE final es <strong>11.442708</strong> y el MSE <strong>1.907118</strong> (miles de USD)². Hemos verificado que las dos etapas mejoran la Loss de Training, pero todavía no hemos demostrado qué tan bien se predicen reclamos nuevos.</p>
+<figure class="learning-figure"><div class="chart-scroll"><svg data-generated-height="291.409375pt" data-generated-width="644.433125pt" version="1.1" viewbox="0 0 644.433125 291.409375" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="g21_7es_figure_1">
+<g id="g21_7es_patch_1">
+<path d="M 0 291.409375 
+L 644.433125 291.409375 
+L 644.433125 0 
+L 0 0 
+z
+" style="fill: #ffffff"></path>
+</g>
+<g id="g21_7es_axes_1">
+<g id="g21_7es_patch_2">
+<path d="M 47.803125 245 
+L 630.033125 245 
+L 630.033125 14.4 
+L 47.803125 14.4 
+z
+" style="fill: #fbfdff"></path>
+</g>
+<g id="g21_7es_matplotlib.axis_1">
+<g id="g21_7es_xtick_1">
+<g id="g21_7es_line2d_1">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="g21_7es_mc1154963f5" style="stroke: #526175; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="74.268125" xlink:href="#g21_7es_mc1154963f5" y="245"></use>
+</g>
+</g>
+<g id="g21_7es_text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 74.268125 259.598437)" x="74.268125" y="259.598437">1</text>
+</g>
+</g>
+<g id="g21_7es_xtick_2">
+<g id="g21_7es_line2d_2">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="180.128125" xlink:href="#g21_7es_mc1154963f5" y="245"></use>
+</g>
+</g>
+<g id="g21_7es_text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 180.128125 259.598437)" x="180.128125" y="259.598437">2</text>
+</g>
+</g>
+<g id="g21_7es_xtick_3">
+<g id="g21_7es_line2d_3">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="285.988125" xlink:href="#g21_7es_mc1154963f5" y="245"></use>
+</g>
+</g>
+<g id="g21_7es_text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 285.988125 259.598437)" x="285.988125" y="259.598437">3</text>
+</g>
+</g>
+<g id="g21_7es_xtick_4">
+<g id="g21_7es_line2d_4">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="391.848125" xlink:href="#g21_7es_mc1154963f5" y="245"></use>
+</g>
+</g>
+<g id="g21_7es_text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 391.848125 259.598437)" x="391.848125" y="259.598437">4</text>
+</g>
+</g>
+<g id="g21_7es_xtick_5">
+<g id="g21_7es_line2d_5">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="497.708125" xlink:href="#g21_7es_mc1154963f5" y="245"></use>
+</g>
+</g>
+<g id="g21_7es_text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 497.708125 259.598437)" x="497.708125" y="259.598437">5</text>
+</g>
+</g>
+<g id="g21_7es_xtick_6">
+<g id="g21_7es_line2d_6">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="603.568125" xlink:href="#g21_7es_mc1154963f5" y="245"></use>
+</g>
+</g>
+<g id="g21_7es_text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 603.568125 259.598437)" x="603.568125" y="259.598437">6</text>
+</g>
+</g>
+<g id="g21_7es_text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" transform="rotate(-0 338.918125 274.929687)" x="338.918125" y="274.929687">Índice de exposición</text>
+</g>
+</g>
+<g id="g21_7es_matplotlib.axis_2">
+<g id="g21_7es_ytick_1">
+<g id="g21_7es_line2d_7">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="g21_7es_m8ed18ea4ae" style="stroke: #526175; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="47.803125" xlink:href="#g21_7es_m8ed18ea4ae" y="234.518182"></use>
+</g>
+</g>
+<g id="g21_7es_text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 40.803125 238.317401)" x="40.803125" y="238.317401">2</text>
+</g>
+</g>
+<g id="g21_7es_ytick_2">
+<g id="g21_7es_line2d_8">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="47.803125" xlink:href="#g21_7es_m8ed18ea4ae" y="187.932323"></use>
+</g>
+</g>
+<g id="g21_7es_text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 40.803125 191.731542)" x="40.803125" y="191.731542">4</text>
+</g>
+</g>
+<g id="g21_7es_ytick_3">
+<g id="g21_7es_line2d_9">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="47.803125" xlink:href="#g21_7es_m8ed18ea4ae" y="141.346465"></use>
+</g>
+</g>
+<g id="g21_7es_text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 40.803125 145.145683)" x="40.803125" y="145.145683">6</text>
+</g>
+</g>
+<g id="g21_7es_ytick_4">
+<g id="g21_7es_line2d_10">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="47.803125" xlink:href="#g21_7es_m8ed18ea4ae" y="94.760606"></use>
+</g>
+</g>
+<g id="g21_7es_text_11">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 40.803125 98.559825)" x="40.803125" y="98.559825">8</text>
+</g>
+</g>
+<g id="g21_7es_ytick_5">
+<g id="g21_7es_line2d_11">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="47.803125" xlink:href="#g21_7es_m8ed18ea4ae" y="48.174747"></use>
+</g>
+</g>
+<g id="g21_7es_text_12">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 40.803125 51.973966)" x="40.803125" y="51.973966">10</text>
+</g>
+</g>
+<g id="g21_7es_text_13">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" transform="rotate(-90 21.998438 129.7)" x="21.998438" y="129.7">Severidad (miles de USD)</text>
+</g>
+</g>
+<g id="g21_7es_line2d_12">
+<path clip-path="url(#g21_7es_pd7af606871)" d="M 74.268125 145.22862 
+L 127.198125 145.22862 
+L 127.198125 145.22862 
+L 233.058125 145.22862 
+L 233.058125 145.22862 
+L 338.918125 145.22862 
+L 338.918125 145.22862 
+L 444.778125 145.22862 
+L 444.778125 145.22862 
+L 550.638125 145.22862 
+L 550.638125 145.22862 
+L 603.568125 145.22862 
+" style="fill: none; stroke-dasharray: 2,3.3; stroke-dashoffset: 0; stroke: #526175; stroke-width: 2"></path>
+</g>
+<g id="g21_7es_line2d_13">
+<path clip-path="url(#g21_7es_pd7af606871)" d="M 74.268125 166.580471 
+L 127.198125 166.580471 
+L 127.198125 166.580471 
+L 233.058125 166.580471 
+L 233.058125 166.580471 
+L 338.918125 166.580471 
+L 338.918125 166.580471 
+L 444.778125 166.580471 
+L 444.778125 102.524916 
+L 550.638125 102.524916 
+L 550.638125 102.524916 
+L 603.568125 102.524916 
+" style="fill: none; stroke: #8c69ba; stroke-width: 2.2; stroke-linecap: square"></path>
+</g>
+<g id="g21_7es_line2d_14">
+<path clip-path="url(#g21_7es_pd7af606871)" d="M 74.268125 194.726094 
+L 127.198125 194.726094 
+L 127.198125 194.726094 
+L 233.058125 194.726094 
+L 233.058125 152.50766 
+L 338.918125 152.50766 
+L 338.918125 152.50766 
+L 444.778125 152.50766 
+L 444.778125 88.452104 
+L 550.638125 88.452104 
+L 550.638125 88.452104 
+L 603.568125 88.452104 
+" style="fill: none; stroke: #15957e; stroke-width: 2.2; stroke-linecap: square"></path>
+</g>
+<g id="g21_7es_patch_3">
+<path d="M 47.803125 245 
+L 47.803125 14.4 
+" style="fill: none; stroke: #adbccf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g21_7es_patch_4">
+<path d="M 47.803125 245 
+L 630.033125 245 
+" style="fill: none; stroke: #adbccf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g21_7es_PathCollection_1">
+<defs>
+<path d="M 0 4.358899 
+C 1.155994 4.358899 2.264796 3.899618 3.082207 3.082207 
+C 3.899618 2.264796 4.358899 1.155994 4.358899 0 
+C 4.358899 -1.155994 3.899618 -2.264796 3.082207 -3.082207 
+C 2.264796 -3.899618 1.155994 -4.358899 0 -4.358899 
+C -1.155994 -4.358899 -2.264796 -3.899618 -3.082207 -3.082207 
+C -3.899618 -2.264796 -4.358899 -1.155994 -4.358899 0 
+C -4.358899 1.155994 -3.899618 2.264796 -3.082207 3.082207 
+C -2.264796 3.899618 -1.155994 4.358899 0 4.358899 
+z
+" id="g21_7es_m0f3cf1407c" style="stroke: #0b1f3a"></path>
+</defs>
+<g clip-path="url(#g21_7es_pd7af606871)">
+<use style="fill: #0b1f3a; stroke: #0b1f3a" x="74.268125" xlink:href="#g21_7es_m0f3cf1407c" y="234.518182"></use>
+<use style="fill: #0b1f3a; stroke: #0b1f3a" x="180.128125" xlink:href="#g21_7es_m0f3cf1407c" y="211.225253"></use>
+<use style="fill: #0b1f3a; stroke: #0b1f3a" x="285.988125" xlink:href="#g21_7es_m0f3cf1407c" y="164.639394"></use>
+<use style="fill: #0b1f3a; stroke: #0b1f3a" x="391.848125" xlink:href="#g21_7es_m0f3cf1407c" y="141.346465"></use>
+<use style="fill: #0b1f3a; stroke: #0b1f3a" x="497.708125" xlink:href="#g21_7es_m0f3cf1407c" y="94.760606"></use>
+<use style="fill: #0b1f3a; stroke: #0b1f3a" x="603.568125" xlink:href="#g21_7es_m0f3cf1407c" y="24.881818"></use>
+</g>
+</g>
+<g id="g21_7es_legend_1">
+<g id="g21_7es_patch_5">
+<path d="M 54.103125 74.44125 
+L 178.239844 74.44125 
+Q 180.039844 74.44125 180.039844 72.64125 
+L 180.039844 20.7 
+Q 180.039844 18.9 178.239844 18.9 
+L 54.103125 18.9 
+Q 52.303125 18.9 52.303125 20.7 
+L 52.303125 72.64125 
+Q 52.303125 74.44125 54.103125 74.44125 
+z
+" style="fill: #fbfdff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"></path>
+</g>
+<g id="g21_7es_PathCollection_2">
+<g>
+<use style="fill: #0b1f3a; stroke: #0b1f3a" x="64.903125" xlink:href="#g21_7es_m0f3cf1407c" y="26.976094"></use>
+</g>
+</g>
+<g id="g21_7es_text_14">
+<text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" transform="rotate(-0 81.103125 29.338594)" x="81.103125" y="29.338594">Severidad observada</text>
+</g>
+<g id="g21_7es_line2d_15">
+<path d="M 55.903125 39.398906 
+L 60.403125 39.398906 
+L 60.403125 39.398906 
+L 69.403125 39.398906 
+L 69.403125 39.398906 
+L 73.903125 39.398906 
+" style="fill: none; stroke-dasharray: 2,3.3; stroke-dashoffset: 0; stroke: #526175; stroke-width: 2"></path>
+</g>
+<g id="g21_7es_text_15">
+<text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" transform="rotate(-0 81.103125 42.548906)" x="81.103125" y="42.548906">Stage 0</text>
+</g>
+<g id="g21_7es_line2d_16">
+<path d="M 55.903125 52.609219 
+L 60.403125 52.609219 
+L 60.403125 52.609219 
+L 69.403125 52.609219 
+L 69.403125 52.609219 
+L 73.903125 52.609219 
+" style="fill: none; stroke: #8c69ba; stroke-width: 2.2; stroke-linecap: square"></path>
+</g>
+<g id="g21_7es_text_16">
+<text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" transform="rotate(-0 81.103125 55.759219)" x="81.103125" y="55.759219">Stage 1</text>
+</g>
+<g id="g21_7es_line2d_17">
+<path d="M 55.903125 65.819531 
+L 60.403125 65.819531 
+L 60.403125 65.819531 
+L 69.403125 65.819531 
+L 69.403125 65.819531 
+L 73.903125 65.819531 
+" style="fill: none; stroke: #15957e; stroke-width: 2.2; stroke-linecap: square"></path>
+</g>
+<g id="g21_7es_text_17">
+<text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" transform="rotate(-0 81.103125 68.969531)" x="81.103125" y="68.969531">Stage 2</text>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="g21_7es_pd7af606871">
+<rect height="230.6" width="582.23" x="47.803125" y="14.4"></rect>
+</clippath>
+</defs>
+</svg>
+</div><figcaption>Predicciones de etapas 0, 1 y 2 sobre seis reclamos sintéticos; cada etapa aporta una corrección parcial. Desliza horizontalmente el gráfico en un teléfono.</figcaption></figure>
+</section><section class="guide-section" id="section-17"><h2>17. Regla general de Gradient Boosting: ¿por qué Negative Gradients?</h2><p>Squared Error es solamente una Loss posible. Sea \(\ell(y,F)\) una Loss diferenciable para una observación, evaluada en la predicción numérica actual \(F\). La derivada parcial respecto de \(F(x_i)\) nos dice si aumentar esa predicción aumenta o reduce la Loss. Avanzar en dirección al <strong>Negative Gradient</strong> reduce localmente la Loss si el paso es suficientemente pequeño.</p>
+<div aria-label="Fórmula matemática" class="formula" role="group">\[r_{im}=-\left.\frac{\partial\ell(y_i,F)}{\partial F}\right|_{F=F_{m-1}(x_i)}.\]</div>
+<p>Si \(\ell(y,F)=\tfrac12(y-F)^2\), derivamos respecto de \(F\): \(\partial\ell/\partial F=F-y\). El Negative Gradient es \(y-F\), exactamente el Residual que utilizamos arriba. <strong>Por eso ajustar Residuals funciona en Squared Error</strong>; no es la definición universal de Gradient Boosting.</p>
+<p>El siguiente modelo aproxima esos Negative Gradients como función de las Features. Algunas implementaciones optimizan después por separado los valores de las hojas o realizan una búsqueda de tamaño de paso según la Loss. En consecuencia, «ajustar un árbol a Residuals» es un caso especial; el principio general es <strong>Functional Gradient Descent</strong>, donde actualizamos una función predictiva, no solamente un vector de coeficientes.</p>
+</section><section class="guide-section teal" id="section-18"><h2>18. Binary Log Loss: los Pseudo-Residuals no son Residuals ordinarios</h2><p>En Classification, \(F(x)\) puede representar un score real de Log-Odds y \(p=\sigma(F)=1/(1+e^{-F})\). Para \(y\in{0,1}\), Binary Log Loss es \(\ell=-[y\ln p+(1-y)\ln(1-p)]\). Aplicando Chain Rule, \(\partial\ell/\partial p=(p-y)/[p(1-p)]\) y \(dp/dF=p(1-p)\). Por tanto,</p>
+<div aria-label="Fórmula matemática" class="formula" role="group">\[\frac{\partial\ell}{\partial F}=p-y,\qquad r^{\mathrm{pseudo}}=y-p.\]</div>
+<p>Para un caso positivo \(y=1\) con \(p=0.30\), el Negative Gradient es \(1-0.30=0.70\): conviene aumentar el score. Para uno negativo \(y=0\) con \(p=0.80\), es \(-0.80\): conviene reducirlo. Son <strong>diferencias en la escala de probabilidad utilizadas para actualizar un score de Log-Odds</strong>, no errores en dólares ni necesariamente los valores finales de hoja de todas las implementaciones.</p>
+<p>Trabajar sobre \(F\), y no sumar directamente árboles a una probabilidad, evita abandonar arbitrariamente el intervalo [0,1]. La Sigmoid transforma el score final en una probabilidad. Esa probabilidad también debe examinarse mediante Calibration independiente antes de tomar decisiones operativas.</p>
+</section><section class="guide-section purple" id="section-19"><h2>19. XGBoost: desde el objetivo exacto a una aproximación de segundo orden</h2><p>XGBoost es una familia particular de Gradient-Boosted Trees optimizados. Su aporte no es simplemente «más árboles»: combina regularización, derivadas de primer y segundo orden, evaluación de Splits, procedimientos para datos dispersos y estrategias computacionales eficientes. Consideremos agregar un árbol \(f_t(x)\) a los scores actuales \(\widehat y_i^{(t-1)}\).</p>
+<div aria-label="Fórmula matemática" class="formula" role="group">\[\mathcal L^{(t)}=\sum_{i=1}^n\ell\!\left(y_i,\widehat y_i^{(t-1)}+f_t(x_i)\right)+\Omega(f_t).\]</div>
+<p>Una <strong>aproximación de Taylor de segundo orden</strong> alrededor del score existente reemplaza el cambio de cada Loss por \(g_if_t(x_i)+\tfrac12h_if_t(x_i)^2\), donde \(g_i=\partial\ell_i/\partial\widehat y_i\) y \(h_i=\partial^2\ell_i/\partial\widehat y_i^2\). Podemos omitir las constantes independientes del árbol nuevo cuando comparamos candidatos.</p>
+<p>Una regularización habitual para árboles es \(\Omega(f)=\gamma T+\tfrac12\lambda\sum_{j=1}^T w_j^2\), donde \(T\) es la cantidad de hojas, \(w_j\) sus scores, \(\gamma\) el costo de agregar una hoja y \(\lambda\) la penalización L2. Son controles de estructura y magnitud, no garantías automáticas de generalización. Ahora obtendremos un peso de hoja y un Split Gain completos.</p>
+</section><section class="guide-section amber" id="section-20"><h2>20. Derivar los pesos de XGBoost y calcular su Split Gain</h2><p>Agrupemos las observaciones que llegan a la hoja \(j\). Definamos \(G_j=\sum_{i\in I_j}g_i\) y \(H_j=\sum_{i\in I_j}h_i\). Su contribución regularizada aproximada es \(G_jw_j+\frac12(H_j+\lambda)w_j^2+\gamma\). Derivamos respecto de \(w_j\) e igualamos a cero:</p>
+<div aria-label="Fórmula matemática" class="formula" role="group">\[G_j+(H_j+\lambda)w_j=0\quad\Rightarrow\quad w_j^*=-\frac{G_j}{H_j+\lambda}.\]</div>
+<p>En nuestro ejemplo de severidad, la predicción base es \(5.833333\) y la Loss es \(\ell=\frac12(y-F)^2\), por lo cual \(g_i=F-y_i\) y \(h_i=1\). Para dividir en \(x\leq4.5\), las cuatro observaciones izquierdas suman \(G_L=7.333333\) y \(H_L=4\). Las dos de la derecha suman \(G_R=-7.333333\), \(H_R=2\). Tomemos \(\lambda=1\) y \(\gamma=0.2\). Entonces</p>
+<div aria-label="Fórmula matemática" class="formula" role="group">\[w_L^*=-\frac{7.333333}{5}=-1.466667.\]</div>
+<div aria-label="Fórmula matemática" class="formula" role="group">\[w_R^*=+\frac{7.333333}{3}=2.444444.\]</div>
+<p>El nodo padre tiene \(G_P=0\), \(H_P=6\). El <strong>Split Gain</strong>, descontando la penalización por la hoja adicional, es</p>
+<p>Definamos las cantidades intermedias \(A_j=G_j^2/(H_j+\lambda)\). Entonces podemos expresar el mismo Split Gain como</p>
+<div aria-label="Fórmula matemática" class="formula" role="group">\[\mathrm{Gain}=\tfrac12(A_L+A_R-A_P)-\gamma.\]</div>
+<p>Aquí \(A_L\), \(A_R\) y \(A_P\) corresponden a los nodos izquierdo, derecho y padre. La abreviación facilita leer la fórmula en pantallas pequeñas sin alterar su significado matemático.</p>
+<p>Sustituyamos:</p>
+<div aria-label="Fórmula matemática" class="formula" role="group">\[A_L=10.755556,\quad A_R=17.925926,\quad A_P=0.\]</div>
+<div aria-label="Fórmula matemática" class="formula" role="group">\[\mathrm{Gain}=\tfrac12(28.681482)-0.2.\]</div>
+<div aria-label="Fórmula matemática" class="formula" role="group">\[=14.340741-0.2=14.140741.\]</div>
+<p>Un Gain positivo favorece la división <strong>frente a dejar este nodo sin dividir, según el objetivo cuadrático local</strong>. No es una mejora medida sobre Validation ni un ahorro en dólares. También vemos por qué las hojas de XGBoost no toman los mismos valores que las medias de Residuals del Gradient Boosting sin regularización: \(\lambda=1\) las acerca a cero.</p><h3>Verificación independiente: comparar todos los candidatos antes de dividir</h3><p>Un Gain positivo en 4.5 no demuestra por sí mismo que ese umbral sea el <em>mejor</em>. Mantengamos los seis gradientes y Hessians, \(\lambda=1\) y \(\gamma=0.2\). Para cada umbral, calculemos \(G_L\) sumando los registros a la izquierda, \(G_R=-G_L\) y \(H_L=n_L\), \(H_R=n_R\). El gradiente del nodo padre permanece en cero. La comparación completa es:</p><div class="table-wrap compare-math-table"><table><caption>Todos los candidatos de Split Gain (misma muestra, λ=1, γ=0.2)</caption><thead><tr><th scope="col">Umbral</th><th scope="col">G izquierdo</th><th scope="col">H izquierdo</th><th scope="col">G derecho</th><th scope="col">H derecho</th><th scope="col">Gain</th></tr></thead><tbody><tr><td>1.5</td><td>3.833333</td><td>1</td><td>-3.833333</td><td>5</td><td>4.698148</td></tr><tr><td>2.5</td><td>6.666667</td><td>2</td><td>-6.666667</td><td>4</td><td>11.651852</td></tr><tr><td>3.5</td><td>7.500000</td><td>3</td><td>-7.500000</td><td>3</td><td>13.862500</td></tr><tr><td>4.5</td><td>7.333333</td><td>4</td><td>-7.333333</td><td>2</td><td>14.140741</td></tr><tr><td>5.5</td><td>5.166667</td><td>5</td><td>-5.166667</td><td>1</td><td>8.698148</td></tr></tbody></table></div><p>Por ejemplo, para 3.5, \(G_L=3.833333+2.833333+0.833333=7.5\), \(G_R=-7.5\), \(H_L=H_R=3\). Por tanto \(\mathrm{Gain}_{3.5}=\tfrac12(7.5^2/4+7.5^2/4)-0.2=13.8625\), inferior a 14.140741 del umbral 4.5. La figura anterior compara <em>reducciones locales del objetivo aproximado</em>; no representa Accuracy validada. Si cambiamos \(\lambda\) o \(\gamma\), debemos recalcular los candidatos antes de asumir el mismo orden.</p><div class="understanding-bridge"><h3>Con Log Loss, el Hessian ya no es igual a 1</h3><p>El caso anterior de severidad tiene \(h_i=1\) porque utiliza la mitad de Squared Error. Para <strong>clasificación binaria</strong>, el modelo utiliza un score de log-odds \(F\) y la probabilidad \(p=\sigma(F)\). Como derivamos en la Sección 18, \(g_i=p_i-y_i\). Derivando otra vez y usando \(dp_i/dF_i=p_i(1-p_i)\), resulta \(h_i=p_i(1-p_i)\). Esto representa curvatura, no otro tipo de Residual.</p><p>Consideremos tres observaciones <em>sintéticas adicionales</em> de una misma hoja: \(y=(1,1,0)\) y \(p=(0.20,0.30,0.60)\). Obtenemos \(g=(-0.80,-0.70,+0.60)\), por lo que \(G=-0.90\); asimismo \(h=(0.16,0.21,0.24)\), de modo que \(H=0.61\). Con \(\lambda=1\), el score óptimo de la hoja es \(w^*=-(-0.90)/(0.61+1)=0.559006\) <em>unidades de log-odds</em>. Con Learning Rate 0.10, el score aumenta solo 0.055901. La probabilidad del primer caso pasa de 0.20 a \(\sigma(\ln(0.20/0.80)+0.055901)=0.209094\), <em>no</em> a 0.255901. Distinguimos así gradiente, curvatura, valor de hoja, actualización y probabilidad final.</p></div>
+<figure class="learning-figure"><div class="chart-scroll"><svg data-generated-height="262.39625pt" data-generated-width="630.033125pt" version="1.1" viewbox="0 0 630.033125 262.39625" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="g21_8es_figure_1">
+<g id="g21_8es_patch_1">
+<path d="M 0 262.39625 
+L 630.033125 262.39625 
+L 630.033125 0 
+L 0 0 
+z
+" style="fill: #ffffff"></path>
+</g>
+<g id="g21_8es_axes_1">
+<g id="g21_8es_patch_2">
+<path d="M 47.803125 217.64 
+L 615.633125 217.64 
+L 615.633125 14.4 
+L 47.803125 14.4 
+z
+" style="fill: #fbfdff"></path>
+</g>
+<g id="g21_8es_matplotlib.axis_1">
+<g id="g21_8es_xtick_1">
+<g id="g21_8es_line2d_1">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="g21_8es_m5fe1aabb63" style="stroke: #526175; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="73.61358" xlink:href="#g21_8es_m5fe1aabb63" y="217.64"></use>
+</g>
+</g>
+<g id="g21_8es_text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 73.61358 232.238438)" x="73.61358" y="232.238438">1.5</text>
+</g>
+</g>
+<g id="g21_8es_xtick_2">
+<g id="g21_8es_line2d_2">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="202.665852" xlink:href="#g21_8es_m5fe1aabb63" y="217.64"></use>
+</g>
+</g>
+<g id="g21_8es_text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 202.665852 232.238438)" x="202.665852" y="232.238438">2.5</text>
+</g>
+</g>
+<g id="g21_8es_xtick_3">
+<g id="g21_8es_line2d_3">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="331.718125" xlink:href="#g21_8es_m5fe1aabb63" y="217.64"></use>
+</g>
+</g>
+<g id="g21_8es_text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 331.718125 232.238438)" x="331.718125" y="232.238438">3.5</text>
+</g>
+</g>
+<g id="g21_8es_xtick_4">
+<g id="g21_8es_line2d_4">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="460.770398" xlink:href="#g21_8es_m5fe1aabb63" y="217.64"></use>
+</g>
+</g>
+<g id="g21_8es_text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 460.770398 232.238438)" x="460.770398" y="232.238438">4.5</text>
+</g>
+</g>
+<g id="g21_8es_xtick_5">
+<g id="g21_8es_line2d_5">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="589.82267" xlink:href="#g21_8es_m5fe1aabb63" y="217.64"></use>
+</g>
+</g>
+<g id="g21_8es_text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #526175" transform="rotate(-0 589.82267 232.238438)" x="589.82267" y="232.238438">5.5</text>
+</g>
+</g>
+<g id="g21_8es_text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" transform="rotate(-0 331.718125 245.916562)" x="331.718125" y="245.916562">Umbral de división</text>
+</g>
+</g>
+<g id="g21_8es_matplotlib.axis_2">
+<g id="g21_8es_ytick_1">
+<g id="g21_8es_line2d_6">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="g21_8es_mb81eb5889c" style="stroke: #526175; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="47.803125" xlink:href="#g21_8es_mb81eb5889c" y="182.928424"></use>
+</g>
+</g>
+<g id="g21_8es_text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 40.803125 186.727643)" x="40.803125" y="186.727643">6</text>
+</g>
+</g>
+<g id="g21_8es_ytick_2">
+<g id="g21_8es_line2d_7">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="47.803125" xlink:href="#g21_8es_mb81eb5889c" y="143.794334"></use>
+</g>
+</g>
+<g id="g21_8es_text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 40.803125 147.593552)" x="40.803125" y="147.593552">8</text>
+</g>
+</g>
+<g id="g21_8es_ytick_3">
+<g id="g21_8es_line2d_8">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="47.803125" xlink:href="#g21_8es_mb81eb5889c" y="104.660243"></use>
+</g>
+</g>
+<g id="g21_8es_text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 40.803125 108.459462)" x="40.803125" y="108.459462">10</text>
+</g>
+</g>
+<g id="g21_8es_ytick_4">
+<g id="g21_8es_line2d_9">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="47.803125" xlink:href="#g21_8es_mb81eb5889c" y="65.526153"></use>
+</g>
+</g>
+<g id="g21_8es_text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 40.803125 69.325371)" x="40.803125" y="69.325371">12</text>
+</g>
+</g>
+<g id="g21_8es_ytick_5">
+<g id="g21_8es_line2d_10">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="47.803125" xlink:href="#g21_8es_mb81eb5889c" y="26.392062"></use>
+</g>
+</g>
+<g id="g21_8es_text_11">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 40.803125 30.191281)" x="40.803125" y="30.191281">14</text>
+</g>
+</g>
+<g id="g21_8es_text_12">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" transform="rotate(-90 21.998438 116.02)" x="21.998438" y="116.02">Gain regularizado</text>
+</g>
+</g>
+<g id="g21_8es_line2d_11">
+<path clip-path="url(#g21_8es_pf41d23492c)" d="M 73.61358 208.401818 
+L 202.665852 72.338383 
+L 331.718125 29.082531 
+L 460.770398 23.638182 
+L 589.82267 130.133637 
+" style="fill: none; stroke: #8c69ba; stroke-width: 2.5; stroke-linecap: square"></path>
+<defs>
+<path d="M 0 4 
+C 1.060812 4 2.078319 3.578535 2.828427 2.828427 
+C 3.578535 2.078319 4 1.060812 4 0 
+C 4 -1.060812 3.578535 -2.078319 2.828427 -2.828427 
+C 2.078319 -3.578535 1.060812 -4 0 -4 
+C -1.060812 -4 -2.078319 -3.578535 -2.828427 -2.828427 
+C -3.578535 -2.078319 -4 -1.060812 -4 0 
+C -4 1.060812 -3.578535 2.078319 -2.828427 2.828427 
+C -2.078319 3.578535 -1.060812 4 0 4 
+z
+" id="g21_8es_m9e029e3df9" style="stroke: #8c69ba"></path>
+</defs>
+<g clip-path="url(#g21_8es_pf41d23492c)">
+<use style="fill: #8c69ba; stroke: #8c69ba" x="73.61358" xlink:href="#g21_8es_m9e029e3df9" y="208.401818"></use>
+<use style="fill: #8c69ba; stroke: #8c69ba" x="202.665852" xlink:href="#g21_8es_m9e029e3df9" y="72.338383"></use>
+<use style="fill: #8c69ba; stroke: #8c69ba" x="331.718125" xlink:href="#g21_8es_m9e029e3df9" y="29.082531"></use>
+<use style="fill: #8c69ba; stroke: #8c69ba" x="460.770398" xlink:href="#g21_8es_m9e029e3df9" y="23.638182"></use>
+<use style="fill: #8c69ba; stroke: #8c69ba" x="589.82267" xlink:href="#g21_8es_m9e029e3df9" y="130.133637"></use>
+</g>
+</g>
+<g id="g21_8es_patch_3">
+<path d="M 47.803125 217.64 
+L 47.803125 14.4 
+" style="fill: none; stroke: #adbccf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g21_8es_patch_4">
+<path d="M 47.803125 217.64 
+L 615.633125 217.64 
+" style="fill: none; stroke: #adbccf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g21_8es_patch_5">
+<path d="M 377.6068 142.334295 
+Q 418.613753 83.806693 458.97916 26.194744 
+" style="fill: none; stroke: #15957e; stroke-linecap: round"></path>
+<path d="M 455.045928 28.323051 
+L 458.97916 26.194744 
+L 458.321866 30.618314 
+" style="fill: none; stroke: #15957e; stroke-linecap: round"></path>
+</g>
+<g id="g21_8es_text_13">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #15957e" transform="rotate(-0 344.623352 153.577856)" x="344.623352" y="153.577856">14.140741</text>
+</g>
+<g id="g21_8es_PathCollection_1">
+<defs>
+<path d="M 0 6.892024 
+C 1.827786 6.892024 3.580957 6.165837 4.873397 4.873397 
+C 6.165837 3.580957 6.892024 1.827786 6.892024 0 
+C 6.892024 -1.827786 6.165837 -3.580957 4.873397 -4.873397 
+C 3.580957 -6.165837 1.827786 -6.892024 0 -6.892024 
+C -1.827786 -6.892024 -3.580957 -6.165837 -4.873397 -4.873397 
+C -6.165837 -3.580957 -6.892024 -1.827786 -6.892024 0 
+C -6.892024 1.827786 -6.165837 3.580957 -4.873397 4.873397 
+C -3.580957 6.165837 -1.827786 6.892024 0 6.892024 
+z
+" id="g21_8es_m567a1b3a56" style="stroke: #15957e"></path>
+</defs>
+<g clip-path="url(#g21_8es_pf41d23492c)">
+<use style="fill: #15957e; stroke: #15957e" x="460.770398" xlink:href="#g21_8es_m567a1b3a56" y="23.638182"></use>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="g21_8es_pf41d23492c">
+<rect height="203.24" width="567.83" x="47.803125" y="14.4"></rect>
+</clippath>
+</defs>
+</svg>
+</div><figcaption>Split Gain regularizado de XGBoost en cinco candidatos, Lambda=1 y Gamma=0.2. Desliza horizontalmente el gráfico en un teléfono.</figcaption></figure>
+</section><section class="guide-section" id="section-21"><h2>21. Diferenciar Gamma, Lambda, Learning Rate y profundidad</h2><p>Cuatro Hyperparameters actúan en momentos distintos. <strong>Lambda</strong> (\(\lambda\)) reduce la magnitud de los scores mediante \(H_j+\lambda\); subirlo de 1 a 3 cambiaría el score izquierdo de \(-7.333333/5=-1.466667\) a \(-7.333333/7=-1.047619\). <strong>Gamma</strong> (\(\gamma\)) resta valor al Gain y desincentiva divisiones con escasa mejora. <strong>Learning Rate</strong> (\(\nu\)) reduce la contribución del árbol <em>después</em> de estimar sus valores. <strong>Max Depth</strong> limita la complejidad de las preguntas sucesivas de cada árbol.</p>
+<p>No son intercambiables. Si \(\gamma\) superara el Gain antes de penalización de 14.340741 en este ejemplo, esa división no sería aceptada bajo una regla de Gain estrictamente positivo; cambiar \(\nu\) no modifica la fórmula con la que se comparan los Splits. XGBoost también permite Subsampling de filas y columnas, introduciendo aleatoriedad sin convertirse en Random Forest: las etapas siguen dependiendo de modelos anteriores.</p>
+<p>Una sutileza: esta demostración supone una Loss diferenciable con Hessian útil y valores constantes en las hojas. XGBoost ofrece varios objetivos y detalles de implementación, como histogramas y rutas para Missing Values. No podemos deducir toda su conducta de una única operación con seis observaciones.</p>
+</section><section class="guide-section teal" id="section-22"><h2>22. Comparación rigurosa de los tres métodos de Boosting</h2><div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Dimensión</th>
+<th>AdaBoost (Classification binaria)</th>
+<th>Gradient Boosting</th>
+<th>XGBoost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Señal para el siguiente modelo</td>
+<td>Pesos actualizados que enfatizan errores</td>
+<td>Negative Gradients de la Loss</td>
+<td>Derivadas de primer y segundo orden y Gain regularizado</td>
+</tr>
+<tr>
+<td>Resultado típico</td>
+<td>Score de Classification ponderado</td>
+<td>Predicción o score aditivo</td>
+<td>Predicción o score de árboles regularizados</td>
+</tr>
+<tr>
+<td>Árboles habituales</td>
+<td>Decision Stumps sencillos</td>
+<td>Regression Trees pequeños</td>
+<td>Árboles optimizados y regularizados</td>
+</tr>
+<tr>
+<td>Controles importantes</td>
+<td>Rondas, Learning Rate y modelo base</td>
+<td>Rondas, Learning Rate, profundidad y Loss</td>
+<td>Rondas, Rate, profundidad, Lambda, Gamma y Subsampling</td>
+</tr>
+<tr>
+<td>Riesgo característico</td>
+<td>Sensibilidad a etiquetas persistentemente erradas</td>
+<td>Overfitting al continuar ajustando patrones residuales</td>
+<td>Riesgos semejantes más interacciones complejas entre Hyperparameters</td>
+</tr>
+</tbody>
+</table></div>
+<p>Todos aprenden a partir de Training, pero no tienen por qué preferir modelos iguales ni devolver scores comparables. Interpretar directamente el score de AdaBoost como probabilidad de fraude, por ejemplo, es inadecuado sin Calibration. Del mismo modo, si Gradient Boosting utiliza Log Loss, una actualización positiva de Log-Odds no significa el mismo incremento numérico en Probability.</p>
+<p><strong>Conexión con la Guía 20:</strong> Bagging ajusta árboles con datos remuestreados y luego agrega. Boosting construye una <em>trayectoria</em> de modelos; el resultado final depende del orden y de la magnitud de las correcciones anteriores. Por eso Learning Rate, Early Stopping y Validation merecen tanta atención.</p>
+</section><section class="guide-section purple" id="section-23"><h2>23. De cálculos manuales a un experimento justo con 180 reclamos</h2><p>Para mostrar un procedimiento más realista generamos 180 reclamos sintéticos. Las cuatro Features son antigüedad del reclamo (días), cantidad de incidentes previos, categoría de exposición climática y canal de reporte. El Target es el importe final, en <strong>miles de dólares</strong>. La fórmula generadora incluye efectos aditivos, una interacción y ruido aleatorio. Está publicada en el código; no utilizamos datos privados.</p>
+<p>Una partición aleatoria fija produce <strong>108 registros de Training, 36 de Validation y 36 de Test</strong>. Ajustaremos un Baseline de media, un Random Forest comparativo y cuatro candidatos de Gradient Boosting, usando <strong>únicamente Training</strong> para aprender. El criterio de selección será MAE de Validation, medido en miles de dólares. Evaluaremos el ganador <strong>una sola vez</strong> en Test; no debemos modificar los candidatos después de mirar Test.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Candidato</th>
+<th style="text-align:right">MAE Validation (miles de USD)</th>
+<th style="text-align:right">RMSE Validation (miles de USD)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Baseline de media</td>
+<td style="text-align:right">2.4379</td>
+<td style="text-align:right">3.0227</td>
+</tr>
+<tr>
+<td>Random Forest</td>
+<td style="text-align:right">1.6384</td>
+<td style="text-align:right">1.9325</td>
+</tr>
+<tr>
+<td>GB: \(\nu=0.05\), 40 árboles</td>
+<td style="text-align:right">1.7438</td>
+<td style="text-align:right">2.0867</td>
+</tr>
+<tr>
+<td>GB: \(\nu=0.10\), 40 árboles</td>
+<td style="text-align:right">1.5741</td>
+<td style="text-align:right">1.8961</td>
+</tr>
+<tr>
+<td>GB: \(\nu=0.10\), 100 árboles</td>
+<td style="text-align:right">1.4422</td>
+<td style="text-align:right">1.7861</td>
+</tr>
+<tr>
+<td><strong>GB: \(\nu=0.30\), 100 árboles</strong></td>
+<td style="text-align:right"><strong>1.4206</strong></td>
+<td style="text-align:right"><strong>1.7705</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Entre estos candidatos predefinidos, el último obtiene el menor MAE de Validation. Eso no demuestra que 0.30 sea el Learning Rate universalmente óptimo; otras muestras o búsquedas podrían favorecer otro valor. Su MAE final sobre Test es <strong>1.2728 miles de dólares</strong> y su RMSE <strong>1.4953 miles de dólares</strong>. Un experimento pequeño y sintético no demuestra eficacia empresarial real.</p>
+<figure class="learning-figure"><div class="chart-scroll"><svg data-generated-height="277.274349pt" data-generated-width="673.26125pt" version="1.1" viewbox="0 0 673.26125 277.274349" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="g21_9es_figure_1">
+<g id="g21_9es_patch_1">
+<path d="M 0 277.274349 
+L 673.26125 277.274349 
+L 673.26125 0 
+L 0 0 
+z
+" style="fill: #ffffff"></path>
+</g>
+<g id="g21_9es_axes_1">
+<g id="g21_9es_patch_2">
+<path d="M 50.98125 228.443867 
+L 658.86125 228.443867 
+L 658.86125 14.4 
+L 50.98125 14.4 
+z
+" style="fill: #fbfdff"></path>
+</g>
+<g id="g21_9es_patch_3">
+<path clip-path="url(#g21_9es_p40579ec13d)" d="M 78.612159 228.443867 
+L 154.835357 228.443867 
+L 154.835357 42.082905 
+L 78.612159 42.082905 
+z
+" style="fill: #d59a32"></path>
+</g>
+<g id="g21_9es_patch_4">
+<path clip-path="url(#g21_9es_p40579ec13d)" d="M 173.891156 228.443867 
+L 250.114353 228.443867 
+L 250.114353 103.19885 
+L 173.891156 103.19885 
+z
+" style="fill: #89afd0"></path>
+</g>
+<g id="g21_9es_patch_5">
+<path clip-path="url(#g21_9es_p40579ec13d)" d="M 269.170153 228.443867 
+L 345.39335 228.443867 
+L 345.39335 95.136812 
+L 269.170153 95.136812 
+z
+" style="fill: #89afd0"></path>
+</g>
+<g id="g21_9es_patch_6">
+<path clip-path="url(#g21_9es_p40579ec13d)" d="M 364.44915 228.443867 
+L 440.672347 228.443867 
+L 440.672347 108.110087 
+L 364.44915 108.110087 
+z
+" style="fill: #89afd0"></path>
+</g>
+<g id="g21_9es_patch_7">
+<path clip-path="url(#g21_9es_p40579ec13d)" d="M 459.728147 228.443867 
+L 535.951344 228.443867 
+L 535.951344 118.198968 
+L 459.728147 118.198968 
+z
+" style="fill: #89afd0"></path>
+</g>
+<g id="g21_9es_patch_8">
+<path clip-path="url(#g21_9es_p40579ec13d)" d="M 555.007143 228.443867 
+L 631.230341 228.443867 
+L 631.230341 119.846112 
+L 555.007143 119.846112 
+z
+" style="fill: #15957e"></path>
+</g>
+<g id="g21_9es_matplotlib.axis_1">
+<g id="g21_9es_xtick_1">
+<g id="g21_9es_line2d_1">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="g21_9es_m1d536a8046" style="stroke: #526175; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="116.723758" xlink:href="#g21_9es_m1d536a8046" y="228.443867"></use>
+</g>
+</g>
+<g id="g21_9es_text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #526175" transform="translate(97.577867 256.431912) rotate(-19)">Baseline</text>
+</g>
+</g>
+<g id="g21_9es_xtick_2">
+<g id="g21_9es_line2d_2">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="212.002755" xlink:href="#g21_9es_m1d536a8046" y="228.443867"></use>
+</g>
+</g>
+<g id="g21_9es_text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #526175" transform="translate(206.897076 246.763047) rotate(-19)">RF</text>
+</g>
+</g>
+<g id="g21_9es_xtick_3">
+<g id="g21_9es_line2d_3">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="307.281752" xlink:href="#g21_9es_m1d536a8046" y="228.443867"></use>
+</g>
+</g>
+<g id="g21_9es_text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #526175" transform="translate(284.644091 258.836538) rotate(-19)">GB .05/40</text>
+</g>
+</g>
+<g id="g21_9es_xtick_4">
+<g id="g21_9es_line2d_4">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="402.560748" xlink:href="#g21_9es_m1d536a8046" y="228.443867"></use>
+</g>
+</g>
+<g id="g21_9es_text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #526175" transform="translate(379.923087 258.836538) rotate(-19)">GB .10/40</text>
+</g>
+</g>
+<g id="g21_9es_xtick_5">
+<g id="g21_9es_line2d_5">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="497.839745" xlink:href="#g21_9es_m1d536a8046" y="228.443867"></use>
+</g>
+</g>
+<g id="g21_9es_text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #526175" transform="translate(472.194153 260.907966) rotate(-19)">GB .10/100</text>
+</g>
+</g>
+<g id="g21_9es_xtick_6">
+<g id="g21_9es_line2d_6">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="593.118742" xlink:href="#g21_9es_m1d536a8046" y="228.443867"></use>
+</g>
+</g>
+<g id="g21_9es_text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; fill: #526175" transform="translate(567.47315 260.907966) rotate(-19)">GB .30/100</text>
+</g>
+</g>
+</g>
+<g id="g21_9es_matplotlib.axis_2">
+<g id="g21_9es_ytick_1">
+<g id="g21_9es_line2d_7">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="g21_9es_m960ef5c9ad" style="stroke: #526175; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="50.98125" xlink:href="#g21_9es_m960ef5c9ad" y="228.443867"></use>
+</g>
+</g>
+<g id="g21_9es_text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 43.98125 232.243086)" x="43.98125" y="232.243086">0.0</text>
+</g>
+</g>
+<g id="g21_9es_ytick_2">
+<g id="g21_9es_line2d_8">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="50.98125" xlink:href="#g21_9es_m960ef5c9ad" y="190.221748"></use>
+</g>
+</g>
+<g id="g21_9es_text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 43.98125 194.020967)" x="43.98125" y="194.020967">0.5</text>
+</g>
+</g>
+<g id="g21_9es_ytick_3">
+<g id="g21_9es_line2d_9">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="50.98125" xlink:href="#g21_9es_m960ef5c9ad" y="151.999629"></use>
+</g>
+</g>
+<g id="g21_9es_text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 43.98125 155.798848)" x="43.98125" y="155.798848">1.0</text>
+</g>
+</g>
+<g id="g21_9es_ytick_4">
+<g id="g21_9es_line2d_10">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="50.98125" xlink:href="#g21_9es_m960ef5c9ad" y="113.77751"></use>
+</g>
+</g>
+<g id="g21_9es_text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 43.98125 117.576729)" x="43.98125" y="117.576729">1.5</text>
+</g>
+</g>
+<g id="g21_9es_ytick_5">
+<g id="g21_9es_line2d_11">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="50.98125" xlink:href="#g21_9es_m960ef5c9ad" y="75.555391"></use>
+</g>
+</g>
+<g id="g21_9es_text_11">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 43.98125 79.354609)" x="43.98125" y="79.354609">2.0</text>
+</g>
+</g>
+<g id="g21_9es_ytick_6">
+<g id="g21_9es_line2d_12">
+<g>
+<use style="fill: #526175; stroke: #526175; stroke-width: 0.8" x="50.98125" xlink:href="#g21_9es_m960ef5c9ad" y="37.333272"></use>
+</g>
+</g>
+<g id="g21_9es_text_12">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #526175" transform="rotate(-0 43.98125 41.13249)" x="43.98125" y="41.13249">2.5</text>
+</g>
+</g>
+<g id="g21_9es_text_13">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" transform="rotate(-90 21.998438 121.421934)" x="21.998438" y="121.421934">MAE de Validation (miles de USD)</text>
+</g>
+</g>
+<g id="g21_9es_patch_9">
+<path d="M 50.98125 228.443867 
+L 50.98125 14.4 
+" style="fill: none; stroke: #adbccf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g21_9es_patch_10">
+<path d="M 50.98125 228.443867 
+L 658.86125 228.443867 
+" style="fill: none; stroke: #adbccf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g21_9es_text_14">
+<text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 116.723758 39.025135)" x="116.723758" y="39.025135">2.438</text>
+</g>
+<g id="g21_9es_text_15">
+<text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 212.002755 100.141081)" x="212.002755" y="100.141081">1.638</text>
+</g>
+<g id="g21_9es_text_16">
+<text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 307.281752 92.079042)" x="307.281752" y="92.079042">1.744</text>
+</g>
+<g id="g21_9es_text_17">
+<text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 402.560748 105.052317)" x="402.560748" y="105.052317">1.574</text>
+</g>
+<g id="g21_9es_text_18">
+<text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 497.839745 115.141199)" x="497.839745" y="115.141199">1.442</text>
+</g>
+<g id="g21_9es_text_19">
+<text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 593.118742 116.788343)" x="593.118742" y="116.788343">1.421</text>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="g21_9es_p40579ec13d">
+<rect height="214.043867" width="607.88" x="50.98125" y="14.4"></rect>
+</clippath>
+</defs>
+</svg>
+</div><figcaption>MAE de Validation para seis candidatos predefinidos; seleccionado en teal. Desliza horizontalmente el gráfico en un teléfono.</figcaption></figure>
+</section><section class="guide-section amber" id="section-24"><h2>24. Python reproducible: generar, ajustar, seleccionar y evaluar una vez</h2><p>El código siguiente funciona como una sola celda de Jupyter, con NumPy y scikit-learn. Todas las Features están definidas antes de generar el importe final simulado; no incluimos el Target como Input. Las Random Seeds del generador y los modelos hacen reproducible el experimento con las implementaciones indicadas.</p>
+<pre class="code-sample"><code class="language-python">import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.dummy import DummyRegressor
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from sklearn.metrics import mean_absolute_error, mean_squared_error
+rng=np.random.default_rng(2026)
+n=180
+age=rng.integers(1,16,n)
+prior=rng.integers(0,5,n)
+weather=rng.integers(0,3,n)
+channel=rng.integers(0,2,n)
+X=np.column_stack([age,prior,weather,channel])
+y=np.maximum(0.5,1.8+0.27*age+0.9*prior+1.5*weather +0.12*age*weather +0.9*(channel==1)*(prior&gt;=2)+rng.normal(0,1.4,n))
+ids=np.arange(n)
+tr,tmp=train_test_split(ids,test_size=.4,random_state=42)
+va,te=train_test_split(tmp,test_size=.5,random_state=42)
+models={'Mean baseline':DummyRegressor(strategy='mean'),'Random Forest':RandomForestRegressor(n_estimators=120,max_depth=4,min_samples_leaf=3,random_state=42), 'GB 0.05, 40':GradientBoostingRegressor(n_estimators=40,learning_rate=.05,max_depth=2,random_state=42),'GB 0.10, 40':GradientBoostingRegressor(n_estimators=40,learning_rate=.1,max_depth=2,random_state=42),'GB 0.10, 100':GradientBoostingRegressor(n_estimators=100,learning_rate=.1,max_depth=2,random_state=42),'GB 0.30, 100':GradientBoostingRegressor(n_estimators=100,learning_rate=.3,max_depth=2,random_state=42)}
+for name,m in models.items():
+ m.fit(X[tr],y[tr]); pr=m.predict(X[va]); print(name,'valid MAE',round(mean_absolute_error(y[va],pr),6),'valid RMSE',round(np.sqrt(mean_squared_error(y[va],pr)),6),'train MAE',round(mean_absolute_error(y[tr],m.predict(X[tr])),6))
+win=min(models,key=lambda k:mean_absolute_error(y[va],models[k].predict(X[va])))
+
+# Stage-wise development-only diagnostic for the 100-tree selected candidate.
+# The already reported Test score belongs to the frozen 100-tree model, not Stage 93.
+chosen=models[win]
+training_mse=[mean_squared_error(y[tr],p) for p in chosen.staged_predict(X[tr])]
+validation_mse=[mean_squared_error(y[va],p) for p in chosen.staged_predict(X[va])]
+validation_mae=[mean_absolute_error(y[va],p) for p in chosen.staged_predict(X[va])]
+best_stage=int(np.argmin(validation_mae)+1)
+print('DEVELOPMENT CURVE: Validation MAE best stage',best_stage,'best',round(validation_mae[best_stage-1],6),'stage 100',round(validation_mae[-1],6))
+print('DEVELOPMENT CURVE: Validation MSE stage 93',round(validation_mse[92],6),'stage 100',round(validation_mse[-1],6))
+print('DEVELOPMENT CURVE: Training MSE stage 93',round(training_mse[92],6),'stage 100',round(training_mse[-1],6))
+print('WIN',win,'TEST MAE',mean_absolute_error(y[te],models[win].predict(X[te])),'TEST RMSE',np.sqrt(mean_squared_error(y[te],models[win].predict(X[te]))),'n',len(tr),len(va),len(te))
+</code></pre>
+<p>El código compara modelos con <strong>MAE de Validation</strong>, no con Training Loss. También presenta RMSE para revelar sensibilidad a errores extremos. Un proyecto real necesitaría investigar grupos de clientes repetidos, validez temporal, cambios de política, outliers, Distribution Shift e intervalos de incertidumbre. La división aleatoria basta para este ejemplo controlado, pero no necesariamente para desplegar un modelo en seguros.</p>
+</section><section class="guide-section" id="section-25"><h2>25. Early Stopping, Overfitting y significado de la curva de Loss</h2><p>Boosting reduce reiteradamente Training Loss y puede terminar ajustando patrones cada vez más específicos. Sin embargo, el desempeño de Validation puede dejar de mejorar y finalmente empeorar. <strong>Early Stopping</strong> consiste en elegir una etapa con datos de desarrollo —Validation o Cross-Validation—, no revisar Test después de cada árbol.</p>
+<p>Una comprobación reproducible en scikit-learn consiste en entrenar un GradientBoostingRegressor con suficientes árboles sobre Training y evaluar <code>staged_predict(X_validation)</code> en varias etapas sucesivas. Seleccionamos aquella que minimiza MAE de Validation y, si el protocolo lo establece, reentrenamos sobre los datos de desarrollo permitidos. El Test final debe mantenerse fuera de todas las decisiones de selección.</p>
+<p>Learning Rate y número de etapas están relacionados. Un \(\nu\) pequeño suele necesitar más modelos; uno grande puede disminuir rápidamente Training Loss, pero también facilitar ajustes excesivos o pasos demasiado grandes. Ni la reducción monótona de Training Loss ni una mejora inicial demuestran Generalization. Una comparación confiable documenta las particiones, los candidatos, la métrica y el único resultado final reservado.</p>
+<h3>Curvas de Loss medidas en el experimento sintético de 180 reclamos</h3><p>Esta es la curva <strong>real</strong> del experimento, no un dibujo esquemático en forma de U. Para el candidato de 100 árboles (<code>learning_rate=0.30</code>, <code>max_depth=2</code>), evaluamos las 100 predicciones de <code>staged_predict</code> en las particiones fijas de Training y Validation. La Loss graficada es <strong>Mean Squared Error (MSE)</strong> en (miles de dólares)². Aquí Gradient Boosting ajusta Squared Error, mientras que la métrica de selección es <strong>MAE</strong> de Validation en miles de dólares. No debemos confundir sus escalas.</p><figure class="learning-figure curve-figure"><div class="chart-scroll"><svg aria-labelledby="g21-curve-es-title g21-curve-es-desc" role="img" viewbox="0 0 760 355" xmlns="http://www.w3.org/2000/svg"><title id="g21-curve-es-title">MSE de Training y Validation por ronda</title><desc id="g21-curve-es-desc">100 etapas, curva de Training decreciente y mínimo de Validation en ronda 93.</desc><rect fill="#fbfdff" height="355" width="760"></rect><line stroke="#e1e8f0" x1="72" x2="700" y1="288.000" y2="288.000"></line><text fill="#4b5c72" font-size="12" text-anchor="end" x="60" y="292.000">0</text><line stroke="#e1e8f0" x1="72" x2="700" y1="235.400" y2="235.400"></line><text fill="#4b5c72" font-size="12" text-anchor="end" x="60" y="239.400">2</text><line stroke="#e1e8f0" x1="72" x2="700" y1="182.800" y2="182.800"></line><text fill="#4b5c72" font-size="12" text-anchor="end" x="60" y="186.800">4</text><line stroke="#e1e8f0" x1="72" x2="700" y1="130.200" y2="130.200"></line><text fill="#4b5c72" font-size="12" text-anchor="end" x="60" y="134.200">6</text><line stroke="#e1e8f0" x1="72" x2="700" y1="77.600" y2="77.600"></line><text fill="#4b5c72" font-size="12" text-anchor="end" x="60" y="81.600">8</text><line stroke="#e1e8f0" x1="72" x2="700" y1="25.000" y2="25.000"></line><text fill="#4b5c72" font-size="12" text-anchor="end" x="60" y="29.000">10</text><text fill="#4b5c72" font-size="12" text-anchor="middle" x="72.000" y="310">1</text><text fill="#4b5c72" font-size="12" text-anchor="middle" x="192.525" y="310">20</text><text fill="#4b5c72" font-size="12" text-anchor="middle" x="319.394" y="310">40</text><text fill="#4b5c72" font-size="12" text-anchor="middle" x="446.263" y="310">60</text><text fill="#4b5c72" font-size="12" text-anchor="middle" x="573.131" y="310">80</text><text fill="#4b5c72" font-size="12" text-anchor="middle" x="700.000" y="310">100</text><line stroke="#40536b" stroke-width="1.5" x1="72" x2="72" y1="25" y2="288"></line><line stroke="#40536b" stroke-width="1.5" x1="72" x2="700" y1="288" y2="288"></line><polyline fill="none" id="g21_curve_es_train" points="72.000,109.712 78.343,149.602 84.687,177.339 91.030,197.083 97.374,211.936 103.717,221.109 110.061,227.477 116.404,232.340 122.747,235.882 129.091,239.575 135.434,241.432 141.778,243.139 148.121,244.599 154.465,245.584 160.808,246.208 167.152,246.892 173.495,247.522 179.838,247.976 186.182,248.287 192.525,248.729 198.869,249.143 205.212,249.376 211.556,249.593 217.899,249.821 224.242,250.252 230.586,250.465 236.929,250.616 243.273,250.751 249.616,250.911 255.960,251.189 262.303,251.324 268.646,251.733 274.990,251.798 281.333,251.886 287.677,251.979 294.020,252.106 300.364,252.401 306.707,252.492 313.051,252.728 319.394,252.800 325.737,253.062 332.081,253.239 338.424,253.324 344.768,253.406 351.111,253.455 357.455,253.496 363.798,253.533 370.141,253.621 376.485,253.660 382.828,253.720 389.172,253.895 395.515,254.054 401.859,254.240 408.202,254.388 414.545,254.497 420.889,254.556 427.232,254.632 433.576,254.677 439.919,254.822 446.263,254.862 452.606,254.959 458.949,254.999 465.293,255.034 471.636,255.123 477.980,255.182 484.323,255.221 490.667,255.299 497.010,255.389 503.354,255.485 509.697,255.631 516.040,255.663 522.384,255.693 528.727,255.812 535.071,255.868 541.414,255.944 547.758,255.989 554.101,256.144 560.444,256.212 566.788,256.245 573.131,256.314 579.475,256.344 585.818,256.419 592.162,256.549 598.505,256.596 604.848,256.630 611.192,256.751 617.535,256.791 623.879,256.832 630.222,256.915 636.566,256.949 642.909,256.996 649.253,257.062 655.596,257.102 661.939,257.184 668.283,257.212 674.626,257.318 680.970,257.376 687.313,257.405 693.657,257.424 700.000,257.588" stroke="#3178b9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.7"></polyline><polyline fill="none" id="g21_curve_es_valid" points="72.000,79.350 78.343,106.396 84.687,131.334 91.030,141.126 97.374,159.202 103.717,163.126 110.061,171.375 116.404,176.394 122.747,178.079 129.091,182.586 135.434,183.621 141.778,185.894 148.121,187.369 154.465,187.851 160.808,188.620 167.152,189.652 173.495,190.042 179.838,190.500 186.182,191.168 192.525,190.870 198.869,191.460 205.212,191.181 211.556,192.565 217.899,192.530 224.242,191.767 230.586,192.287 236.929,192.168 243.273,193.268 249.616,193.132 255.960,194.671 262.303,194.622 268.646,195.248 274.990,195.501 281.333,196.177 287.677,196.378 294.020,197.396 300.364,197.687 306.707,197.594 313.051,197.973 319.394,198.217 325.737,197.765 332.081,197.941 338.424,197.768 344.768,198.365 351.111,198.361 357.455,198.655 363.798,198.784 370.141,199.583 376.485,199.879 382.828,200.096 389.172,200.356 395.515,199.534 401.859,199.429 408.202,199.563 414.545,199.749 420.889,200.336 427.232,200.877 433.576,201.238 439.919,202.095 446.263,202.221 452.606,201.854 458.949,202.219 465.293,202.156 471.636,202.793 477.980,202.591 484.323,202.650 490.667,203.553 497.010,203.327 503.354,202.845 509.697,202.851 516.040,202.765 522.384,202.811 528.727,203.051 535.071,203.570 541.414,204.134 547.758,204.632 554.101,204.452 560.444,204.057 566.788,203.973 573.131,203.221 579.475,203.198 585.818,202.961 592.162,203.389 598.505,203.204 604.848,203.246 611.192,203.147 617.535,203.572 623.879,203.496 630.222,204.090 636.566,204.504 642.909,204.924 649.253,205.754 655.596,205.910 661.939,205.430 668.283,205.506 674.626,205.314 680.970,205.161 687.313,205.373 693.657,205.432 700.000,205.555" stroke="#15957e" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.7"></polyline><line stroke="#d59a32" stroke-dasharray="4 4" x1="655.596" x2="655.596" y1="25" y2="288"></line><circle cx="655.596" cy="205.910" fill="#15957e" r="5" stroke="#fff" stroke-width="1.6"></circle><text fill="#8a6316" font-size="12" font-weight="700" text-anchor="end" x="649.596" y="40">Mejor: 93</text><line stroke="#3178b9" stroke-width="3" x1="215" x2="247" y1="335" y2="335"></line><text fill="#30405b" font-size="12" x="252" y="339">Training MSE</text><line stroke="#15957e" stroke-width="3" x1="365" x2="397" y1="335" y2="335"></line><text fill="#30405b" font-size="12" x="402" y="339">Validation MSE</text><text fill="#354964" font-size="13" text-anchor="middle" x="390" y="323">Número de árboles (rondas)</text><text fill="#354964" font-size="12" text-anchor="middle" transform="rotate(-90 20 165)" x="20" y="165">MSE (1,000 USD)²</text></svg></div><figcaption>Training y Validation MSE durante las 100 rondas, calculados directamente del código de la Sección 24. El mínimo de Validation está en la ronda 93; las curvas provienen de predicciones reales. Desplaza la figura horizontalmente en un teléfono.</figcaption></figure><div class="table-wrap compare-math-table"><table><caption>Cálculo con staged_predict: valores antes de observar Test</caption><thead><tr><th scope="col">Ronda</th><th scope="col">Training MSE</th><th scope="col">Validation MSE</th><th scope="col">Validation MAE</th></tr></thead><tbody><tr><td>1</td><td>6.779010</td><td>7.933454</td><td>2.348697</td></tr><tr><td>10</td><td>1.841238</td><td>4.008154</td><td>1.677555</td></tr><tr><td>40</td><td>1.338384</td><td>3.413793</td><td>1.508229</td></tr><tr><td>80</td><td>1.204795</td><td>3.223544</td><td>1.435714</td></tr><tr><td>93</td><td>1.174820</td><td>3.121289</td><td>1.411774</td></tr><tr><td>100</td><td>1.156364</td><td>3.134783</td><td>1.420614</td></tr></tbody></table></div><p><strong>Interpretación y decisión.</strong> El mínimo Validation MAE ocurre en la <strong>ronda 93 = 1.411774</strong> miles de dólares, frente a <strong>1.420614</strong> en la ronda 100. Validation MSE también alcanza su mínimo en la ronda 93 (3.121289 frente a 3.134783), mientras Training MSE continúa bajando de 1.174820 a 1.156364. Es un deterioro pequeño y real en esta muestra sintética de Validation, no una demostración de Overfitting universal. El Test MAE <strong>1.272816</strong> reportado corresponde al candidato de <strong>100 árboles</strong> originalmente especificado y congelado. <strong>No es el resultado de 93 árboles.</strong> En un experimento nuevo, con Early Stopping predefinido antes de mirar Test, podríamos elegir 93 rondas con Validation y después evaluar ese modelo distinto una sola vez en Test. Repetir búsquedas sin ajustar la evaluación aumenta Selection Bias.</p></section><section class="guide-section teal" id="section-26"><h2>26. Feature Importance, Missing Data, equidad y límites de despliegue</h2><p>La <strong>Feature Importance</strong> de árboles potenciados suele cuantificar el uso de divisiones o mejoras dentro del modelo ajustado. No demuestra causalidad. Una Feature puede parecer importante por representar información correlacionada o, peor, por contener información futura. En aplicaciones delicadas de seguros, conviene contrastarla con <strong>Permutation Importance</strong> sobre datos reservados y examinar desempeño por subgrupos, incertidumbre y posibles variables proxy de discriminación.</p>
+<p>Los Missing Values requieren una estrategia compatible con el algoritmo. El GradientBoostingRegressor clásico de scikit-learn suele necesitar preprocessing, mientras que XGBoost puede aprender direcciones de división para datos ausentes. Esa comodidad no convierte la ausencia de datos en algo inocuo: el patrón de Missingness podría cambiar entre departamentos o periodos. Cada transformación aprendida debe ajustarse solamente sobre Training o el fold correspondiente de Cross-Validation.</p>
+<p>En producción, predecir el importe final no equivale a decidir automáticamente una liquidación. Debemos considerar el uso previsto, las reglas de revisión humana, los costos de decisiones incorrectas, el Monitoring y los cambios en la prevalencia o las políticas. <strong>Predicción no significa explicación causal</strong>: modificar una Feature importante no necesariamente produce el cambio que sugiere el modelo.</p>
+</section><section class="guide-section purple" id="section-27"><h2>27. Comprobaciones de comprensión y errores comunes</h2><p>Estos errores son peligrosos porque pueden persistir aun cuando el programa se ejecute sin fallas:</p>
+<ol>
+<li><strong>«Boosting significa Bootstrap».</strong> No. Bagging organiza modelos independientes sobre muestras; Boosting organiza actualizaciones secuenciales. Algunas variantes de Boosting usan Subsampling, pero siguen dependiendo de etapas anteriores.</li>
+<li><strong>«Los pesos de AdaBoost son probabilidades de las clases».</strong> No. Los pesos de las observaciones distribuyen atención, \(\alpha_m\) controla la influencia del modelo, y el score final no está automáticamente calibrado.</li>
+<li><strong>«El siguiente árbol de Gradient Boosting predice el Target original».</strong> No en nuestra derivación. Aproxima el <em>Negative Gradient actual</em>, que coincide con un Residual solamente en el Squared Error escogido.</li>
+<li><strong>«El Hessian de XGBoost es un detalle decorativo».</strong> La segunda derivada interviene en pesos óptimos y Split Gain; no es otro nombre para Gradient.</li>
+<li><strong>«Gamma, Lambda y Learning Rate son la misma penalización».</strong> Actúan sobre división, magnitud de hoja y contribución de etapa, respectivamente.</li>
+<li><strong>«Si baja Training Error, también baja Test Error».</strong> Falso. Se necesita evaluación reservada y un esquema de validación adecuado.</li>
+<li><strong>«Elegimos el mejor resultado observado en Test».</strong> Eso reutiliza Test para seleccionar y destruye su independencia.</li>
+<li><strong>«Una división aleatoria siempre sirve en seguros».</strong> Clientes repetidos, cambios temporales y políticas pueden requerir Group-Based o Time-Based Splits.</li>
+<li><strong>«Feature Importance demuestra causalidad».</strong> Una asociación predictiva no equivale a un efecto de intervención.</li>
+<li><strong>«Menos errores significa siempre menor costo».</strong> Importan el tipo de error, la política de acción y la capacidad operativa.</li>
+<li><strong>«Los tres algoritmos generan el mismo tipo de score».</strong> Los márgenes de AdaBoost, los importes de Regression y los Log-Odds usan escalas distintas.</li>
+<li><strong>«Los resultados sintéticos validan el desempeño para aseguradoras reales».</strong> Validan cálculos y código educativos, no eficacia empresarial.</li>
+</ol>
+<p><strong>Autoevaluación breve:</strong> ¿Por qué E recibe peso 0.5 después de AdaBoost ronda 1? Porque el error multiplica por \(\sqrt5\), cinco aciertos se multiplican por \(1/\sqrt5\), y se normaliza el total. ¿Por qué en Regression la hoja derecha predice 7.6667 y no 9.5 en la primera actualización? Porque \(\nu=0.5\) avanza solo la mitad del camino desde la constante inicial 5.8333 hasta la media 9.5.</p>
+</section><section class="guide-section amber" id="section-28"><h2>28. Ejercicios con soluciones desarrolladas</h2><p>Intenta resolver cada ejercicio antes de desplegar la respuesta. Los resultados incluyen cálculo e interpretación.</p>
+<details><summary>1. ¿Por qué el primer Stump de AdaBoost es óptimo entre los umbrales de estos seis índices?</summary><div class="exercise-answer"><p>Su regla predice −1 para x≤2.5 y +1 en caso contrario; compárala con (−1,−1,+1,+1,−1,+1). Solamente E está equivocado, por lo que con pesos iguales el error es 1/6. El umbral 1.5 se equivoca en B y E: 2/6; con 3.5 se equivoca en C y E: también 2/6. La división elegida supera esas alternativas. La conclusión depende de las reglas candidatas y no de todos los clasificadores imaginables.</p></div></details>
+<details><summary>2. Calcula el primer coeficiente de influencia de AdaBoost.</summary><div class="exercise-answer"><p>El error ponderado es ε=1/6. Sustituimos en α=(1/2)ln[(1−ε)/ε]=(1/2)ln[(5/6)/(1/6)]=(1/2)ln 5=0.804719. Es positivo porque ε&lt;0.5; el Stump influye más que uno casi aleatorio. Este coeficiente pondera al modelo, no a un reclamo ni a una probabilidad.</p></div></details>
+<details><summary>3. Reproduce la primera actualización del peso del reclamo E, clasificado incorrectamente.</summary><div class="exercise-answer"><p>Inicialmente w_E=1/6. Como y_E h_1(E)=−1, su peso sin normalizar es (1/6)e^{0.804719}=(1/6)√5≈0.372678. La suma sin normalizar es Z≈0.745356. Dividimos: 0.372678/0.745356=0.5. Los cinco reclamos correctos reciben 0.1 cada uno, y los seis pesos suman 1.</p></div></details>
+<details><summary>4. ¿Por qué el segundo Stump no se entrena con pesos iguales?</summary><div class="exercise-answer"><p>AdaBoost hace que el siguiente modelo responda al error anterior. El reclamo E tiene peso 0.5 y cada otro reclamo tiene 0.1. El Stump con umbral 5.5 acierta E y falla en C y D, cuyos pesos suman apenas 0.2. Con pesos iguales, dos errores costarían 2/6, pero en la segunda ronda corresponde usar error ponderado 0.2, no Accuracy sin ponderar.</p></div></details>
+<details><summary>5. Calcula el peso normalizado de C después de la segunda ronda.</summary><div class="exercise-answer"><p>Antes de actualizar, C tiene peso 0.1. El segundo Stump se equivoca en C y α₂=(1/2)ln4=0.693147; su peso sin normalizar es 0.1e^{α₂}=0.1×2=0.2. Los seis pesos sin normalizar suman 0.8, así que w_C^(3)=0.2/0.8=0.25. Coincide con la tabla y muestra cómo la atención pasa parcialmente a C y D.</p></div></details>
+<details><summary>6. Reconstruye la predicción final de los dos Stumps para E y explica el resultado.</summary><div class="exercise-answer"><p>Para E, h₁(E)=+1 y h₂(E)=−1. Entonces S₂(E)=0.804719(+1)+0.693147(−1)=0.111572&gt;0. La clase predicha es +1, pero la real es −1. Aunque Stump 2 acierta E, el modelo previo sigue teniendo un coeficiente mayor. Añadir un modelo correctivo no garantiza corregir inmediatamente todos los errores.</p></div></details>
+<details><summary>7. Compara las contribuciones a Exponential Loss de E y A después de dos rondas.</summary><div class="exercise-answer"><p>Para E, el margen firmado es y_E S₂(E)=−0.111572 y su Loss es e^{0.111572}≈1.118. Para A, el margen es (−1)(−1.497866)=+1.497866 y su Loss es e^{−1.497866}≈0.224. E aporta aproximadamente cinco veces más Loss. La razón exacta es e^{1.609438}=5 y refleja la fuerte penalización de los errores.</p></div></details>
+<details><summary>8. Deriva la mejor predicción constante para los seis reclamos de Regression.</summary><div class="exercise-answer"><p>Plantea L(c)=(1/2)Σ(y_i−c)². Deriva: dL/dc=Σ(c−y_i)=6c−35. Igualando a cero obtenemos c=35/6=5.833333 miles de dólares. La segunda derivada es 6&gt;0 y confirma un mínimo. Es un Baseline: predice siempre lo mismo, independientemente de la exposición.</p></div></details>
+<details><summary>9. Comprueba que los Residuals iniciales suman cero.</summary><div class="exercise-answer"><p>Los importes observados suman 35. Seis predicciones iguales a 35/6 también suman 35. Por eso Σ(y_i−F₀)=35−35=0. Numéricamente el vector es aproximadamente (−3.8333,−2.8333,−0.8333,0.1667,2.1667,5.1667), con diferencias mínimas por redondeo. Que sumen cero es una propiedad de la media ajustada; no demuestra bajo error de predicción.</p></div></details>
+<details><summary>10. Calcula la SSE del Split 4.5 para el primer Regression Stump.</summary><div class="exercise-answer"><p>A la izquierda están 2,3,5,6 con media 4. Las desviaciones cuadradas son 4,1,1,4 y suman 10. A la derecha, 8 y 11 tienen media 9.5; sus desviaciones cuadradas son 2.25 y 2.25, suma 4.5. La SSE total es 10+4.5=14.5 (miles de dólares)², la menor entre los cinco Splits considerados.</p></div></details>
+<details><summary>11. Aplica la primera actualización de Regression al reclamo F con Learning Rate 0.5.</summary><div class="exercise-answer"><p>La predicción inicial de F es 5.833333 miles de dólares. La media residual de su hoja es +3.666667. La corrección escalada es 0.5×3.666667=1.833333 y F₁(F)=5.833333+1.833333=7.666667 miles de dólares. El importe real es 11, así que su nuevo Residual es 11−7.666667=3.333333. Ese error remanente ayuda a entrenar la segunda etapa.</p></div></details>
+<details><summary>12. Calcula las medias de hojas del Stump de la segunda etapa e identifica el Split elegido.</summary><div class="exercise-answer"><p>Después de la etapa 1, los Residuals son (−2.916667,−1.916667,0.083333,1.083333,0.333333,3.333333). Dividir en 2.5 da media izquierda (−2.916667−1.916667)/2=−2.416667 y media derecha (0.083333+1.083333+0.333333+3.333333)/4=1.208333. Su SSE residual es 7.0625, menor que con los otros cuatro umbrales; por ello se elige.</p></div></details>
+<details><summary>13. Calcula el MSE del modelo tras la etapa 2 e interpreta sus unidades.</summary><div class="exercise-answer"><p>Después del segundo medio paso, las predicciones son (3.708333,3.708333,5.520833,5.520833,8.270833,8.270833). Réstalas de (2,3,5,6,8,11), eleva al cuadrado los seis errores y suma: SSE=11.442708. Divide entre 6: MSE=1.907118 en (miles de dólares)². Es menor que el MSE inicial 9.138889, pero sigue siendo error de Training, no una estimación validada del riesgo futuro.</p></div></details>
+<details><summary>14. Usa Chain Rule para hallar el Negative Gradient de Binary Log Loss.</summary><div class="exercise-answer"><p>Con p=σ(F), dℓ/dp=(p−y)/[p(1−p)] y dp/dF=p(1−p). Multiplicar cancela el factor común y deja dℓ/dF=p−y. El Negative Gradient es y−p. Para y=1,p=0.3 vale +0.7; para y=0,p=0.8 vale −0.8. Estas cantidades orientan actualizaciones de Log-Odds, no errores medidos en dólares.</p></div></details>
+<details><summary>15. Deriva el peso de la hoja izquierda de XGBoost con Lambda = 1.</summary><div class="exercise-answer"><p>La hoja izquierda reúne Gradients con suma G_L=7.333333 y H_L=4. Su objetivo aproximado en w es Gw+(1/2)(H+λ)w² más una constante. Derivamos: G+(H+λ)w=0. Entonces w*=−G/(H+λ)=−7.333333/(4+1)=−1.466667. Lambda reduce su magnitud frente al valor no regularizado −7.333333/4=−1.833333.</p></div></details>
+<details><summary>16. Calcula el Gain de XGBoost y explica qué no representa.</summary><div class="exercise-answer"><p>Usa G_L=7.333333,H_L=4,G_R=−7.333333,H_R=2,G_P=0,H_P=6,λ=1,γ=0.2. Gain=(1/2)[53.777778/5+53.777778/3−0]−0.2=14.140741. Es la mejora en una aproximación regularizada de segundo orden al dividir un nodo. No equivale a la mejora de MAE reservado ni a un ahorro medido para una aseguradora.</p></div></details>
+<details><summary>17. Audita el experimento: ¿qué modelo se elige y para qué sirve Test?</summary><div class="exercise-answer"><p>Entre los candidatos predefinidos, GB(learning_rate=0.30,n_estimators=100,max_depth=2) tiene el menor MAE de Validation, aproximadamente 1.4206 miles de dólares. Congelamos esa decisión antes de evaluar Test. El MAE de Test es aproximadamente 1.2728 miles de dólares; la diferencia no autoriza cambiar al ganador. Si hay clientes repetidos o cambios temporales, debemos rediseñar la partición para otro experimento, no reutilizar este Test para ajustar.</p></div></details>
+<details><summary>18. Transferencia: el departamento duplica su volumen y cambia la política. ¿Qué debes volver a comprobar?</summary><div class="exercise-answer"><p>Un MAE histórico bajo en Validation no garantiza buen desempeño desplegado. Revisa definiciones de Features, momento del reporte, política de liquidación, distribución de Loss, prevalencia y patrones de Missingness. Evalúa un periodo realmente nuevo, monitorea error por tipo de reclamo y subgrupo, y comprueba capacidad operativa y revisión humana. Feature Importance refleja asociaciones aprendidas, no efectos causales de una intervención.</p></div></details>
+<details><summary>19. Transferencia: calcula el Gain de XGBoost en 3.5 y compáralo con 4.5.</summary><div class="exercise-answer"><p>Los seis gradientes de Squared Error suman cero. Para los primeros tres reclamos, \(G_L=(35/6-2)+(35/6-3)+(35/6-5)=15/2=7.5\) y \(H_L=3\). Los otros tres tienen \(G_R=-7.5\) y \(H_R=3\). Con \(\lambda=1\) y \(\gamma=0.2\), \(A_L=A_R=7.5^2/(3+1)=14.0625\) y \(A_P=0\). Por tanto, \(\mathrm{Gain}_{3.5}=\tfrac12(14.0625+14.0625)-0.2=13.8625\). El candidato 4.5 alcanza 14.140741, que lo supera en \(14.140741-13.8625=0.278241\) (redondeado). <strong>Interpretación:</strong> 4.5 produce la mayor mejora bajo este objetivo local; el Gain no mide Accuracy de Test.</p></div></details>
+<details><summary>20. Transferencia: calcula una hoja XGBoost para Log Loss con Hessian no constante.</summary><div class="exercise-answer"><p>Considera tres ejemplos <em>sintéticos nuevos</em> con \(y=(1,1,0)\), \(p=(0.20,0.30,0.60)\). Para Binary Log Loss los gradientes respecto al score son \(g=p-y=(-0.80,-0.70,+0.60)\), así que \(G=-0.90\). Los Hessians son \(h=p(1-p)=(0.16,0.21,0.24)\), así que \(H=0.61\). Con \(\lambda=1\), \(w^*=-G/(H+\lambda)=0.90/1.61=0.559006\) unidades de log-odds. Si \(\nu=0.10\), la corrección al score es \(+0.055901\), no un incremento directo de 0.055901 en probabilidad. Para el primer ejemplo, la nueva probabilidad = \(\sigma(\ln(0.2/0.8)+0.055901)\approx0.209094\). Esta cuenta demuestra la importancia tanto de la curvatura como de la función de enlace.</p></div></details>
+<details><summary>21. Transferencia de Early Stopping: ¿por qué gana la ronda 93 en Validation y qué permanece congelado?</summary><div class="exercise-answer"><p>El candidato publicado tiene \(\nu=0.30\) y 100 árboles. En la ronda 93, Validation MAE = 1.411774 miles de dólares frente a 1.420614 en la ronda 100: diferencia 0.008840 miles de dólares, unos $8.84 por reclamo en esta muestra sintética de Validation. Validation MSE pasa de 3.134783 en la ronda 100 a 3.121289 en la 93, en (miles de dólares)². Training MSE sigue bajando (1.174820 a 1.156364): optimizar Training no garantiza mejorar Validation. El Test MAE de 1.272816 publicado para 100 árboles <em>no</em> es el Test de un modelo de 93 árboles. Elegir 93 constituye una alternativa seleccionada con datos de desarrollo que tendría que congelarse y evaluarse una sola vez en Test bajo un protocolo predefinido.</p></div></details></section><section class="guide-section" id="section-29"><h2>29. Síntesis, glosario y laboratorio futuro</h2><p><strong>Síntesis.</strong> AdaBoost modifica pesos de observaciones; Gradient Boosting agrega funciones siguiendo el Negative Gradient; XGBoost agrega árboles regularizados utilizando Gradient y curvatura. Su estructura aditiva común no debe ocultar sus objetivos diferentes. En los ejemplos de seis reclamos puedes reproducir las actualizaciones. En el experimento mayor puedes elegir un modelo sin contaminar Test, interpretar las unidades de error y explicar por qué un resultado sintético favorable no garantiza éxito en producción.</p>
+<p><strong>Glosario.</strong> <strong>Weak Learner:</strong> modelo restringido que aporta información al conjunto. <strong>Stump:</strong> árbol de una sola división. <strong>Weighted Error:</strong> suma de pesos de las observaciones equivocadas. <strong>Alpha:</strong> contribución del modelo en AdaBoost. <strong>Pseudo-Residual:</strong> Negative Gradient en las predicciones actuales. <strong>Learning Rate:</strong> factor que escala cada nueva contribución. <strong>Hessian:</strong> segunda derivada de la Loss respecto del score. <strong>Split Gain:</strong> mejora regularizada del objetivo aproximado del árbol. <strong>Early Stopping:</strong> elegir cantidad de etapas con datos de desarrollo. <strong>Generalization:</strong> desempeño sobre nuevas observaciones del entorno previsto.</p>
+<p><strong>Futuro laboratorio Jupyter/R:</strong> reproducir las dos rondas manuales de AdaBoost, graficar predicciones de severidad por etapas, usar scikit-learn para comparar Random Forest, AdaBoost y Gradient Boosting con Targets apropiados, inspeccionar curvas de Validation y una implementación de XGBoost, y crear un Model Card con métricas reservadas, comprobaciones por grupos, limitaciones y riesgos empresariales. <strong>La pregunta final sigue siendo:</strong> ¿podría un estudiante nuevo reproducir las operaciones y explicar <em>por qué</em> cada etapa modifica el modelo?</p>
+<p><strong>Comprobación final:</strong> puedes recalcular los cinco Split Gains, explicar qué cambia con el Hessian de Log Loss y distinguir la ronda 93 seleccionada con Validation del modelo de 100 árboles evaluado en Test. Una mejora de la muestra sintética no demuestra un beneficio real para una aseguradora.</p></section></article></main><footer class="guide-footer"><div class="container"><p>Guía educativa · Datos sintéticos · © Alfredo Saldana</p><a href="/es/tutorials.html">Learn</a></div></footer><script>(function(){var b=document.querySelector('.menu-btn'),n=document.getElementById('site-nav');if(b&&n)b.addEventListener('click',function(){var open=n.classList.toggle('open');b.setAttribute('aria-expanded',open?'true':'false');});})();</script></body></html>

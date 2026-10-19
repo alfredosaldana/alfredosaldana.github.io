@@ -1,0 +1,3293 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Aprende Anomaly Detection y Association Rules desde sus fundamentos: Z-score, MAD, LOF, Isolation Forest, Support, Confidence, Lift y Apriori con datos completos, gráficos y Python reproducible."><title>Anomaly Detection and Association Rule Mining from First Principles | Alfredo Saldana</title>
+<link rel="stylesheet" href="/assets/css/style.css"><link rel="alternate" hreflang="en" href="/learn/machine-learning/anomaly-detection-and-association-rule-mining-from-first-principles.html">
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script><style>
+.guide-hero{padding:56px 0 38px;background:#fff;border-bottom:1px solid var(--line)}.guide-hero h1{font-size:clamp(2.15rem,4.5vw,3.65rem);max-width:980px;line-height:1.14}.guide-hero .lead{max-width:840px}.guide-meta{color:var(--muted);font-size:.88rem}.guide-main{padding:38px 0 80px}.guide-article{width:min(900px,calc(100% - 32px));margin:auto}.guide-section{background:white;border:1px solid var(--line);border-left:5px solid #3178b9;border-radius:0 17px 17px 0;padding:28px 34px;margin:0 0 22px;box-shadow:0 3px 12px rgba(11,31,58,.025)}.guide-section.teal{border-left-color:#15957e}.guide-section.purple{border-left-color:#8c69ba}.guide-section.amber{border-left-color:#d59a32}.guide-section h2{font-size:clamp(1.55rem,3vw,2.1rem);line-height:1.2;margin:0 0 18px}.guide-section h3{font-size:1.27rem;line-height:1.25;margin:26px 0 12px}.guide-section p{font-size:1.035rem;line-height:1.8}.callout{padding:20px 22px;border-left:4px solid #3178b9;background:#eff6ff;border-radius:0 12px 12px 0;margin:22px 0}.callout h3:first-child{margin-top:0}.callout p:last-child{margin-bottom:0}.callout.teal{background:#effaf7;border-color:#15957e}.callout.purple{background:#f6f1fd;border-color:#8c69ba}.callout.amber{background:#fff8e8;border-color:#d59a32}.formula{text-align:center;background:#f6f1fd;border:1px solid #e3d7f3;border-radius:12px;padding:22px 16px;font-size:clamp(1.35rem,3vw,1.85rem);overflow-x:auto;margin:20px 0}.table-wrap{overflow-x:auto;margin:24px 0}table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:500px}caption{text-align:left;font-weight:650;padding-bottom:10px;color:#536276}th,td{padding:12px 14px;text-align:left;border-bottom:1px solid #e1e9f1}th{background:#eaf2ff;color:#0b1f3a}tbody tr:nth-child(even){background:#f8fafc}.diagram{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:27px 0}.diagram div{background:#eaf2ff;border:1px solid #d9e6fa;border-radius:12px;padding:14px 10px;text-align:center;flex:1;min-width:105px;font-size:.82rem;font-weight:700;color:#0b1f3a}.diagram small{font-size:.76rem;font-weight:400}.diagram span{color:#2563eb;font-weight:700}.plot{margin:25px auto;max-width:680px}.plot svg{display:block;width:100%;height:auto;background:#fbfdff;border:1px solid #e5eaf1;border-radius:12px}.plot figcaption{font-size:.83rem;color:#526175;margin-top:10px;line-height:1.5}.steps{padding-left:22px}.steps li{padding:8px 0;line-height:1.75}.cluster-viz{display:flex;align-items:center;gap:12px;justify-content:space-around;padding:22px;background:#f6fafc;border-radius:12px;flex-wrap:wrap}.cluster-viz span{min-width:60px;text-align:center;border:2px solid #15957e;border-radius:22px;background:#dff5ed;padding:9px;font-weight:700}.cluster-viz .last{border-color:#8c69ba;background:#eee5fa}details{border:1px solid #dfe8f0;padding:16px 19px;border-radius:12px;margin:12px 0;background:#fbfdff}summary{font-weight:700;cursor:pointer;line-height:1.6}details p{padding-top:14px;margin:0}.glossary{display:grid;grid-template-columns:1fr 1fr;gap:12px}.glossary div{background:#f8fafc;border:1px solid #e5eaf1;border-radius:12px;padding:14px}.glossary dt{font-weight:700;color:#0b1f3a}.glossary dd{margin:5px 0 0;color:#506178;line-height:1.6}.guide-links{display:flex;gap:15px;flex-wrap:wrap;margin-top:20px}.guide-links a{color:#2563eb;font-weight:700}.guide-footer{background:#071426;color:#c4d2e2;padding:30px 0}.guide-footer a{color:white}.skip{position:absolute;top:-200px}.skip:focus{top:10px;left:10px;z-index:999;background:white;padding:12px}@media(max-width:650px){.guide-section{padding:22px 19px}.glossary{grid-template-columns:1fr}.diagram{gap:6px}.diagram div{min-width:115px}.diagram span{display:none}.guide-hero{padding:36px 0 30px}.guide-main{padding-top:22px}}
+
+.guide-section .table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.guide-section .table-wrap table{width:100%;font-variant-numeric:tabular-nums}.guide-section .formula{line-height:1.7}.guide-section .callout .formula{background:#fff}.guide-section h3{line-height:1.3}.guide-section p+ .formula{margin-top:14px}@media(max-width:650px){.guide-section .formula{font-size:1.05rem;padding:16px 10px}.guide-section .table-wrap th,.guide-section .table-wrap td{padding:10px 12px;white-space:nowrap;font-size:.9rem}}
+
+.guide-section .note-inline{font-size:.88rem;color:#526175}.guide-section .mini-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:22px 0}.mini-grid .tile{background:#f8fafc;border:1px solid #dfe8f0;border-radius:12px;padding:16px}.mini-grid .tile strong{display:block;color:#0b1f3a;margin-bottom:7px}.guide-section .mini-grid p{font-size:.91rem;line-height:1.55;margin:0}.guide-section .math-caption{font-size:.9rem;color:#536276;margin-top:-8px}.guide-section .table-wrap td{vertical-align:top}.guide-section .source-list li{padding:6px 0;line-height:1.7}.guide-section .source-list a{color:#2563eb;text-decoration:underline;text-underline-offset:3px}.guide-section .formula{overflow-wrap:normal}.guide-section svg text{font-family:Inter,Arial,sans-serif}.guide-section .section-intro{font-size:1.12rem;color:#42526a}.guide-section .algorithm{border-top:1px solid #e2eaf3;padding-top:7px;margin-top:20px}.guide-section .algorithm h3{margin-top:12px}.guide-section .algorithm p:last-child{margin-bottom:10px}@media(max-width:650px){.guide-section .mini-grid{grid-template-columns:1fr}.guide-section .formula{overflow-x:auto;white-space:normal}.guide-section .plot{overflow-x:auto}}
+
+.guide-section .inline-math{white-space:normal}.guide-section .plot-svg{margin:22px 0 26px}.guide-section .plot-svg svg{display:block;width:100%;height:auto;border:1px solid #dce6ef;border-radius:12px;background:#fbfdff}.guide-section .plot-svg figcaption{color:#526175;font-size:.88rem;line-height:1.65;margin-top:9px}.guide-section .table-wrap table{min-width:530px}.guide-section .diagram{justify-content:center}.guide-section .diagram div{min-width:120px}.guide-section details p{font-size:1rem;line-height:1.75}.guide-section details summary{color:#0b1f3a}.guide-section h3{scroll-margin-top:90px}.guide-section{scroll-margin-top:90px}.guide-section .formula{max-width:100%;overflow:auto}.guide-section .MathJax{max-width:100%}.guide-section .formula mjx-container[display="true"]{margin:0!important;min-width:max-content}.guide-section .table-wrap{max-width:100%}@media(max-width:650px){.guide-section .plot-svg figcaption{font-size:.82rem}.guide-section .formula{font-size:1.02rem}}
+
+/* Guide charts remain legible on narrow screens: scroll the figure, not the page. */
+@media(max-width:650px){.guide-main{overflow-x:clip}.guide-section .plot-svg{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.guide-section .plot-svg svg{width:660px;max-width:none}.guide-section .plot-svg figcaption{max-width:100%;font-size:.9rem}}
+
+/* Guide 3: scoped additions consistent with existing brand typography and colors. */
+.guide-section .code-sample{background:#0b1f3a;color:#ebf5ff;padding:20px 22px;border-radius:12px;overflow-x:auto;font-size:.9rem;line-height:1.65;margin:24px 0;tab-size:4}
+.guide-section .code-sample code{white-space:pre;font-family:Consolas,"Courier New",monospace}
+.guide-section code:not(.code-sample code){font-size:.92em;background:#eef4fa;padding:1px 4px;border-radius:4px}
+.guide-section .mistake{padding:5px 0 8px;border-bottom:1px solid #e6edf4}
+.guide-section .mistake h3{color:#794f1b;margin:18px 0 8px}
+.guide-section .mistake p{margin-bottom:10px}
+.guide-section ul li{margin:7px 0;line-height:1.7}
+.guide-section .plot-svg svg{font-family:Inter,Arial,sans-serif}
+.guide-section .plot-svg figcaption{display:block;font-weight:400}
+.guide-section .answer p{margin:12px 0 0}
+@media (max-width:650px){.guide-section .plot-svg{overflow-x:auto}.guide-section .plot-svg svg{width:770px;max-width:none}.guide-section .code-sample{padding:14px 15px;font-size:.78rem}.guide-section{overflow-wrap:break-word}}
+
+
+/* Guide 27 only: isolated local styles, retaining the website's shared style.css. */
+.guide-article{min-width:0}.guide-section{min-width:0;overflow-wrap:break-word}
+.guide-section h2{font-family:'Source Serif 4',Georgia,serif}
+.guide-section .formula{max-width:100%;overflow-x:auto;overflow-y:hidden;white-space:normal;text-align:center;line-height:1.6}
+.guide-section .formula mjx-container[display="true"]{min-width:max-content;margin:.2em 0!important}
+.guide-section .table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.guide-section table{font-size:.9rem;min-width:590px}
+.guide-section td{line-height:1.5}
+.guide-section .plot-svg{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch}
+.guide-section .plot-svg svg{max-width:100%;width:100%;height:auto;display:block}
+.guide-section .plot-svg figcaption{color:#526175;font-size:.87rem;line-height:1.6}
+.guide-section .m-inline{overflow-wrap:normal}
+.guide-section details .answer{margin-top:10px;padding-top:2px;border-top:1px solid #e1e8ef}
+.guide-section details .answer p{padding-top:7px}
+.guide-section .code-sample{background:#0b1f3a;color:#e9f4ff;border-radius:12px;padding:20px;font-size:.86rem;line-height:1.6;max-width:100%;overflow-x:auto;overflow-y:hidden;white-space:pre}
+.guide-section .code-sample code{font-family:Consolas,'Courier New',monospace;white-space:pre}
+.guide-section .code-sample .highlight{color:#e9f4ff}
+.guide-section p, .guide-section li{line-height:1.78}
+.guide-section p+ol,.guide-section p+ul{margin-top:10px}
+.guide-section li{padding:5px 0}
+.guide-section summary{font-family:Inter,Arial,sans-serif}
+.guide-hero .lead{line-height:1.7}
+.guide-article a{color:#2563eb;text-decoration:underline}
+@media(max-width:700px){.guide-section{padding:21px 17px}.guide-section .formula{font-size:1rem;padding:15px 10px}.guide-section .plot-svg svg{width:660px;max-width:none}.guide-section .code-sample{font-size:.76rem;padding:14px}.guide-section .table-wrap table{font-size:.83rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Guide 27: audit-enhanced charts scroll internally on narrow viewports. */
+.guide-section .guide27-plot{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.guide-section .guide27-plot svg{width:100%;height:auto;min-width:0}.guide-section .guide27-plot figcaption{font-size:.88rem;line-height:1.6;max-width:100%}@media(max-width:650px){.guide-section .guide27-plot svg{width:760px;max-width:none}}
+</style></head>
+<body><a href="#main" class="skip">Ir al contenido</a>
+<header class="site-header"><div class="container nav-wrap"><div style="display:flex;align-items:center;gap:20px"><a class="brand" href="/es/index.html">Alfredo Saldana</a><div class="lang-switch" style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap"><a href="/learn/machine-learning/anomaly-detection-and-association-rule-mining-from-first-principles.html" lang="en">EN</a><span aria-hidden="true"> | </span><a href="/es/learn/machine-learning/anomaly-detection-and-association-rule-mining-from-first-principles-es.html" lang="es" aria-current="page">ES</a></div></div><button class="menu-btn" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Abrir navegación">☰</button><nav class="nav" id="site-nav" aria-label="Navegación principal"><a href="/es/index.html">Inicio</a><a href="/es/tutorials.html" class="active">Recursos</a><a href="/es/projects.html">Proyectos</a><a href="/es/open-box.html">Open Box</a><a href="/es/about.html">Acerca de</a><a href="/es/contact.html">Contacto</a></nav></div></header>
+<section class="guide-hero"><div class="narrow"><div class="eyebrow">LEARN · MACHINE LEARNING</div><h1>Anomaly Detection and Association Rule Mining from First Principles</h1><p class="lead">Cómo identificar lecturas inusuales sin convertirlas en diagnósticos y descubrir reglas de compra sin confundir asociación con causalidad: ocho mediciones, doce recibos y operaciones verificables.</p><p class="guide-meta">Machine Learning · Guía 27 de 33 · Desarrollo matemático, evaluación y Python · Alfredo Saldana</p><div class="guide-links"><a lang="en" href="/learn/machine-learning/anomaly-detection-and-association-rule-mining-from-first-principles.html">Read in English ↗</a><a href="/es/tutorials.html">Volver a Learn ↗</a></div></div></section>
+<main id="main" class="guide-main"><article class="guide-article"><section class="guide-section blue" id="section-1"><h2>1. Por qué las observaciones inusuales y las combinaciones frecuentes son problemas distintos</h2>
+<p>Una empresa minorista con cámaras frigoríficas registra mediciones de maquinaria y compras. Surgen dos preguntas legítimas de Unsupervised Learning: <strong>¿Es inusual esta lectura de vibración frente a condiciones comparables?</strong> y <strong>¿Qué productos suelen aparecer juntos en una compra?</strong> La primera genera un Anomaly Score o una alerta; la segunda genera Itemsets frecuentes y Association Rules. Ninguna produce automáticamente una etiqueta real de falla ni demuestra que comprar un artículo cause otra compra.</p>
+<p><strong>Learning Outcomes.</strong> Al terminar podrás (1) calcular manualmente puntuaciones clásicas y robustas, (2) explicar y verificar Local Outlier Factor (LOF) e Isolation Forest, (3) calcular Support, Confidence y Lift desde cada recibo original, (4) reconstruir las etapas de Apriori y su poda, (5) diseñar validaciones y umbrales sin Data Leakage y (6) ejecutar dos programas autónomos y reproducibles.</p>
+<p>Usaremos <strong>dos datasets sintéticos pequeños</strong>: ocho mediciones de vibración en milímetros por segundo (mm/s) y doce compras. No representan fallas industriales reales ni beneficios comerciales observados. Estudiamos ambos métodos porque descubren estructura <em>sin etiquetas</em>, no porque Association Rule Mining sea lo mismo que Anomaly Detection.</p>
+</section><section class="guide-section teal" id="section-2"><h2>2. Anomaly Detection: las ocho lecturas originales de sensores</h2>
+<p>Un compresor frigorífico registra la <strong>amplitud de vibración cuadrática media</strong> (RMS) en mm/s, en ocho momentos igualmente espaciados y bajo condiciones supuestamente comparables. Mostramos todas las lecturas. Son cifras inventadas con fines matemáticos; un límite industrial real exigiría especificaciones de la máquina y contexto operativo.</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th style="text-align:right">S1</th>
+<th style="text-align:right">S2</th>
+<th style="text-align:right">S3</th>
+<th style="text-align:right">S4</th>
+<th style="text-align:right">S5</th>
+<th style="text-align:right">S6</th>
+<th style="text-align:right">S7</th>
+<th style="text-align:right">S8</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vibración (mm/s)</td>
+<td style="text-align:right">2.0</td>
+<td style="text-align:right">2.2</td>
+<td style="text-align:right">2.4</td>
+<td style="text-align:right">2.6</td>
+<td style="text-align:right">2.8</td>
+<td style="text-align:right">3.0</td>
+<td style="text-align:right">3.2</td>
+<td style="text-align:right">8.0</td>
+</tr>
+</tbody>
+</table>
+<figure class="plot-svg" role="group" aria-label="S1–S7 se encuentran entre 2.0 y 3.2 mm/s; S8 mide 8.0 mm/s. Este gráfico descriptivo no constituye un diagnóstico de falla."><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="493.420625pt" height="237.282375pt" viewBox="0 0 493.420625 237.282375" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-14T00:51:50.605407</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="g27f1_figure_1">
+  <g id="g27f1_patch_1">
+   <path d="M 0 237.282375 
+L 493.420625 237.282375 
+L 493.420625 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="g27f1_axes_1">
+   <g id="g27f1_patch_2">
+    <path d="M 34.240625 199.726125 
+L 486.220625 199.726125 
+L 486.220625 22.318125 
+L 34.240625 22.318125 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="g27f1_matplotlib.axis_1">
+    <g id="g27f1_xtick_1">
+     <g id="g27f1_line2d_1">
+      <path d="M 54.78517 199.726125 
+L 54.78517 22.318125 
+" clip-path="url(#g27f1_pe649bd239d)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f1_line2d_2">
+      <defs>
+       <path id="g27f1_mbac8eeac4d" d="M 0 0 
+L 0 3.5 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#g27f1_mbac8eeac4d" x="54.78517" y="199.726125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f1_text_1">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="54.78517" y="214.324563" transform="rotate(-0 54.78517 214.324563)">1</text>
+     </g>
+    </g>
+    <g id="g27f1_xtick_2">
+     <g id="g27f1_line2d_3">
+      <path d="M 113.483872 199.726125 
+L 113.483872 22.318125 
+" clip-path="url(#g27f1_pe649bd239d)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f1_line2d_4">
+      <g>
+       <use xlink:href="#g27f1_mbac8eeac4d" x="113.483872" y="199.726125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f1_text_2">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="113.483872" y="214.324563" transform="rotate(-0 113.483872 214.324563)">2</text>
+     </g>
+    </g>
+    <g id="g27f1_xtick_3">
+     <g id="g27f1_line2d_5">
+      <path d="M 172.182573 199.726125 
+L 172.182573 22.318125 
+" clip-path="url(#g27f1_pe649bd239d)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f1_line2d_6">
+      <g>
+       <use xlink:href="#g27f1_mbac8eeac4d" x="172.182573" y="199.726125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f1_text_3">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="172.182573" y="214.324563" transform="rotate(-0 172.182573 214.324563)">3</text>
+     </g>
+    </g>
+    <g id="g27f1_xtick_4">
+     <g id="g27f1_line2d_7">
+      <path d="M 230.881274 199.726125 
+L 230.881274 22.318125 
+" clip-path="url(#g27f1_pe649bd239d)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f1_line2d_8">
+      <g>
+       <use xlink:href="#g27f1_mbac8eeac4d" x="230.881274" y="199.726125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f1_text_4">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="230.881274" y="214.324563" transform="rotate(-0 230.881274 214.324563)">4</text>
+     </g>
+    </g>
+    <g id="g27f1_xtick_5">
+     <g id="g27f1_line2d_9">
+      <path d="M 289.579976 199.726125 
+L 289.579976 22.318125 
+" clip-path="url(#g27f1_pe649bd239d)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f1_line2d_10">
+      <g>
+       <use xlink:href="#g27f1_mbac8eeac4d" x="289.579976" y="199.726125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f1_text_5">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="289.579976" y="214.324563" transform="rotate(-0 289.579976 214.324563)">5</text>
+     </g>
+    </g>
+    <g id="g27f1_xtick_6">
+     <g id="g27f1_line2d_11">
+      <path d="M 348.278677 199.726125 
+L 348.278677 22.318125 
+" clip-path="url(#g27f1_pe649bd239d)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f1_line2d_12">
+      <g>
+       <use xlink:href="#g27f1_mbac8eeac4d" x="348.278677" y="199.726125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f1_text_6">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="348.278677" y="214.324563" transform="rotate(-0 348.278677 214.324563)">6</text>
+     </g>
+    </g>
+    <g id="g27f1_xtick_7">
+     <g id="g27f1_line2d_13">
+      <path d="M 406.977378 199.726125 
+L 406.977378 22.318125 
+" clip-path="url(#g27f1_pe649bd239d)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f1_line2d_14">
+      <g>
+       <use xlink:href="#g27f1_mbac8eeac4d" x="406.977378" y="199.726125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f1_text_7">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="406.977378" y="214.324563" transform="rotate(-0 406.977378 214.324563)">7</text>
+     </g>
+    </g>
+    <g id="g27f1_xtick_8">
+     <g id="g27f1_line2d_15">
+      <path d="M 465.67608 199.726125 
+L 465.67608 22.318125 
+" clip-path="url(#g27f1_pe649bd239d)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f1_line2d_16">
+      <g>
+       <use xlink:href="#g27f1_mbac8eeac4d" x="465.67608" y="199.726125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f1_text_8">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="465.67608" y="214.324563" transform="rotate(-0 465.67608 214.324563)">8</text>
+     </g>
+    </g>
+    <g id="g27f1_text_9">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="260.230625" y="228.002688" transform="rotate(-0 260.230625 228.002688)">Medición</text>
+    </g>
+   </g>
+   <g id="g27f1_matplotlib.axis_2">
+    <g id="g27f1_ytick_1">
+     <g id="g27f1_line2d_17">
+      <path d="M 34.240625 191.662125 
+L 486.220625 191.662125 
+" clip-path="url(#g27f1_pe649bd239d)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f1_line2d_18">
+      <defs>
+       <path id="g27f1_m236d5b2949" d="M 0 0 
+L -3.5 0 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#g27f1_m236d5b2949" x="34.240625" y="191.662125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f1_text_10">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.240625" y="195.461344" transform="rotate(-0 27.240625 195.461344)">2</text>
+     </g>
+    </g>
+    <g id="g27f1_ytick_2">
+     <g id="g27f1_line2d_19">
+      <path d="M 34.240625 164.782125 
+L 486.220625 164.782125 
+" clip-path="url(#g27f1_pe649bd239d)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f1_line2d_20">
+      <g>
+       <use xlink:href="#g27f1_m236d5b2949" x="34.240625" y="164.782125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f1_text_11">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.240625" y="168.581344" transform="rotate(-0 27.240625 168.581344)">3</text>
+     </g>
+    </g>
+    <g id="g27f1_ytick_3">
+     <g id="g27f1_line2d_21">
+      <path d="M 34.240625 137.902125 
+L 486.220625 137.902125 
+" clip-path="url(#g27f1_pe649bd239d)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f1_line2d_22">
+      <g>
+       <use xlink:href="#g27f1_m236d5b2949" x="34.240625" y="137.902125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f1_text_12">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.240625" y="141.701344" transform="rotate(-0 27.240625 141.701344)">4</text>
+     </g>
+    </g>
+    <g id="g27f1_ytick_4">
+     <g id="g27f1_line2d_23">
+      <path d="M 34.240625 111.022125 
+L 486.220625 111.022125 
+" clip-path="url(#g27f1_pe649bd239d)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f1_line2d_24">
+      <g>
+       <use xlink:href="#g27f1_m236d5b2949" x="34.240625" y="111.022125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f1_text_13">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.240625" y="114.821344" transform="rotate(-0 27.240625 114.821344)">5</text>
+     </g>
+    </g>
+    <g id="g27f1_ytick_5">
+     <g id="g27f1_line2d_25">
+      <path d="M 34.240625 84.142125 
+L 486.220625 84.142125 
+" clip-path="url(#g27f1_pe649bd239d)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f1_line2d_26">
+      <g>
+       <use xlink:href="#g27f1_m236d5b2949" x="34.240625" y="84.142125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f1_text_14">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.240625" y="87.941344" transform="rotate(-0 27.240625 87.941344)">6</text>
+     </g>
+    </g>
+    <g id="g27f1_ytick_6">
+     <g id="g27f1_line2d_27">
+      <path d="M 34.240625 57.262125 
+L 486.220625 57.262125 
+" clip-path="url(#g27f1_pe649bd239d)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f1_line2d_28">
+      <g>
+       <use xlink:href="#g27f1_m236d5b2949" x="34.240625" y="57.262125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f1_text_15">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.240625" y="61.061344" transform="rotate(-0 27.240625 61.061344)">7</text>
+     </g>
+    </g>
+    <g id="g27f1_ytick_7">
+     <g id="g27f1_line2d_29">
+      <path d="M 34.240625 30.382125 
+L 486.220625 30.382125 
+" clip-path="url(#g27f1_pe649bd239d)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f1_line2d_30">
+      <g>
+       <use xlink:href="#g27f1_m236d5b2949" x="34.240625" y="30.382125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f1_text_16">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.240625" y="34.181344" transform="rotate(-0 27.240625 34.181344)">8</text>
+     </g>
+    </g>
+    <g id="g27f1_text_17">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="14.798438" y="111.022125" transform="rotate(-90 14.798438 111.022125)">Vibración (mm/s)</text>
+    </g>
+   </g>
+   <g id="g27f1_line2d_31">
+    <path d="M 54.78517 191.662125 
+L 113.483872 186.286125 
+L 172.182573 180.910125 
+L 230.881274 175.534125 
+L 289.579976 170.158125 
+L 348.278677 164.782125 
+L 406.977378 159.406125 
+L 465.67608 30.382125 
+" clip-path="url(#g27f1_pe649bd239d)" style="fill: none; stroke: #3178b9; stroke-width: 2.2; stroke-linecap: square"/>
+    <defs>
+     <path id="g27f1_ma575e7fd12" d="M 0 3 
+C 0.795609 3 1.55874 2.683901 2.12132 2.12132 
+C 2.683901 1.55874 3 0.795609 3 0 
+C 3 -0.795609 2.683901 -1.55874 2.12132 -2.12132 
+C 1.55874 -2.683901 0.795609 -3 0 -3 
+C -0.795609 -3 -1.55874 -2.683901 -2.12132 -2.12132 
+C -2.683901 -1.55874 -3 -0.795609 -3 0 
+C -3 0.795609 -2.683901 1.55874 -2.12132 2.12132 
+C -1.55874 2.683901 -0.795609 3 0 3 
+z
+" style="stroke: #3178b9"/>
+    </defs>
+    <g clip-path="url(#g27f1_pe649bd239d)">
+     <use xlink:href="#g27f1_ma575e7fd12" x="54.78517" y="191.662125" style="fill: #3178b9; stroke: #3178b9"/>
+     <use xlink:href="#g27f1_ma575e7fd12" x="113.483872" y="186.286125" style="fill: #3178b9; stroke: #3178b9"/>
+     <use xlink:href="#g27f1_ma575e7fd12" x="172.182573" y="180.910125" style="fill: #3178b9; stroke: #3178b9"/>
+     <use xlink:href="#g27f1_ma575e7fd12" x="230.881274" y="175.534125" style="fill: #3178b9; stroke: #3178b9"/>
+     <use xlink:href="#g27f1_ma575e7fd12" x="289.579976" y="170.158125" style="fill: #3178b9; stroke: #3178b9"/>
+     <use xlink:href="#g27f1_ma575e7fd12" x="348.278677" y="164.782125" style="fill: #3178b9; stroke: #3178b9"/>
+     <use xlink:href="#g27f1_ma575e7fd12" x="406.977378" y="159.406125" style="fill: #3178b9; stroke: #3178b9"/>
+     <use xlink:href="#g27f1_ma575e7fd12" x="465.67608" y="30.382125" style="fill: #3178b9; stroke: #3178b9"/>
+    </g>
+   </g>
+   <g id="g27f1_line2d_32">
+    <path d="M 34.240625 172.846125 
+L 486.220625 172.846125 
+" clip-path="url(#g27f1_pe649bd239d)" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #15957e; stroke-width: 1.5"/>
+   </g>
+   <g id="g27f1_patch_3">
+    <path d="M 34.240625 199.726125 
+L 34.240625 22.318125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f1_patch_4">
+    <path d="M 486.220625 199.726125 
+L 486.220625 22.318125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f1_patch_5">
+    <path d="M 34.240625 199.726125 
+L 486.220625 199.726125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f1_patch_6">
+    <path d="M 34.240625 22.318125 
+L 486.220625 22.318125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f1_text_18">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="260.230625" y="16.318125" transform="rotate(-0 260.230625 16.318125)">Mediciones de sensores: ocho lecturas sintéticas</text>
+   </g>
+   <g id="g27f1_PathCollection_1">
+    <defs>
+     <path id="g27f1_m128501c9aa" d="M 0 5.123475 
+C 1.358762 5.123475 2.662055 4.583634 3.622844 3.622844 
+C 4.583634 2.662055 5.123475 1.358762 5.123475 0 
+C 5.123475 -1.358762 4.583634 -2.662055 3.622844 -3.622844 
+C 2.662055 -4.583634 1.358762 -5.123475 0 -5.123475 
+C -1.358762 -5.123475 -2.662055 -4.583634 -3.622844 -3.622844 
+C -4.583634 -2.662055 -5.123475 -1.358762 -5.123475 0 
+C -5.123475 1.358762 -4.583634 2.662055 -3.622844 3.622844 
+C -2.662055 4.583634 -1.358762 5.123475 0 5.123475 
+z
+" style="stroke: #b34850"/>
+    </defs>
+    <g clip-path="url(#g27f1_pe649bd239d)">
+     <use xlink:href="#g27f1_m128501c9aa" x="465.67608" y="30.382125" style="fill: #b34850; stroke: #b34850"/>
+    </g>
+   </g>
+   <g id="g27f1_legend_1">
+    <g id="g27f1_patch_7">
+     <path d="M 41.240625 44.99625 
+L 134.823438 44.99625 
+Q 136.823438 44.99625 136.823438 42.99625 
+L 136.823438 29.318125 
+Q 136.823438 27.318125 134.823438 27.318125 
+L 41.240625 27.318125 
+Q 39.240625 27.318125 39.240625 29.318125 
+L 39.240625 42.99625 
+Q 39.240625 44.99625 41.240625 44.99625 
+z
+" style="fill: #ffffff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"/>
+    </g>
+    <g id="g27f1_line2d_33">
+     <path d="M 43.240625 35.416562 
+L 53.240625 35.416562 
+L 63.240625 35.416562 
+" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #15957e; stroke-width: 1.5"/>
+    </g>
+    <g id="g27f1_text_19">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" x="71.240625" y="38.916562" transform="rotate(-0 71.240625 38.916562)">Mediana 2.7</text>
+    </g>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="g27f1_pe649bd239d">
+   <rect x="34.240625" y="22.318125" width="451.98" height="177.408"/>
+  </clipPath>
+ </defs>
+</svg>
+<figcaption>S1–S7 se encuentran entre 2.0 y 3.2 mm/s; S8 mide 8.0 mm/s. Este gráfico descriptivo no constituye un diagnóstico de falla.</figcaption></figure>
+<p>Existen <strong>Point Anomalies</strong> (una lectura extraña por sí sola), <strong>Contextual Anomalies</strong> (extrañas solo según carga, temporada, turno o temperatura) y <strong>Collective Anomalies</strong> (una secuencia cuyo patrón es raro aunque cada número sea plausible). Ocho números aislados ilustran solamente el primer tipo. No podemos concluir si S8 representa defecto mecánico, conversión errónea de unidades, cambio de velocidad, falla de medición o régimen operativo inofensivo.</p>
+<p>La pregunta clave es <em>¿inusual respecto de qué referencia?</em> Si incorporamos indiscriminadamente lecturas futuras o períodos históricos contaminados, incluso una fórmula correcta puede generar alertas deficientes.</p>
+</section><section class="guide-section purple" id="section-3"><h2>3. Mean, Sample Standard Deviation y Z-score clásico</h2>
+<p>La <strong>Mean</strong> equilibra los valores, pero cambia cuando uno es extremo. Sumamos explícitamente: <span class="m-inline">\(2.0+2.2+2.4+2.6+2.8+3.0+3.2+8.0=26.2\)</span> mm/s. Por tanto,</p>
+<p><div class="formula">\[\bar x=\frac{26.2}{8}=3.275\ \mathrm{mm/s}.\]</div></p>
+<p>La <strong>Sample Standard Deviation</strong> utiliza el denominador <span class="m-inline">\(n-1=7\)</span>, de acuerdo con la definición habitual de varianza muestral. Los ocho cuadrados de las desviaciones, medidos en <span class="m-inline">\((\mathrm{mm/s})^2\)</span>, son:</p>
+<table>
+<thead>
+<tr>
+<th>Lectura</th>
+<th style="text-align:right"><span class="m-inline">\(x_i-3.275\)</span></th>
+<th style="text-align:right"><span class="m-inline">\((x_i-3.275)^2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2.0</td>
+<td style="text-align:right">−1.275</td>
+<td style="text-align:right">1.625625</td>
+</tr>
+<tr>
+<td>2.2</td>
+<td style="text-align:right">−1.075</td>
+<td style="text-align:right">1.155625</td>
+</tr>
+<tr>
+<td>2.4</td>
+<td style="text-align:right">−0.875</td>
+<td style="text-align:right">0.765625</td>
+</tr>
+<tr>
+<td>2.6</td>
+<td style="text-align:right">−0.675</td>
+<td style="text-align:right">0.455625</td>
+</tr>
+<tr>
+<td>2.8</td>
+<td style="text-align:right">−0.475</td>
+<td style="text-align:right">0.225625</td>
+</tr>
+<tr>
+<td>3.0</td>
+<td style="text-align:right">−0.275</td>
+<td style="text-align:right">0.075625</td>
+</tr>
+<tr>
+<td>3.2</td>
+<td style="text-align:right">−0.075</td>
+<td style="text-align:right">0.005625</td>
+</tr>
+<tr>
+<td>8.0</td>
+<td style="text-align:right">4.725</td>
+<td style="text-align:right">22.325625</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td style="text-align:right"><strong>0</strong></td>
+<td style="text-align:right"><strong>26.635000</strong></td>
+</tr>
+</tbody>
+</table>
+<p><div class="formula">\[s=\sqrt{\frac{26.635}{7}}=1.950641\ \mathrm{mm/s},\qquad z_{S8}=\frac{8-3.275}{1.950641}=2.4223.\]</div></p>
+<p>El Z-score no tiene unidades: dividimos mm/s entre mm/s. Con un umbral <strong>ilustrativo</strong> de <span class="m-inline">\(|z|>3\)</span>, S8 <strong>no</strong> recibiría una alerta. Eso no prueba que S8 sea normal: la lectura extrema desplazó la media y aumentó la desviación estándar. Interpretar el Z-score como probabilidad de cola gaussiana requeriría supuestos distributivos mucho más fuertes que los justificados por ocho observaciones.</p>
+</section><section class="guide-section amber" id="section-4"><h2>4. Median, Median Absolute Deviation y Z-score robusto</h2>
+<p>La <strong>Median</strong> es el centro de las observaciones ordenadas. Con ocho valores promediamos el cuarto y el quinto: <span class="m-inline">\((2.6+2.8)/2=2.7\)</span> mm/s. La <strong>Median Absolute Deviation (MAD)</strong> es la mediana de las ocho distancias a 2.7, <strong>no</strong> su promedio:</p>
+<table>
+<thead>
+<tr>
+<th>Lectura</th>
+<th style="text-align:right">2.0</th>
+<th style="text-align:right">2.2</th>
+<th style="text-align:right">2.4</th>
+<th style="text-align:right">2.6</th>
+<th style="text-align:right">2.8</th>
+<th style="text-align:right">3.0</th>
+<th style="text-align:right">3.2</th>
+<th style="text-align:right">8.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="m-inline">\(|x_i-2.7|\)</span></td>
+<td style="text-align:right">0.7</td>
+<td style="text-align:right">0.5</td>
+<td style="text-align:right">0.3</td>
+<td style="text-align:right">0.1</td>
+<td style="text-align:right">0.1</td>
+<td style="text-align:right">0.3</td>
+<td style="text-align:right">0.5</td>
+<td style="text-align:right">5.3</td>
+</tr>
+</tbody>
+</table>
+<p>Las desviaciones absolutas ordenadas son <strong>0.1, 0.1, 0.3, 0.3, 0.5, 0.5, 0.7, 5.3</strong>. Por tanto, <span class="m-inline">\(\mathrm{MAD}=(0.3+0.5)/2=0.4\)</span> mm/s. El factor <strong>1.4826</strong> reescala MAD para estimar la desviación estándar <em>bajo una distribución de referencia aproximadamente gaussiana</em>; no vuelve gaussianos los datos.</p>
+<p><div class="formula">\[z_i^{\rm robust}=\frac{x_i-\mathrm{median}(x)}{1.4826\,\mathrm{MAD}},\qquad z_{S8}^{\rm robust}=\frac{8-2.7}{1.4826(0.4)}=8.9370.\]</div></p>
+<p>Con el umbral <strong>ilustrativo</strong> <span class="m-inline">\(|z^{\rm robust}|>3.5\)</span>, S8 queda señalado. Compara <span class="m-inline">\(2.4223\)</span> con <span class="m-inline">\(8.9370\)</span>: el denominador cambia la interpretación. Esto demuestra <em>resistencia a un valor extremo</em>, <strong>no</strong> que 3.5 sea un límite operativo adecuado. Si MAD es cero (muchas lecturas idénticas), la fórmula queda indefinida y necesitamos otra escala, política de empates o método basado en conocimiento técnico.</p>
+<figure class="plot-svg" role="group" aria-label="Las desviaciones clásica y robusta usan las mismas ocho mediciones, pero centros y escalas diferentes."><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="501.800312pt" height="222.16425pt" viewBox="0 0 501.800312 222.16425" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-14T00:51:50.690956</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="g27f2_figure_1">
+  <g id="g27f2_patch_1">
+   <path d="M 0 222.16425 
+L 501.800312 222.16425 
+L 501.800312 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="g27f2_axes_1">
+   <g id="g27f2_patch_2">
+    <path d="M 42.620313 184.608 
+L 494.600313 184.608 
+L 494.600313 7.2 
+L 42.620313 7.2 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="g27f2_matplotlib.axis_1">
+    <g id="g27f2_xtick_1">
+     <g id="g27f2_line2d_1">
+      <path d="M 63.164858 184.608 
+L 63.164858 7.2 
+" clip-path="url(#g27f2_pff2a4f0390)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f2_line2d_2">
+      <defs>
+       <path id="g27f2_mdf69419ea8" d="M 0 0 
+L 0 3.5 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#g27f2_mdf69419ea8" x="63.164858" y="184.608" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f2_text_1">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="63.164858" y="199.206437" transform="rotate(-0 63.164858 199.206437)">1</text>
+     </g>
+    </g>
+    <g id="g27f2_xtick_2">
+     <g id="g27f2_line2d_3">
+      <path d="M 121.863559 184.608 
+L 121.863559 7.2 
+" clip-path="url(#g27f2_pff2a4f0390)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f2_line2d_4">
+      <g>
+       <use xlink:href="#g27f2_mdf69419ea8" x="121.863559" y="184.608" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f2_text_2">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="121.863559" y="199.206437" transform="rotate(-0 121.863559 199.206437)">2</text>
+     </g>
+    </g>
+    <g id="g27f2_xtick_3">
+     <g id="g27f2_line2d_5">
+      <path d="M 180.562261 184.608 
+L 180.562261 7.2 
+" clip-path="url(#g27f2_pff2a4f0390)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f2_line2d_6">
+      <g>
+       <use xlink:href="#g27f2_mdf69419ea8" x="180.562261" y="184.608" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f2_text_3">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="180.562261" y="199.206437" transform="rotate(-0 180.562261 199.206437)">3</text>
+     </g>
+    </g>
+    <g id="g27f2_xtick_4">
+     <g id="g27f2_line2d_7">
+      <path d="M 239.260962 184.608 
+L 239.260962 7.2 
+" clip-path="url(#g27f2_pff2a4f0390)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f2_line2d_8">
+      <g>
+       <use xlink:href="#g27f2_mdf69419ea8" x="239.260962" y="184.608" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f2_text_4">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="239.260962" y="199.206437" transform="rotate(-0 239.260962 199.206437)">4</text>
+     </g>
+    </g>
+    <g id="g27f2_xtick_5">
+     <g id="g27f2_line2d_9">
+      <path d="M 297.959663 184.608 
+L 297.959663 7.2 
+" clip-path="url(#g27f2_pff2a4f0390)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f2_line2d_10">
+      <g>
+       <use xlink:href="#g27f2_mdf69419ea8" x="297.959663" y="184.608" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f2_text_5">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="297.959663" y="199.206437" transform="rotate(-0 297.959663 199.206437)">5</text>
+     </g>
+    </g>
+    <g id="g27f2_xtick_6">
+     <g id="g27f2_line2d_11">
+      <path d="M 356.658364 184.608 
+L 356.658364 7.2 
+" clip-path="url(#g27f2_pff2a4f0390)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f2_line2d_12">
+      <g>
+       <use xlink:href="#g27f2_mdf69419ea8" x="356.658364" y="184.608" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f2_text_6">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="356.658364" y="199.206437" transform="rotate(-0 356.658364 199.206437)">6</text>
+     </g>
+    </g>
+    <g id="g27f2_xtick_7">
+     <g id="g27f2_line2d_13">
+      <path d="M 415.357066 184.608 
+L 415.357066 7.2 
+" clip-path="url(#g27f2_pff2a4f0390)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f2_line2d_14">
+      <g>
+       <use xlink:href="#g27f2_mdf69419ea8" x="415.357066" y="184.608" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f2_text_7">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="415.357066" y="199.206437" transform="rotate(-0 415.357066 199.206437)">7</text>
+     </g>
+    </g>
+    <g id="g27f2_xtick_8">
+     <g id="g27f2_line2d_15">
+      <path d="M 474.055767 184.608 
+L 474.055767 7.2 
+" clip-path="url(#g27f2_pff2a4f0390)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f2_line2d_16">
+      <g>
+       <use xlink:href="#g27f2_mdf69419ea8" x="474.055767" y="184.608" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f2_text_8">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="474.055767" y="199.206437" transform="rotate(-0 474.055767 199.206437)">8</text>
+     </g>
+    </g>
+    <g id="g27f2_text_9">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="268.610313" y="212.884562" transform="rotate(-0 268.610313 212.884562)">Medición</text>
+    </g>
+   </g>
+   <g id="g27f2_matplotlib.axis_2">
+    <g id="g27f2_ytick_1">
+     <g id="g27f2_line2d_17">
+      <path d="M 42.620313 183.027877 
+L 494.600313 183.027877 
+" clip-path="url(#g27f2_pff2a4f0390)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f2_line2d_18">
+      <defs>
+       <path id="g27f2_m3990d2fe6f" d="M 0 0 
+L -3.5 0 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#g27f2_m3990d2fe6f" x="42.620313" y="183.027877" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f2_text_10">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="35.620313" y="186.827096" transform="rotate(-0 35.620313 186.827096)">−4</text>
+     </g>
+    </g>
+    <g id="g27f2_ytick_2">
+     <g id="g27f2_line2d_19">
+      <path d="M 42.620313 157.092368 
+L 494.600313 157.092368 
+" clip-path="url(#g27f2_pff2a4f0390)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f2_line2d_20">
+      <g>
+       <use xlink:href="#g27f2_m3990d2fe6f" x="42.620313" y="157.092368" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f2_text_11">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="35.620313" y="160.891587" transform="rotate(-0 35.620313 160.891587)">−2</text>
+     </g>
+    </g>
+    <g id="g27f2_ytick_3">
+     <g id="g27f2_line2d_21">
+      <path d="M 42.620313 131.156858 
+L 494.600313 131.156858 
+" clip-path="url(#g27f2_pff2a4f0390)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f2_line2d_22">
+      <g>
+       <use xlink:href="#g27f2_m3990d2fe6f" x="42.620313" y="131.156858" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f2_text_12">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="35.620313" y="134.956077" transform="rotate(-0 35.620313 134.956077)">0</text>
+     </g>
+    </g>
+    <g id="g27f2_ytick_4">
+     <g id="g27f2_line2d_23">
+      <path d="M 42.620313 105.221348 
+L 494.600313 105.221348 
+" clip-path="url(#g27f2_pff2a4f0390)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f2_line2d_24">
+      <g>
+       <use xlink:href="#g27f2_m3990d2fe6f" x="42.620313" y="105.221348" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f2_text_13">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="35.620313" y="109.020567" transform="rotate(-0 35.620313 109.020567)">2</text>
+     </g>
+    </g>
+    <g id="g27f2_ytick_5">
+     <g id="g27f2_line2d_25">
+      <path d="M 42.620313 79.285839 
+L 494.600313 79.285839 
+" clip-path="url(#g27f2_pff2a4f0390)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f2_line2d_26">
+      <g>
+       <use xlink:href="#g27f2_m3990d2fe6f" x="42.620313" y="79.285839" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f2_text_14">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="35.620313" y="83.085058" transform="rotate(-0 35.620313 83.085058)">4</text>
+     </g>
+    </g>
+    <g id="g27f2_ytick_6">
+     <g id="g27f2_line2d_27">
+      <path d="M 42.620313 53.350329 
+L 494.600313 53.350329 
+" clip-path="url(#g27f2_pff2a4f0390)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f2_line2d_28">
+      <g>
+       <use xlink:href="#g27f2_m3990d2fe6f" x="42.620313" y="53.350329" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f2_text_15">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="35.620313" y="57.149548" transform="rotate(-0 35.620313 57.149548)">6</text>
+     </g>
+    </g>
+    <g id="g27f2_ytick_7">
+     <g id="g27f2_line2d_29">
+      <path d="M 42.620313 27.41482 
+L 494.600313 27.41482 
+" clip-path="url(#g27f2_pff2a4f0390)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f2_line2d_30">
+      <g>
+       <use xlink:href="#g27f2_m3990d2fe6f" x="42.620313" y="27.41482" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f2_text_16">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="35.620313" y="31.214038" transform="rotate(-0 35.620313 31.214038)">8</text>
+     </g>
+    </g>
+    <g id="g27f2_text_17">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="14.798438" y="95.904" transform="rotate(-90 14.798438 95.904)">Puntuación (sin unidades)</text>
+    </g>
+   </g>
+   <g id="g27f2_line2d_31">
+    <path d="M 63.164858 139.632989 
+L 121.863559 138.3034 
+L 180.562261 136.973811 
+L 239.260962 135.644221 
+L 297.959663 134.314632 
+L 356.658364 132.985043 
+L 415.357066 131.655454 
+L 474.055767 99.745315 
+" clip-path="url(#g27f2_pff2a4f0390)" style="fill: none; stroke: #3178b9; stroke-width: 1.5; stroke-linecap: square"/>
+    <defs>
+     <path id="g27f2_m93561310b8" d="M 0 3 
+C 0.795609 3 1.55874 2.683901 2.12132 2.12132 
+C 2.683901 1.55874 3 0.795609 3 0 
+C 3 -0.795609 2.683901 -1.55874 2.12132 -2.12132 
+C 1.55874 -2.683901 0.795609 -3 0 -3 
+C -0.795609 -3 -1.55874 -2.683901 -2.12132 -2.12132 
+C -2.683901 -1.55874 -3 -0.795609 -3 0 
+C -3 0.795609 -2.683901 1.55874 -2.12132 2.12132 
+C -1.55874 2.683901 -0.795609 3 0 3 
+z
+" style="stroke: #3178b9"/>
+    </defs>
+    <g clip-path="url(#g27f2_pff2a4f0390)">
+     <use xlink:href="#g27f2_m93561310b8" x="63.164858" y="139.632989" style="fill: #3178b9; stroke: #3178b9"/>
+     <use xlink:href="#g27f2_m93561310b8" x="121.863559" y="138.3034" style="fill: #3178b9; stroke: #3178b9"/>
+     <use xlink:href="#g27f2_m93561310b8" x="180.562261" y="136.973811" style="fill: #3178b9; stroke: #3178b9"/>
+     <use xlink:href="#g27f2_m93561310b8" x="239.260962" y="135.644221" style="fill: #3178b9; stroke: #3178b9"/>
+     <use xlink:href="#g27f2_m93561310b8" x="297.959663" y="134.314632" style="fill: #3178b9; stroke: #3178b9"/>
+     <use xlink:href="#g27f2_m93561310b8" x="356.658364" y="132.985043" style="fill: #3178b9; stroke: #3178b9"/>
+     <use xlink:href="#g27f2_m93561310b8" x="415.357066" y="131.655454" style="fill: #3178b9; stroke: #3178b9"/>
+     <use xlink:href="#g27f2_m93561310b8" x="474.055767" y="99.745315" style="fill: #3178b9; stroke: #3178b9"/>
+    </g>
+   </g>
+   <g id="g27f2_line2d_32">
+    <path d="M 63.164858 146.463462 
+L 121.863559 142.090147 
+L 180.562261 137.716831 
+L 239.260962 133.343516 
+L 297.959663 128.9702 
+L 356.658364 124.596885 
+L 415.357066 120.22357 
+L 474.055767 15.264 
+" clip-path="url(#g27f2_pff2a4f0390)" style="fill: none; stroke: #8c69ba; stroke-width: 1.5; stroke-linecap: square"/>
+    <defs>
+     <path id="g27f2_mfb676f44ae" d="M -3 3 
+L 3 3 
+L 3 -3 
+L -3 -3 
+z
+" style="stroke: #8c69ba; stroke-linejoin: miter"/>
+    </defs>
+    <g clip-path="url(#g27f2_pff2a4f0390)">
+     <use xlink:href="#g27f2_mfb676f44ae" x="63.164858" y="146.463462" style="fill: #8c69ba; stroke: #8c69ba; stroke-linejoin: miter"/>
+     <use xlink:href="#g27f2_mfb676f44ae" x="121.863559" y="142.090147" style="fill: #8c69ba; stroke: #8c69ba; stroke-linejoin: miter"/>
+     <use xlink:href="#g27f2_mfb676f44ae" x="180.562261" y="137.716831" style="fill: #8c69ba; stroke: #8c69ba; stroke-linejoin: miter"/>
+     <use xlink:href="#g27f2_mfb676f44ae" x="239.260962" y="133.343516" style="fill: #8c69ba; stroke: #8c69ba; stroke-linejoin: miter"/>
+     <use xlink:href="#g27f2_mfb676f44ae" x="297.959663" y="128.9702" style="fill: #8c69ba; stroke: #8c69ba; stroke-linejoin: miter"/>
+     <use xlink:href="#g27f2_mfb676f44ae" x="356.658364" y="124.596885" style="fill: #8c69ba; stroke: #8c69ba; stroke-linejoin: miter"/>
+     <use xlink:href="#g27f2_mfb676f44ae" x="415.357066" y="120.22357" style="fill: #8c69ba; stroke: #8c69ba; stroke-linejoin: miter"/>
+     <use xlink:href="#g27f2_mfb676f44ae" x="474.055767" y="15.264" style="fill: #8c69ba; stroke: #8c69ba; stroke-linejoin: miter"/>
+    </g>
+   </g>
+   <g id="g27f2_line2d_33">
+    <path d="M 42.620313 85.769716 
+L 494.600313 85.769716 
+" clip-path="url(#g27f2_pff2a4f0390)" style="fill: none; stroke-dasharray: 1.5,2.475; stroke-dashoffset: 0; stroke: #b34850; stroke-width: 1.5"/>
+   </g>
+   <g id="g27f2_line2d_34">
+    <path d="M 42.620313 176.544 
+L 494.600313 176.544 
+" clip-path="url(#g27f2_pff2a4f0390)" style="fill: none; stroke-dasharray: 1.5,2.475; stroke-dashoffset: 0; stroke: #b34850; stroke-width: 1.5"/>
+   </g>
+   <g id="g27f2_patch_3">
+    <path d="M 42.620313 184.608 
+L 42.620313 7.2 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f2_patch_4">
+    <path d="M 494.600313 184.608 
+L 494.600313 7.2 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f2_patch_5">
+    <path d="M 42.620313 184.608 
+L 494.600313 184.608 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f2_patch_6">
+    <path d="M 42.620313 7.2 
+L 494.600313 7.2 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f2_legend_1">
+    <g id="g27f2_patch_7">
+     <path d="M 48.920313 40.820625 
+L 268.008438 40.820625 
+Q 269.808438 40.820625 269.808438 39.020625 
+L 269.808438 13.5 
+Q 269.808438 11.7 268.008438 11.7 
+L 48.920313 11.7 
+Q 47.120313 11.7 47.120313 13.5 
+L 47.120313 39.020625 
+Q 47.120313 40.820625 48.920313 40.820625 
+z
+" style="fill: #ffffff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"/>
+    </g>
+    <g id="g27f2_line2d_35">
+     <path d="M 50.720313 18.988594 
+L 59.720313 18.988594 
+L 68.720313 18.988594 
+" style="fill: none; stroke: #3178b9; stroke-width: 1.5; stroke-linecap: square"/>
+     <g>
+      <use xlink:href="#g27f2_m93561310b8" x="59.720313" y="18.988594" style="fill: #3178b9; stroke: #3178b9"/>
+     </g>
+    </g>
+    <g id="g27f2_text_18">
+     <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="75.920313" y="22.138594" transform="rotate(-0 75.920313 22.138594)">Sample Z-score</text>
+    </g>
+    <g id="g27f2_line2d_36">
+     <path d="M 50.720313 32.198906 
+L 59.720313 32.198906 
+L 68.720313 32.198906 
+" style="fill: none; stroke: #8c69ba; stroke-width: 1.5; stroke-linecap: square"/>
+     <g>
+      <use xlink:href="#g27f2_mfb676f44ae" x="59.720313" y="32.198906" style="fill: #8c69ba; stroke: #8c69ba; stroke-linejoin: miter"/>
+     </g>
+    </g>
+    <g id="g27f2_text_19">
+     <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="75.920313" y="35.348906" transform="rotate(-0 75.920313 35.348906)">Robust Z-score</text>
+    </g>
+    <g id="g27f2_line2d_37">
+     <path d="M 163.961406 18.988594 
+L 172.961406 18.988594 
+L 181.961406 18.988594 
+" style="fill: none; stroke-dasharray: 1.5,2.475; stroke-dashoffset: 0; stroke: #b34850; stroke-width: 1.5"/>
+    </g>
+    <g id="g27f2_text_20">
+     <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="189.161406" y="22.138594" transform="rotate(-0 189.161406 22.138594)">Robust cutoff 3.5</text>
+    </g>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="g27f2_pff2a4f0390">
+   <rect x="42.620313" y="7.2" width="451.98" height="177.408"/>
+  </clipPath>
+ </defs>
+</svg>
+<figcaption>Las desviaciones clásica y robusta usan las mismas ocho mediciones, pero centros y escalas diferentes.</figcaption></figure>
+</section><section class="guide-section blue" id="section-5"><h2>5. Transformar un Score en alerta y analizar su sensibilidad</h2>
+<p>Un <strong>Score</strong> mide rareza frente a una referencia; un <strong>Decision Threshold</strong> lo transforma en una acción. Con <span class="m-inline">\(|z^{\rm robust}|>3.5\)</span>, S1–S7 quedan por debajo del umbral y S8 lo supera. Por ejemplo, S1 tiene <span class="m-inline">\((2.0-2.7)/0.59304=-1.1804\)</span>, lo cual por sí solo no es diagnóstico de falla. S8 presenta un valor absoluto de 8.9370.</p>
+<figure class="plot-svg" role="group" aria-label="Solo S8 supera el umbral robusto ilustrativo de 3.5. No estimamos rendimiento porque desconocemos las fallas verdaderas."><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="493.7425pt" height="215.586375pt" viewBox="0 0 493.7425 215.586375" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-14T00:51:50.942691</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="g27f5_figure_1">
+  <g id="g27f5_patch_1">
+   <path d="M 0 215.586375 
+L 493.7425 215.586375 
+L 493.7425 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="g27f5_axes_1">
+   <g id="g27f5_patch_2">
+    <path d="M 34.5625 178.030125 
+L 486.5425 178.030125 
+L 486.5425 22.798125 
+L 34.5625 22.798125 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="g27f5_patch_3">
+    <path d="M 55.107045 178.030125 
+L 97.249703 178.030125 
+L 97.249703 158.504087 
+L 55.107045 158.504087 
+z
+" clip-path="url(#g27f5_pc8a65be420)" style="fill: #15957e"/>
+   </g>
+   <g id="g27f5_patch_4">
+    <path d="M 107.785367 178.030125 
+L 149.928024 178.030125 
+L 149.928024 164.082955 
+L 107.785367 164.082955 
+z
+" clip-path="url(#g27f5_pc8a65be420)" style="fill: #15957e"/>
+   </g>
+   <g id="g27f5_patch_5">
+    <path d="M 160.463689 178.030125 
+L 202.606346 178.030125 
+L 202.606346 169.661823 
+L 160.463689 169.661823 
+z
+" clip-path="url(#g27f5_pc8a65be420)" style="fill: #15957e"/>
+   </g>
+   <g id="g27f5_patch_6">
+    <path d="M 213.14201 178.030125 
+L 255.284668 178.030125 
+L 255.284668 175.240691 
+L 213.14201 175.240691 
+z
+" clip-path="url(#g27f5_pc8a65be420)" style="fill: #15957e"/>
+   </g>
+   <g id="g27f5_patch_7">
+    <path d="M 265.820332 178.030125 
+L 307.96299 178.030125 
+L 307.96299 175.240691 
+L 265.820332 175.240691 
+z
+" clip-path="url(#g27f5_pc8a65be420)" style="fill: #15957e"/>
+   </g>
+   <g id="g27f5_patch_8">
+    <path d="M 318.498654 178.030125 
+L 360.641311 178.030125 
+L 360.641311 169.661823 
+L 318.498654 169.661823 
+z
+" clip-path="url(#g27f5_pc8a65be420)" style="fill: #15957e"/>
+   </g>
+   <g id="g27f5_patch_9">
+    <path d="M 371.176976 178.030125 
+L 413.319633 178.030125 
+L 413.319633 164.082955 
+L 371.176976 164.082955 
+z
+" clip-path="url(#g27f5_pc8a65be420)" style="fill: #15957e"/>
+   </g>
+   <g id="g27f5_patch_10">
+    <path d="M 423.855297 178.030125 
+L 465.997955 178.030125 
+L 465.997955 30.190125 
+L 423.855297 30.190125 
+z
+" clip-path="url(#g27f5_pc8a65be420)" style="fill: #b34850"/>
+   </g>
+   <g id="g27f5_matplotlib.axis_1">
+    <g id="g27f5_xtick_1">
+     <g id="g27f5_line2d_1">
+      <defs>
+       <path id="g27f5_m03e549cf25" d="M 0 0 
+L 0 3.5 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#g27f5_m03e549cf25" x="76.178374" y="178.030125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f5_text_1">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="76.178374" y="192.628562" transform="rotate(-0 76.178374 192.628562)">1</text>
+     </g>
+    </g>
+    <g id="g27f5_xtick_2">
+     <g id="g27f5_line2d_2">
+      <g>
+       <use xlink:href="#g27f5_m03e549cf25" x="128.856696" y="178.030125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f5_text_2">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="128.856696" y="192.628562" transform="rotate(-0 128.856696 192.628562)">2</text>
+     </g>
+    </g>
+    <g id="g27f5_xtick_3">
+     <g id="g27f5_line2d_3">
+      <g>
+       <use xlink:href="#g27f5_m03e549cf25" x="181.535017" y="178.030125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f5_text_3">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="181.535017" y="192.628562" transform="rotate(-0 181.535017 192.628562)">3</text>
+     </g>
+    </g>
+    <g id="g27f5_xtick_4">
+     <g id="g27f5_line2d_4">
+      <g>
+       <use xlink:href="#g27f5_m03e549cf25" x="234.213339" y="178.030125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f5_text_4">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="234.213339" y="192.628562" transform="rotate(-0 234.213339 192.628562)">4</text>
+     </g>
+    </g>
+    <g id="g27f5_xtick_5">
+     <g id="g27f5_line2d_5">
+      <g>
+       <use xlink:href="#g27f5_m03e549cf25" x="286.891661" y="178.030125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f5_text_5">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="286.891661" y="192.628562" transform="rotate(-0 286.891661 192.628562)">5</text>
+     </g>
+    </g>
+    <g id="g27f5_xtick_6">
+     <g id="g27f5_line2d_6">
+      <g>
+       <use xlink:href="#g27f5_m03e549cf25" x="339.569983" y="178.030125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f5_text_6">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="339.569983" y="192.628562" transform="rotate(-0 339.569983 192.628562)">6</text>
+     </g>
+    </g>
+    <g id="g27f5_xtick_7">
+     <g id="g27f5_line2d_7">
+      <g>
+       <use xlink:href="#g27f5_m03e549cf25" x="392.248304" y="178.030125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f5_text_7">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="392.248304" y="192.628562" transform="rotate(-0 392.248304 192.628562)">7</text>
+     </g>
+    </g>
+    <g id="g27f5_xtick_8">
+     <g id="g27f5_line2d_8">
+      <g>
+       <use xlink:href="#g27f5_m03e549cf25" x="444.926626" y="178.030125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f5_text_8">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="444.926626" y="192.628562" transform="rotate(-0 444.926626 192.628562)">8</text>
+     </g>
+    </g>
+    <g id="g27f5_text_9">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="260.5525" y="206.306687" transform="rotate(-0 260.5525 206.306687)">Medición</text>
+    </g>
+   </g>
+   <g id="g27f5_matplotlib.axis_2">
+    <g id="g27f5_ytick_1">
+     <g id="g27f5_line2d_9">
+      <path d="M 34.5625 178.030125 
+L 486.5425 178.030125 
+" clip-path="url(#g27f5_pc8a65be420)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f5_line2d_10">
+      <defs>
+       <path id="g27f5_mee97d6d23e" d="M 0 0 
+L -3.5 0 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#g27f5_mee97d6d23e" x="34.5625" y="178.030125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f5_text_10">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.5625" y="181.829344" transform="rotate(-0 27.5625 181.829344)">0</text>
+     </g>
+    </g>
+    <g id="g27f5_ytick_2">
+     <g id="g27f5_line2d_11">
+      <path d="M 34.5625 144.945207 
+L 486.5425 144.945207 
+" clip-path="url(#g27f5_pc8a65be420)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f5_line2d_12">
+      <g>
+       <use xlink:href="#g27f5_mee97d6d23e" x="34.5625" y="144.945207" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f5_text_11">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.5625" y="148.744425" transform="rotate(-0 27.5625 148.744425)">2</text>
+     </g>
+    </g>
+    <g id="g27f5_ytick_3">
+     <g id="g27f5_line2d_13">
+      <path d="M 34.5625 111.860288 
+L 486.5425 111.860288 
+" clip-path="url(#g27f5_pc8a65be420)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f5_line2d_14">
+      <g>
+       <use xlink:href="#g27f5_mee97d6d23e" x="34.5625" y="111.860288" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f5_text_12">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.5625" y="115.659507" transform="rotate(-0 27.5625 115.659507)">4</text>
+     </g>
+    </g>
+    <g id="g27f5_ytick_4">
+     <g id="g27f5_line2d_15">
+      <path d="M 34.5625 78.77537 
+L 486.5425 78.77537 
+" clip-path="url(#g27f5_pc8a65be420)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f5_line2d_16">
+      <g>
+       <use xlink:href="#g27f5_mee97d6d23e" x="34.5625" y="78.77537" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f5_text_13">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.5625" y="82.574589" transform="rotate(-0 27.5625 82.574589)">6</text>
+     </g>
+    </g>
+    <g id="g27f5_ytick_5">
+     <g id="g27f5_line2d_17">
+      <path d="M 34.5625 45.690452 
+L 486.5425 45.690452 
+" clip-path="url(#g27f5_pc8a65be420)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f5_line2d_18">
+      <g>
+       <use xlink:href="#g27f5_mee97d6d23e" x="34.5625" y="45.690452" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f5_text_14">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.5625" y="49.48967" transform="rotate(-0 27.5625 49.48967)">8</text>
+     </g>
+    </g>
+    <g id="g27f5_text_15">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="14.842188" y="100.414125" transform="rotate(-90 14.842188 100.414125)">|Robust Z-score|</text>
+    </g>
+   </g>
+   <g id="g27f5_line2d_19">
+    <path d="M 34.5625 120.131518 
+L 486.5425 120.131518 
+" clip-path="url(#g27f5_pc8a65be420)" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #0b1f3a; stroke-width: 1.5"/>
+   </g>
+   <g id="g27f5_patch_11">
+    <path d="M 34.5625 178.030125 
+L 34.5625 22.798125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f5_patch_12">
+    <path d="M 486.5425 178.030125 
+L 486.5425 22.798125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f5_patch_13">
+    <path d="M 34.5625 178.030125 
+L 486.5425 178.030125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f5_patch_14">
+    <path d="M 34.5625 22.798125 
+L 486.5425 22.798125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f5_text_16">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="260.5525" y="16.798125" transform="rotate(-0 260.5525 16.798125)">Regla ilustrativa: magnitud de la desviación robusta</text>
+   </g>
+   <g id="g27f5_legend_1">
+    <g id="g27f5_patch_15">
+     <path d="M 41.5625 45.47625 
+L 134.601562 45.47625 
+Q 136.601562 45.47625 136.601562 43.47625 
+L 136.601562 29.798125 
+Q 136.601562 27.798125 134.601562 27.798125 
+L 41.5625 27.798125 
+Q 39.5625 27.798125 39.5625 29.798125 
+L 39.5625 43.47625 
+Q 39.5625 45.47625 41.5625 45.47625 
+z
+" style="fill: #ffffff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"/>
+    </g>
+    <g id="g27f5_line2d_20">
+     <path d="M 43.5625 35.896562 
+L 53.5625 35.896562 
+L 63.5625 35.896562 
+" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #0b1f3a; stroke-width: 1.5"/>
+    </g>
+    <g id="g27f5_text_17">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" x="71.5625" y="39.396562" transform="rotate(-0 71.5625 39.396562)">Cutoff = 3.5</text>
+    </g>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="g27f5_pc8a65be420">
+   <rect x="34.5625" y="22.798125" width="451.98" height="155.232"/>
+  </clipPath>
+ </defs>
+</svg>
+<figcaption>Solo S8 supera el umbral robusto ilustrativo de 3.5. No estimamos rendimiento porque desconocemos las fallas verdaderas.</figcaption></figure>
+<p><strong>Sensitivity Analysis.</strong> Si el umbral aumenta de 3.5 a 9.0, <strong>ninguna lectura</strong> recibe alerta. Si disminuye a 1.0, revisamos los valores: S1 vale −1.1804, S7 vale <span class="m-inline">\((3.2-2.7)/0.59304=0.8431\)</span> y S8 vale 8.9370. Por tanto hay <strong>dos alertas a 1.0</strong> (S1 y S8), una a 3.5 y ninguna a 9.0. Una cifra de alertas debe calcularse, no suponerse.</p>
+<p>Un operador decidiría si el Score requiere repetir la medición, revisar la máquina o detenerla. Sin resultados confirmados no podemos calcular Precision o Recall significativos. Si luego existen fallas verificadas, evaluaremos falsos avisos, fallas omitidas, volumen de alertas, anticipación y costos asimétricos en períodos posteriores.</p>
+</section><section class="guide-section teal" id="section-6"><h2>6. Distancias, vecindarios y Feature Scaling</h2>
+<p>En varias dimensiones, decir &quot;lejos&quot; requiere definir una distancia. La <strong>Euclidean Distance</strong> entre <span class="m-inline">\(x=(x_1,x_2)\)</span> y <span class="m-inline">\(y=(y_1,y_2)\)</span> es <span class="m-inline">\(d(x,y)=\sqrt{(x_1-y_1)^2+(x_2-y_2)^2}\)</span>. Para vibraciones 2.0 y 3.0 mm/s y temperaturas 4 y 5 °C, combinar números crudos produce <span class="m-inline">\(\sqrt{1^2+1^2}=\sqrt 2\)</span>, pero <strong>ese resultado carece de una unidad física coherente</strong>. La Feature de escala numérica mayor puede dominar.</p>
+<p>Muchos algoritmos basados en distancias o densidades necesitan transformar las Features con parámetros calculados <strong>solo en Training</strong>: <span class="m-inline">\(z_j=(x_j-\mu_j^{\rm train})/s_j^{\rm train}\)</span> para cada Feature <span class="m-inline">\(j\)</span>. Para una lectura futura reutilizamos <em>exactamente</em> estos parámetros almacenados; no ajustamos de nuevo con observaciones sospechosas o períodos posteriores. Sin embargo, estandarizar también puede ocultar diferencias de unidades físicamente importantes; una escala basada en conocimiento técnico puede ser mejor. Si la desviación estándar es cero, debemos definir una política explícita.</p>
+<p>Los métodos de distancias pueden ignorar <strong>Contextual Anomalies</strong>: una vibración de 4 mm/s quizá sea normal al arrancar y peligrosa en reposo. Podemos incorporar régimen operativo o comparar dentro de grupos pertinentes. En alta dimensión también aparece el problema de concentración de distancias.</p>
+</section><section class="guide-section purple" id="section-7"><h2>7. Local Outlier Factor: cálculo completo de densidad con cinco puntos</h2>
+<p><strong>Local Outlier Factor (LOF)</strong> pregunta si un punto está en un entorno menos denso que sus vecinos. A diferencia de un centro global, puede reconocer regiones con densidades locales diferentes. Consideremos <strong>cinco puntos sintéticos adicionales</strong>, de coordenadas sin unidades: <span class="m-inline">\(A=(0,0)\)</span>, <span class="m-inline">\(B=(0,1)\)</span>, <span class="m-inline">\(C=(1,0)\)</span>, <span class="m-inline">\(D=(1,1)\)</span> y <span class="m-inline">\(E=(5,5)\)</span>. Usamos <span class="m-inline">\(k=2\)</span> vecinos y excluimos el propio punto.</p>
+<figure class="plot-svg" role="group" aria-label="Los segmentos discontinuos conectan E con sus dos vecinos más próximos, D y B; C empata con B y produce el mismo resultado."><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="340.816625pt" height="359.250375pt" viewBox="0 0 340.816625 359.250375" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-14T00:51:50.785484</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="g27f3_figure_1">
+  <g id="g27f3_patch_1">
+   <path d="M 0 359.250375 
+L 340.816625 359.250375 
+L 340.816625 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="g27f3_axes_1">
+   <g id="g27f3_patch_2">
+    <path d="M 34.240625 321.694125 
+L 333.616625 321.694125 
+L 333.616625 22.318125 
+L 34.240625 22.318125 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="g27f3_PathCollection_1">
+    <defs>
+     <path id="g27f3_m541f5cbf2b" d="M 0 4.743416 
+C 1.257969 4.743416 2.464584 4.24362 3.354102 3.354102 
+C 4.24362 2.464584 4.743416 1.257969 4.743416 0 
+C 4.743416 -1.257969 4.24362 -2.464584 3.354102 -3.354102 
+C 2.464584 -4.24362 1.257969 -4.743416 0 -4.743416 
+C -1.257969 -4.743416 -2.464584 -4.24362 -3.354102 -3.354102 
+C -4.24362 -2.464584 -4.743416 -1.257969 -4.743416 0 
+C -4.743416 1.257969 -4.24362 2.464584 -3.354102 3.354102 
+C -2.464584 4.24362 -1.257969 4.743416 0 4.743416 
+z
+" style="stroke: #15957e"/>
+    </defs>
+    <g clip-path="url(#g27f3_p4956dc5840)">
+     <use xlink:href="#g27f3_m541f5cbf2b" x="54.199025" y="301.735725" style="fill: #15957e; stroke: #15957e"/>
+     <use xlink:href="#g27f3_m541f5cbf2b" x="54.199025" y="251.839725" style="fill: #15957e; stroke: #15957e"/>
+     <use xlink:href="#g27f3_m541f5cbf2b" x="104.095025" y="301.735725" style="fill: #15957e; stroke: #15957e"/>
+     <use xlink:href="#g27f3_m541f5cbf2b" x="104.095025" y="251.839725" style="fill: #15957e; stroke: #15957e"/>
+    </g>
+   </g>
+   <g id="g27f3_PathCollection_2">
+    <defs>
+     <path id="g27f3_m0156358594" d="M 0 5.477226 
+C 1.452577 5.477226 2.845856 4.900111 3.872983 3.872983 
+C 4.900111 2.845856 5.477226 1.452577 5.477226 0 
+C 5.477226 -1.452577 4.900111 -2.845856 3.872983 -3.872983 
+C 2.845856 -4.900111 1.452577 -5.477226 0 -5.477226 
+C -1.452577 -5.477226 -2.845856 -4.900111 -3.872983 -3.872983 
+C -4.900111 -2.845856 -5.477226 -1.452577 -5.477226 0 
+C -5.477226 1.452577 -4.900111 2.845856 -3.872983 3.872983 
+C -2.845856 4.900111 -1.452577 5.477226 0 5.477226 
+z
+" style="stroke: #b34850"/>
+    </defs>
+    <g clip-path="url(#g27f3_p4956dc5840)">
+     <use xlink:href="#g27f3_m0156358594" x="303.679025" y="52.255725" style="fill: #b34850; stroke: #b34850"/>
+    </g>
+   </g>
+   <g id="g27f3_matplotlib.axis_1">
+    <g id="g27f3_xtick_1">
+     <g id="g27f3_line2d_1">
+      <path d="M 54.199025 321.694125 
+L 54.199025 22.318125 
+" clip-path="url(#g27f3_p4956dc5840)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f3_line2d_2">
+      <defs>
+       <path id="g27f3_m772da78b3c" d="M 0 0 
+L 0 3.5 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#g27f3_m772da78b3c" x="54.199025" y="321.694125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f3_text_1">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="54.199025" y="336.292562" transform="rotate(-0 54.199025 336.292562)">0</text>
+     </g>
+    </g>
+    <g id="g27f3_xtick_2">
+     <g id="g27f3_line2d_3">
+      <path d="M 104.095025 321.694125 
+L 104.095025 22.318125 
+" clip-path="url(#g27f3_p4956dc5840)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f3_line2d_4">
+      <g>
+       <use xlink:href="#g27f3_m772da78b3c" x="104.095025" y="321.694125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f3_text_2">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="104.095025" y="336.292562" transform="rotate(-0 104.095025 336.292562)">1</text>
+     </g>
+    </g>
+    <g id="g27f3_xtick_3">
+     <g id="g27f3_line2d_5">
+      <path d="M 153.991025 321.694125 
+L 153.991025 22.318125 
+" clip-path="url(#g27f3_p4956dc5840)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f3_line2d_6">
+      <g>
+       <use xlink:href="#g27f3_m772da78b3c" x="153.991025" y="321.694125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f3_text_3">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="153.991025" y="336.292562" transform="rotate(-0 153.991025 336.292562)">2</text>
+     </g>
+    </g>
+    <g id="g27f3_xtick_4">
+     <g id="g27f3_line2d_7">
+      <path d="M 203.887025 321.694125 
+L 203.887025 22.318125 
+" clip-path="url(#g27f3_p4956dc5840)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f3_line2d_8">
+      <g>
+       <use xlink:href="#g27f3_m772da78b3c" x="203.887025" y="321.694125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f3_text_4">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="203.887025" y="336.292562" transform="rotate(-0 203.887025 336.292562)">3</text>
+     </g>
+    </g>
+    <g id="g27f3_xtick_5">
+     <g id="g27f3_line2d_9">
+      <path d="M 253.783025 321.694125 
+L 253.783025 22.318125 
+" clip-path="url(#g27f3_p4956dc5840)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f3_line2d_10">
+      <g>
+       <use xlink:href="#g27f3_m772da78b3c" x="253.783025" y="321.694125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f3_text_5">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="253.783025" y="336.292562" transform="rotate(-0 253.783025 336.292562)">4</text>
+     </g>
+    </g>
+    <g id="g27f3_xtick_6">
+     <g id="g27f3_line2d_11">
+      <path d="M 303.679025 321.694125 
+L 303.679025 22.318125 
+" clip-path="url(#g27f3_p4956dc5840)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f3_line2d_12">
+      <g>
+       <use xlink:href="#g27f3_m772da78b3c" x="303.679025" y="321.694125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f3_text_6">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="303.679025" y="336.292562" transform="rotate(-0 303.679025 336.292562)">5</text>
+     </g>
+    </g>
+    <g id="g27f3_text_7">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="183.928625" y="349.970687" transform="rotate(-0 183.928625 349.970687)">Dimensión 1</text>
+    </g>
+   </g>
+   <g id="g27f3_matplotlib.axis_2">
+    <g id="g27f3_ytick_1">
+     <g id="g27f3_line2d_13">
+      <path d="M 34.240625 301.735725 
+L 333.616625 301.735725 
+" clip-path="url(#g27f3_p4956dc5840)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f3_line2d_14">
+      <defs>
+       <path id="g27f3_m36baf710c8" d="M 0 0 
+L -3.5 0 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#g27f3_m36baf710c8" x="34.240625" y="301.735725" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f3_text_8">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.240625" y="305.534944" transform="rotate(-0 27.240625 305.534944)">0</text>
+     </g>
+    </g>
+    <g id="g27f3_ytick_2">
+     <g id="g27f3_line2d_15">
+      <path d="M 34.240625 251.839725 
+L 333.616625 251.839725 
+" clip-path="url(#g27f3_p4956dc5840)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f3_line2d_16">
+      <g>
+       <use xlink:href="#g27f3_m36baf710c8" x="34.240625" y="251.839725" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f3_text_9">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.240625" y="255.638944" transform="rotate(-0 27.240625 255.638944)">1</text>
+     </g>
+    </g>
+    <g id="g27f3_ytick_3">
+     <g id="g27f3_line2d_17">
+      <path d="M 34.240625 201.943725 
+L 333.616625 201.943725 
+" clip-path="url(#g27f3_p4956dc5840)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f3_line2d_18">
+      <g>
+       <use xlink:href="#g27f3_m36baf710c8" x="34.240625" y="201.943725" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f3_text_10">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.240625" y="205.742944" transform="rotate(-0 27.240625 205.742944)">2</text>
+     </g>
+    </g>
+    <g id="g27f3_ytick_4">
+     <g id="g27f3_line2d_19">
+      <path d="M 34.240625 152.047725 
+L 333.616625 152.047725 
+" clip-path="url(#g27f3_p4956dc5840)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f3_line2d_20">
+      <g>
+       <use xlink:href="#g27f3_m36baf710c8" x="34.240625" y="152.047725" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f3_text_11">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.240625" y="155.846944" transform="rotate(-0 27.240625 155.846944)">3</text>
+     </g>
+    </g>
+    <g id="g27f3_ytick_5">
+     <g id="g27f3_line2d_21">
+      <path d="M 34.240625 102.151725 
+L 333.616625 102.151725 
+" clip-path="url(#g27f3_p4956dc5840)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f3_line2d_22">
+      <g>
+       <use xlink:href="#g27f3_m36baf710c8" x="34.240625" y="102.151725" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f3_text_12">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.240625" y="105.950944" transform="rotate(-0 27.240625 105.950944)">4</text>
+     </g>
+    </g>
+    <g id="g27f3_ytick_6">
+     <g id="g27f3_line2d_23">
+      <path d="M 34.240625 52.255725 
+L 333.616625 52.255725 
+" clip-path="url(#g27f3_p4956dc5840)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g27f3_line2d_24">
+      <g>
+       <use xlink:href="#g27f3_m36baf710c8" x="34.240625" y="52.255725" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f3_text_13">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.240625" y="56.054944" transform="rotate(-0 27.240625 56.054944)">5</text>
+     </g>
+    </g>
+    <g id="g27f3_text_14">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="14.798438" y="172.006125" transform="rotate(-90 14.798438 172.006125)">Dimensión 2</text>
+    </g>
+   </g>
+   <g id="g27f3_line2d_25">
+    <path d="M 303.679025 52.255725 
+L 104.095025 251.839725 
+" clip-path="url(#g27f3_p4956dc5840)" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #b34850; stroke-width: 1.5"/>
+   </g>
+   <g id="g27f3_line2d_26">
+    <path d="M 303.679025 52.255725 
+L 54.199025 251.839725 
+" clip-path="url(#g27f3_p4956dc5840)" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #b34850; stroke-width: 1.5"/>
+   </g>
+   <g id="g27f3_patch_3">
+    <path d="M 34.240625 321.694125 
+L 34.240625 22.318125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f3_patch_4">
+    <path d="M 333.616625 321.694125 
+L 333.616625 22.318125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f3_patch_5">
+    <path d="M 34.240625 321.694125 
+L 333.616625 321.694125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f3_patch_6">
+    <path d="M 34.240625 22.318125 
+L 333.616625 22.318125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f3_text_15">
+    <text style="font-weight: 700; font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" x="61.199025" y="293.735725" transform="rotate(-0 61.199025 293.735725)">A</text>
+   </g>
+   <g id="g27f3_text_16">
+    <text style="font-weight: 700; font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" x="61.199025" y="243.839725" transform="rotate(-0 61.199025 243.839725)">B</text>
+   </g>
+   <g id="g27f3_text_17">
+    <text style="font-weight: 700; font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" x="111.095025" y="293.735725" transform="rotate(-0 111.095025 293.735725)">C</text>
+   </g>
+   <g id="g27f3_text_18">
+    <text style="font-weight: 700; font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" x="111.095025" y="243.839725" transform="rotate(-0 111.095025 243.839725)">D</text>
+   </g>
+   <g id="g27f3_text_19">
+    <text style="font-weight: 700; font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" x="310.679025" y="44.255725" transform="rotate(-0 310.679025 44.255725)">E</text>
+   </g>
+   <g id="g27f3_text_20">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="183.928625" y="16.318125" transform="rotate(-0 183.928625 16.318125)">LOF: vecindario denso frente a punto aislado</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="g27f3_p4956dc5840">
+   <rect x="34.240625" y="22.318125" width="299.376" height="299.376"/>
+  </clipPath>
+ </defs>
+</svg>
+<figcaption>Los segmentos discontinuos conectan E con sus dos vecinos más próximos, D y B; C empata con B y produce el mismo resultado.</figcaption></figure>
+<ol>
+<li><strong>k-distance.</strong> Cada uno de A, B, C y D tiene distancia al segundo vecino igual a <strong>1</strong>. El vecino más próximo de E es D a <span class="m-inline">\(\sqrt{(5-1)^2+(5-1)^2}=\sqrt{32}=5.656854\)</span>; su segunda distancia es <span class="m-inline">\(\sqrt{41}=6.403124\)</span> a B o C. Resolvemos el empate eligiendo B.</li>
+<li><strong>Reachability Distance.</strong> Para un vecino <span class="m-inline">\(o\)</span>, <span class="m-inline">\(\operatorname{reach}_k(E,o)=\max\{k\mathrm{dist}(o),d(E,o)\}\)</span>. Así obtenemos <span class="m-inline">\(\max(1,5.656854)=5.656854\)</span> para D y <span class="m-inline">\(\max(1,6.403124)=6.403124\)</span> para B.</li>
+<li><strong>Local Reachability Density.</strong> <span class="m-inline">\(\operatorname{lrd}_k(E)=1/[(5.656854+6.403124)/2]=0.165838\)</span> por unidad de coordenada. Para D y B, todas las distancias de alcance hacia sus dos vecinos del grupo denso valen 1, de modo que ambos tienen <span class="m-inline">\(\operatorname{lrd}=1\)</span>.</li>
+<li><strong>LOF Ratio.</strong> <span class="m-inline">\(\operatorname{LOF}_k(E)=[(1+1)/2]/0.165838=6.029989\)</span>. Para A, en cambio, <span class="m-inline">\([(1+1)/2]/1=1\)</span>.</li>
+</ol>
+<p>Un LOF cercano a <strong>1</strong> representa densidad comparable con el vecindario; uno grande refleja una región localmente menos densa. LOF no es probabilidad de falla ni se compara automáticamente entre distintos <span class="m-inline">\(k\)</span> y datasets. En scikit-learn, <code>negative_outlier_factor_</code> utiliza <strong>el signo opuesto</strong> (cerca de −6.03 para E). Con coordenadas duplicadas o numerosos empates importan las convenciones de implementación.</p>
+</section><section class="guide-section amber" id="section-8"><h2>8. Isolation Forest: intuición de las rutas cortas de aislamiento</h2>
+<p><strong>Isolation Forest</strong> separa repetidamente observaciones mediante cortes aleatorios de Features y valores de partición. Los puntos aislados suelen requerir menos divisiones para quedar solos. A diferencia de LOF, no comienza estimando densidad de vecinos. Es útil con varios atributos, pero depende de muestras, aleatoriedad, Features y configuración.</p>
+<p>Con nuestras ocho lecturas, ilustremos <strong>un único corte determinista</strong> en <span class="m-inline">\(5.6\)</span> mm/s: el hijo izquierdo contiene S1–S7 y el derecho solo S8. S8 queda aislado con <strong>Path Length <span class="m-inline">\(h=1\)</span></strong>. Un verdadero Isolation Forest promedia muchos árboles aleatorios; <strong>este corte es ilustrativo</strong>, no garantiza que todos aíslen S8 de inmediato.</p>
+<figure class="plot-svg" role="group" aria-label="Un corte en la raíz a 5.6 mm/s aísla S8. Isolation Forest real promedia numerosos árboles aleatorios."><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="466.38pt" height="210.042375pt" viewBox="0 0 466.38 210.042375" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-14T00:51:50.870402</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="g27f4_figure_1">
+  <g id="g27f4_patch_1">
+   <path d="M 0 210.042375 
+L 466.38 210.042375 
+L 466.38 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="g27f4_axes_1">
+   <g id="g27f4_patch_2">
+    <path d="M 7.2 172.486125 
+L 459.18 172.486125 
+L 459.18 22.798125 
+L 7.2 22.798125 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="g27f4_PathCollection_1">
+    <defs>
+     <path id="g27f4_C0_0_a0ee9b058b" d="M 0 4.330127 
+C 1.148363 4.330127 2.249847 3.873878 3.061862 3.061862 
+C 3.873878 2.249847 4.330127 1.148363 4.330127 -0 
+C 4.330127 -1.148363 3.873878 -2.249847 3.061862 -3.061862 
+C 2.249847 -3.873878 1.148363 -4.330127 0 -4.330127 
+C -1.148363 -4.330127 -2.249847 -3.873878 -3.061862 -3.061862 
+C -3.873878 -2.249847 -4.330127 -1.148363 -4.330127 0 
+C -4.330127 1.148363 -3.873878 2.249847 -3.061862 3.061862 
+C -2.249847 3.873878 -1.148363 4.330127 0 4.330127 
+z
+"/>
+    </defs>
+    <g clip-path="url(#g27f4_p301cf29a89)">
+     <use xlink:href="#g27f4_C0_0_a0ee9b058b" x="39.484286" y="108.334125" style="fill: #3178b9; stroke: #3178b9"/>
+    </g>
+    <g clip-path="url(#g27f4_p301cf29a89)">
+     <use xlink:href="#g27f4_C0_0_a0ee9b058b" x="52.398" y="108.334125" style="fill: #3178b9; stroke: #3178b9"/>
+    </g>
+    <g clip-path="url(#g27f4_p301cf29a89)">
+     <use xlink:href="#g27f4_C0_0_a0ee9b058b" x="65.311714" y="108.334125" style="fill: #3178b9; stroke: #3178b9"/>
+    </g>
+    <g clip-path="url(#g27f4_p301cf29a89)">
+     <use xlink:href="#g27f4_C0_0_a0ee9b058b" x="78.225429" y="108.334125" style="fill: #3178b9; stroke: #3178b9"/>
+    </g>
+    <g clip-path="url(#g27f4_p301cf29a89)">
+     <use xlink:href="#g27f4_C0_0_a0ee9b058b" x="91.139143" y="108.334125" style="fill: #3178b9; stroke: #3178b9"/>
+    </g>
+    <g clip-path="url(#g27f4_p301cf29a89)">
+     <use xlink:href="#g27f4_C0_0_a0ee9b058b" x="104.052857" y="108.334125" style="fill: #3178b9; stroke: #3178b9"/>
+    </g>
+    <g clip-path="url(#g27f4_p301cf29a89)">
+     <use xlink:href="#g27f4_C0_0_a0ee9b058b" x="116.966571" y="108.334125" style="fill: #3178b9; stroke: #3178b9"/>
+    </g>
+    <g clip-path="url(#g27f4_p301cf29a89)">
+     <use xlink:href="#g27f4_C0_0_a0ee9b058b" x="426.895714" y="108.334125" style="fill: #b34850; stroke: #b34850"/>
+    </g>
+   </g>
+   <g id="g27f4_patch_3">
+    <path d="M 271.931143 172.486125 
+L 446.266286 172.486125 
+L 446.266286 22.798125 
+L 271.931143 22.798125 
+z
+" clip-path="url(#g27f4_p301cf29a89)" style="fill: #fff2e6; opacity: 0.65; stroke: #fff2e6; stroke-linejoin: miter"/>
+   </g>
+   <g id="g27f4_matplotlib.axis_1">
+    <g id="g27f4_xtick_1">
+     <g id="g27f4_line2d_1">
+      <defs>
+       <path id="g27f4_md74498b32f" d="M 0 0 
+L 0 3.5 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#g27f4_md74498b32f" x="39.484286" y="172.486125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f4_text_1">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="39.484286" y="187.084563" transform="rotate(-0 39.484286 187.084563)">2</text>
+     </g>
+    </g>
+    <g id="g27f4_xtick_2">
+     <g id="g27f4_line2d_2">
+      <g>
+       <use xlink:href="#g27f4_md74498b32f" x="104.052857" y="172.486125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f4_text_2">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="104.052857" y="187.084563" transform="rotate(-0 104.052857 187.084563)">3</text>
+     </g>
+    </g>
+    <g id="g27f4_xtick_3">
+     <g id="g27f4_line2d_3">
+      <g>
+       <use xlink:href="#g27f4_md74498b32f" x="168.621429" y="172.486125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f4_text_3">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="168.621429" y="187.084563" transform="rotate(-0 168.621429 187.084563)">4</text>
+     </g>
+    </g>
+    <g id="g27f4_xtick_4">
+     <g id="g27f4_line2d_4">
+      <g>
+       <use xlink:href="#g27f4_md74498b32f" x="233.19" y="172.486125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f4_text_4">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="233.19" y="187.084563" transform="rotate(-0 233.19 187.084563)">5</text>
+     </g>
+    </g>
+    <g id="g27f4_xtick_5">
+     <g id="g27f4_line2d_5">
+      <g>
+       <use xlink:href="#g27f4_md74498b32f" x="297.758571" y="172.486125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f4_text_5">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="297.758571" y="187.084563" transform="rotate(-0 297.758571 187.084563)">6</text>
+     </g>
+    </g>
+    <g id="g27f4_xtick_6">
+     <g id="g27f4_line2d_6">
+      <g>
+       <use xlink:href="#g27f4_md74498b32f" x="362.327143" y="172.486125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f4_text_6">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="362.327143" y="187.084563" transform="rotate(-0 362.327143 187.084563)">7</text>
+     </g>
+    </g>
+    <g id="g27f4_xtick_7">
+     <g id="g27f4_line2d_7">
+      <g>
+       <use xlink:href="#g27f4_md74498b32f" x="426.895714" y="172.486125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f4_text_7">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="426.895714" y="187.084563" transform="rotate(-0 426.895714 187.084563)">8</text>
+     </g>
+    </g>
+    <g id="g27f4_text_8">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="233.19" y="200.762688" transform="rotate(-0 233.19 200.762688)">Vibración (mm/s)</text>
+    </g>
+   </g>
+   <g id="g27f4_matplotlib.axis_2"/>
+   <g id="g27f4_line2d_8">
+    <path d="M 271.931143 172.486125 
+L 271.931143 22.798125 
+" clip-path="url(#g27f4_p301cf29a89)" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #8c69ba; stroke-width: 1.5"/>
+   </g>
+   <g id="g27f4_patch_4">
+    <path d="M 7.2 172.486125 
+L 7.2 22.798125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f4_patch_5">
+    <path d="M 459.18 172.486125 
+L 459.18 22.798125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f4_patch_6">
+    <path d="M 7.2 172.486125 
+L 459.18 172.486125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f4_patch_7">
+    <path d="M 7.2 22.798125 
+L 459.18 22.798125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f4_text_9">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="39.484286" y="99.334125" transform="rotate(-0 39.484286 99.334125)">1</text>
+   </g>
+   <g id="g27f4_text_10">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="52.398" y="99.334125" transform="rotate(-0 52.398 99.334125)">2</text>
+   </g>
+   <g id="g27f4_text_11">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="65.311714" y="99.334125" transform="rotate(-0 65.311714 99.334125)">3</text>
+   </g>
+   <g id="g27f4_text_12">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="78.225429" y="99.334125" transform="rotate(-0 78.225429 99.334125)">4</text>
+   </g>
+   <g id="g27f4_text_13">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="91.139143" y="99.334125" transform="rotate(-0 91.139143 99.334125)">5</text>
+   </g>
+   <g id="g27f4_text_14">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="104.052857" y="99.334125" transform="rotate(-0 104.052857 99.334125)">6</text>
+   </g>
+   <g id="g27f4_text_15">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="116.966571" y="99.334125" transform="rotate(-0 116.966571 99.334125)">7</text>
+   </g>
+   <g id="g27f4_text_16">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="426.895714" y="99.334125" transform="rotate(-0 426.895714 99.334125)">8</text>
+   </g>
+   <g id="g27f4_text_17">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="233.19" y="16.798125" transform="rotate(-0 233.19 16.798125)">Ejemplo de un árbol de aislamiento (no un bosque completo)</text>
+   </g>
+   <g id="g27f4_legend_1">
+    <g id="g27f4_patch_8">
+     <path d="M 14.2 167.486125 
+L 114.010938 167.486125 
+Q 116.010938 167.486125 116.010938 165.486125 
+L 116.010938 151.808 
+Q 116.010938 149.808 114.010938 149.808 
+L 14.2 149.808 
+Q 12.2 149.808 12.2 151.808 
+L 12.2 165.486125 
+Q 12.2 167.486125 14.2 167.486125 
+z
+" style="fill: #ffffff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"/>
+    </g>
+    <g id="g27f4_line2d_9">
+     <path d="M 16.2 157.906438 
+L 26.2 157.906438 
+L 36.2 157.906438 
+" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #8c69ba; stroke-width: 1.5"/>
+    </g>
+    <g id="g27f4_text_18">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" x="44.2" y="161.406438" transform="rotate(-0 44.2 161.406438)">Corte raíz 5.6</text>
+    </g>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="g27f4_p301cf29a89">
+   <rect x="7.2" y="22.798125" width="451.98" height="149.688"/>
+  </clipPath>
+ </defs>
+</svg>
+<figcaption>Un corte en la raíz a 5.6 mm/s aísla S8. Isolation Forest real promedia numerosos árboles aleatorios.</figcaption></figure>
+<p>Para un árbol construido con <span class="m-inline">\(n\)</span> puntos distintos, la normalización estándar es <span class="m-inline">\(c(n)=2H_{n-1}-2(n-1)/n\)</span>, donde <span class="m-inline">\(H_m=\sum_{j=1}^{m}1/j\)</span>. Si <span class="m-inline">\(n=8\)</span>:</p>
+<p><div class="formula">\[H_7=1+\tfrac12+\tfrac13+\tfrac14+\tfrac15+\tfrac16+\tfrac17=2.592857.\]</div>
+<div class="formula">\[c(8)=2(2.592857)-\frac{14}{8}=3.435714.\]</div></p>
+<p>La forma publicada del Anomaly Score de Isolation Forest es <span class="m-inline">\(s(x,n)=2^{-E[h(x)]/c(n)}\)</span>, donde <span class="m-inline">\(E[h(x)]\)</span> es la longitud <strong>promediada y ajustada</strong> de los caminos en muchos árboles. <strong>Solo a modo de ilustración de un árbol</strong>, sustituir <span class="m-inline">\(h=1\)</span> da <span class="m-inline">\(2^{-1/3.435714}=0.8173\)</span>. <strong>No</strong> es una puntuación medida de un Isolation Forest: necesitamos todos los árboles, sus muestras y ajustes en las hojas. Distintas bibliotecas pueden ofrecer Scores con signo u origen diferentes; se debe verificar la API antes de fijar un umbral.</p>
+</section><section class="guide-section blue" id="section-9"><h2>9. Isolation Forest frente a LOF; Novelty y Outlier Detection</h2>
+<p>Un punto puede ser raro globalmente sin ser raro localmente. <strong>LOF</strong> compara densidad de vecinos; <strong>Isolation Forest</strong> busca configuraciones de Features fáciles de aislar. Ninguno descubre todas las anomalías ni se vuelve Supervised Classification porque una biblioteca devuelva etiquetas <code>+1</code> y <code>−1</code>.</p>
+<p><strong>Outlier Detection</strong> suele ajustarse sobre datos que quizá ya contienen anomalías. <strong>Novelty Detection</strong> construye una referencia principalmente normal y evalúa observaciones futuras: son supuestos distintos. En scikit-learn, <code>LocalOutlierFactor(novelty=False)</code> ofrece <code>fit_predict</code> para la muestra de ajuste, pero no el mismo flujo de <code>predict</code> para lecturas futuras; <code>novelty=True</code> habilita predicciones sobre observaciones nuevas. No interpretes los <code>predict</code> de Training en Novelty Mode como equivalentes a <code>negative_outlier_factor_</code>.</p>
+<p><code>IsolationForest</code> expone <code>score_samples</code>, <code>decision_function</code> y <code>predict</code>. En <code>decision_function</code>, <strong>positivo = Inlier y negativo = Outlier</strong> respecto del Offset escogido; valores menores de <code>score_samples</code> significan mayor rareza. <code>contamination</code> controla la estimación del umbral/Offset, <strong>no</strong> demuestra la prevalencia real de fallas. El umbral práctico debe obedecer presupuesto operativo o Validation con resultados confirmados.</p>
+</section><section class="guide-section teal" id="section-10"><h2>10. Alternativa multivariada: Mahalanobis Distance y sus supuestos</h2>
+<p>Si las Features están correlacionadas, Euclidean Distance puede contar dos veces el mismo cambio. <strong>Mahalanobis Distance</strong> incorpora Covariance: <span class="m-inline">\(D_M(x)=\sqrt{(x-\mu)^\top\Sigma^{-1}(x-\mu)}\)</span>, donde <span class="m-inline">\(\mu\in\mathbb R^p\)</span> es el centro, <span class="m-inline">\(\Sigma\in\mathbb R^{p\times p}\)</span> es una Covariance Matrix invertible y <span class="m-inline">\(x\in\mathbb R^p\)</span> es la nueva observación. La distancia no tiene unidades cuando la matriz expresa unidades coherentes.</p>
+<p>Para dos dimensiones, usemos <span class="m-inline">\(\mu=(0,0)^\top\)</span>, <span class="m-inline">\(\Sigma=\begin{bmatrix}4&0\\0&1\end{bmatrix}\)</span> y <span class="m-inline">\(x=(2,1)^\top\)</span>. Como <span class="m-inline">\(\Sigma^{-1}=\begin{bmatrix}1/4&0\\0&1\end{bmatrix}\)</span>:</p>
+<p><div class="formula">\[D_M^2=(2,1)\begin{bmatrix}1/4&0\\0&1\end{bmatrix}\begin{bmatrix}2\\1\end{bmatrix}=2^2/4+1^2/1=2,\]</div>
+<div class="formula">\[D_M=\sqrt 2\approx1.4142.\]</div></p>
+<p>Euclidean Distance produciría <span class="m-inline">\(\sqrt{2^2+1^2}=\sqrt5\)</span>. Mahalanobis interpreta un cambio de dos unidades en la primera dimensión como una desviación estándar de referencia. Si la Covariance Matrix es <strong>singular</strong>, no existe la inversa ordinaria y necesitamos Regularization o una Pseudoinverse justificada. Utilizar una distribución Chi-square para fijar un umbral requiere supuestos sobre la distribución y la estimación; no es válido automáticamente para cualquier sensor.</p>
+</section><section class="guide-section purple" id="section-11"><h2>11. Calibración de umbrales, costos y evaluación honesta</h2>
+<p>Un sistema rara vez dispone de recursos ilimitados para inspeccionar alertas. Supongamos que revisar una señal cuesta <strong>US$40</strong>, omitir una falla verdadera cuesta <strong>US$2,000</strong> y llegan 100 lecturas nuevas al día. Es un <strong>ejemplo hipotético de decisión</strong>, no un estudio de costos real. Una alerta diaria cuesta <strong>US$40</strong> en inspecciones; diez cuestan <strong>US$400</strong>. Sin embargo, reducir alertas ignorando las fallas omitidas puede ser desastroso.</p>
+<p>Con resultados históricos confirmados, calibramos el umbral en <strong>Validation</strong>, preferiblemente en fechas posteriores y regímenes comparables. Después congelamos modelo y umbral antes de evaluar en un <strong>Test</strong> independiente. Precision = alertas verdaderas confirmadas / todas las alertas; Recall = fallas reales detectadas / todas las fallas reales. Sin etiquetas verificadas solo podemos informar tasas de alertas y revisión de casos, <strong>no</strong> Accuracy supervisada. Una muestra auditada de alertas y no alertas ayuda a identificar fallas de cobertura.</p>
+<p>Si entrenamos Isolation Forest en Training, guardamos el preprocessing, el modelo y el umbral. Aplicamos los tres sin cambios a datos futuros. No elegimos umbrales después de mirar Labels de Test. Algunas etiquetas de fallas maduran con retraso y utilizarlas prematuramente causa Data Leakage. Se requieren además revisión humana, procedimientos de seguridad y escalamiento cuando no se cumplen los supuestos del algoritmo.</p>
+
+<h3>Ejemplo adicional: fijar un umbral en Validation y comprobar su comportamiento posterior</h3>
+<p>Supón que un modelo de Anomaly Detection <strong>ya fue ajustado en Training</strong>. Produce diez puntuaciones <em>sin unidades</em> en un bloque de Validation independiente; una puntuación mayor indica una observación más inusual. No se utilizaron etiquetas de falla: el objetivo administrativo es revisar aproximadamente el 20% de las mediciones de Validation, no demostrar que el 20% sean fallas.</p>
+<div class="table-wrap"><table><caption>Puntuaciones hipotéticas de Validation, ya ordenadas</caption><thead><tr><th>Índice ordenado</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr></thead><tbody><tr><th>Score</th><td>0.4</td><td>0.6</td><td>0.8</td><td>1.0</td><td>1.2</td><td>1.4</td><td>1.5</td><td>1.8</td><td>2.2</td><td>3.6</td></tr></tbody></table></div>
+<p><strong>Paso 1 — Regla de decisión.</strong> Elegimos <span class="m-inline">\(\text{alerta}(x)=\mathbf{1}\{s(x)>t\}\)</span>, donde <span class="m-inline">\(s(x)\)</span> es el Score y <span class="m-inline">\(t\)</span> es el umbral; <em>una igualdad exacta no genera alerta</em>. Con un presupuesto ilustrativo de dos alertas entre diez, elegimos <span class="m-inline">\(t=1.8\)</span> porque las únicas puntuaciones estrictamente mayores son 2.2 y 3.6:</p>
+<div class="formula">\[\widehat r_{\rm val}=\frac{\#\{s_i>1.8\}}{10}=\frac{2}{10}=0.20=20\%.\]</div>
+<p><strong>Paso 2 — Congelar la decisión.</strong> Llegan cinco observaciones posteriores con Scores <strong>1.1, 1.9, 2.4, 0.3 y 3.0</strong>. Aplicamos exactamente <span class="m-inline">\(t=1.8\)</span>, sin recalcular el centro, ajustar el algoritmo ni elegir otro umbral. Superan el umbral 1.9, 2.4 y 3.0:</p>
+<div class="formula">\[\widehat r_{\rm posterior}=\frac{\#\{1.9,2.4,3.0\}}5=\frac35=0.60=60\%.\]</div>
+<p><strong>Paso 3 — Sensibilidad.</strong> Si durante el diseño se hubiera elegido <span class="m-inline">\(t=2.2\)</span>, Validation produciría <span class="m-inline">\(1/10=10\%\)</span> y los cinco datos posteriores <span class="m-inline">\(2/5=40\%\)</span>. La diferencia no demuestra Drift con una muestra de cinco; sí demuestra que fijar un umbral para una proporción histórica no garantiza esa proporción en futuros datos.</p><figure class="plot-svg guide27-plot"><svg xmlns="http://www.w3.org/2000/svg" width="860" height="384" viewBox="0 0 860 384" role="img" aria-labelledby="guide27-alert-title guide27-alert-desc"><title id="guide27-alert-title">Tasas de alerta: umbral congelado</title><desc id="guide27-alert-desc">Muestra Validation (10) frente a cinco lecturas posteriores. Comparación de tasas con umbrales aplicados sin reajuste.</desc><rect x="0" y="0" width="860" height="384" fill="#fbfdff"/><text x="28" y="32" font-size="20" font-weight="700" fill="#0b1f3a">Tasas de alerta: umbral congelado</text><text x="28" y="52" font-size="13.5" fill="#526175">Muestra Validation (10) frente a cinco lecturas posteriores</text><line x1="100" y1="292.00" x2="815" y2="292.00" stroke="#dae5ee" stroke-width="1"/><text x="88" y="297.00" text-anchor="end" font-size="14" fill="#46566b">0%</text><line x1="100" y1="232.00" x2="815" y2="232.00" stroke="#dae5ee" stroke-width="1"/><text x="88" y="237.00" text-anchor="end" font-size="14" fill="#46566b">20%</text><line x1="100" y1="172.00" x2="815" y2="172.00" stroke="#dae5ee" stroke-width="1"/><text x="88" y="177.00" text-anchor="end" font-size="14" fill="#46566b">40%</text><line x1="100" y1="112.00" x2="815" y2="112.00" stroke="#dae5ee" stroke-width="1"/><text x="88" y="117.00" text-anchor="end" font-size="14" fill="#46566b">60%</text><text x="19" y="183" transform="rotate(-90,19,183)" font-size="14" fill="#46566b" text-anchor="middle">Fracción de alertas</text><rect x="183.00" y="232.00" width="78" height="60.00" rx="6" fill="#2563eb"/><text x="222" y="222.00" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1f3a">20.0%</text><text x="222" y="312" text-anchor="middle" font-size="12" fill="#44536b">2/10</text><rect x="293.00" y="112.00" width="78" height="180.00" rx="6" fill="#15957e"/><text x="332" y="102.00" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1f3a">60.0%</text><text x="332" y="312" text-anchor="middle" font-size="12" fill="#44536b">3/5</text><text x="277" y="338" text-anchor="middle" font-size="15" font-weight="700" fill="#102033">Umbral 1.8</text><rect x="527.00" y="262.00" width="78" height="30.00" rx="6" fill="#2563eb"/><text x="566" y="252.00" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1f3a">10.0%</text><text x="566" y="312" text-anchor="middle" font-size="12" fill="#44536b">1/10</text><rect x="637.00" y="172.00" width="78" height="120.00" rx="6" fill="#15957e"/><text x="676" y="162.00" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1f3a">40.0%</text><text x="676" y="312" text-anchor="middle" font-size="12" fill="#44536b">2/5</text><text x="621" y="338" text-anchor="middle" font-size="15" font-weight="700" fill="#102033">Umbral 2.2</text><rect x="112" y="358" width="13" height="13" rx="2" fill="#2563eb"/><text x="132" y="369" font-size="13" fill="#334155">Validation (10)</text><rect x="445" y="358" width="13" height="13" rx="2" fill="#15957e"/><text x="465" y="369" font-size="13" fill="#334155">Posterior (5)</text></svg><figcaption>Las alturas muestran proporciones, no Precision ni False Positive Rate: no existen etiquetas verificadas. Cada barra indica numerador y denominador.</figcaption></figure><div class="callout teal"><p><strong>Interpretación responsable.</strong> Este ejemplo utiliza <em>Scores inventados y diferentes</em> de los ocho valores de vibración utilizados para calcular MAD. Muestra una política de capacidad, no una estimación válida de Precision, Recall, False Positive Rate ni probabilidad de falla. Con umbrales en caso de empate, define previamente la regla <span class="m-inline">\(>\)</span> o <span class="m-inline">\(\ge\)</span>. Si se emplearan los datos posteriores para volver a elegir el umbral, dejarían de ser una evaluación independiente.</p></div>
+</section><section class="guide-section amber" id="section-12"><h2>12. Drift, eventos poco frecuentes y consecuencias de falsos positivos</h2>
+<p>La distribución que definía lo &quot;normal&quot; puede desplazarse tras mantenimiento, sustitución de sensores, cambios estacionales de carga o apertura de una tienda. <strong>Data Drift</strong> significa que cambia la distribución de Inputs; <strong>Concept Drift</strong> significa que cambia la relación entre Inputs y estado real de falla. El monitoreo debe seguir disponibilidad de sensores, Missing Values, distribuciones de Features, Scores, resultados confirmados y carga de alertas.</p>
+<p>Un False Positive puede causar paradas costosas; un False Negative puede comprometer la inocuidad alimentaria. Por tanto, el mismo Anomaly Score no debe provocar necesariamente la misma respuesta para todas las máquinas. Criticidad, regulación y protocolos humanos corresponden a la capa de decisiones. Una anomalía del sensor no explica causalmente la falla.</p>
+<p>Un Monitoring Plan válido define cómo se recolectan lecturas, qué referencia permanece activa, quién autoriza Retraining, cómo se identifica Drift y qué futuros datos etiquetados justifican cambiar el umbral. Recalcular retrospectivamente la referencia incorporando el incidente sospechoso podría ocultar precisamente la anomalía buscada.</p>
+</section><section class="guide-section blue" id="section-13"><h2>13. De lecturas de sensores a compras: un tipo de dato diferente</h2>
+<p>Association Rule Mining estudia <strong>conjuntos de artículos por transacción</strong>, no distancias entre mediciones de sensores. Un recibo con Bread, Milk y Coffee es un conjunto <span class="m-inline">\(\{B,M,C\}\)</span>; en esta introducción binaria ignoramos orden y cantidades. Otra pregunta de negocio (secuencia, monto, cantidades o identidad del cliente) requiere otro modelo.</p>
+<p>El <strong>universo de artículos</strong> es <span class="m-inline">\(I=\{B,M,C,T,Q\}\)</span> para Bread, Milk, Coffee, Tea y Coupon. Una <strong>Transaction</strong> es un subconjunto de <span class="m-inline">\(I\)</span>. Un <strong>Itemset</strong> como <span class="m-inline">\(\{B,M\}\)</span> aparece si el recibo contiene <strong>ambos</strong> productos. Una <strong>Association Rule</strong> <span class="m-inline">\(X\Rightarrow Y\)</span> exige <span class="m-inline">\(X\cap Y=\varnothing\)</span>: a la izquierda está el Antecedent y a la derecha el Consequent. La flecha significa Co-occurrence condicional, <strong>no causalidad</strong>.</p>
+<p>Incluimos Coupon deliberadamente porque las promociones pueden asociar mecánicamente cupones a ciertos productos. Una relación perfecta Tea–Coupon será didáctica, pero no debe confundirse con una oportunidad comercial demostrada.</p>
+</section><section class="guide-section teal" id="section-14"><h2>14. Los doce Baskets sintéticos completos</h2>
+<p>Estos son los <strong>12 recibos sintéticos completos</strong>, con el mismo vocabulario de cinco elementos utilizado en todos los cálculos. Un recibo equivale a una Transaction, aunque existan productos repetidos entre recibos. Coupon Q representa una promoción de té agregada automáticamente, no necesariamente un bien comprado.</p>
+<table>
+<thead>
+<tr>
+<th>Recibo</th>
+<th>Artículos</th>
+<th>Conjunto codificado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R1</td>
+<td>Bread, Milk, Coffee</td>
+<td>B M C</td>
+</tr>
+<tr>
+<td>R2</td>
+<td>Bread, Milk</td>
+<td>B M</td>
+</tr>
+<tr>
+<td>R3</td>
+<td>Bread, Milk, Coffee</td>
+<td>B M C</td>
+</tr>
+<tr>
+<td>R4</td>
+<td>Bread, Milk</td>
+<td>B M</td>
+</tr>
+<tr>
+<td>R5</td>
+<td>Bread, Coffee</td>
+<td>B C</td>
+</tr>
+<tr>
+<td>R6</td>
+<td>Milk, Coffee</td>
+<td>M C</td>
+</tr>
+<tr>
+<td>R7</td>
+<td>Bread, Milk, Coffee</td>
+<td>B M C</td>
+</tr>
+<tr>
+<td>R8</td>
+<td>Bread, Milk</td>
+<td>B M</td>
+</tr>
+<tr>
+<td>R9</td>
+<td>Bread, Tea, Coupon</td>
+<td>B T Q</td>
+</tr>
+<tr>
+<td>R10</td>
+<td>Milk, Tea, Coupon</td>
+<td>M T Q</td>
+</tr>
+<tr>
+<td>R11</td>
+<td>Coffee, Tea, Coupon</td>
+<td>C T Q</td>
+</tr>
+<tr>
+<td>R12</td>
+<td>Bread, Milk, Coffee</td>
+<td>B M C</td>
+</tr>
+</tbody>
+</table>
+<p>Para reproducir un Support Count, revisamos cada fila y registramos 1 si el Itemset aparece dentro del recibo. Por ejemplo, <span class="m-inline">\(\{B,M\}\)</span> aparece en <strong>R1, R2, R3, R4, R7, R8, R12</strong>: son <strong>siete</strong> transacciones. <span class="m-inline">\(\{T,Q\}\)</span> aparece en <strong>R9, R10, R11</strong>: son tres. Preferimos datos sintéticos para que cada numerador sea visible.</p>
+<p>En una tienda real hay que definir devoluciones, sesiones de compra, varios recibos por cliente, temporadas promocionales y catálogo de productos antes de extraer reglas. De lo contrario, una Association Rule puede reflejar simplemente cómo construimos los registros.</p>
+</section><section class="guide-section purple" id="section-15"><h2>15. Support Counts, Support y el denominador de frecuencia</h2>
+<p>Para un Itemset <span class="m-inline">\(X\)</span>, sea <span class="m-inline">\(N(X)\)</span> el número de recibos que contiene todos los elementos de <span class="m-inline">\(X\)</span> y sea <span class="m-inline">\(N=12\)</span> el total. <strong>Support</strong> es <span class="m-inline">\(\operatorname{supp}(X)=N(X)/N\)</span>. Mide frecuencia entre <strong>todas las compras</strong>, no solamente las que contienen el Antecedent.</p>
+<p>Revisamos la tabla original y contamos artículos individuales: <span class="m-inline">\(N(B)=9\)</span>, <span class="m-inline">\(N(M)=9\)</span>, <span class="m-inline">\(N(C)=7\)</span>, <span class="m-inline">\(N(T)=3\)</span>, <span class="m-inline">\(N(Q)=3\)</span>. Los pares frecuentes incluyen <span class="m-inline">\(N(BM)=7\)</span>, <span class="m-inline">\(N(BC)=5\)</span>, <span class="m-inline">\(N(MC)=5\)</span>, <span class="m-inline">\(N(TQ)=3\)</span>; el triple <span class="m-inline">\(N(BMC)=4\)</span>. Así:</p>
+<p><div class="formula">\[\operatorname{supp}(BM)=7/12=0.5833,\quad \operatorname{supp}(BMC)=4/12=0.3333.\]</div></p>
+<figure class="plot-svg" role="group" aria-label="Support Counts exactos calculados desde los doce recibos. La línea indica un conteo mínimo de tres."><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="588.679375pt" height="325.986375pt" viewBox="0 0 588.679375 325.986375" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-14T00:51:51.035198</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="g27f6_figure_1">
+  <g id="g27f6_patch_1">
+   <path d="M 0 325.986375 
+L 588.679375 325.986375 
+L 588.679375 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="g27f6_axes_1">
+   <g id="g27f6_patch_2">
+    <path d="M 112.759375 288.430125 
+L 581.479375 288.430125 
+L 581.479375 22.318125 
+L 112.759375 22.318125 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="g27f6_patch_3">
+    <path d="M 112.759375 34.414125 
+L 496.257557 34.414125 
+L 496.257557 54.162696 
+L 112.759375 54.162696 
+z
+" clip-path="url(#g27f6_p7d8decb446)" style="fill: #3178b9"/>
+   </g>
+   <g id="g27f6_patch_4">
+    <path d="M 112.759375 59.099839 
+L 496.257557 59.099839 
+L 496.257557 78.848411 
+L 112.759375 78.848411 
+z
+" clip-path="url(#g27f6_p7d8decb446)" style="fill: #3178b9"/>
+   </g>
+   <g id="g27f6_patch_5">
+    <path d="M 112.759375 83.785554 
+L 411.035739 83.785554 
+L 411.035739 103.534125 
+L 112.759375 103.534125 
+z
+" clip-path="url(#g27f6_p7d8decb446)" style="fill: #3178b9"/>
+   </g>
+   <g id="g27f6_patch_6">
+    <path d="M 112.759375 108.471268 
+L 240.592102 108.471268 
+L 240.592102 128.219839 
+L 112.759375 128.219839 
+z
+" clip-path="url(#g27f6_p7d8decb446)" style="fill: #3178b9"/>
+   </g>
+   <g id="g27f6_patch_7">
+    <path d="M 112.759375 133.156982 
+L 240.592102 133.156982 
+L 240.592102 152.905554 
+L 112.759375 152.905554 
+z
+" clip-path="url(#g27f6_p7d8decb446)" style="fill: #3178b9"/>
+   </g>
+   <g id="g27f6_patch_8">
+    <path d="M 112.759375 157.842696 
+L 411.035739 157.842696 
+L 411.035739 177.591268 
+L 112.759375 177.591268 
+z
+" clip-path="url(#g27f6_p7d8decb446)" style="fill: #8c69ba"/>
+   </g>
+   <g id="g27f6_patch_9">
+    <path d="M 112.759375 182.528411 
+L 325.81392 182.528411 
+L 325.81392 202.276982 
+L 112.759375 202.276982 
+z
+" clip-path="url(#g27f6_p7d8decb446)" style="fill: #8c69ba"/>
+   </g>
+   <g id="g27f6_patch_10">
+    <path d="M 112.759375 207.214125 
+L 325.81392 207.214125 
+L 325.81392 226.962696 
+L 112.759375 226.962696 
+z
+" clip-path="url(#g27f6_p7d8decb446)" style="fill: #8c69ba"/>
+   </g>
+   <g id="g27f6_patch_11">
+    <path d="M 112.759375 231.899839 
+L 240.592102 231.899839 
+L 240.592102 251.648411 
+L 112.759375 251.648411 
+z
+" clip-path="url(#g27f6_p7d8decb446)" style="fill: #8c69ba"/>
+   </g>
+   <g id="g27f6_patch_12">
+    <path d="M 112.759375 256.585554 
+L 283.203011 256.585554 
+L 283.203011 276.334125 
+L 112.759375 276.334125 
+z
+" clip-path="url(#g27f6_p7d8decb446)" style="fill: #8c69ba"/>
+   </g>
+   <g id="g27f6_matplotlib.axis_1">
+    <g id="g27f6_xtick_1">
+     <g id="g27f6_line2d_1">
+      <defs>
+       <path id="g27f6_m9a8f0e3040" d="M 0 0 
+L 0 3.5 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#g27f6_m9a8f0e3040" x="112.759375" y="288.430125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f6_text_1">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="112.759375" y="303.028562" transform="rotate(-0 112.759375 303.028562)">0</text>
+     </g>
+    </g>
+    <g id="g27f6_xtick_2">
+     <g id="g27f6_line2d_2">
+      <g>
+       <use xlink:href="#g27f6_m9a8f0e3040" x="197.981193" y="288.430125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f6_text_2">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="197.981193" y="303.028562" transform="rotate(-0 197.981193 303.028562)">2</text>
+     </g>
+    </g>
+    <g id="g27f6_xtick_3">
+     <g id="g27f6_line2d_3">
+      <g>
+       <use xlink:href="#g27f6_m9a8f0e3040" x="283.203011" y="288.430125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f6_text_3">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="283.203011" y="303.028562" transform="rotate(-0 283.203011 303.028562)">4</text>
+     </g>
+    </g>
+    <g id="g27f6_xtick_4">
+     <g id="g27f6_line2d_4">
+      <g>
+       <use xlink:href="#g27f6_m9a8f0e3040" x="368.42483" y="288.430125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f6_text_4">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="368.42483" y="303.028562" transform="rotate(-0 368.42483 303.028562)">6</text>
+     </g>
+    </g>
+    <g id="g27f6_xtick_5">
+     <g id="g27f6_line2d_5">
+      <g>
+       <use xlink:href="#g27f6_m9a8f0e3040" x="453.646648" y="288.430125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f6_text_5">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="453.646648" y="303.028562" transform="rotate(-0 453.646648 303.028562)">8</text>
+     </g>
+    </g>
+    <g id="g27f6_xtick_6">
+     <g id="g27f6_line2d_6">
+      <g>
+       <use xlink:href="#g27f6_m9a8f0e3040" x="538.868466" y="288.430125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f6_text_6">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="538.868466" y="303.028562" transform="rotate(-0 538.868466 303.028562)">10</text>
+     </g>
+    </g>
+    <g id="g27f6_text_7">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="347.119375" y="316.706687" transform="rotate(-0 347.119375 316.706687)">Transacciones con el Itemset (de 12)</text>
+    </g>
+   </g>
+   <g id="g27f6_matplotlib.axis_2">
+    <g id="g27f6_ytick_1">
+     <g id="g27f6_line2d_7">
+      <defs>
+       <path id="g27f6_me79a6165e8" d="M 0 0 
+L -3.5 0 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#g27f6_me79a6165e8" x="112.759375" y="44.288411" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f6_text_8">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="105.759375" y="48.087629" transform="rotate(-0 105.759375 48.087629)">Bread</text>
+     </g>
+    </g>
+    <g id="g27f6_ytick_2">
+     <g id="g27f6_line2d_8">
+      <g>
+       <use xlink:href="#g27f6_me79a6165e8" x="112.759375" y="68.974125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f6_text_9">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="105.759375" y="72.773344" transform="rotate(-0 105.759375 72.773344)">Milk</text>
+     </g>
+    </g>
+    <g id="g27f6_ytick_3">
+     <g id="g27f6_line2d_9">
+      <g>
+       <use xlink:href="#g27f6_me79a6165e8" x="112.759375" y="93.659839" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f6_text_10">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="105.759375" y="97.459058" transform="rotate(-0 105.759375 97.459058)">Coffee</text>
+     </g>
+    </g>
+    <g id="g27f6_ytick_4">
+     <g id="g27f6_line2d_10">
+      <g>
+       <use xlink:href="#g27f6_me79a6165e8" x="112.759375" y="118.345554" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f6_text_11">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="105.759375" y="122.144772" transform="rotate(-0 105.759375 122.144772)">Tea</text>
+     </g>
+    </g>
+    <g id="g27f6_ytick_5">
+     <g id="g27f6_line2d_11">
+      <g>
+       <use xlink:href="#g27f6_me79a6165e8" x="112.759375" y="143.031268" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f6_text_12">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="105.759375" y="146.830487" transform="rotate(-0 105.759375 146.830487)">Coupon</text>
+     </g>
+    </g>
+    <g id="g27f6_ytick_6">
+     <g id="g27f6_line2d_12">
+      <g>
+       <use xlink:href="#g27f6_me79a6165e8" x="112.759375" y="167.716982" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f6_text_13">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="105.759375" y="171.516201" transform="rotate(-0 105.759375 171.516201)">Bread+Milk</text>
+     </g>
+    </g>
+    <g id="g27f6_ytick_7">
+     <g id="g27f6_line2d_13">
+      <g>
+       <use xlink:href="#g27f6_me79a6165e8" x="112.759375" y="192.402696" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f6_text_14">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="105.759375" y="196.201915" transform="rotate(-0 105.759375 196.201915)">Bread+Coffee</text>
+     </g>
+    </g>
+    <g id="g27f6_ytick_8">
+     <g id="g27f6_line2d_14">
+      <g>
+       <use xlink:href="#g27f6_me79a6165e8" x="112.759375" y="217.088411" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f6_text_15">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="105.759375" y="220.887629" transform="rotate(-0 105.759375 220.887629)">Milk+Coffee</text>
+     </g>
+    </g>
+    <g id="g27f6_ytick_9">
+     <g id="g27f6_line2d_15">
+      <g>
+       <use xlink:href="#g27f6_me79a6165e8" x="112.759375" y="241.774125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f6_text_16">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="105.759375" y="245.573344" transform="rotate(-0 105.759375 245.573344)">Tea+Coupon</text>
+     </g>
+    </g>
+    <g id="g27f6_ytick_10">
+     <g id="g27f6_line2d_16">
+      <g>
+       <use xlink:href="#g27f6_me79a6165e8" x="112.759375" y="266.459839" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f6_text_17">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="105.759375" y="270.259058" transform="rotate(-0 105.759375 270.259058)">Bread+Milk+Coffee</text>
+     </g>
+    </g>
+   </g>
+   <g id="g27f6_line2d_17">
+    <path d="M 240.592102 288.430125 
+L 240.592102 22.318125 
+" clip-path="url(#g27f6_p7d8decb446)" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #d59a32; stroke-width: 1.5"/>
+   </g>
+   <g id="g27f6_patch_13">
+    <path d="M 112.759375 288.430125 
+L 112.759375 22.318125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f6_patch_14">
+    <path d="M 581.479375 288.430125 
+L 581.479375 22.318125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f6_patch_15">
+    <path d="M 112.759375 288.430125 
+L 581.479375 288.430125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f6_patch_16">
+    <path d="M 112.759375 22.318125 
+L 581.479375 22.318125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f6_text_18">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="502.649193" y="46.771848" transform="rotate(-0 502.649193 46.771848)">9</text>
+   </g>
+   <g id="g27f6_text_19">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="502.649193" y="71.457562" transform="rotate(-0 502.649193 71.457562)">9</text>
+   </g>
+   <g id="g27f6_text_20">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="417.427375" y="96.143277" transform="rotate(-0 417.427375 96.143277)">7</text>
+   </g>
+   <g id="g27f6_text_21">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="246.983739" y="120.828991" transform="rotate(-0 246.983739 120.828991)">3</text>
+   </g>
+   <g id="g27f6_text_22">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="246.983739" y="145.514705" transform="rotate(-0 246.983739 145.514705)">3</text>
+   </g>
+   <g id="g27f6_text_23">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="417.427375" y="170.20042" transform="rotate(-0 417.427375 170.20042)">7</text>
+   </g>
+   <g id="g27f6_text_24">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="332.205557" y="194.886134" transform="rotate(-0 332.205557 194.886134)">5</text>
+   </g>
+   <g id="g27f6_text_25">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="332.205557" y="219.571848" transform="rotate(-0 332.205557 219.571848)">5</text>
+   </g>
+   <g id="g27f6_text_26">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="246.983739" y="244.257562" transform="rotate(-0 246.983739 244.257562)">3</text>
+   </g>
+   <g id="g27f6_text_27">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="289.594648" y="268.943277" transform="rotate(-0 289.594648 268.943277)">4</text>
+   </g>
+   <g id="g27f6_text_28">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="347.119375" y="16.318125" transform="rotate(-0 347.119375 16.318125)">Support Counts calculados desde las 12 compras</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="g27f6_p7d8decb446">
+   <rect x="112.759375" y="22.318125" width="468.72" height="266.112"/>
+  </clipPath>
+ </defs>
+</svg>
+<figcaption>Support Counts exactos calculados desde los doce recibos. La línea indica un conteo mínimo de tres.</figcaption></figure>
+<p>Usaremos <strong>Minimum Support Count 3</strong>, que equivale a <span class="m-inline">\(3/12=0.25\)</span>. Conserva el par Tea–Coupon, pero excluye parejas de un solo recibo. Cambiar la definición de Transaction o el denominador altera todos los Supports; un porcentaje mínimo fijo no garantiza estabilidad estadística ni utilidad comercial.</p>
+</section><section class="guide-section amber" id="section-16"><h2>16. Apriori: propiedad de cierre descendente y su demostración</h2>
+<p><strong>Apriori</strong> reduce la búsqueda mediante un hecho matemático determinista: si <span class="m-inline">\(A\subseteq B\)</span> son Itemsets, <em>cada compra que contiene <span class="m-inline">\(B\)</span> también contiene <span class="m-inline">\(A\)</span></em>. Por eso, el conjunto de recibos que contiene <span class="m-inline">\(B\)</span> es subconjunto del que contiene <span class="m-inline">\(A\)</span>, de modo que</p>
+<p><div class="formula">\[N(B)\le N(A),\qquad \operatorname{supp}(B)\le\operatorname{supp}(A).\]</div></p>
+<p>Es la propiedad <strong>Anti-Monotonicity / Downward Closure</strong> de Support. Es una prueba basada en inclusión de conjuntos, no una heurística. Por tanto, si Bread–Tea aparece una sola vez, <strong>cualquier superconjunto que contenga Bread y Tea</strong> aparece como máximo una vez y no alcanzará el conteo mínimo de tres. Podemos podar Bread–Tea–Coupon sin contar todas las combinaciones posibles.</p>
+<p>No confundamos esto con Confidence o Lift: esas métricas <strong>no</strong> necesariamente disminuyen al añadir artículos. La poda por Support es exacta para nuestra tabla y umbral; no demuestra que un patrón de bajo Support sea científicamente imposible, solo que no cumple nuestro criterio de búsqueda.</p>
+</section><section class="guide-section blue" id="section-17"><h2>17. Apriori, ronda 1: identificar todos los Singletons frecuentes</h2>
+<p>Empezamos con <span class="m-inline">\(C_1=\{B,M,C,T,Q\}\)</span>, los cinco Itemsets candidatos de un elemento. Los contamos desde los recibos y conservamos aquellos con <span class="m-inline">\(N(X)\ge3\)</span>: en nuestro caso sobreviven <strong>los cinco</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Singleton</th>
+<th style="text-align:right">B</th>
+<th style="text-align:right">M</th>
+<th style="text-align:right">C</th>
+<th style="text-align:right">T</th>
+<th style="text-align:right">Q</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Conteo</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>¿Mínimo 3?</td>
+<td style="text-align:right">Sí</td>
+<td style="text-align:right">Sí</td>
+<td style="text-align:right">Sí</td>
+<td style="text-align:right">Sí</td>
+<td style="text-align:right">Sí</td>
+</tr>
+</tbody>
+</table>
+<p>¿Por qué no generar de inmediato los 31 Itemsets no vacíos? Con cinco artículos existen <span class="m-inline">\(2^5-1=31\)</span> posibilidades, pero un catálogo real puede tener miles de productos y el espacio de combinaciones crece exponencialmente. Apriori trabaja por niveles y utiliza los subconjuntos ya evaluados para evitar conteos innecesarios. Aunque todos los Singletons sobrevivan, la segunda ronda descartará muchas combinaciones.</p>
+</section><section class="guide-section teal" id="section-18"><h2>18. Apriori, rondas 2 y 3: conteos exactos y poda de candidatos</h2>
+<p>Como sobrevivieron cinco Singletons, formamos los diez pares posibles en <span class="m-inline">\(C_2\)</span>. Sus conteos exactos son:</p>
+<table>
+<thead>
+<tr>
+<th>Par</th>
+<th style="text-align:right">BM</th>
+<th style="text-align:right">BC</th>
+<th style="text-align:right">BT</th>
+<th style="text-align:right">BQ</th>
+<th style="text-align:right">MC</th>
+<th style="text-align:right">MT</th>
+<th style="text-align:right">MQ</th>
+<th style="text-align:right">CT</th>
+<th style="text-align:right">CQ</th>
+<th style="text-align:right">TQ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Conteo</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>¿Frecuente?</td>
+<td style="text-align:right">✓</td>
+<td style="text-align:right">✓</td>
+<td style="text-align:right">×</td>
+<td style="text-align:right">×</td>
+<td style="text-align:right">✓</td>
+<td style="text-align:right">×</td>
+<td style="text-align:right">×</td>
+<td style="text-align:right">×</td>
+<td style="text-align:right">×</td>
+<td style="text-align:right">✓</td>
+</tr>
+</tbody>
+</table>
+<p>Entonces <span class="m-inline">\(L_2=\{BM,BC,MC,TQ\}\)</span>. Para que un triple sea candidato, <strong>todos sus subconjuntos de dos elementos deben ser frecuentes</strong>. <span class="m-inline">\(\{B,M,C\}\)</span> supera el control porque BM, BC y MC están en <span class="m-inline">\(L_2\)</span>; su conteo es <strong>4</strong>, así que es frecuente. Todo triple que contenga TQ junto a B, M o C falla porque alguno de los pares BT/BQ, MT/MQ o CT/CQ no es frecuente. Por tanto, <span class="m-inline">\(L_3=\{BMC\}\)</span>. No puede haber un Itemset frecuente de cuatro elementos: requeriría varios triples frecuentes y solo tenemos uno.</p>
+<figure class="plot-svg" role="group" aria-label="El triple Bread–Milk–Coffee sobrevive porque todos sus pares tienen suficiente Support; Bread–Tea se poda por conteo uno."><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="466.38pt" height="229.102125pt" viewBox="0 0 466.38 229.102125" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-14T00:51:51.103550</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="g27f7_figure_1">
+  <g id="g27f7_patch_1">
+   <path d="M 0 229.102125 
+L 466.38 229.102125 
+L 466.38 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="g27f7_axes_1">
+   <g id="g27f7_text_1">
+    <g id="g27f7_patch_2">
+     <path d="M 37.437141 66.405094 
+L 67.358859 66.405094 
+Q 72.858859 66.405094 72.858859 60.905094 
+L 72.858859 50.259156 
+Q 72.858859 44.759156 67.358859 44.759156 
+L 37.437141 44.759156 
+Q 31.937141 44.759156 31.937141 50.259156 
+L 31.937141 60.905094 
+Q 31.937141 66.405094 37.437141 66.405094 
+z
+" style="fill: #edf5ff; stroke: #cddfec; stroke-linejoin: miter"/>
+    </g>
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" x="52.398" y="58.617437" transform="rotate(-0 52.398 58.617437)">B (9)</text>
+   </g>
+   <g id="g27f7_text_2">
+    <g id="g27f7_patch_3">
+     <path d="M 171.749813 66.405094 
+L 204.234188 66.405094 
+Q 209.734188 66.405094 209.734188 60.905094 
+L 209.734188 50.259156 
+Q 209.734188 44.759156 204.234188 44.759156 
+L 171.749813 44.759156 
+Q 166.249813 44.759156 166.249813 50.259156 
+L 166.249813 60.905094 
+Q 166.249813 66.405094 171.749813 66.405094 
+z
+" style="fill: #edf5ff; stroke: #cddfec; stroke-linejoin: miter"/>
+    </g>
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" x="187.992" y="58.617437" transform="rotate(-0 187.992 58.617437)">M (9)</text>
+   </g>
+   <g id="g27f7_text_3">
+    <g id="g27f7_patch_4">
+     <path d="M 308.780688 66.405094 
+L 338.391313 66.405094 
+Q 343.891313 66.405094 343.891313 60.905094 
+L 343.891313 50.259156 
+Q 343.891313 44.759156 338.391313 44.759156 
+L 308.780688 44.759156 
+Q 303.280688 44.759156 303.280688 50.259156 
+L 303.280688 60.905094 
+Q 303.280688 66.405094 308.780688 66.405094 
+z
+" style="fill: #edf5ff; stroke: #cddfec; stroke-linejoin: miter"/>
+    </g>
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" x="323.586" y="58.617437" transform="rotate(-0 323.586 58.617437)">C (7)</text>
+   </g>
+   <g id="g27f7_text_4">
+    <g id="g27f7_patch_5">
+     <path d="M 31.963781 132.933094 
+L 72.832219 132.933094 
+Q 78.332219 132.933094 78.332219 127.433094 
+L 78.332219 116.787156 
+Q 78.332219 111.287156 72.832219 111.287156 
+L 31.963781 111.287156 
+Q 26.463781 111.287156 26.463781 116.787156 
+L 26.463781 127.433094 
+Q 26.463781 132.933094 31.963781 132.933094 
+z
+" style="fill: #eaf8f3; stroke: #cddfec; stroke-linejoin: miter"/>
+    </g>
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" x="52.398" y="125.145437" transform="rotate(-0 52.398 125.145437)">BM (7)</text>
+   </g>
+   <g id="g27f7_text_5">
+    <g id="g27f7_patch_6">
+     <path d="M 168.994656 132.933094 
+L 206.989344 132.933094 
+Q 212.489344 132.933094 212.489344 127.433094 
+L 212.489344 116.787156 
+Q 212.489344 111.287156 206.989344 111.287156 
+L 168.994656 111.287156 
+Q 163.494656 111.287156 163.494656 116.787156 
+L 163.494656 127.433094 
+Q 163.494656 132.933094 168.994656 132.933094 
+z
+" style="fill: #eaf8f3; stroke: #cddfec; stroke-linejoin: miter"/>
+    </g>
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" x="187.992" y="125.145437" transform="rotate(-0 187.992 125.145437)">BC (5)</text>
+   </g>
+   <g id="g27f7_text_6">
+    <g id="g27f7_patch_7">
+     <path d="M 303.307328 132.933094 
+L 343.864672 132.933094 
+Q 349.364672 132.933094 349.364672 127.433094 
+L 349.364672 116.787156 
+Q 349.364672 111.287156 343.864672 111.287156 
+L 303.307328 111.287156 
+Q 297.807328 111.287156 297.807328 116.787156 
+L 297.807328 127.433094 
+Q 297.807328 132.933094 303.307328 132.933094 
+z
+" style="fill: #eaf8f3; stroke: #cddfec; stroke-linejoin: miter"/>
+    </g>
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" x="323.586" y="125.145437" transform="rotate(-0 323.586 125.145437)">MC (5)</text>
+   </g>
+   <g id="g27f7_text_7">
+    <g id="g27f7_patch_8">
+     <path d="M 163.521297 205.005094 
+L 212.462703 205.005094 
+Q 217.962703 205.005094 217.962703 199.505094 
+L 217.962703 188.859156 
+Q 217.962703 183.359156 212.462703 183.359156 
+L 163.521297 183.359156 
+Q 158.021297 183.359156 158.021297 188.859156 
+L 158.021297 199.505094 
+Q 158.021297 205.005094 163.521297 205.005094 
+z
+" style="fill: #eaf8f3; stroke: #cddfec; stroke-linejoin: miter"/>
+    </g>
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #0b1f3a" x="187.992" y="197.217437" transform="rotate(-0 187.992 197.217437)">BMC (4)</text>
+   </g>
+   <g id="g27f7_patch_9">
+    <path d="M 54.297342 136.583623 
+Q 120.191982 157.86795 184.384366 178.60244 
+" style="fill: none; stroke: #63758a; stroke-width: 1.6; stroke-linecap: round"/>
+    <path d="M 181.192742 175.469783 
+L 184.384366 178.60244 
+L 179.963266 179.276145 
+" style="fill: none; stroke: #63758a; stroke-width: 1.6; stroke-linecap: round"/>
+   </g>
+   <g id="g27f7_patch_10">
+    <path d="M 187.992 137.972347 
+Q 187.992 157.868773 187.992 175.976345 
+" style="fill: none; stroke: #63758a; stroke-width: 1.6; stroke-linecap: round"/>
+    <path d="M 189.992 171.976345 
+L 187.992 175.976345 
+L 185.992 171.976345 
+" style="fill: none; stroke: #63758a; stroke-width: 1.6; stroke-linecap: round"/>
+   </g>
+   <g id="g27f7_patch_11">
+    <path d="M 321.686658 136.583623 
+Q 255.792018 157.86795 191.599634 178.60244 
+" style="fill: none; stroke: #63758a; stroke-width: 1.6; stroke-linecap: round"/>
+    <path d="M 196.020734 179.276145 
+L 191.599634 178.60244 
+L 194.791258 175.469783 
+" style="fill: none; stroke: #63758a; stroke-width: 1.6; stroke-linecap: round"/>
+   </g>
+   <g id="g27f7_text_8">
+    <text style="font-weight: 700; font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #8c69ba" x="445.6206" y="88.846125" transform="rotate(-0 445.6206 88.846125)">TQ (3)</text>
+   </g>
+   <g id="g27f7_text_9">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #b34850" x="445.6206" y="127.654125" transform="rotate(-0 445.6206 127.654125)">BT (1): podado</text>
+   </g>
+   <g id="g27f7_text_10">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="233.19" y="16.318125" transform="rotate(-0 233.19 16.318125)">Apriori: Itemsets frecuentes y poda por Support</text>
+   </g>
+  </g>
+ </g>
+</svg>
+<figcaption>El triple Bread–Milk–Coffee sobrevive porque todos sus pares tienen suficiente Support; Bread–Tea se poda por conteo uno.</figcaption></figure>
+<p>El resultado <strong>completo de Itemsets frecuentes</strong> es 5 Singletons + 4 pares + 1 triple = <strong>10 Itemsets</strong>. Es un resultado matemático de filtrado, <em>no</em> diez conclusiones comerciales independientes. Por ejemplo, {Bread} y {Bread, Milk} están relacionados y comparten recibos; hay que interpretar los patrones antes de actuar.</p>
+</section><section class="guide-section purple" id="section-19"><h2>19. Confidence es condicional; no corrige una Consequent muy frecuente</h2>
+<p>Para Itemsets disjuntos <span class="m-inline">\(X\)</span> e <span class="m-inline">\(Y\)</span>, <strong>Confidence</strong> mide la proporción de compras con <span class="m-inline">\(X\)</span> que también contienen <span class="m-inline">\(Y\)</span>: <span class="m-inline">\(\operatorname{conf}(X\Rightarrow Y)=N(X\cup Y)/N(X)\)</span>. Es una <em>frecuencia condicional muestral</em>, no un efecto experimental.</p>
+<p>Tomemos <strong>Bread <span class="m-inline">\(\Rightarrow\)</span> Milk</strong>. Nueve compras contienen Bread y siete de ellas también incluyen Milk. Entonces <span class="m-inline">\(\operatorname{conf}(B\Rightarrow M)=7/9=0.7778\)</span>, es decir <strong>77.78%</strong>. Parece alto hasta observar que <strong>9 de las 12 compras contienen Milk incluso sin condicionar por Bread</strong>: <span class="m-inline">\(\operatorname{supp}(M)=9/12=0.75\)</span>.</p>
+<p><strong>Lift</strong> compara la frecuencia condicional con esa referencia:</p>
+<p><div class="formula">\[\operatorname{lift}(B\Rightarrow M)=\frac{\operatorname{conf}(B\Rightarrow M)}{\operatorname{supp}(M)}=\frac{7/9}{9/12}=\frac{28}{27}=1.0370.\]</div></p>
+<p>Lift igual a <strong>1</strong> indica independencia <em>en las frecuencias de la tabla observada</em>; mayor que 1 muestra Co-occurrence positiva y menor que 1 negativa. <strong>1.037</strong> apenas supera la independencia en esta muestra sintética pequeña. Confidence de 77.78% no justifica una campaña cuando la base ya es 75%. No hemos estimado incertidumbre ni comprobado si esa diferencia se generaliza.</p>
+</section><section class="guide-section amber" id="section-20"><h2>20. Una regla con Lift 4 también puede carecer de utilidad comercial</h2>
+<p>Ahora consideremos <strong>Tea <span class="m-inline">\(\Rightarrow\)</span> Coupon</strong>. Tea aparece en tres compras (R9–R11) y Coupon está exactamente en esas tres. Por lo tanto:</p>
+<p><div class="formula">\[\operatorname{supp}(TQ)=3/12=0.25,\quad \operatorname{conf}(T\Rightarrow Q)=3/3=1.\]</div>
+<div class="formula">\[\operatorname{lift}(T\Rightarrow Q)=\frac{1}{3/12}=4.00.\]</div></p>
+<p>Comparemos visualmente con Bread <span class="m-inline">\(\Rightarrow\)</span> Milk:</p>
+<figure class="plot-svg" role="group" aria-label="Confidence = 1 y Lift = 4 en Tea → Coupon, pero la promoción asigna automáticamente el cupón; asociación no significa causalidad."><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="459.940625pt" height="251.32425pt" viewBox="0 0 459.940625 251.32425" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-14T00:51:51.168568</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="g27f8_figure_1">
+  <g id="g27f8_patch_1">
+   <path d="M 0 251.32425 
+L 459.940625 251.32425 
+L 459.940625 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="g27f8_axes_1">
+   <g id="g27f8_patch_2">
+    <path d="M 34.240625 227.446125 
+L 452.740625 227.446125 
+L 452.740625 22.318125 
+L 34.240625 22.318125 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="g27f8_patch_3">
+    <path d="M 53.263352 227.446125 
+L 128.895882 227.446125 
+L 128.895882 193.500593 
+L 53.263352 193.500593 
+z
+" clip-path="url(#g27f8_p249aea8f56)" style="fill: #15957e"/>
+   </g>
+   <g id="g27f8_patch_4">
+    <path d="M 282.452837 227.446125 
+L 358.085368 227.446125 
+L 358.085368 183.80187 
+L 282.452837 183.80187 
+z
+" clip-path="url(#g27f8_p249aea8f56)" style="fill: #15957e"/>
+   </g>
+   <g id="g27f8_patch_5">
+    <path d="M 128.895882 227.446125 
+L 204.528413 227.446125 
+L 204.528413 182.185416 
+L 128.895882 182.185416 
+z
+" clip-path="url(#g27f8_p249aea8f56)" style="fill: #8c69ba"/>
+   </g>
+   <g id="g27f8_patch_6">
+    <path d="M 358.085368 227.446125 
+L 433.717898 227.446125 
+L 433.717898 52.869104 
+L 358.085368 52.869104 
+z
+" clip-path="url(#g27f8_p249aea8f56)" style="fill: #8c69ba"/>
+   </g>
+   <g id="g27f8_matplotlib.axis_1">
+    <g id="g27f8_xtick_1">
+     <g id="g27f8_line2d_1">
+      <defs>
+       <path id="g27f8_m2db9599c2c" d="M 0 0 
+L 0 3.5 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#g27f8_m2db9599c2c" x="128.895882" y="227.446125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f8_text_1">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="128.895882" y="242.044563" transform="rotate(-0 128.895882 242.044563)">Bread → Milk</text>
+     </g>
+    </g>
+    <g id="g27f8_xtick_2">
+     <g id="g27f8_line2d_2">
+      <g>
+       <use xlink:href="#g27f8_m2db9599c2c" x="358.085368" y="227.446125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f8_text_2">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="358.085368" y="242.044563" transform="rotate(-0 358.085368 242.044563)">Tea → Coupon</text>
+     </g>
+    </g>
+   </g>
+   <g id="g27f8_matplotlib.axis_2">
+    <g id="g27f8_ytick_1">
+     <g id="g27f8_line2d_3">
+      <defs>
+       <path id="g27f8_m03c70048a3" d="M 0 0 
+L -3.5 0 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#g27f8_m03c70048a3" x="34.240625" y="227.446125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f8_text_3">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.240625" y="231.245344" transform="rotate(-0 27.240625 231.245344)">0</text>
+     </g>
+    </g>
+    <g id="g27f8_ytick_2">
+     <g id="g27f8_line2d_4">
+      <g>
+       <use xlink:href="#g27f8_m03c70048a3" x="34.240625" y="183.80187" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f8_text_4">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.240625" y="187.601088" transform="rotate(-0 27.240625 187.601088)">1</text>
+     </g>
+    </g>
+    <g id="g27f8_ytick_3">
+     <g id="g27f8_line2d_5">
+      <g>
+       <use xlink:href="#g27f8_m03c70048a3" x="34.240625" y="140.157614" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f8_text_5">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.240625" y="143.956833" transform="rotate(-0 27.240625 143.956833)">2</text>
+     </g>
+    </g>
+    <g id="g27f8_ytick_4">
+     <g id="g27f8_line2d_6">
+      <g>
+       <use xlink:href="#g27f8_m03c70048a3" x="34.240625" y="96.513359" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f8_text_6">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.240625" y="100.312578" transform="rotate(-0 27.240625 100.312578)">3</text>
+     </g>
+    </g>
+    <g id="g27f8_ytick_5">
+     <g id="g27f8_line2d_7">
+      <g>
+       <use xlink:href="#g27f8_m03c70048a3" x="34.240625" y="52.869104" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g27f8_text_7">
+      <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" x="27.240625" y="56.668322" transform="rotate(-0 27.240625 56.668322)">4</text>
+     </g>
+    </g>
+    <g id="g27f8_text_8">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" x="14.798438" y="124.882125" transform="rotate(-90 14.798438 124.882125)">Valor</text>
+    </g>
+   </g>
+   <g id="g27f8_line2d_8">
+    <path d="M 34.240625 183.80187 
+L 452.740625 183.80187 
+" clip-path="url(#g27f8_p249aea8f56)" style="fill: none; stroke-dasharray: 1,1.65; stroke-dashoffset: 0; stroke: #63758a"/>
+   </g>
+   <g id="g27f8_patch_7">
+    <path d="M 34.240625 227.446125 
+L 34.240625 22.318125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f8_patch_8">
+    <path d="M 452.740625 227.446125 
+L 452.740625 22.318125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f8_patch_9">
+    <path d="M 34.240625 227.446125 
+L 452.740625 227.446125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f8_patch_10">
+    <path d="M 34.240625 22.318125 
+L 452.740625 22.318125 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g27f8_text_9">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="91.079617" y="189.57261" transform="rotate(-0 91.079617 189.57261)">0.778</text>
+   </g>
+   <g id="g27f8_text_10">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="320.269103" y="179.873887" transform="rotate(-0 320.269103 179.873887)">1.000</text>
+   </g>
+   <g id="g27f8_text_11">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="166.712147" y="178.257433" transform="rotate(-0 166.712147 178.257433)">1.037</text>
+   </g>
+   <g id="g27f8_text_12">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="395.901633" y="48.941121" transform="rotate(-0 395.901633 48.941121)">4.000</text>
+   </g>
+   <g id="g27f8_text_13">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle" x="243.490625" y="16.318125" transform="rotate(-0 243.490625 16.318125)">Alta Confidence no equivale a alto Lift</text>
+   </g>
+   <g id="g27f8_legend_1">
+    <g id="g27f8_patch_11">
+     <path d="M 41.240625 59.674375 
+L 129.46875 59.674375 
+Q 131.46875 59.674375 131.46875 57.674375 
+L 131.46875 29.318125 
+Q 131.46875 27.318125 129.46875 27.318125 
+L 41.240625 27.318125 
+Q 39.240625 27.318125 39.240625 29.318125 
+L 39.240625 57.674375 
+Q 39.240625 59.674375 41.240625 59.674375 
+z
+" style="fill: #ffffff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"/>
+    </g>
+    <g id="g27f8_patch_12">
+     <path d="M 43.240625 38.916562 
+L 63.240625 38.916562 
+L 63.240625 31.916562 
+L 43.240625 31.916562 
+z
+" style="fill: #15957e"/>
+    </g>
+    <g id="g27f8_text_14">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" x="71.240625" y="38.916562" transform="rotate(-0 71.240625 38.916562)">Confidence</text>
+    </g>
+    <g id="g27f8_patch_13">
+     <path d="M 43.240625 53.594687 
+L 63.240625 53.594687 
+L 63.240625 46.594687 
+L 43.240625 46.594687 
+z
+" style="fill: #8c69ba"/>
+    </g>
+    <g id="g27f8_text_15">
+     <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" x="71.240625" y="53.594687" transform="rotate(-0 71.240625 53.594687)">Lift</text>
+    </g>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="g27f8_p249aea8f56">
+   <rect x="34.240625" y="22.318125" width="418.5" height="205.128"/>
+  </clipPath>
+ </defs>
+</svg>
+<figcaption>Confidence = 1 y Lift = 4 en Tea → Coupon, pero la promoción asigna automáticamente el cupón; asociación no significa causalidad.</figcaption></figure>
+<p>En nuestro sistema inventado, un cupón se <strong>adjunta automáticamente a las compras con Tea</strong>. Por tanto, la relación perfecta con Lift 4 es previsible debido a la regla de registro. Ofrecer ese mismo cupón no necesariamente <em>causa</em> ventas adicionales de té. La asociación podría ser redundante, promocional, temporal o consecuencia de cómo se registran los datos. Solo existen tres compras con Tea, por lo que es especialmente incierta su generalización.</p>
+<p>Si queremos aumentar la venta de té, necesitamos comparar creíblemente clientes expuestos y no expuestos a la promoción bajo un diseño experimental ético. Rule Mining puede generar hipótesis, pero no estima el <strong>efecto incremental</strong> de una intervención.</p>
+</section><section class="guide-section blue" id="section-21"><h2>21. Dirección de reglas, asociación negativa y métricas adicionales</h2>
+<p>Las dos direcciones de una regla generalmente difieren. Por ejemplo, <span class="m-inline">\(\operatorname{conf}(B\Rightarrow C)=N(BC)/N(B)=5/9=0.5556\)</span>, mientras <span class="m-inline">\(\operatorname{conf}(C\Rightarrow B)=5/7=0.7143\)</span>. La intersección es simétrica, pero el denominador <strong>no</strong>. Lift es simétrico entre ambas direcciones porque <span class="m-inline">\(N(BC)N/[N(B)N(C)]=5(12)/(9\cdot7)=20/21=0.95238\)</span>.</p>
+<p>Este <strong>Lift menor que 1</strong> señala una Co-occurrence ligeramente inferior al producto de las frecuencias marginales. Doce recibos no prueban un patrón negativo estable. <strong>Leverage</strong> mide la diferencia <em>absoluta</em> entre Support conjunto y la referencia de independencia: <span class="m-inline">\(\operatorname{lev}(B,C)=5/12-(9/12)(7/12)=5/12-63/144=-3/144=-0.020833\)</span>. Leverage se mide como fracción de compras; Lift es una razón sin unidades.</p>
+<p>Otra métrica, <strong>Conviction</strong>, es <span class="m-inline">\(\operatorname{conv}(X\Rightarrow Y)=[1-\operatorname{supp}(Y)]/[1-\operatorname{conf}(X\Rightarrow Y)]\)</span> si el denominador no es cero. Para Bread <span class="m-inline">\(\Rightarrow\)</span> Milk vale <span class="m-inline">\((1-0.75)/(1-7/9)=0.25/(2/9)=1.125\)</span>. Si Confidence = 1 y el Support del Consequent es menor que 1, Conviction es formalmente infinita; no demuestra certeza causal. Si el Antecedent tiene Support cero, Confidence queda indefinida y no debe calcularse la regla.</p>
+</section><section class="guide-section teal" id="section-22"><h2>22. Comparaciones múltiples, selección de reglas y validación temporal</h2>
+<p>Al buscar miles de Itemsets y escoger únicamente los mayores Lift aparece <strong>Selection Bias</strong>: productos no relacionados pueden aparentar asociación por azar. Reglas de Support bajo pueden mostrar razones espectaculares porque uno o dos recibos dominan los denominadores. Los conteos exactos de Apriori no corrigen por pruebas múltiples, compras correlacionadas por cliente, estacionalidad ni diseño experimental.</p>
+<p>Un Workflow riguroso separa un período de <strong>Discovery</strong> y otro posterior de <strong>Validation</strong>. En Discovery escogemos Itemsets, umbral de Support y dirección de reglas. En Validation posterior congelamos las reglas y calculamos nuevos Support, frecuencia condicional, Lift e incertidumbre en recibos nuevos y comparables. Si ajustamos reiteradamente sobre Validation, reservamos un Test temporal posterior e intacto. Las compras repetidas de un cliente pueden exigir tratamiento por grupos cuando importa la independencia.</p>
+<p>Para estimar beneficio práctico hay que contrastar la intervención propuesta con un Baseline. La compra conjunta no indica si una recomendación cambia el comportamiento. Un A/B Test o una evaluación causal creíble puede ser necesaria. También debemos proteger privacidad: combinaciones muy raras de productos sensibles pueden identificar personas aunque no figure su nombre.</p>
+
+<h3>Ejemplo adicional: comprobar una regla congelada en recibos posteriores</h3>
+<p>Hagamos una <strong>simulación retrospectiva explícita</strong> con los doce recibos originales (sección 14). Supongamos que, antes de ver R9–R12, el comercio hubiera elegido la regla candidata <strong>Bread → Milk</strong> utilizando solo R1–R8 para Discovery. Reservamos R9–R12 como un bloque posterior de Validation. En esta guía ya hemos visto los doce recibos; por tanto, este ejercicio <strong>no es una prueba prospectiva ciega</strong> ni justifica una estimación estadística de generalización.</p>
+<div class="table-wrap"><table><caption>Reconteo desde los recibos originales, por período</caption><thead><tr><th>Medida</th><th>Discovery: R1–R8 (8)</th><th>Validation: R9–R12 (4)</th></tr></thead><tbody>
+<tr><td>Recibos con Bread</td><td>7: R1, R2, R3, R4, R5, R7, R8</td><td>2: R9, R12</td></tr>
+<tr><td>Recibos con Milk</td><td>7: R1, R2, R3, R4, R6, R7, R8</td><td>2: R10, R12</td></tr>
+<tr><td>Recibos Bread y Milk</td><td>6: R1, R2, R3, R4, R7, R8</td><td>1: R12</td></tr>
+<tr><td>Support(B,M)</td><td>6/8 = 0.75</td><td>1/4 = 0.25</td></tr>
+<tr><td>Confidence(B→M)</td><td>6/7 ≈ 0.857143</td><td>1/2 = 0.50</td></tr>
+<tr><td>Support(M)</td><td>7/8 = 0.875</td><td>2/4 = 0.50</td></tr>
+<tr><td>Lift(B→M)</td><td>48/49 ≈ 0.979592</td><td>1.00</td></tr>
+</tbody></table></div>
+<p><strong>Paso 1 — Discovery.</strong> Entre R1–R8, Bread aparece siete veces y Bread+Milk seis: <span class="m-inline">\(\operatorname{conf}_D(B\Rightarrow M)=6/7\)</span>. La frecuencia base de Milk es <span class="m-inline">\(7/8\)</span>. Por sustitución:</p>
+<div class="formula">\[\operatorname{lift}_D=\frac{6/7}{7/8}=\frac{6}{7}\cdot\frac{8}{7}=\frac{48}{49}\approx0.979592.\]</div>
+<p><strong>Paso 2 — Validation posterior.</strong> En R9–R12, solo R12 contiene ambos productos; Bread aparece en R9 y R12, mientras que Milk aparece en R10 y R12. Se obtiene:</p>
+<div class="formula">\[\operatorname{conf}_V=\frac12=0.50,\qquad\operatorname{lift}_V=\frac{1/2}{2/4}=1.\]</div>
+<p><strong>Paso 3 — Interpretación.</strong> Confidence disminuye de 0.8571 a 0.50, pero la frecuencia base de Milk también cae de 0.875 a 0.50. Por eso Lift permanece cercano a uno en ambos períodos. No podemos concluir que Bread prediga Milk mejor que su frecuencia marginal ni que el cambio refleje una tendencia de negocio: Validation contiene solo <strong>cuatro recibos</strong>. Calcular métricas en los doce recibos juntos describe la muestra completa, <em>no</em> reproduce este diseño de Validation.</p><figure class="plot-svg guide27-plot"><svg xmlns="http://www.w3.org/2000/svg" width="860" height="384" viewBox="0 0 860 384" role="img" aria-labelledby="guide27-rules-title guide27-rules-desc"><title id="guide27-rules-title">Bread → Milk: comparación entre períodos</title><desc id="guide27-rules-desc">Las mismas 12 compras, divididas como ilustración temporal. Las proporciones cambian; Lift también depende de la frecuencia base.</desc><rect x="0" y="0" width="860" height="384" fill="#fbfdff"/><text x="28" y="32" font-size="20" font-weight="700" fill="#0b1f3a">Bread → Milk: comparación entre períodos</text><text x="28" y="52" font-size="13.5" fill="#526175">Las mismas 12 compras, divididas como ilustración temporal</text><line x1="100" y1="292.00" x2="815" y2="292.00" stroke="#dae5ee" stroke-width="1"/><text x="88" y="297.00" text-anchor="end" font-size="14" fill="#46566b">0%</text><line x1="100" y1="239.50" x2="815" y2="239.50" stroke="#dae5ee" stroke-width="1"/><text x="88" y="244.50" text-anchor="end" font-size="14" fill="#46566b">25%</text><line x1="100" y1="187.00" x2="815" y2="187.00" stroke="#dae5ee" stroke-width="1"/><text x="88" y="192.00" text-anchor="end" font-size="14" fill="#46566b">50%</text><line x1="100" y1="134.50" x2="815" y2="134.50" stroke="#dae5ee" stroke-width="1"/><text x="88" y="139.50" text-anchor="end" font-size="14" fill="#46566b">75%</text><line x1="100" y1="82.00" x2="815" y2="82.00" stroke="#dae5ee" stroke-width="1"/><text x="88" y="87.00" text-anchor="end" font-size="14" fill="#46566b">100%</text><text x="19" y="183" transform="rotate(-90,19,183)" font-size="14" fill="#46566b" text-anchor="middle">Proporción</text><rect x="183.00" y="112.00" width="78" height="180.00" rx="6" fill="#2563eb"/><text x="222" y="102.00" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1f3a">85.7%</text><text x="222" y="312" text-anchor="middle" font-size="12" fill="#44536b">6/7</text><rect x="293.00" y="108.25" width="78" height="183.75" rx="6" fill="#15957e"/><text x="332" y="98.25" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1f3a">87.5%</text><text x="332" y="312" text-anchor="middle" font-size="12" fill="#44536b">7/8</text><text x="277" y="338" text-anchor="middle" font-size="15" font-weight="700" fill="#102033">R1–R8 (8 compras)</text><rect x="527.00" y="187.00" width="78" height="105.00" rx="6" fill="#2563eb"/><text x="566" y="177.00" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1f3a">50.0%</text><text x="566" y="312" text-anchor="middle" font-size="12" fill="#44536b">1/2</text><rect x="637.00" y="187.00" width="78" height="105.00" rx="6" fill="#15957e"/><text x="676" y="177.00" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1f3a">50.0%</text><text x="676" y="312" text-anchor="middle" font-size="12" fill="#44536b">2/4</text><text x="621" y="338" text-anchor="middle" font-size="15" font-weight="700" fill="#102033">R9–R12 (4 compras)</text><rect x="112" y="358" width="13" height="13" rx="2" fill="#2563eb"/><text x="132" y="369" font-size="13" fill="#334155">Confidence (B → M)</text><rect x="445" y="358" width="13" height="13" rx="2" fill="#15957e"/><text x="465" y="369" font-size="13" fill="#334155">Support(M)</text></svg><figcaption>En cada período se grafica Confidence(Bread→Milk) frente a la frecuencia marginal de Milk. Los denominadores cambian; las proporciones no constituyen pruebas de estabilidad.</figcaption></figure><div class="callout amber"><p><strong>Regla de integridad.</strong> Para una investigación real: descubrir en un bloque temprano, congelar la regla y evaluar en datos posteriores que aún no se han examinado; fijar la definición de Transaction, revisar promociones y considerar clientes repetidos. No usar este ejercicio retrospectivo como certificación externa ni como evidencia causal.</p></div>
+</section><section class="guide-section purple" id="section-23"><h2>23. Apriori frente a FP-Growth y cuándo no extraer reglas</h2>
+<p><strong>Apriori</strong> cuenta Itemsets candidatos por niveles y poda superconjuntos de combinaciones poco frecuentes. Su lógica es transparente, pero puede requerir múltiples recorridos del dataset y listas grandes de candidatos. <strong>FP-Growth</strong> comprime transacciones en un árbol de prefijos orientado por frecuencia (FP-tree) y encuentra patrones sin enumerar de igual forma todas esas listas. Ambos buscan Itemsets frecuentes bajo un Support definido; ninguno resuelve inferencia causal ni decisiones empresariales.</p>
+<p>Imaginemos un catálogo de 50,000 productos con recibos de solo tres artículos en promedio. El número de todos los posibles Itemsets es <span class="m-inline">\(2^{50000}-1\)</span> y resulta imposible enumerarlos exhaustivamente. Los algoritmos eficientes aprovechan compras dispersas y un Minimum Support, pero el costo computacional depende de amplitud de las compras, distribución de frecuencias y umbral. Un umbral bajo puede inundar de patrones redundantes aun cuando el algoritmo se ejecute correctamente.</p>
+<p>No debemos extraer estas reglas si la pregunta es sobre <strong>secuencia</strong> (comprar A hoy y B el próximo mes), <strong>cantidades</strong> (tres unidades frente a una), <strong>elasticidad de precios</strong> o <strong>efecto causal</strong>. Esas preguntas requieren métodos temporales, cuantitativos, econométricos o experimentales. A veces una tabla sencilla de frecuencias responde mejor que miles de Association Rules.</p>
+</section><section class="guide-section amber" id="section-24"><h2>24. Comparar las dos tareas Unsupervised sin confundir resultados</h2>
+<table>
+<thead>
+<tr>
+<th>Pregunta</th>
+<th>Anomaly Detection</th>
+<th>Association Rule Mining</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unidad de observación</td>
+<td>Lectura o vector de Features</td>
+<td>Transaction como conjunto de artículos</td>
+</tr>
+<tr>
+<td>Output habitual</td>
+<td>Score, Ranking o alerta</td>
+<td>Itemsets frecuentes y reglas direccionales</td>
+</tr>
+<tr>
+<td>Supuestos principales</td>
+<td>Referencia comparable y Features relevantes</td>
+<td>Transacciones definidas de manera estable y frecuencias suficientes</td>
+</tr>
+<tr>
+<td>Ejemplo numérico</td>
+<td>Z-score robusto de S8 = 8.937</td>
+<td>Bread→Milk Lift = 28/27</td>
+</tr>
+<tr>
+<td>Limitación principal</td>
+<td>Inusual no significa averiado</td>
+<td>Asociación no significa causalidad</td>
+</tr>
+<tr>
+<td>Validación</td>
+<td>Incidentes comprobados o revisión experta posterior</td>
+<td>Recibos futuros, pruebas de negocio y estabilidad</td>
+</tr>
+</tbody>
+</table>
+<p>En una empresa real, ambos sistemas pueden ser útiles, pero <strong>sus contratos de datos y responsables de decisión son distintos</strong>. Una lectura frigorífica anómala podría generar inspección calibrada; una Association Rule sugerir una hipótesis de distribución comercial. Cada sistema necesita consecuencias, riesgos y evidencia de éxito propios.</p>
+<p><strong>Pregunta de control.</strong> Si un algoritmo devuelve un Score de 0.9, ¿podemos llamarlo probabilidad del 90% de falla? <strong>No.</strong> Si 90% de las compras con Tea incluye cupón, ¿podemos afirmar que el cupón causa ventas de té? <strong>No.</strong> Explica los supuestos faltantes antes de avanzar al código.</p>
+</section><section class="guide-section blue" id="section-25"><h2>25. Laboratorio Python A reproducible: Scores robustos, Isolation Forest y LOF</h2>
+<p>Ejecuta el siguiente <strong>bloque completo en una sesión Python limpia</strong> con NumPy y scikit-learn instalados. Reproduce Median = 2.7, MAD = 0.4 y Score robusto de S8 ≈ 8.9370. Para el segundo dataset de cinco puntos, LOF(E) debe aproximarse a <strong>6.03</strong>. Los resultados de Isolation Forest ilustran la dependencia del Seed y la biblioteca; <strong>no interpretes su Decision Score firmado como probabilidad de falla</strong>.</p>
+<pre class="code-sample"><code class="language-python">import numpy as np
+from sklearn.ensemble import IsolationForest
+from sklearn.neighbors import LocalOutlierFactor
+
+# Synthetic sensor measurements, mm/s: not documented failures.
+vibration = np.array([2.0, 2.2, 2.4, 2.6, 2.8, 3.0, 3.2, 8.0])
+median = np.median(vibration)
+mad = np.median(np.abs(vibration - median))
+robust_z = (vibration - median) / (1.4826 * mad)
+print('median:', round(median, 4), 'MAD:', round(mad, 4))
+print('robust S8:', round(robust_z[-1], 4))
+print('robust flags:', np.where(np.abs(robust_z) &gt; 3.5)[0] + 1)
+
+# Demonstration of library score signs; NOT a validated fault model.
+forest = IsolationForest(n_estimators=100, max_samples=8,
+                         contamination=0.125, random_state=27)
+forest.fit(vibration.reshape(-1, 1))
+print('IsolationForest labels:', forest.predict(vibration.reshape(-1, 1)))
+print('IF decision scores:', np.round(forest.decision_function(vibration.reshape(-1, 1)), 4))
+
+xy = np.array([[0., 0.], [0., 1.], [1., 0.], [1., 1.], [5., 5.]])
+lof = LocalOutlierFactor(n_neighbors=2)
+lof.fit_predict(xy)
+print('LOF values:', np.round(-lof.negative_outlier_factor_, 4))
+print('LOF isolated E:', round(-lof.negative_outlier_factor_[-1], 4))
+
+
+# Separate hypothetical Validation scores, not the eight sensor readings.
+validation_scores = np.array([.4, .6, .8, 1.0, 1.2, 1.4, 1.5, 1.8, 2.2, 3.6])
+later_scores = np.array([1.1, 1.9, 2.4, .3, 3.0])
+# Strict threshold: values equal to t are not flagged. No refitting.
+for fixed_threshold in (1.8, 2.2):
+    n_val = int(np.sum(validation_scores &gt; fixed_threshold))
+    n_later = int(np.sum(later_scores &gt; fixed_threshold))
+    print(f't={fixed_threshold}: Validation {n_val}/10, later {n_later}/5')
+</code></pre>
+<p><strong>Cómo leer el código:</strong> NumPy calcula directamente las dos estadísticas robustas a partir de las ocho lecturas; el umbral MAD representa nuestra decisión ilustrativa. <code>IsolationForest.fit</code> aprende una colección de cortes aleatorios y <code>predict</code> devuelve −1 bajo la frontera de decisión ajustada. LOF muestra que scikit-learn emplea el signo contrario con <code>negative_outlier_factor_</code>. Estas operaciones son educativas, no un sistema de monitoreo industrial validado.</p>
+</section><section class="guide-section teal" id="section-26"><h2>26. Laboratorio Python B reproducible: verificación independiente de Apriori</h2>
+<p>El siguiente programa autónomo verifica el ejemplo por <strong>enumeración directa</strong> (todas las combinaciones), no implementa Apriori. Lo hacemos deliberadamente para disponer de un <strong>cálculo independiente</strong> que contraste la poda y los resultados del algoritmo. Con cinco productos, esta enumeración es barata; para catálogos grandes convienen implementaciones optimizadas.</p>
+<pre class="code-sample"><code class="language-python">from collections import Counter
+from itertools import combinations
+
+# Synthetic transactions: one list element = one receipt.
+receipts = [
+    {'Bread','Milk','Coffee'}, {'Bread','Milk'},
+    {'Bread','Milk','Coffee'}, {'Bread','Milk'},
+    {'Bread','Coffee'}, {'Milk','Coffee'},
+    {'Bread','Milk','Coffee'}, {'Bread','Milk'},
+    {'Bread','Tea','Coupon'}, {'Milk','Tea','Coupon'},
+    {'Coffee','Tea','Coupon'}, {'Bread','Milk','Coffee'}]
+minimum_count = 3
+items = sorted(set().union(*receipts))
+frequent = {}
+for size in range(1, len(items) + 1):
+    for candidate in combinations(items, size):
+        occurrences = sum(set(candidate).issubset(r) for r in receipts)
+        if occurrences &gt;= minimum_count:
+            frequent[candidate] = occurrences
+print('frequent size histogram:', dict(sorted(Counter(map(len, frequent)).items())))
+
+count = lambda group: sum(set(group).issubset(r) for r in receipts)
+N = len(receipts)
+def measures(antecedent, consequent):
+    a, c = set(antecedent), set(consequent)
+    assert a and c and a.isdisjoint(c)
+    both, na, nc = count(a | c), count(a), count(c)
+    support = both / N
+    confidence = both / na
+    lift = confidence / (nc / N)
+    return (round(support, 6), round(confidence, 6), round(lift, 6))
+print('Bread =&gt; Milk:', measures({'Bread'}, {'Milk'}))
+print('Tea =&gt; Coupon:', measures({'Tea'}, {'Coupon'}))
+print('Bread =&gt; Coffee:', measures({'Bread'}, {'Coffee'}))
+
+
+# Retrospective time-order illustration: reuse the same 12 receipts.
+# Only the first 8 stand in for discovery; last 4 stand in for later checking.
+def frozen_rule_period(block):
+    n = len(block)
+    n_b = sum('Bread' in receipt for receipt in block)
+    n_m = sum('Milk' in receipt for receipt in block)
+    n_bm = sum({'Bread', 'Milk'}.issubset(receipt) for receipt in block)
+    return {'B': n_b, 'M': n_m, 'BM': n_bm,
+            'support': n_bm / n,
+            'confidence': n_bm / n_b,
+            'lift': (n_bm / n_b) / (n_m / n)}
+
+print('discovery B=&gt;M:', frozen_rule_period(receipts[:8]))
+print('later B=&gt;M:', frozen_rule_period(receipts[8:]))
+</code></pre>
+<p>Histograma esperado: <strong>5 Singletons, 4 pares y 1 triple</strong>. Para Bread→Milk, <span class="m-inline">\((\mathrm{Support},\mathrm{Confidence},\mathrm{Lift})=(0.583333,0.777778,1.037037)\)</span>; para Tea→Coupon, <span class="m-inline">\((0.25,1.0,4.0)\)</span>. La rutina exige <strong>Antecedent y Consequent no vacíos y disjuntos</strong>. No pretende medir significancia estadística ni utilidad causal.</p>
+</section><section class="guide-section purple" id="section-27"><h2>27. Errores frecuentes: diagnosticar el razonamiento, no solo memorizar nombres</h2>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Por qué falla y qué hacer correctamente</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. Anomaly = falla</strong></td>
+<td>S8 es extraño bajo ocho lecturas; hay que comprobar contexto y resultados antes de diagnosticar fallas.</td>
+</tr>
+<tr>
+<td><strong>2. Interpretar <span class="m-inline">\(z\)</span> como probabilidad</strong></td>
+<td>El Z-score es una distancia estandarizada, no <span class="m-inline">\(P(\text{falla})\)</span>. Para calibrar probabilidades necesitamos etiquetas y supuestos.</td>
+</tr>
+<tr>
+<td><strong>3. Suponer que Mean es robusta</strong></td>
+<td>S8 desplaza Mean a 3.275; Median permanece en 2.7. Debemos revisar sensibilidad.</td>
+</tr>
+<tr>
+<td><strong>4. Confundir MAD con la media de desviaciones</strong></td>
+<td>MAD es la <strong>mediana</strong> de <span class="m-inline">\(0.7,0.5,0.3,0.1,0.1,0.3,0.5,5.3\)</span>: vale 0.4.</td>
+</tr>
+<tr>
+<td><strong>5. Dividir entre MAD cero</strong></td>
+<td>Cuando MAD = 0, el Z robusto no está definido; se necesita una alternativa explícita.</td>
+</tr>
+<tr>
+<td><strong>6. Mezclar unidades incompatibles</strong></td>
+<td>Euclidean Distance sobre mm/s y °C sin una política de escala carece de interpretación física coherente.</td>
+</tr>
+<tr>
+<td><strong>7. Confundir signos de LOF</strong></td>
+<td><code>negative_outlier_factor_</code> es negativo: para comparar con LOF conceptual usamos <span class="m-inline">\(-\mathrm{negative\_outlier\_factor\_}\)</span>.</td>
+</tr>
+<tr>
+<td><strong>8. Confundir un corte de Isolation con un Forest</strong></td>
+<td><span class="m-inline">\(0.8173\)</span> ilustra un árbol, no un Score observado del Ensemble.</td>
+</tr>
+<tr>
+<td><strong>9. Ajustar umbrales con datos futuros</strong></td>
+<td>Ajustar referencias solo en Training, decisiones en Validation y reservar Test intacto.</td>
+</tr>
+<tr>
+<td><strong>10. Usar denominador incorrecto en Support</strong></td>
+<td>Support(BM) = 7/12, no 7/9. Este último es Confidence(B→M).</td>
+</tr>
+<tr>
+<td><strong>11. Confundir Confidence y Lift</strong></td>
+<td>Confidence(B→M) = 77.78%, pero Milk ya aparece en 75% de las compras; Lift = 1.037.</td>
+</tr>
+<tr>
+<td><strong>12. Leer la flecha como causalidad</strong></td>
+<td>Lift 4 de Tea→Coupon surge del cupón automático, no de evidencia de ventas incrementales.</td>
+</tr>
+<tr>
+<td><strong>13. Suponer simetría de dirección</strong></td>
+<td>Confidence(B→C) = 5/9, frente a Confidence(C→B) = 5/7. Cambian los denominadores.</td>
+</tr>
+<tr>
+<td><strong>14. Aplicar poda Apriori según Lift</strong></td>
+<td>Downward Closure corresponde a Support, no en general a Confidence o Lift.</td>
+</tr>
+<tr>
+<td><strong>15. Informar reglas seleccionadas sobre Test</strong></td>
+<td>Extraer en Discovery, comprobar reglas congeladas en registros posteriores y reservar Test para evaluación final.</td>
+</tr>
+<tr>
+<td><strong>16. Tratar clientes repetidos como independientes</strong></td>
+<td>Un comprador frecuente puede dominar recibos; se deben considerar grupos y muestreo.</td>
+</tr>
+</tbody>
+</table>
+<p>Son procedimientos de diagnóstico y no eslóganes: para cada error preguntamos <strong>qué denominador, supuesto, unidad, período de referencia o afirmación causal se confundió</strong>. Una buena conclusión indica lo que la cifra respalda <em>y lo que no puede demostrar</em>.</p>
+</section><section class="guide-section amber" id="section-28"><h2>28. Ejercicios resueltos: reproducir, diagnosticar y transferir</h2>
+<p>Antes de abrir una solución, identifica numerador, denominador, datos utilizados y unidades. Las actividades progresan desde reproducir cálculos hasta modificar Support y proponer una evaluación nueva. <strong>Las últimas requieren razonamiento más allá de copiar el ejemplo original.</strong></p>
+<details><summary>1. Calcula Mean sin S8. ¿Qué cambió?</summary><div class="answer"><p>S1–S7 suman <span class="m-inline">\(18.2\)</span> mm/s. La media es <span class="m-inline">\(18.2/7=2.6\)</span> mm/s frente a <span class="m-inline">\(3.275\)</span>. El cambio <span class="m-inline">\(0.675\)</span> mm/s demuestra sensibilidad a un valor extremo.</p>
+</div></details>
+<details><summary>2. Deriva nuevamente MAD desde toda la lista.</summary><div class="answer"><p>Median <span class="m-inline">\(=(2.6+2.8)/2=2.7\)</span>; desviaciones ordenadas <span class="m-inline">\(0.1,0.1,0.3,0.3,0.5,0.5,0.7,5.3\)</span>; MAD <span class="m-inline">\(=(0.3+0.5)/2=0.4\)</span> mm/s. Su promedio representaría otro estadístico.</p>
+</div></details>
+<details><summary>3. ¿Cuál es el Z-score robusto de S1?</summary><div class="answer"><p><span class="m-inline">\(z=(2.0-2.7)/(1.4826\cdot0.4)=-0.7/0.59304=-1.1804\)</span>. Su valor absoluto no supera 3.5; esto no certifica estado saludable.</p>
+</div></details>
+<details><summary>4. Si el umbral robusto es 1.0, ¿qué lecturas reciben alerta?</summary><div class="answer"><p>Solo S1 (<span class="m-inline">\(|-1.1804|>1\)</span>) y S8 (<span class="m-inline">\(8.9370>1\)</span>). S7 tiene <span class="m-inline">\(0.5/0.59304=0.8431\)</span> y no supera el umbral. Las alertas aumentan de una a dos.</p>
+</div></details>
+<details><summary>5. Calcula la distancia E–D del ejemplo LOF.</summary><div class="answer"><p><span class="m-inline">\(d(E,D)=\sqrt{(5-1)^2+(5-1)^2}=\sqrt{16+16}=\sqrt{32}=5.656854\)</span> unidades. Reachability toma el máximo entre este número y k-distance de D igual a 1.</p>
+</div></details>
+<details><summary>6. Calcula LOF(E) reconstruyendo los pasos.</summary><div class="answer"><p>Los vecinos D y B tienen <span class="m-inline">\(\mathrm{lrd}=1\)</span>. E tiene <span class="m-inline">\(\mathrm{lrd}=1/[(\sqrt{32}+\sqrt{41})/2]\)</span>. Así <span class="m-inline">\(\mathrm{LOF}(E)=(\sqrt{32}+\sqrt{41})/2=6.029989\)</span>. Las unidades se cancelan.</p>
+</div></details>
+<details><summary>7. ¿Un Isolation Score de 0.817 significa 81.7% de probabilidad de falla?</summary><div class="answer"><p>No. Viene de normalizar la longitud de un único árbol ilustrativo, no de una probabilidad posterior calibrada ni del Ensemble ajustado. Para probabilidad de falla necesitamos resultados confirmados y validación.</p>
+</div></details>
+<details><summary>8. Obtén Mahalanobis al cuadrado para x=(0,2).</summary><div class="answer"><p>Con <span class="m-inline">\(\mu=(0,0)\)</span> y <span class="m-inline">\(\Sigma^{-1}=\mathrm{diag}(1/4,1)\)</span>, <span class="m-inline">\(D_M^2=0^2/4+2^2=4\)</span> y <span class="m-inline">\(D_M=2\)</span>. Para <span class="m-inline">\((2,1)\)</span> era <span class="m-inline">\(\sqrt2\)</span>; la segunda coordenada tiene menor varianza de referencia.</p>
+</div></details>
+<details><summary>9. Cuenta la coincidencia Bread–Coffee y calcula Support.</summary><div class="answer"><p>Coinciden en R1, R3, R5, R7 y R12: cinco recibos. Support <span class="m-inline">\(=5/12=0.4167\)</span>, no <span class="m-inline">\(5/9\)</span> (condicional a Bread).</p>
+</div></details>
+<details><summary>10. Calcula Confidence(Coffee → Bread).</summary><div class="answer"><p>Coffee aparece en siete compras y Bread+Coffee en cinco; Confidence <span class="m-inline">\(=5/7=0.7143\)</span>. La regla inversa vale <span class="m-inline">\(5/9=0.5556\)</span>; cambia el denominador.</p>
+</div></details>
+<details><summary>11. Calcula Lift(Bread → Coffee) e interprétalo.</summary><div class="answer"><p>Confidence <span class="m-inline">\(=5/9\)</span>; Support(Coffee) <span class="m-inline">\(=7/12\)</span>. Lift <span class="m-inline">\(=(5/9)/(7/12)=20/21=0.95238\)</span>. Queda ligeramente por debajo de 1, sin demostrar una relación causal negativa estable.</p>
+</div></details>
+<details><summary>12. ¿Por qué Apriori poda Bread–Tea–Coupon?</summary><div class="answer"><p>Bread–Tea aparece solo en R9: <span class="m-inline">\(N(BT)=1<3\)</span>. Todo superconjunto que contenga BT, incluido BTQ, tiene conteo <span class="m-inline">\(\le1\)</span> y no alcanza el mínimo 3.</p>
+</div></details>
+<details><summary>13. Cambia Support mínimo de 3 a 4: ¿qué desaparece?</summary><div class="answer"><p>Tea y Coupon individualmente tienen conteo 3 y desaparecen; también Tea–Coupon (3). Permanecen B (9), M (9), C (7), BM (7), BC (5), MC (5), BMC (4): 7 Itemsets frecuentes.</p>
+</div></details>
+<details><summary>14. Calcula Support, Confidence y Lift de Tea → Coupon.</summary><div class="answer"><p>Support <span class="m-inline">\(=N(TQ)/12=3/12=0.25\)</span>; Confidence <span class="m-inline">\(=N(TQ)/N(T)=3/3=1\)</span>; Support(Coupon) <span class="m-inline">\(=3/12=0.25\)</span>; Lift <span class="m-inline">\(=1/0.25=4\)</span>. La promoción automática explica el patrón, no un aumento causal de ventas.</p>
+</div></details>
+<details><summary>15. ¿Por qué Lift es simétrico y Confidence no?</summary><div class="answer"><p><span class="m-inline">\(\mathrm{Lift}(X\Rightarrow Y)=\mathrm{supp}(XY)/[\mathrm{supp}(X)\mathrm{supp}(Y)]\)</span> no cambia al intercambiar X e Y. Confidence divide solo entre Support del Antecedent; la dirección sí importa.</p>
+</div></details>
+<details><summary>16. Transferencia: ¿qué validación fundamentaría una decisión real?</summary><div class="answer"><p>Para anomalías: ajustar referencia en Training pasado mayormente normal, elegir umbrales con Validation posterior o capacidad de revisión y reservar Test. Para reglas: descubrir patrones en compras iniciales, congelar candidatos y verificar coocurrencias futuras; cualquier intervención exige evaluación causal. Ninguno de nuestros ejemplos sintéticos demuestra eficacia real.</p>
+</div></details>
+<p>Una respuesta numérica sin denominador, supuesto e interpretación válidos está incompleta. Si no puedes reproducir LOF(E), la poda Apriori y la diferencia entre Confidence y Lift, vuelve a sus demostraciones antes de avanzar.</p>
+
+<details><summary>17. Transferencia: aplicar sin reajuste el umbral t=1.8 a cinco Scores posteriores.</summary><div class="answer"><p>Scores: 1.1, 1.9, 2.4, 0.3 y 3.0. Según la regla estricta <span class="m-inline">\(s>1.8\)</span>, solo 1.9, 2.4 y 3.0 generan alerta: <span class="m-inline">\(3/5=60\%\)</span>. En Validation fueron <span class="m-inline">\(2/10=20\%\)</span>. No cambiamos el umbral; la variación descriptiva no prueba Drift ni representa tasa de fallas.</p></div></details>
+<details><summary>18. Transferencia: ¿qué sucede al elegir t=2.2 y cómo manejarías empates?</summary><div class="answer"><p>Con la desigualdad estricta <span class="m-inline">\(s>2.2\)</span>, en Validation solo 3.6 supera el umbral: <span class="m-inline">\(1/10=10\%\)</span>. Después lo superan 2.4 y 3.0: <span class="m-inline">\(2/5=40\%\)</span>. La lectura 2.2 no cuenta al usar <span class="m-inline">\(>\)</span>; cambiar a <span class="m-inline">\(\ge\)</span> sin justificarlo altera el conteo. Fijar política de empates antes de mirar resultados.</p></div></details>
+<details><summary>19. Transferencia: deriva Lift(Bread→Milk) en Discovery y Validation sin reunir las dos muestras.</summary><div class="answer"><p>Discovery R1–R8: Bread 7, Milk 7, ambos 6: <span class="m-inline">\(\operatorname{conf}=6/7\)</span>, <span class="m-inline">\(\operatorname{supp}(M)=7/8\)</span>, por tanto <span class="m-inline">\(\operatorname{lift}=48/49\approx0.979592\)</span>. Validation R9–R12: Bread 2, Milk 2, ambos 1: Confidence <span class="m-inline">\(1/2\)</span>, base Milk <span class="m-inline">\(2/4\)</span>, Lift = 1. Un cambio de Confidence no significa mejora ni empeoramiento causal. Cuatro tickets aportan evidencia descriptiva muy limitada.</p></div></details>
+</section><section class="guide-section blue" id="section-29"><h2>29. Glosario, síntesis y Student Understanding Test</h2>
+<table>
+<thead>
+<tr>
+<th>Término</th>
+<th>Significado preciso en esta guía</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Anomaly Detection</strong></td>
+<td>Ordenar o identificar observaciones extrañas frente a una referencia.</td>
+</tr>
+<tr>
+<td><strong>Novelty Detection</strong></td>
+<td>Puntuar puntos nuevos mediante un modelo previo principalmente normal.</td>
+</tr>
+<tr>
+<td><strong>Median / MAD</strong></td>
+<td>Centro robusto y mediana de distancias absolutas a ese centro.</td>
+</tr>
+<tr>
+<td><strong>LOF</strong></td>
+<td>Razón que compara densidad de alcance de vecinos con la del punto.</td>
+</tr>
+<tr>
+<td><strong>Isolation Forest</strong></td>
+<td>Ensemble de árboles aleatorios; rutas medias cortas pueden señalar anomalías.</td>
+</tr>
+<tr>
+<td><strong>Itemset / Transaction</strong></td>
+<td>Conjunto de artículos; recibo representado como un conjunto.</td>
+</tr>
+<tr>
+<td><strong>Support</strong></td>
+<td>Co-occurrence dividida entre <em>todas</em> las transacciones.</td>
+</tr>
+<tr>
+<td><strong>Confidence</strong></td>
+<td>Frecuencia condicional muestral del Consequent dado el Antecedent.</td>
+</tr>
+<tr>
+<td><strong>Lift</strong></td>
+<td>Confidence dividida entre Support marginal del Consequent.</td>
+</tr>
+<tr>
+<td><strong>Apriori</strong></td>
+<td>Búsqueda de Itemsets frecuentes mediante Downward Closure de Support.</td>
+</tr>
+<tr>
+<td><strong>Data Leakage</strong></td>
+<td>Información indebidamente futura influye en el ajuste, selección o evaluación.</td>
+</tr>
+</tbody>
+</table>
+<p>Las dos conclusiones numéricas son específicas: S8 tiene Z robusto ≈ <strong>8.937</strong> frente a ocho lecturas sintéticas; Bread→Milk tiene <strong>Confidence 7/9</strong> pero <strong>Lift 28/27</strong> en doce recibos sintéticos. Lo primero no demuestra falla; lo segundo no demuestra que comprar Bread aumente las ventas de Milk. Enseñan la diferencia entre <em>patrón</em>, <em>evidencia</em> y <em>decisión</em>.</p>
+<p><strong>Conexión entre ambos diagnósticos.</strong> En el nuevo ejemplo de umbrales se obtiene 20% en Validation y 60% en cinco Scores posteriores <em>sin ajustar de nuevo el modelo</em>; son tasas de alerta, no prevalencias de falla. En el ejemplo de compras, Confidence(Bread→Milk) baja de 6/7 a 1/2, mientras Lift pasa de 48/49 a 1. En ambos casos hay que identificar el <strong>denominador, la población de referencia y el momento de medición</strong> antes de tomar una decisión.</p>
+<p><strong>Student Understanding Test.</strong> ¿Puedes <strong>comprender</strong> por qué las tareas son distintas, <strong>justificar</strong> cada denominador, <strong>reproducir</strong> LOF y Apriori, <strong>interpretar</strong> Scores con unidades y referencias, <strong>contrastar</strong> cambios de umbral y <strong>reconocer límites</strong> de afirmaciones sobre eventos raros? Si no, vuelve a la demostración correspondiente. Futuros laboratorios Jupyter podrían incluir Features de régimen operativo, Drift y validación temporal, o explorar nuevos recibos y estabilidad de reglas; no requieren modificar los datasets pequeños ya verificados.</p>
+</section></article></main>
+<footer class="guide-footer"><div class="container">© Alfredo Saldana · Data Scientist · Economist · Educator · <a href="/es/tutorials.html">Learn</a></div></footer>
+<script>document.addEventListener('DOMContentLoaded',function(){const b=document.querySelector('.menu-btn'),n=document.querySelector('#site-nav');if(b&&n){b.addEventListener('click',function(){let expanded=b.getAttribute('aria-expanded')==='true';b.setAttribute('aria-expanded',String(!expanded));n.classList.toggle('open',!expanded);});}});</script></body></html>

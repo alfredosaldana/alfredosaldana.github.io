@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><meta content="Build reproducible, leakage-safe Pipelines with ColumnTransformer; verify every transformation, evaluate and audit subgroup errors, and document responsible model releases." name="description"/><title>Machine Learning Pipelines, Reproducibility and Responsible Modeling | Alfredo Saldana</title><link href="/assets/css/style.css" rel="stylesheet"/><link href="/es/learn/machine-learning/machine-learning-pipelines-reproducibility-and-responsible-modeling-es.html" hreflang="es" rel="alternate"/><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script><style>
+.guide-hero{padding:56px 0 38px;background:#fff;border-bottom:1px solid var(--line)}.guide-hero h1{font-size:clamp(2.15rem,4.5vw,3.65rem);max-width:980px;line-height:1.14}.guide-hero .lead{max-width:840px}.guide-meta{color:var(--muted);font-size:.88rem}.guide-main{padding:38px 0 80px}.guide-article{width:min(900px,calc(100% - 32px));margin:auto}.guide-section{background:white;border:1px solid var(--line);border-left:5px solid #3178b9;border-radius:0 17px 17px 0;padding:28px 34px;margin:0 0 22px;box-shadow:0 3px 12px rgba(11,31,58,.025)}.guide-section.teal{border-left-color:#15957e}.guide-section.purple{border-left-color:#8c69ba}.guide-section.amber{border-left-color:#d59a32}.guide-section h2{font-size:clamp(1.55rem,3vw,2.1rem);line-height:1.2;margin:0 0 18px}.guide-section h3{font-size:1.27rem;line-height:1.25;margin:26px 0 12px}.guide-section p{font-size:1.035rem;line-height:1.8}.callout{padding:20px 22px;border-left:4px solid #3178b9;background:#eff6ff;border-radius:0 12px 12px 0;margin:22px 0}.callout h3:first-child{margin-top:0}.callout p:last-child{margin-bottom:0}.callout.teal{background:#effaf7;border-color:#15957e}.callout.purple{background:#f6f1fd;border-color:#8c69ba}.callout.amber{background:#fff8e8;border-color:#d59a32}.formula{text-align:center;background:#f6f1fd;border:1px solid #e3d7f3;border-radius:12px;padding:22px 16px;font-size:clamp(1.35rem,3vw,1.85rem);overflow-x:auto;margin:20px 0}.table-wrap{overflow-x:auto;margin:24px 0}table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:500px}caption{text-align:left;font-weight:650;padding-bottom:10px;color:#536276}th,td{padding:12px 14px;text-align:left;border-bottom:1px solid #e1e9f1}th{background:#eaf2ff;color:#0b1f3a}tbody tr:nth-child(even){background:#f8fafc}.diagram{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:27px 0}.diagram div{background:#eaf2ff;border:1px solid #d9e6fa;border-radius:12px;padding:14px 10px;text-align:center;flex:1;min-width:105px;font-size:.82rem;font-weight:700;color:#0b1f3a}.diagram small{font-size:.76rem;font-weight:400}.diagram span{color:#2563eb;font-weight:700}.plot{margin:25px auto;max-width:680px}.plot svg{display:block;width:100%;height:auto;background:#fbfdff;border:1px solid #e5eaf1;border-radius:12px}.plot figcaption{font-size:.83rem;color:#526175;margin-top:10px;line-height:1.5}.steps{padding-left:22px}.steps li{padding:8px 0;line-height:1.75}.cluster-viz{display:flex;align-items:center;gap:12px;justify-content:space-around;padding:22px;background:#f6fafc;border-radius:12px;flex-wrap:wrap}.cluster-viz span{min-width:60px;text-align:center;border:2px solid #15957e;border-radius:22px;background:#dff5ed;padding:9px;font-weight:700}.cluster-viz .last{border-color:#8c69ba;background:#eee5fa}details{border:1px solid #dfe8f0;padding:16px 19px;border-radius:12px;margin:12px 0;background:#fbfdff}summary{font-weight:700;cursor:pointer;line-height:1.6}details p{padding-top:14px;margin:0}.glossary{display:grid;grid-template-columns:1fr 1fr;gap:12px}.glossary div{background:#f8fafc;border:1px solid #e5eaf1;border-radius:12px;padding:14px}.glossary dt{font-weight:700;color:#0b1f3a}.glossary dd{margin:5px 0 0;color:#506178;line-height:1.6}.guide-links{display:flex;gap:15px;flex-wrap:wrap;margin-top:20px}.guide-links a{color:#2563eb;font-weight:700}.guide-footer{background:#071426;color:#c4d2e2;padding:30px 0}.guide-footer a{color:white}.skip{position:absolute;top:-200px}.skip:focus{top:10px;left:10px;z-index:999;background:white;padding:12px}@media(max-width:650px){.guide-section{padding:22px 19px}.glossary{grid-template-columns:1fr}.diagram{gap:6px}.diagram div{min-width:115px}.diagram span{display:none}.guide-hero{padding:36px 0 30px}.guide-main{padding-top:22px}}
+
+.guide-section .table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.guide-section .table-wrap table{width:100%;font-variant-numeric:tabular-nums}.guide-section .formula{line-height:1.7}.guide-section .callout .formula{background:#fff}.guide-section h3{line-height:1.3}.guide-section p+ .formula{margin-top:14px}@media(max-width:650px){.guide-section .formula{font-size:1.05rem;padding:16px 10px}.guide-section .table-wrap th,.guide-section .table-wrap td{padding:10px 12px;white-space:nowrap;font-size:.9rem}}
+
+.guide-section .note-inline{font-size:.88rem;color:#526175}.guide-section .mini-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:22px 0}.mini-grid .tile{background:#f8fafc;border:1px solid #dfe8f0;border-radius:12px;padding:16px}.mini-grid .tile strong{display:block;color:#0b1f3a;margin-bottom:7px}.guide-section .mini-grid p{font-size:.91rem;line-height:1.55;margin:0}.guide-section .math-caption{font-size:.9rem;color:#536276;margin-top:-8px}.guide-section .table-wrap td{vertical-align:top}.guide-section .source-list li{padding:6px 0;line-height:1.7}.guide-section .source-list a{color:#2563eb;text-decoration:underline;text-underline-offset:3px}.guide-section .formula{overflow-wrap:normal}.guide-section svg text{font-family:Inter,Arial,sans-serif}.guide-section .section-intro{font-size:1.12rem;color:#42526a}.guide-section .algorithm{border-top:1px solid #e2eaf3;padding-top:7px;margin-top:20px}.guide-section .algorithm h3{margin-top:12px}.guide-section .algorithm p:last-child{margin-bottom:10px}@media(max-width:650px){.guide-section .mini-grid{grid-template-columns:1fr}.guide-section .formula{overflow-x:auto;white-space:normal}.guide-section .plot{overflow-x:auto}}
+
+.guide-section .inline-math{white-space:normal}.guide-section .plot-svg{margin:22px 0 26px}.guide-section .plot-svg svg{display:block;width:100%;height:auto;border:1px solid #dce6ef;border-radius:12px;background:#fbfdff}.guide-section .plot-svg figcaption{color:#526175;font-size:.88rem;line-height:1.65;margin-top:9px}.guide-section .table-wrap table{min-width:530px}.guide-section .diagram{justify-content:center}.guide-section .diagram div{min-width:120px}.guide-section details p{font-size:1rem;line-height:1.75}.guide-section details summary{color:#0b1f3a}.guide-section h3{scroll-margin-top:90px}.guide-section{scroll-margin-top:90px}.guide-section .formula{max-width:100%;overflow:auto}.guide-section .MathJax{max-width:100%}.guide-section .formula mjx-container[display="true"]{margin:0!important;min-width:max-content}.guide-section .table-wrap{max-width:100%}@media(max-width:650px){.guide-section .plot-svg figcaption{font-size:.82rem}.guide-section .formula{font-size:1.02rem}}
+
+/* Guide charts remain legible on narrow screens: scroll the figure, not the page. */
+@media(max-width:650px){.guide-main{overflow-x:clip}.guide-section .plot-svg{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.guide-section .plot-svg svg{width:660px;max-width:none}.guide-section .plot-svg figcaption{max-width:100%;font-size:.9rem}}
+
+/* Guide 3: scoped additions consistent with existing brand typography and colors. */
+.guide-section .code-sample{background:#0b1f3a;color:#ebf5ff;padding:20px 22px;border-radius:12px;overflow-x:auto;font-size:.9rem;line-height:1.65;margin:24px 0;tab-size:4}
+.guide-section .code-sample code{white-space:pre;font-family:Consolas,"Courier New",monospace}
+.guide-section code:not(.code-sample code){font-size:.92em;background:#eef4fa;padding:1px 4px;border-radius:4px}
+.guide-section .mistake{padding:5px 0 8px;border-bottom:1px solid #e6edf4}
+.guide-section .mistake h3{color:#794f1b;margin:18px 0 8px}
+.guide-section .mistake p{margin-bottom:10px}
+.guide-section ul li{margin:7px 0;line-height:1.7}
+.guide-section .plot-svg svg{font-family:Inter,Arial,sans-serif}
+.guide-section .plot-svg figcaption{display:block;font-weight:400}
+.guide-section .answer p{margin:12px 0 0}
+@media (max-width:650px){.guide-section .plot-svg{overflow-x:auto}.guide-section .plot-svg svg{width:770px;max-width:none}.guide-section .code-sample{padding:14px 15px;font-size:.78rem}.guide-section{overflow-wrap:break-word}}
+
+
+/* Guide 27 only: isolated local styles, retaining the website's shared style.css. */
+.guide-article{min-width:0}.guide-section{min-width:0;overflow-wrap:break-word}
+.guide-section h2{font-family:'Source Serif 4',Georgia,serif}
+.guide-section .formula{max-width:100%;overflow-x:auto;overflow-y:hidden;white-space:normal;text-align:center;line-height:1.6}
+.guide-section .formula mjx-container[display="true"]{min-width:max-content;margin:.2em 0!important}
+.guide-section .table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.guide-section table{font-size:.9rem;min-width:590px}
+.guide-section td{line-height:1.5}
+.guide-section .plot-svg{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch}
+.guide-section .plot-svg svg{max-width:100%;width:100%;height:auto;display:block}
+.guide-section .plot-svg figcaption{color:#526175;font-size:.87rem;line-height:1.6}
+.guide-section .m-inline{overflow-wrap:normal}
+.guide-section details .answer{margin-top:10px;padding-top:2px;border-top:1px solid #e1e8ef}
+.guide-section details .answer p{padding-top:7px}
+.guide-section .code-sample{background:#0b1f3a;color:#e9f4ff;border-radius:12px;padding:20px;font-size:.86rem;line-height:1.6;max-width:100%;overflow-x:auto;overflow-y:hidden;white-space:pre}
+.guide-section .code-sample code{font-family:Consolas,'Courier New',monospace;white-space:pre}
+.guide-section .code-sample .highlight{color:#e9f4ff}
+.guide-section p, .guide-section li{line-height:1.78}
+.guide-section p+ol,.guide-section p+ul{margin-top:10px}
+.guide-section li{padding:5px 0}
+.guide-section summary{font-family:Inter,Arial,sans-serif}
+.guide-hero .lead{line-height:1.7}
+.guide-article a{color:#2563eb;text-decoration:underline}
+@media(max-width:700px){.guide-section{padding:21px 17px}.guide-section .formula{font-size:1rem;padding:15px 10px}.guide-section .plot-svg svg{width:660px;max-width:none}.guide-section .code-sample{font-size:.76rem;padding:14px}.guide-section .table-wrap table{font-size:.83rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+
+/* Guide 29 scope; site-wide typography, academic color system and style.css preserved. */
+.guide-article{min-width:0}.guide-section{min-width:0;overflow-wrap:break-word;scroll-margin-top:95px}
+.guide-section .formula{max-width:100%;overflow-x:auto;overflow-y:hidden;font-size:1.15rem;padding:18px 13px}
+.guide-section .formula mjx-container[display="true"]{margin:0!important;min-width:max-content}
+.guide-section .table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.guide-section table{width:100%;min-width:560px;font-size:.91rem}
+.guide-section th,.guide-section td{padding:10px 11px;line-height:1.6;vertical-align:top}
+.guide-section .plot-svg{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch}
+.guide-section .plot-svg svg{width:100%;height:auto;display:block;max-width:100%}
+.guide-section .plot-svg figcaption{font-size:.89rem;line-height:1.6;color:#526175}
+.guide-section .code-sample{background:#0b1f3a;color:#eef5ff;padding:20px;border-radius:12px;overflow-x:auto;max-width:100%;font-size:.84rem;line-height:1.65;white-space:pre}
+.guide-section .code-sample code{font-family:Consolas,'Courier New',monospace;white-space:pre;background:transparent;color:inherit}
+.guide-section details .answer{border-top:1px solid #dce7ef;margin-top:12px;padding-top:12px}
+.guide-section details .answer p{margin:0 0 9px}
+.guide-section p,.guide-section li{line-height:1.78}
+.guide-section p{overflow-wrap:break-word}
+.guide-section .m-inline{max-width:100%}
+@media(max-width:700px){.guide-section{padding:22px 18px}.guide-section .formula{font-size:1rem;padding:15px 10px}.guide-section .plot-svg svg{width:655px;max-width:none}.guide-section .code-sample{padding:14px;font-size:.75rem}.guide-section table{font-size:.82rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Guide 30 isolated additions; global stylesheet remains authoritative */
+.guide-article,.guide-section{min-width:0}.guide-section{scroll-margin-top:96px;overflow-wrap:break-word}
+.guide-section .formula{overflow-x:auto;max-width:100%;font-size:1.1rem;padding:18px 13px}
+.guide-section .formula mjx-container[display="true"]{margin:0!important;min-width:max-content}
+.guide-section .table-wrap{overflow:auto;max-width:100%;-webkit-overflow-scrolling:touch}
+.guide-section .table-wrap table{min-width:590px;width:100%;font-size:.9rem}
+.guide-section .table-wrap td,.guide-section .table-wrap th{vertical-align:top;line-height:1.55;padding:10px 11px}
+.guide-section .plot-svg{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}
+.guide-section .plot-svg svg{display:block;width:100%;height:auto;max-width:100%}
+.guide-section .plot-svg figcaption{line-height:1.55;color:#536276;font-size:.88rem}
+.guide-section .code-sample{overflow-x:auto;max-width:100%;background:#0b1f3a;color:#f0f6ff;padding:18px;border-radius:12px;font-size:.8rem;line-height:1.65}
+.guide-section .code-sample code{background:transparent;color:inherit;white-space:pre;font-family:Consolas,'Courier New',monospace}
+.guide-section .answer{border-top:1px solid #dce6ef;padding-top:12px;margin-top:12px}
+.guide-section .answer p{margin:0 0 10px;line-height:1.7}
+.guide-section .m-inline{max-width:100%}
+@media(max-width:700px){.guide-section{padding:22px 18px}.guide-section .formula{font-size:1rem;padding:15px 10px}.guide-section .plot-svg svg{width:660px;max-width:none}.guide-section .code-sample{font-size:.75rem;padding:14px}.guide-section .table-wrap table{font-size:.82rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Guide 31: keep mathematical tables and figures inside their own scrollers */
+.guide-section .formula{line-height:1.65}.guide-section .plot-svg svg{font-family:Inter,Arial,sans-serif}
+.guide-section .table-wrap{contain:inline-size}.guide-section details.exercise{scroll-margin-top:95px}
+.guide-section{overflow-wrap:break-word}
+@media(max-width:700px){.guide-section .formula{font-size:1rem}}
+
+/* Guide 32: scoped refinements; master stylesheet retains typographic authority. */
+.guide-article,.guide-section{min-width:0}
+.guide-section{scroll-margin-top:94px;overflow-wrap:break-word}
+.guide-section .formula{overflow-x:auto;overflow-y:hidden;max-width:100%;font-size:1.07rem;line-height:1.75;padding:17px 11px}
+.guide-section .formula mjx-container[display="true"]{margin:0!important;min-width:max-content}
+.guide-section .plot-svg{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch}
+.guide-section .plot-svg svg{display:block;width:100%;max-width:100%;height:auto;font-family:Inter,Arial,sans-serif}
+.guide-section .table-wrap{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}
+.guide-section .table-wrap table{min-width:590px;font-size:.86rem;width:100%}
+.guide-section .table-wrap th,.guide-section .table-wrap td{padding:10px;white-space:normal;vertical-align:top}
+.guide-section .code-sample{max-width:100%;overflow-x:auto;font-size:.78rem;line-height:1.6}
+.guide-section .code-sample code{background:transparent!important;color:#eff8ff!important}
+.guide-section details.exercise{margin:12px 0;padding:16px 18px}
+.guide-section details.exercise .answer{margin-top:14px;border-top:1px solid #dfe8f0;padding-top:13px}
+.guide-section details.exercise .answer p{margin:0;padding:0;line-height:1.74}
+.guide-section p,.guide-section li{line-height:1.78}
+@media(max-width:650px){.guide-section{padding:21px 17px}.guide-section .plot-svg svg{width:665px;max-width:none}.guide-section .table-wrap table{font-size:.78rem}.guide-section .formula{font-size:.96rem;padding:13px 9px}.guide-section .code-sample{font-size:.73rem;padding:12px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><div class="container nav-wrap"><div style="display:flex;align-items:center;gap:20px"><a class="brand" href="/index.html">Alfredo Saldana</a><div class="lang-switch" style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap"><a href="/learn/machine-learning/machine-learning-pipelines-reproducibility-and-responsible-modeling.html" lang="en" aria-current="page">EN</a><span aria-hidden="true"> | </span><a href="/es/learn/machine-learning/machine-learning-pipelines-reproducibility-and-responsible-modeling-es.html" lang="es">ES</a></div></div><button class="menu-btn" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Toggle navigation">☰</button><nav class="nav" id="site-nav" aria-label="Main navigation"><a href="/index.html">Home</a><a href="/tutorials.html" class="active">Learn</a><a href="/projects.html">Projects</a><a href="/open-box.html">Open Box</a><a href="/about.html">About</a><a href="/contact.html">Contact</a></nav></div></header><section class="guide-hero"><div class="narrow"><div class="eyebrow">LEARN · MACHINE LEARNING</div><h1>Machine Learning Pipelines, Reproducibility and Responsible Modeling</h1><p class="lead">Build reproducible, leakage-safe Pipelines with ColumnTransformer; verify every transformation, evaluate and audit subgroup errors, and document responsible model releases.</p><p class="guide-meta">Machine Learning · Guide 32 of 33 · Alfredo Saldana · Master Standard 3.0</p><div class="guide-links"><a href="/es/learn/machine-learning/machine-learning-pipelines-reproducibility-and-responsible-modeling-es.html" lang="es">Leer en español ↗</a><a href="/tutorials.html">Back to Learn ↗</a></div></div></section><main class="guide-main" id="main"><article class="guide-article"><section class="guide-section blue" id="section-1"><h2>1. A prediction system is more than a trained model</h2>
+<p>A network of outpatient clinics would like to anticipate which booked appointments might be missed so that it can offer appropriate reminders or flexible rescheduling. A classifier alone cannot solve this problem. If the team measures travel time differently at prediction time, recalculates data transformations from tomorrow's patients, or overlooks patients with limited access to phones, a seemingly successful model could become unreliable or unfair.</p>
+<p>Our <strong>prediction unit</strong> is one appointment. We score after the planned reminder method has been selected and logged at booking, but before that contact occurs. Inputs include the booking-time travel estimate, the already planned reminder method, and whether a prior appointment was missed. The <strong>Target</strong> is 1 for a missed appointment and 0 for attendance. The location group (<em>Central</em> or <em>Outlying</em>) is retained for auditing, not supplied to the classifier. All 28 records in this chapter are deliberately <strong>synthetic</strong>, including their outcomes and group membership; they do not describe a real healthcare system.</p>
+<p>This guide connects four questions: How do we build repeatable preprocessing? How can another analyst reproduce the fitted system? Do predictions work outside Training? Could the resulting decision create avoidable harm? The four require different kinds of evidence.</p>
+<p><figure aria-label="Training fits preprocessing; Validation selects; Test audits the frozen choice." class="plot-svg"><svg aria-label="Machine Learning lifecycle with leakage boundary" role="img" viewbox="0 0 760 290" xmlns="http://www.w3.org/2000/svg"><rect fill="#eaf2ff" height="92" rx="10" stroke="#bcd0e8" width="139" x="12" y="80"></rect><text fill="#526175" font-size="13" font-weight="500" text-anchor="middle" x="81" y="113">1</text><text fill="#233a54" font-size="12" font-weight="500" text-anchor="middle" x="81" y="141">Source data</text><path d="M153 126 L161 126" stroke="#426b91" stroke-width="2"></path><rect fill="#eaf2ff" height="92" rx="10" stroke="#bcd0e8" width="139" x="163" y="80"></rect><text fill="#526175" font-size="13" font-weight="500" text-anchor="middle" x="232" y="113">2</text><text fill="#233a54" font-size="12" font-weight="500" text-anchor="middle" x="232" y="141">Training only</text><path d="M304 126 L312 126" stroke="#426b91" stroke-width="2"></path><rect fill="#effaf7" height="92" rx="10" stroke="#bcd0e8" width="139" x="314" y="80"></rect><text fill="#526175" font-size="13" font-weight="500" text-anchor="middle" x="383" y="113">3</text><text fill="#233a54" font-size="12" font-weight="500" text-anchor="middle" x="383" y="141">Fitted preprocessing</text><path d="M455 126 L463 126" stroke="#426b91" stroke-width="2"></path><rect fill="#f6f1fd" height="92" rx="10" stroke="#bcd0e8" width="139" x="465" y="80"></rect><text fill="#526175" font-size="13" font-weight="500" text-anchor="middle" x="534" y="113">4</text><text fill="#233a54" font-size="12" font-weight="500" text-anchor="middle" x="534" y="141">Validation</text><path d="M606 126 L614 126" stroke="#426b91" stroke-width="2"></path><rect fill="#fff8e8" height="92" rx="10" stroke="#bcd0e8" width="139" x="616" y="80"></rect><text fill="#526175" font-size="13" font-weight="500" text-anchor="middle" x="685" y="113">5</text><text fill="#233a54" font-size="12" font-weight="500" text-anchor="middle" x="685" y="141">Frozen Test</text><text fill="#854b1d" font-size="15" font-weight="500" text-anchor="middle" x="375" y="46">No information from Test may enter model selection</text><text fill="#233a54" font-size="14" font-weight="500" text-anchor="middle" x="375" y="227">Only Training learns imputation, scaling, categories and coefficients</text></svg><figcaption>Training fits preprocessing; Validation selects; Test audits the frozen choice.</figcaption></figure></p>
+<p><strong>Learning outcomes.</strong> By the end, you will reconstruct Training-only transformations, explain Logistic Regression inputs and outputs, run an integrated scikit-learn Pipeline, choose an operating threshold without Test leakage, audit subgroup errors, and write an experiment manifest. None of these constitutes authorization to deploy a system on actual patients.</p>
+</section>
+<section class="guide-section teal" id="section-2"><h2>2. Define data availability before writing any code</h2>
+<p>A common error is to use a variable merely because it exists in the completed historical database. We must instead ask whether it existed <strong>at the moment the prediction would have been produced</strong>. Travel minutes here are a booking-time estimate, not the actual journey recorded after the appointment. The planned reminder is also known at booking. The outcome becomes available later and must never appear among the model inputs.</p>
+<p>The split is chronological in meaning: Training describes earlier appointments, Validation a later period used to compare candidate choices, and Test an even later untouched period. We simplified the example by making every appointment a different synthetic person. A real clinic with repeated appointments would need a group- and time-aware design; patient histories may connect rows even if their IDs differ after anonymization.</p>
+<p><figure aria-label="Twelve Train, eight Validation and eight Test synthetic observations; partitions are fixed before learning." class="plot-svg"><svg aria-label="Chronological split: past train validation future test" role="img" viewbox="0 0 760 290" xmlns="http://www.w3.org/2000/svg"><rect fill="#dbeafe" height="100" rx="10" stroke="#bcd0e8" width="370" x="28" y="80"></rect><text fill="#193b61" font-size="18" font-weight="700" text-anchor="middle" x="213.0" y="128">Train · 12</text><rect fill="#e7dff5" height="100" rx="10" stroke="#bcd0e8" width="157" x="409" y="80"></rect><text fill="#193b61" font-size="18" font-weight="700" text-anchor="middle" x="487.5" y="128">Validation · 8</text><rect fill="#fce9c2" height="100" rx="10" stroke="#bcd0e8" width="155" x="580" y="80"></rect><text fill="#193b61" font-size="18" font-weight="700" text-anchor="middle" x="657.5" y="128">Test · 8</text><text fill="#233a54" font-size="15" font-weight="500" text-anchor="middle" x="385" y="36">Time →</text><text fill="#233a54" font-size="14" font-weight="500" text-anchor="middle" x="385" y="225">Split and lock evaluation cohorts before examining their outcomes</text></svg><figcaption>Twelve Train, eight Validation and eight Test synthetic observations; partitions are fixed before learning.</figcaption></figure></p>
+<p>The prospective task can be written as \(\hat p_i=f_{\theta}(x_i)\), where \(x_i\) contains only three booking-time predictors, \(\theta\) is learned only from Training and \(\hat p_i\) is the model's estimated score for missed appointment \(y_i=1\). A probability-like output is not guaranteed to be calibrated; we will check how it is evaluated rather than assume its numerical interpretation is perfect.</p>
+<p><strong>Why this is a scientific boundary:</strong> Validation scores can influence threshold choice; the final Test labels cannot. If Test errors lead to a revised model, those labels have joined development and a new untouched assessment is required.</p>
+<p><div class="table-wrap"><table><caption>Point-in-time data contract</caption><thead><tr><th scope="col">Field</th><th scope="col">Available by</th><th scope="col">Use in predictor</th><th scope="col">Unit/policy</th></tr></thead><tbody><tr><td>travel_min</td><td>Booking</td><td>Yes</td><td>minutes; median impute</td></tr><tr><td>reminder</td><td>Booking</td><td>Yes</td><td>Call/SMS; unseen ignored</td></tr><tr><td>prior_missed</td><td>Booking</td><td>Yes</td><td>0 or 1</td></tr><tr><td>group</td><td>Booking</td><td>No</td><td>controlled audit only</td></tr><tr><td>missed</td><td>After appointment</td><td>No</td><td>Target; 0 or 1</td></tr></tbody></table></div></p>
+</section>
+<section class="guide-section purple" id="section-3"><h2>3. Inspect every row of the synthetic case</h2>
+<p>Our canonical dataset contains 12 Training, eight Validation and eight Test appointments. <strong>Travel minutes</strong> are measured in minutes, <strong>Reminder</strong> takes values SMS or Call, and <strong>Prior missed</strong> is 0 or 1. The audit-only <strong>Group</strong> distinguishes Central and Outlying access areas. <code>NA</code> means that a booking-time travel estimate was unavailable, <strong>not</strong> that the journey took zero minutes.</p>
+<p><div class="table-wrap"><table><caption>Complete synthetic appointment dataset · 28 observations</caption><thead><tr><th scope="col">ID</th><th scope="col">Set</th><th scope="col">Group</th><th scope="col">Travel (min)</th><th scope="col">Reminder</th><th scope="col">Prior missed</th><th scope="col">Target: missed</th></tr></thead><tbody><tr><td>T01</td><td>Train</td><td>Central</td><td>10</td><td>SMS</td><td>0</td><td>0</td></tr><tr><td>T02</td><td>Train</td><td>Central</td><td>20</td><td>Call</td><td>0</td><td>0</td></tr><tr><td>T03</td><td>Train</td><td>Central</td><td>30</td><td>SMS</td><td>1</td><td>1</td></tr><tr><td>T04</td><td>Train</td><td>Central</td><td>40</td><td>Call</td><td>0</td><td>0</td></tr><tr><td>T05</td><td>Train</td><td>Central</td><td>50</td><td>SMS</td><td>0</td><td>0</td></tr><tr><td>T06</td><td>Train</td><td>Central</td><td>60</td><td>Call</td><td>1</td><td>1</td></tr><tr><td>T07</td><td>Train</td><td>Outlying</td><td>70</td><td>SMS</td><td>0</td><td>0</td></tr><tr><td>T08</td><td>Train</td><td>Outlying</td><td>80</td><td>Call</td><td>1</td><td>1</td></tr><tr><td>T09</td><td>Train</td><td>Outlying</td><td>90</td><td>SMS</td><td>1</td><td>1</td></tr><tr><td>T10</td><td>Train</td><td>Outlying</td><td>100</td><td>Call</td><td>1</td><td>1</td></tr><tr><td>T11</td><td>Train</td><td>Outlying</td><td>NA</td><td>SMS</td><td>0</td><td>0</td></tr><tr><td>T12</td><td>Train</td><td>Outlying</td><td>NA</td><td>Call</td><td>1</td><td>1</td></tr><tr><td>V01</td><td>Validation</td><td>Central</td><td>15</td><td>SMS</td><td>0</td><td>0</td></tr><tr><td>V02</td><td>Validation</td><td>Central</td><td>25</td><td>Call</td><td>1</td><td>1</td></tr><tr><td>V03</td><td>Validation</td><td>Central</td><td>45</td><td>SMS</td><td>0</td><td>0</td></tr><tr><td>V04</td><td>Validation</td><td>Central</td><td>65</td><td>Call</td><td>1</td><td>1</td></tr><tr><td>V05</td><td>Validation</td><td>Outlying</td><td>55</td><td>SMS</td><td>0</td><td>0</td></tr><tr><td>V06</td><td>Validation</td><td>Outlying</td><td>75</td><td>Call</td><td>1</td><td>1</td></tr><tr><td>V07</td><td>Validation</td><td>Outlying</td><td>85</td><td>SMS</td><td>1</td><td>0</td></tr><tr><td>V08</td><td>Validation</td><td>Outlying</td><td>95</td><td>Call</td><td>0</td><td>1</td></tr><tr><td>E01</td><td>Test</td><td>Central</td><td>18</td><td>SMS</td><td>0</td><td>0</td></tr><tr><td>E02</td><td>Test</td><td>Central</td><td>28</td><td>Call</td><td>1</td><td>1</td></tr><tr><td>E03</td><td>Test</td><td>Central</td><td>48</td><td>SMS</td><td>0</td><td>0</td></tr><tr><td>E04</td><td>Test</td><td>Central</td><td>58</td><td>Call</td><td>1</td><td>1</td></tr><tr><td>E05</td><td>Test</td><td>Outlying</td><td>52</td><td>SMS</td><td>0</td><td>0</td></tr><tr><td>E06</td><td>Test</td><td>Outlying</td><td>78</td><td>Call</td><td>1</td><td>1</td></tr><tr><td>E07</td><td>Test</td><td>Outlying</td><td>88</td><td>SMS</td><td>1</td><td>1</td></tr><tr><td>E08</td><td>Test</td><td>Outlying</td><td>98</td><td>Call</td><td>0</td><td>0</td></tr></tbody></table></div></p>
+<p>Read T08 horizontally: an Outlying appointment has travel estimate 80 minutes, Call reminder, a past missed appointment (1), and a future missed outcome (1). That outcome cannot be known when the reminder is planned. Read T11 vertically: travel time is missing but the other inputs are present. The correct response is not to delete T11 automatically or manufacture a travel measurement; we must specify a training-derived imputation rule.</p>
+<p>Training contains six missed and six attended appointments; Validation contains four and four; Test also contains four and four. Thus the illustrative Training prevalence is \(6/12=0.50\). This artificial balance makes manual metrics easy, but missed appointments need not be balanced in a real clinic. We do not infer any true population prevalence, disparity, or model utility from these 28 constructed records.</p>
+<p><strong>Data dictionary checkpoint:</strong> every field requires a unit, collection timestamp, permitted values, missing-data policy, and access restrictions. <code>Group</code> is not an implicit permission to discriminate; it can help detect errors that would otherwise remain hidden.</p>
+</section>
+<section class="guide-section amber" id="section-4"><h2>4. Why a Pipeline is a learned mathematical object</h2>
+<p>A <code>Pipeline</code> is not merely a convenient list of functions. It is a <strong>composition of estimators and transformations with fitted state</strong>. If a preparation function \(T_{\phi}\) learns median, scale or category mappings \(\phi\) from Training, and a classifier \(f_{\theta}\) learns coefficients \(\theta\), the complete predictor is:</p>
+<p><div class="formula">\[\hat p(x)=f_{\hat\theta}\left(T_{\hat\phi_{\mathrm{train}}}(x)\right).\]</div></p>
+<p>Here \(\hat\phi_{\mathrm{train}}\) is frozen after fitting on Training. Validation and Test pass through the <strong>same</strong> transformation; we do not recompute their medians or means. Then the classifier receives a stable numerical representation of the appointment.</p>
+<p>In scikit-learn, <code>fit(X_train, y_train)</code> calls <code>fit</code> on applicable preprocessors before fitting the classifier. A later <code>predict_proba(X_validation)</code> uses the stored parameters via <code>transform</code>, then calls the fitted estimator. <code>fit_transform</code> combines learning and application to the same permitted fitting set; <code>transform</code> alone reuses previously fitted state. These names describe different statistical operations, not merely two spellings for data cleaning.</p>
+<p><strong>One conceptual consequence:</strong> a saved coefficient vector alone is insufficient. If another application uses a different column order or new scaling constants, it computes a different function even with the same coefficients. Therefore the serialized <em>Pipeline</em>, its feature schema and its data contract must be versioned together.</p>
+</section>
+<section class="guide-section blue" id="section-5"><h2>5. Impute missing travel times from Training alone</h2>
+<p>The ten observed Training travel times, sorted, are \(10,20,30,40,50,60,70,80,90,100\) minutes. Since there are ten nonmissing numbers, the median is the mean of positions five and six:</p>
+<p><div class="formula">\[\operatorname{median}_{\rm Train}=\frac{50+60}{2}=55\ \text{minutes}. \]</div></p>
+<p>T11 and T12 have missing travel estimates. A <code>SimpleImputer(strategy="median")</code> fitted on Training replaces <strong>both</strong> missing values with 55. The complete transformed travel column is therefore \(10,20,30,40,50,60,70,80,90,100,55,55\) minutes. Notice that each imputed record remains in the dataset, so the training size stays at 12 rather than shrinking to 10.</p>
+<p>Why median rather than zero? Zero would encode a travel time the source never measured and could turn missingness into an artificial low-travel indicator. The median is less sensitive than the mean to extreme observed journeys. It is nevertheless an assumption: missing travel times may systematically occur for patients with less geographic data. For real analyses, assess missingness mechanisms and consider adding a missingness indicator when justified.</p>
+<p><strong>Validation example:</strong> if a future booking has missing travel time, transform it to <strong>55</strong>, regardless of the other Validation travel times. Its target cannot influence this value. If the training median changes in a later retraining cycle, that requires a new versioned Pipeline, not a silent production-only adjustment.</p>
+</section>
+<section class="guide-section teal" id="section-6"><h2>6. Derive StandardScaler with every intermediate sum</h2>
+<p>After imputation the 12 values are \(10,20,30,40,50,60,70,80,90,100,55,55\). Their sum is \(550+55+55=660\), so the fitted mean is \(\mu=660/12=55\) minutes. The ten nonmissing observations are symmetric around 55; the two imputed values contribute zero deviation.</p>
+<p><div class="formula">\[\begin{aligned}\sum_{i=1}^{12}(x_i-55)^2&amp;=2(45^2+35^2+25^2+15^2+5^2)+0+0\\&amp;=2(2025+1225+625+225+25)\\&amp;=8250\ \text{min}^2.\end{aligned}\]</div></p>
+<p><code>StandardScaler</code> uses the population-style denominator \(n\), not \(n-1\). Thus \(\sigma^2=8250/12=687.5\) minutes squared and \(\sigma=\sqrt{687.5}\approx26.2202\) minutes. The transformed input is:</p>
+<p><div class="formula">\[z(x)=\frac{x-\mu}{\sigma};\qquad z(80)=\frac{80-55}{26.2202}\approx0.95346.\]</div></p>
+<p>The units cancel, making \(z\) dimensionless. A journey of 80 minutes sits about 0.95 training standard deviations above the fitted mean; it does not mean a 95.35% missed-appointment risk. <strong>If all fitted travel values were identical</strong>, their zero variance would require handling; scikit-learn uses a safe scaling convention rather than dividing by zero. Other software may have different conventions.</p>
+<p><figure aria-label="For row T08 the final feature vector equals [0.95346, 1, 0, 1], with columns standardized travel, Call, SMS, prior missed." class="plot-svg"><svg aria-label="Feature preprocessing for one appointment" role="img" viewbox="0 0 760 290" xmlns="http://www.w3.org/2000/svg"><rect fill="#eaf2ff" height="130" rx="10" stroke="#bcd0e8" width="215" x="25" y="72"></rect><text fill="#1e4165" font-size="15" font-weight="700" text-anchor="middle" x="132" y="99">T08</text><rect fill="#effaf7" height="130" rx="10" stroke="#bcd0e8" width="215" x="280" y="72"></rect><text fill="#1e4165" font-size="15" font-weight="700" text-anchor="middle" x="387" y="99">Training statistics</text><rect fill="#f6f1fd" height="130" rx="10" stroke="#bcd0e8" width="215" x="520" y="72"></rect><text fill="#1e4165" font-size="15" font-weight="700" text-anchor="middle" x="627" y="99">Numeric vector</text><text fill="#233a54" font-size="14" font-weight="500" text-anchor="middle" x="132" y="131">80 min · Call · prior=1</text><text fill="#233a54" font-size="14" font-weight="500" text-anchor="middle" x="389" y="132">median=55; mean=55</text><text fill="#233a54" font-size="14" font-weight="500" text-anchor="middle" x="389" y="159">SD=26.2202 min</text><text fill="#233a54" font-size="16" font-weight="500" text-anchor="middle" x="628" y="129">[0.95346, 1, 0, 1]</text><text fill="#233a54" font-size="15" font-weight="500" text-anchor="middle" x="628" y="158">1×4</text><path d="M240 145 H277 M495 145 H517" stroke="#426b91" stroke-width="3"></path><text fill="#233a54" font-size="14" font-weight="500" text-anchor="middle" x="377" y="250">Imputer → StandardScaler → OneHotEncoder → passthrough</text></svg><figcaption>For row T08 the final feature vector equals [0.95346, 1, 0, 1], with columns standardized travel, Call, SMS, prior missed.</figcaption></figure></p>
+</section>
+<section class="guide-section purple" id="section-7"><h2>7. Encode categories and preserve the column schema</h2>
+<p>A mathematical classifier requires numbers; <code>SMS</code> and <code>Call</code> are strings. A <code>OneHotEncoder</code> fitted on Training learns the ordered categories <code>['Call', 'SMS']</code>, then converts each label to indicators. Because alphabetical order defines the two encoded columns in this implementation, <strong>Call becomes [1,0] and SMS becomes [0,1]</strong>. The binary feature <code>prior_missed</code> is passed through unchanged.</p>
+<p>For T08, the ordered numerical output is:</p>
+<p><div class="formula">\[\mathbf{x}_{\mathrm{T08}}=\begin{bmatrix}\mathrm{travel\ }z &amp; \mathrm{Call} &amp; \mathrm{SMS} &amp; \mathrm{prior}\\0.953463 &amp; 1 &amp; 0 &amp; 1\end{bmatrix},\quad\mathrm{shape}=1\times4.\]</div></p>
+<p>This is why we must store <strong>feature names and order</strong>, not merely a prediction function. <code>ColumnTransformer</code> allows distinct operations for distinct kinds of columns: median then scale for travel, OneHotEncoder for reminder, and passthrough for the prior-outcome indicator. It prevents an accidental attempt to standardize strings or one-hot-encode a physical measurement with hundreds of possible values.</p>
+<p>What if Test contains a new reminder channel such as Email? <code>handle_unknown="ignore"</code> encodes it as <code>[0,0]</code> instead of crashing. This is an engineering fallback, <strong>not a guarantee of reliable behavior</strong> on a category the model never learned. The application should flag category drift, document its policy and decide whether retraining or special handling is warranted.</p>
+</section>
+<section class="guide-section amber" id="section-8"><h2>8. Follow one appointment through the complete transformation</h2>
+<p>Let us reproduce T08 from the raw table without executing code. We read travel=80 minutes, reminder=Call, prior_missed=1. The Training median is 55 but T08 is observed, so no imputation is applied to this row. Its standardized travel is \((80-55)/\sqrt{687.5}=0.953463\). The learned category order places a 1 in the first reminder indicator and 0 in the second. The previous-miss indicator remains 1.</p>
+<p>The final row therefore equals \([0.953463,1,0,1]\). Because the model's coefficient vector has four values, the matrix multiplication between one row of four columns and four coefficients produces one numeric score. In a batch of \(m\) appointments, the transformed input has shape \(m\times4\); this dimensional check is a simple way to catch accidental column insertion or reordering.</p>
+<p>A single unseen Email record would instead have indicators \([0,0]\). A missing travel estimate would be first replaced with 55, then scaled to \((55-55)/26.2202=0\). This standardized zero expresses the imputed central training value, <strong>not observed zero travel</strong>.</p>
+<p><strong>Reproduction question:</strong> can you turn T02 (20 minutes, Call, prior=0) into a numerical row? Its travel coordinate is \((20-55)/26.2202\approx-1.33485\), so the result is \([-1.33485,1,0,0]\). Explain why its negative first coordinate is permitted: it indicates a shorter trip than the Training mean.</p>
+</section>
+<section class="guide-section blue" id="section-9"><h2>9. Spot Data Leakage by changing one forbidden assumption</h2>
+<p>Suppose a future appointment outside our canonical dataset has an estimated travel time of <strong>200 minutes</strong>. We must apply the already fitted Training mean 55 and standard deviation 26.2202; its standardized value is \((200-55)/26.2202\approx5.530\). It is unusually far from the training distribution, but that observation is precisely why we should investigate extrapolation and not secretly recalculate the scaler.</p>
+<p>What if an analyst mistakenly appends this one future value to the <strong>12 imputed Training values</strong> before fitting a new mean? The combined sum becomes \(660+200=860\) over 13 rows, so \(\mu_{\mathrm{leaked}}=860/13\approx66.1538\) minutes, instead of 55. Thus even old Training observations would be represented on a different scale. The wrong pipeline has learned something about a future appointment.</p>
+<p><figure aria-label="Example of leakage: including one hypothetical future value changes the mean from 55 to 66.15 minutes." class="plot-svg"><svg aria-label="Leakage shifts mean using future sample" role="img" viewbox="0 0 760 290" xmlns="http://www.w3.org/2000/svg"><rect fill="#15957e" height="40" rx="4" stroke="#15957e" width="187.0" x="100" y="100"></rect><text fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" x="193.5" y="126">55.00 min</text><text fill="#354967" font-size="15" font-weight="500" text-anchor="start" x="100" y="85">Train only</text><rect fill="#c7902e" height="40" rx="4" stroke="#c7902e" width="224.91000000000003" x="450" y="100"></rect><text fill="#ffffff" font-size="16" font-weight="700" text-anchor="middle" x="562.455" y="126">66.15 min</text><text fill="#354967" font-size="15" font-weight="500" text-anchor="start" x="450" y="85">Train + future</text><text fill="#233a54" font-size="14" font-weight="500" text-anchor="middle" x="376" y="239">Illustrative separate future row of 200 min: do not fit on it</text></svg><figcaption>Example of leakage: including one hypothetical future value changes the mean from 55 to 66.15 minutes.</figcaption></figure></p>
+<p>The illustrative 200-minute row is <strong>not</strong> a hidden thirteenth Training row and not among our eight Validation or Test rows. It is a counterfactual that isolates the mechanism of Leakage. The same principle applies to median imputation, learned category vocabularies, feature selection and Target Encoding. <code>Pipeline</code> reduces this risk only when the analyst passes the correct <strong>Training partition</strong> to <code>fit</code> and does not fit transformations globally beforehand.</p>
+</section>
+<section class="guide-section teal" id="section-10"><h2>10. Understand what Logistic Regression learns</h2>
+<p>After preprocessing, one row has four numeric features \(\mathbf x=(z,\mathrm{Call},\mathrm{SMS},\mathrm{prior})\). Binary Logistic Regression computes a linear <strong>logit</strong> \(a=b+\mathbf w^\top\mathbf x\) and maps it through the Sigmoid function:</p>
+<p><div class="formula">\[\hat p=\sigma(a)=\frac{1}{1+e^{-a}}. \]</div></p>
+<p>Here \(b\) is an intercept, \(\mathbf w\) holds four fitted coefficients, and \(\hat p\) is the model score for \(y=1\). Training adjusts \(b,\mathbf w\) to minimize Binary Cross-Entropy plus the chosen regularization penalty. <code>C=1</code> controls the inverse regularization strength in scikit-learn; a larger \(C\) means weaker penalty, other conditions equal. This is not the same as the <strong>threshold</strong> used later to convert scores into decisions.</p>
+<p>A simplified worked calculation uses <strong>illustrative coefficients</strong>, deliberately different from the ones scikit-learn learns on our small dataset: \(b=-1\), \(\mathbf w=(0.7,0.3,-0.3,1.5)\). For T08, \(a=-1+0.7(0.953463)+0.3(1)-0.3(0)+1.5(1)=1.467424\). Therefore \(\sigma(a)=1/(1+e^{-1.467424})\approx0.8127\). This explains how a logit becomes a score; do not confuse 0.8127 with the actual fitted score displayed later.</p>
+<p><strong>One subtlety:</strong> with both Call and SMS indicator columns and an intercept, the design includes redundant information. Regularization produces a defined fitted solution in this implementation, but coefficients should not be assigned separate causal interpretations. One category can alternatively be dropped to define a reference level.</p>
+</section>
+<section class="guide-section purple" id="section-11"><h2>11. Reproduce a single learning update, not just the prediction</h2>
+<p>To see why Logistic Regression's coefficients can be learned, isolate a single standardized feature \(x=1\) with observed label \(y=1\). Begin at weight \(w=0\) and intercept \(b=0\). The logit is \(a=wx+b=0\), so \(p=\sigma(0)=0.5\). The Binary Cross-Entropy for one observation is \(L=-y\ln p-(1-y)\ln(1-p)=-\ln(0.5)=0.693147\).</p>
+<p>By the Chain Rule, the gradients are \(\partial L/\partial w=(p-y)x=(0.5-1)(1)=-0.5\) and \(\partial L/\partial b=p-y=-0.5\). With Learning Rate \(\eta=0.2\), Gradient Descent gives:</p>
+<p><div class="formula">\[w_{\rm new}=0-0.2(-0.5)=0.1,\qquad b_{\rm new}=0-0.2(-0.5)=0.1.\]</div></p>
+<p>Now \(a_{\rm new}=0.1(1)+0.1=0.2\), \(p_{\rm new}=1/(1+e^{-0.2})\approx0.549834\), and \(L_{\rm new}=-\ln(0.549834)\approx0.598139\). The example therefore <strong>verifies a loss decrease</strong> of about 0.0950 for this observation. These are one-feature, one-row pedagogical numbers; the actual integrated Pipeline uses regularized Logistic Regression fitted over all 12 Training rows with the LBFGS optimizer rather than this single SGD step.</p>
+</section>
+<section class="guide-section amber" id="section-12"><h2>12. Run the complete Training-to-Test Pipeline</h2>
+<p>The complete Python laboratory below creates the 28 appointments inside the script, separates the three cohorts, fits <em>only</em> on Training, and reports Validation and Test predictions. Run it as a standalone Jupyter cell or Python script after installing compatible versions of <code>numpy</code>, <code>pandas</code> and <code>scikit-learn</code> (tested here with 2.3.5, 2.2.3 and 1.8.0 respectively). No private files or external health records are needed.</p>
+<p>The key code architecture is <code>ColumnTransformer</code> inside <code>Pipeline</code>. <code>SimpleImputer</code> stores Training median 55; <code>StandardScaler</code> stores mean 55 and variance 687.5; <code>OneHotEncoder</code> stores the categories; <code>LogisticRegression</code> learns its coefficients. These fitted components move together whenever the whole Pipeline is applied.</p>
+<p><pre class="code-sample"><code># Synthetic appointments; do not use to make clinical decisions.
+import numpy as np
+import pandas as pd
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, brier_score_loss
+
+rows = [
+    ('T01', 'Train', 'Central', 10, 'SMS', 0, 0),
+    ('T02', 'Train', 'Central', 20, 'Call', 0, 0),
+    ('T03', 'Train', 'Central', 30, 'SMS', 1, 1),
+    ('T04', 'Train', 'Central', 40, 'Call', 0, 0),
+    ('T05', 'Train', 'Central', 50, 'SMS', 0, 0),
+    ('T06', 'Train', 'Central', 60, 'Call', 1, 1),
+    ('T07', 'Train', 'Outlying', 70, 'SMS', 0, 0),
+    ('T08', 'Train', 'Outlying', 80, 'Call', 1, 1),
+    ('T09', 'Train', 'Outlying', 90, 'SMS', 1, 1),
+    ('T10', 'Train', 'Outlying', 100, 'Call', 1, 1),
+    ('T11', 'Train', 'Outlying', None, 'SMS', 0, 0),
+    ('T12', 'Train', 'Outlying', None, 'Call', 1, 1),
+    ('V01', 'Validation', 'Central', 15, 'SMS', 0, 0),
+    ('V02', 'Validation', 'Central', 25, 'Call', 1, 1),
+    ('V03', 'Validation', 'Central', 45, 'SMS', 0, 0),
+    ('V04', 'Validation', 'Central', 65, 'Call', 1, 1),
+    ('V05', 'Validation', 'Outlying', 55, 'SMS', 0, 0),
+    ('V06', 'Validation', 'Outlying', 75, 'Call', 1, 1),
+    ('V07', 'Validation', 'Outlying', 85, 'SMS', 1, 0),
+    ('V08', 'Validation', 'Outlying', 95, 'Call', 0, 1),
+    ('E01', 'Test', 'Central', 18, 'SMS', 0, 0),
+    ('E02', 'Test', 'Central', 28, 'Call', 1, 1),
+    ('E03', 'Test', 'Central', 48, 'SMS', 0, 0),
+    ('E04', 'Test', 'Central', 58, 'Call', 1, 1),
+    ('E05', 'Test', 'Outlying', 52, 'SMS', 0, 0),
+    ('E06', 'Test', 'Outlying', 78, 'Call', 1, 1),
+    ('E07', 'Test', 'Outlying', 88, 'SMS', 1, 1),
+    ('E08', 'Test', 'Outlying', 98, 'Call', 0, 0),
+]
+df = pd.DataFrame(rows, columns=["id","split","group","travel_min","reminder","prior_missed","missed"])
+train = df[df.split == "Train"].copy()
+valid = df[df.split == "Validation"].copy()
+test = df[df.split == "Test"].copy()
+features = ["travel_min","reminder","prior_missed"]
+prep = ColumnTransformer([
+    ("travel", Pipeline([("impute", SimpleImputer(strategy="median")), ("scale", StandardScaler())]), ["travel_min"]),
+    ("reminder", OneHotEncoder(handle_unknown="ignore", sparse_output=False), ["reminder"]),
+    ("prior", "passthrough", ["prior_missed"]),
+])
+clf = Pipeline([("prep", prep), ("model", LogisticRegression(C=1.0, solver="lbfgs", max_iter=2000, random_state=7))])
+clf.fit(train[features], train.missed)
+
+transform = clf.named_steps["prep"]
+print("median", transform.named_transformers_["travel"].named_steps["impute"].statistics_)
+print("mean and variance", transform.named_transformers_["travel"].named_steps["scale"].mean_,transform.named_transformers_["travel"].named_steps["scale"].var_)
+print("T08", transform.transform(train.loc[train.id=="T08", features]))
+print("coefficients",clf.named_steps["model"].intercept_,clf.named_steps["model"].coef_)
+assert np.allclose(transform.transform(train.loc[train.id=="T08", features])[0], [25/np.sqrt(687.5),1,0,1])
+assert abs(transform.named_transformers_["travel"].named_steps["impute"].statistics_[0]-55)&lt;1e-10
+for set_name,part in [("Validation",valid),("Test",test)]:
+    probs=clf.predict_proba(part[features])[:,1]
+    print("\n",set_name,"probabilities",np.round(probs,6).tolist())
+    print("Brier",round(brier_score_loss(part.missed,probs),6))
+    for threshold in [.35,.50,.65]:
+        pred=(probs&gt;=threshold).astype(int)
+        tn,fp,fn,tp=confusion_matrix(part.missed,pred,labels=[0,1]).ravel()
+        print("threshold",threshold,"TN FP FN TP",tn,fp,fn,tp,"cost",int(fp+5*fn))
+assert abs(brier_score_loss(valid.missed,clf.predict_proba(valid[features])[:,1])-0.14337922294189795)&lt;1e-8
+</code></pre></p>
+<p>Read the output in order. The transform of T08 should be <code>[0.953463,1,0,1]</code>, agreeing with our handwritten derivation. The fitted model's intercept and coefficients will differ from the earlier <strong>illustrative</strong> coefficient vector because they are estimated from all Training rows. The assertions are not replacements for the mathematical explanations; they are independent checks that the code implements the stated numerical contract.</p>
+<p><strong>Important evaluation distinction:</strong> although the example script prints Test results so a reader can reproduce the teaching dataset, a real project would not inspect Test repeatedly while choosing the model. This script is a finished, frozen educational experiment, not permission to explore Test during development.</p>
+</section>
+<section class="guide-section blue" id="section-13"><h2>13. Inspect all frozen scores instead of trusting a single metric</h2>
+<p>The following table reports the fitted scikit-learn model's scores on each Validation and Test row, rounded to six decimals. The positive class is <strong>missed=1</strong>. A score of 0.573519 for V02 means that this particular fitted model outputs approximately 0.574 for the missed class; it is not a measured clinical probability, proof of future risk, or evidence that sending a reminder changes the outcome.</p>
+<p><div class="table-wrap"><table><caption>Frozen validation and test scores (rounded; scikit-learn 1.8)</caption><thead><tr><th scope="col">ID</th><th scope="col">Group</th><th scope="col">y</th><th scope="col">p (missed)</th><th scope="col">Predicted (0.50)</th></tr></thead><tbody><tr><td>V01</td><td>Central</td><td>0</td><td>0.123357</td><td>0</td></tr><tr><td>V02</td><td>Central</td><td>1</td><td>0.573519</td><td>1</td></tr><tr><td>V03</td><td>Central</td><td>0</td><td>0.226838</td><td>0</td></tr><tr><td>V04</td><td>Central</td><td>1</td><td>0.781752</td><td>1</td></tr><tr><td>V05</td><td>Outlying</td><td>0</td><td>0.272627</td><td>0</td></tr><tr><td>V06</td><td>Outlying</td><td>1</td><td>0.820660</td><td>1</td></tr><tr><td>V07</td><td>Outlying</td><td>0</td><td>0.777342</td><td>1</td></tr><tr><td>V08</td><td>Outlying</td><td>1</td><td>0.625708</td><td>1</td></tr><tr><td>E01</td><td>Central</td><td>0</td><td>0.131525</td><td>0</td></tr><tr><td>E02</td><td>Central</td><td>1</td><td>0.591386</td><td>1</td></tr><tr><td>E03</td><td>Central</td><td>0</td><td>0.239982</td><td>0</td></tr><tr><td>E04</td><td>Central</td><td>1</td><td>0.751095</td><td>1</td></tr><tr><td>E05</td><td>Outlying</td><td>0</td><td>0.258302</td><td>0</td></tr><tr><td>E06</td><td>Outlying</td><td>1</td><td>0.831220</td><td>1</td></tr><tr><td>E07</td><td>Outlying</td><td>1</td><td>0.789800</td><td>1</td></tr><tr><td>E08</td><td>Outlying</td><td>0</td><td>0.642751</td><td>1</td></tr></tbody></table></div></p>
+<p>At threshold 0.50, classify a row as missed when \(\hat p\ge0.50\) and otherwise predict attendance. Read Validation V07: score 0.777342 gives predicted 1, but observed label 0; this is a <strong>False Positive</strong>. V08 scores 0.625708 and is truly missed (1), so it is a <strong>True Positive</strong>. Looking at each row explains where the single Validation mistake occurs, not just that Accuracy is 87.5%.</p>
+<p>Test E08 scores 0.642751 but has label 0, hence is a False Positive. We did not use this result to change the threshold or fitted weights. The full table is included so readers can recalculate a confusion matrix and reconcile the model's outputs with the code. Six displayed decimals are rounded; exact internal floating-point values should be used for metrics near thresholds.</p>
+</section>
+<section class="guide-section teal" id="section-14"><h2>14. Derive confusion counts and performance at threshold 0.50</h2>
+<p>For Validation, four appointments truly are missed (V02, V04, V06, V08) and four are attended (V01, V03, V05, V07). Applying threshold 0.50 flags five: V02, V04, V06, V07, V08. Match predictions with outcomes one at a time. The four missed appointments are correctly identified: \(TP=4\) and \(FN=0\). Of the four attended appointments, V07 is incorrectly flagged: \(FP=1\) and \(TN=3\).</p>
+<p><div class="formula">\[\mathrm{Accuracy}=\frac{TP+TN}{8}=\frac{4+3}{8}=0.875.\]</div>
+<div class="formula">\[\mathrm{Precision}=\frac{TP}{TP+FP}=\frac45=0.80,\qquad \mathrm{Recall}=\frac{TP}{TP+FN}=\frac44=1.00.\]</div></p>
+<p>Accuracy answers how many predictions match; Precision answers how many alerts were truly missed; Recall answers what fraction of missed appointments the model flags. A system with unlimited reminders may value Recall differently from a clinic with limited capacity and possible communication burden. The numbers are results for eight <strong>constructed</strong> Validation rows, not performance estimates with defensible confidence for actual clinics.</p>
+<p>Our always-attends Baseline would predict 0 for all eight rows and obtain \(TN=4,FN=4,TP=FP=0\), yielding Accuracy 50%, Recall 0%, and undefined Precision because there are no alerts. The contrast illustrates why a high Accuracy alone is insufficient in imbalanced applications, even though our synthetic data happen to be balanced.</p>
+</section>
+<section class="guide-section purple" id="section-15"><h2>15. Select a Decision Threshold using costs, not Test results</h2>
+<p>A trained scoring model and an operating policy are different artifacts. We now compare three <strong>predeclared</strong> thresholds on Validation, before opening Test: 0.35, 0.50 and 0.65. Suppose, for this synthetic exercise, that every missed appointment not identified incurs five abstract cost units, while every unnecessary alert incurs one unit. These units are a teaching convenience, <strong>not actual dollar costs or healthcare impact</strong>.</p>
+<p><div class="formula">\[C(t)=1\,FP(t)+5\,FN(t).\]</div></p>
+<p>For \(t=0.35\), all four missed cases are flagged, along with one attended case: \(FP=1,FN=0\), giving \(C=1\). At \(t=0.50\), the five flags are unchanged, so \(C=1\) again. At \(t=0.65\), only V04, V06 and V07 are flagged: V02 and V08 become missed positives (\(FN=2\)), while V07 remains a False Positive (\(FP=1\)). Therefore \(C=1+5(2)=11\) units.</p>
+<p><figure aria-label="On Validation, thresholds 0.35 and 0.50 each cost 1 unit; 0.65 costs 11 units." class="plot-svg"><svg aria-label="Validation threshold costs with explicit FN FP weights" role="img" viewbox="0 0 760 290" xmlns="http://www.w3.org/2000/svg"><rect fill="#15957e" height="13" rx="3" stroke="#15957e" width="100" x="135" y="196"></rect><text fill="#213e5b" font-size="18" font-weight="500" text-anchor="middle" x="185" y="186">1</text><text fill="#233a54" font-size="16" font-weight="500" text-anchor="middle" x="185" y="236">0.35</text><rect fill="#15957e" height="13" rx="3" stroke="#15957e" width="100" x="330" y="196"></rect><text fill="#213e5b" font-size="18" font-weight="500" text-anchor="middle" x="380" y="186">1</text><text fill="#233a54" font-size="16" font-weight="500" text-anchor="middle" x="380" y="236">0.50</text><rect fill="#d59a32" height="143" rx="3" stroke="#d59a32" width="100" x="525" y="66"></rect><text fill="#213e5b" font-size="18" font-weight="500" text-anchor="middle" x="575" y="56">11</text><text fill="#233a54" font-size="16" font-weight="500" text-anchor="middle" x="575" y="236">0.65</text><text fill="#233a54" font-size="16" font-weight="500" text-anchor="middle" x="379" y="39">Validation cost = FP + 5×FN</text><text fill="#233a54" font-size="15" font-weight="500" text-anchor="middle" x="383" y="268">Threshold</text></svg><figcaption>On Validation, thresholds 0.35 and 0.50 each cost 1 unit; 0.65 costs 11 units.</figcaption></figure></p>
+<p>We select <strong>0.50</strong> because it ties with 0.35 for minimum Validation cost, has the same flagged cases on these specific rows, and is an easy documented convention. This <strong>tie-breaker is chosen before looking at Test</strong>. If a future population has different costs or prevalence, the decision needs re-evaluation and likely recalibration. Tuning a threshold on Validation makes its measured cost optimistic as an estimate of fully independent performance; Test serves that later role.</p>
+<p><div class="table-wrap"><table><caption>Threshold comparison on Validation only</caption><thead><tr><th scope="col">Threshold</th><th scope="col">Validation TP</th><th scope="col">FP</th><th scope="col">FN</th><th scope="col">TN</th><th scope="col">Cost = FP + 5FN</th></tr></thead><tbody><tr><td>0.35</td><td>4</td><td>1</td><td>0</td><td>3</td><td>1</td></tr><tr><td>0.5</td><td>4</td><td>1</td><td>0</td><td>3</td><td>1</td></tr><tr><td>0.65</td><td>2</td><td>1</td><td>2</td><td>3</td><td>11</td></tr></tbody></table></div></p>
+</section>
+<section class="guide-section amber" id="section-16"><h2>16. Evaluate Test once and keep the roles distinct</h2>
+<p>Freeze the fitted Pipeline and selected threshold 0.50. On Test, the model flags E02, E04, E06, E07 and E08. True missed cases are E02, E04, E06 and E07. Thus \(TP=4\), \(FP=1\) (E08), \(TN=3\) and \(FN=0\). We obtain the same numerical Accuracy \(7/8=87.5\%\), Precision \(4/5=80\%\), Recall \(4/4=100\%\), and illustrative cost \(1\).</p>
+<p>The equality between Validation and Test here is not evidence of a uniquely excellent model. The dataset was constructed to illustrate all computations, sample sizes are extremely small, and both sets contain artificial outcomes. For real work we would seek multiple appropriately separated time periods, useful uncertainty estimates, realistic prevalence and prospective monitoring. One additional error in eight rows changes Accuracy by \(1/8=12.5\) percentage points.</p>
+<p>A scoring metric can be computed without a threshold. For Brier Score, each case contributes the squared difference between predicted score and observed binary Target:</p>
+<p><div class="formula">\[\mathrm{Brier}=\frac1n\sum_{i=1}^n(\hat p_i-y_i)^2.\]</div></p>
+<p>For V01, \(y=0\) and \(\hat p=0.123357\), contributing \(0.123357^2\approx0.01522\). Summing all eight squared residuals yields approximately \(1.147034\); dividing by eight gives <strong>Brier = 0.143379</strong>. Test Brier is approximately <strong>0.107041</strong>. Lower Brier is better for the scoring task, but eight cases cannot validate calibration in a population. Never interpret a Brier score as a causal effect of outreach.</p>
+</section>
+<section class="guide-section blue" id="section-17"><h2>17. Fairness begins by comparing errors, not labels alone</h2>
+<p>Fairness in Machine Learning is not a single number. <strong>False Positive Rate (FPR)</strong> is the share of truly attended appointments incorrectly flagged: \(FPR=FP/(FP+TN)\). <strong>True Positive Rate (TPR)</strong> is the share of truly missed appointments identified: \(TPR=TP/(TP+FN)\). Different stakeholders may care about error patterns, equitable access, resource allocation and the effect of outreach.</p>
+<p>At threshold 0.50 in Validation, Central has two attended and two missed cases; all four are correctly classified. Therefore \(FPR_C=0/2=0\) and \(TPR_C=2/2=1\). Outlying has two attended, of which V07 is flagged, and two missed, both flagged. Thus \(FPR_O=1/2=0.5\) and \(TPR_O=2/2=1\). The observed <strong>FPR gap is 50 percentage points</strong>. Test happens to repeat these same subgroup counts, with E08 the Outlying False Positive.</p>
+<p><figure aria-label="Both Validation and Test show Central FPR 0/2 and Outlying FPR 1/2 at threshold 0.50; these are tiny samples." class="plot-svg"><svg aria-label="Subgroup false positive rates at threshold 0.50" role="img" viewbox="0 0 760 290" xmlns="http://www.w3.org/2000/svg"><text fill="#1e4165" font-size="16" font-weight="500" text-anchor="middle" x="220" y="70">Central</text><rect fill="#eef3f8" height="50" rx="5" stroke="#eef3f8" width="160" x="140" y="105"></rect><text fill="#233a54" font-size="16" font-weight="500" text-anchor="middle" x="220" y="185">0/2 = 0%</text><text fill="#1e4165" font-size="16" font-weight="500" text-anchor="middle" x="550" y="70">Outlying</text><rect fill="#eef3f8" height="50" rx="5" stroke="#eef3f8" width="160" x="470" y="105"></rect><rect fill="#8c69ba" height="50" rx="5" stroke="#8c69ba" width="80.0" x="470" y="105"></rect><text fill="#233a54" font-size="16" font-weight="500" text-anchor="middle" x="550" y="185">1/2 = 50%</text><text fill="#233a54" font-size="13" font-weight="500" text-anchor="middle" x="379" y="235">Only two negative cases per group: no population-level fairness claim</text></svg><figcaption>Both Validation and Test show Central FPR 0/2 and Outlying FPR 1/2 at threshold 0.50; these are tiny samples.</figcaption></figure></p>
+<p>Does this prove discrimination against Outlying patients? <strong>No.</strong> Each FPR denominator is only two appointments. Changing one prediction changes its group's FPR by 50 percentage points. Moreover, absence labels may reflect structural access barriers; group exclusion from Training Features does <strong>not</strong> remove all proxy signals from travel time. Ethical assessment requires context about consequences, legal protections, measurement quality, prospective evidence, and affected communities.</p>
+<p>A responsible audit asks whether the model or its deployment amplifies barriers to care. An unnecessary extra reminder may be benign in one setting and burdensome, stigmatizing or inaccessible in another. Equal FPR is not the only possible fairness objective, and mathematical criteria can conflict across populations with different base rates.</p>
+<p><div class="table-wrap"><table><caption>Audit at fixed threshold 0.50</caption><thead><tr><th scope="col">Set</th><th scope="col">Group</th><th scope="col">TN</th><th scope="col">FP</th><th scope="col">FN</th><th scope="col">TP</th><th scope="col">FPR</th><th scope="col">TPR</th></tr></thead><tbody><tr><td>Validation</td><td>Central</td><td>2</td><td>0</td><td>0</td><td>2</td><td>0/2 = 0%</td><td>2/2 = 100%</td></tr><tr><td>Validation</td><td>Outlying</td><td>1</td><td>1</td><td>0</td><td>2</td><td>1/2 = 50%</td><td>2/2 = 100%</td></tr><tr><td>Test</td><td>Central</td><td>2</td><td>0</td><td>0</td><td>2</td><td>0/2 = 0%</td><td>2/2 = 100%</td></tr><tr><td>Test</td><td>Outlying</td><td>1</td><td>1</td><td>0</td><td>2</td><td>1/2 = 50%</td><td>2/2 = 100%</td></tr></tbody></table></div></p>
+<h3>Why a 50-point FPR gap is still highly uncertain</h3>
+<p>A fairness comparison must report <strong>both the rate and its denominator</strong>. Here the Validation FPR is 0/2 in Central and 1/2 in Outlying. That is an observed difference of 0.50, but two truly attended patients per group cannot determine how the rates would behave in a larger population. We can make this limitation numerical rather than merely saying “small samples.”</p>
+<p>For a count of <em>k</em> errors among <em>n</em> truly negative cases, let \(\hat p=k/n\). A Wilson score interval, under a simplifying independent-binomial sampling model, has center and half-width</p>
+<div class="formula">\[\begin{aligned}d&amp;=1+\frac{z^2}{n},\\c&amp;=\frac{\hat p+z^2/(2n)}{d},\\h&amp;=\frac{z}{d}\sqrt{\frac{\hat p(1-\hat p)}{n}+\frac{z^2}{4n^2}}.\end{aligned}\]</div>
+<p>Use \(z=1.96\) for an illustrative 95% interval, \(n=2\) and \(z^2=3.8416\). The shared denominator is \(d=1+3.8416/2=2.9208\). For Central, \(k=0\) gives \(\hat p=0\), \(c=0.9604/2.9208\approx0.328814\) and \(h\approx0.328814\), hence approximately <strong>[0.0000, 0.6576]</strong>. For Outlying, \(k=1\) gives \(\hat p=0.5\), \(c=(0.5+0.9604)/2.9208=0.5\) and \(h\approx0.405471\), hence approximately <strong>[0.0945, 0.9055]</strong>. These intervals are about individual group rates, <em>not</em> an interval for their difference.</p>
+<div class="table-wrap"><table><caption>Validation FPR uncertainty · illustrative Wilson 95% intervals</caption><thead><tr><th scope="col">Audit group</th><th scope="col">FP / all negatives</th><th scope="col">Observed FPR</th><th scope="col">Wilson interval</th></tr></thead><tbody><tr><td>Central</td><td>0 / 2</td><td>0%</td><td>[0.0%, 65.8%]</td></tr><tr><td>Outlying</td><td>1 / 2</td><td>50%</td><td>[9.5%, 90.5%]</td></tr></tbody></table></div>
+<p>The widths of the intervals are the essential result. They do <strong>not</strong> certify fairness or prove discrimination. Our records are constructed, not an independent probability sample from a clinic population; therefore these are teaching calculations under stated assumptions, <strong>not empirical confidence claims about real patients</strong>. Nor does overlap of these two intervals constitute a formal test of the FPR difference. A real audit must assess sampling, label quality, uncertainty, group sizes and possible consequences before deciding whether a disparity warrants action.</p><figure aria-label="Illustrative Wilson intervals, not population evidence" class="plot-svg"><svg aria-label="Illustrative Wilson intervals, not population evidence" role="img" viewbox="0 0 760 355" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#fbfdff" height="355" rx="18" width="760"></rect>
+<text fill="#0b1f3a" font-size="19" font-weight="700" x="25" y="35">Illustrative Wilson intervals, not population evidence</text>
+<rect fill="#f2f7fc" height="205" rx="8" width="440" x="200" y="70"></rect>
+<line stroke="#d4e2ef" x1="200" x2="200" y1="70" y2="275"></line><text fill="#526175" font-size="13" text-anchor="middle" x="200" y="298">0%</text><line stroke="#d4e2ef" x1="310" x2="310" y1="70" y2="275"></line><text fill="#526175" font-size="13" text-anchor="middle" x="310" y="298">25%</text><line stroke="#d4e2ef" x1="420" x2="420" y1="70" y2="275"></line><text fill="#526175" font-size="13" text-anchor="middle" x="420" y="298">50%</text><line stroke="#d4e2ef" x1="530" x2="530" y1="70" y2="275"></line><text fill="#526175" font-size="13" text-anchor="middle" x="530" y="298">75%</text><line stroke="#d4e2ef" x1="640" x2="640" y1="70" y2="275"></line><text fill="#526175" font-size="13" text-anchor="middle" x="640" y="298">100%</text>
+<text fill="#102033" font-size="17" font-weight="600" text-anchor="end" x="160" y="139">Central</text>
+<text fill="#102033" font-size="17" font-weight="600" text-anchor="end" x="160" y="239">Outlying</text>
+<line opacity=".65" stroke="#0e8e80" stroke-linecap="round" stroke-width="9" x1="200.00" x2="489.36" y1="133" y2="133"></line>
+<line stroke="#0e8e80" stroke-width="3" x1="200.00" x2="200.00" y1="118" y2="148"></line>
+<line stroke="#0e8e80" stroke-width="3" x1="489.36" x2="489.36" y1="118" y2="148"></line>
+<circle cx="200" cy="133" fill="#0e8e80" r="10" stroke="white" stroke-width="2"></circle>
+<line opacity=".62" stroke="#7c3aed" stroke-linecap="round" stroke-width="9" x1="241.59" x2="598.41" y1="233" y2="233"></line>
+<line stroke="#7c3aed" stroke-width="3" x1="241.59" x2="241.59" y1="218" y2="248"></line>
+<line stroke="#7c3aed" stroke-width="3" x1="598.41" x2="598.41" y1="218" y2="248"></line>
+<circle cx="420" cy="233" fill="#7c3aed" r="10" stroke="white" stroke-width="2"></circle>
+<text fill="#0b6a60" font-size="13" x="208" y="111">0/2 = 0% observed</text>
+<text fill="#6330b4" font-size="13" text-anchor="middle" x="420" y="211">1/2 = 50% observed</text>
+<text fill="#334155" font-size="16" text-anchor="middle" x="420" y="326">False positive rate (FPR)</text>
+</svg><figcaption>Dots are observed FPRs; thick segments are illustrative 95% Wilson intervals for n=2 in each group, not an interval for the group gap.</figcaption></figure></section>
+<section class="guide-section teal" id="section-18"><h2>18. Sampling bias can reverse a seemingly stable average</h2>
+<p>Our Training table contains six Central and six Outlying appointments, so each group contributes 50%. Imagine, separately, that the intended future clinic network has <strong>80% Central and 20% Outlying</strong> appointments. This is a hypothetical planning scenario, not a fact estimated from our small dataset. An overall error rate computed on a 50/50 sample may fail to describe that deployment mixture.</p>
+<p><figure aria-label="Train contains 50% Central and 50% Outlying; the 80/20 deployment mix is a hypothetical scenario." class="plot-svg"><svg aria-label="Sampling group proportions versus intended deployment" role="img" viewbox="0 0 760 290" xmlns="http://www.w3.org/2000/svg"><text fill="#1d3a5b" font-size="16" font-weight="500" text-anchor="start" x="75" y="64">Training</text><rect fill="#3178b9" height="65" rx="2" stroke="#3178b9" width="150.0" x="75" y="92"></rect><rect fill="#8c69ba" height="65" rx="2" stroke="#8c69ba" width="150.0" x="225.0" y="92"></rect><text fill="#ffffff" font-size="16" font-weight="500" text-anchor="middle" x="150.0" y="132">50%</text><text fill="#ffffff" font-size="16" font-weight="500" text-anchor="middle" x="300.0" y="132">50%</text><text fill="#1d3a5b" font-size="16" font-weight="500" text-anchor="start" x="435" y="64">Deployment scenario</text><rect fill="#3178b9" height="65" rx="2" stroke="#3178b9" width="240.0" x="435" y="92"></rect><rect fill="#8c69ba" height="65" rx="2" stroke="#8c69ba" width="60.0" x="675.0" y="92"></rect><text fill="#ffffff" font-size="16" font-weight="500" text-anchor="middle" x="555.0" y="132">80%</text><text fill="#ffffff" font-size="16" font-weight="500" text-anchor="middle" x="705.0" y="132">20%</text><text fill="#233a54" font-size="14" font-weight="500" text-anchor="middle" x="380" y="220">Blue: Central · Purple: Outlying</text><text fill="#233a54" font-size="13" font-weight="500" text-anchor="middle" x="381" y="251">Deployment mix is hypothetical, not inferred from the dataset</text></svg><figcaption>Train contains 50% Central and 50% Outlying; the 80/20 deployment mix is a hypothetical scenario.</figcaption></figure></p>
+<p>If we use the observed Validation error rates merely as an arithmetic illustration, Central has \(0/4=0\) mistakes and Outlying has \(1/4=0.25\). A 50/50 mixture gives \(0.5(0)+0.5(0.25)=0.125\), matching the original one error in eight. Under the hypothetical 80/20 deployment mixture, a <strong>standardized mixture calculation</strong> would give \(0.8(0)+0.2(0.25)=0.05\), or 5%. This is not a measured future error rate: it assumes group-conditional errors remain unchanged and ignores sampling uncertainty.</p>
+<p>The broader lesson is that <strong>selection mechanisms matter</strong>. Historical records may overrepresent patients who already have transportation, reliable internet, or easy scheduling access. Missing people cannot be recovered merely by reweighting observed cases if their outcomes and support needs differ in unknown ways. A serious sampling-bias audit compares eligibility, inclusion, exclusion and data quality across groups rather than treating one weighted average as a guarantee.</p>
+</section>
+<section class="guide-section purple" id="section-19"><h2>19. Privacy is part of the mathematical data contract</h2>
+<p>A reproducible experiment does <strong>not</strong> require making patient-level records public. Our example uses only invented IDs and invented appointments. A real healthcare workflow would need a clear lawful purpose, minimum necessary features, retention rules, access controls, encryption where appropriate, disclosure review, and legal/privacy oversight. Public reproducibility may be achieved with synthetic samples, code, schemas and aggregate verification, while confidential data remain protected.</p>
+<p>Avoid assuming that removing a name makes data anonymous. Travel time, clinic, appointment timestamp and unusual histories can sometimes permit reidentification when combined with external information. Group-level reporting also needs care: publishing a table of a subgroup with only two people may disclose information even without direct names. Differential privacy or secure aggregation may be relevant in some settings, but these tools need their own assumptions and privacy budgets; they are not magic switches.</p>
+<p>For a privacy-aware evaluation record, distinguish <strong>model features</strong> (needed for inference), <strong>audit attributes</strong> (access-controlled for fairness checks), <strong>outcomes</strong> (available after follow-up), and <strong>identifiers</strong> (restricted join keys rather than predictors). An access log should make clear who can see raw data, fitted artifacts and group-level results. None of this demonstrates compliance with a particular regulation without a contextual legal and organizational assessment.</p>
+<p><strong>Ethical distinction:</strong> a low observed prediction error does not by itself justify contacting or profiling a patient. The action must be appropriate, transparent, reversible where possible and subject to human oversight.</p>
+</section>
+<section class="guide-section amber" id="section-20"><h2>20. Reproducibility means tracking more than a Random Seed</h2>
+<p>A Random Seed stabilizes certain random operations, but it does not preserve the meaning of a dataset. Complete reproducibility also requires <strong>which exact rows</strong>, <strong>which labels and timestamps</strong>, <strong>which preprocessing parameters</strong>, <strong>which package versions</strong>, <strong>which threshold</strong>, and <strong>which evaluation convention</strong> were used. Our example uses <code>random_state=7</code>, though the deterministic LBFGS optimizer may not change with the seed for these data; the seed is not a certificate of identical results on every future software environment.</p>
+<p>An experiment manifest can record: a source-data fingerprint, Training/Validation/Test selection rules, code revision, Python and library versions, schema, categorical vocabulary, imputation median, scaling mean and variance, classifier hyperparameters, selected threshold and a table of evaluation metrics. If any component changes, the run should receive a new identity. This makes it possible to compare versions without silently mixing different definitions of a positive case.</p>
+<p>A <strong>SHA-256 hash</strong> creates a fixed-length fingerprint of a specific sequence of bytes. Recomputing the hash detects whether those bytes changed, but it does not prove that the records are correct, representative or legally usable. For example, changing a timestamp format while keeping the same meaning changes the bytes and therefore the hash. Canonical serialization conventions should be documented.</p>
+<p><figure aria-label="Reproducible release requires data, code, dependencies, fitted Pipeline, evaluation evidence and oversight." class="plot-svg"><svg aria-label="Model reproducibility manifest and governance checklist" role="img" viewbox="0 0 760 290" xmlns="http://www.w3.org/2000/svg"><rect fill="#eaf2ff" height="88" rx="10" stroke="#bcd0e8" width="139" x="12" y="100"></rect><text fill="#526175" font-size="13" font-weight="500" text-anchor="middle" x="81" y="131">1</text><text fill="#233a54" font-size="12" font-weight="500" text-anchor="middle" x="81" y="158">Data snapshot</text><path d="M155 145 H162" stroke="#426b91" stroke-width="2"></path><rect fill="#effaf7" height="88" rx="10" stroke="#bcd0e8" width="139" x="163" y="100"></rect><text fill="#526175" font-size="13" font-weight="500" text-anchor="middle" x="232" y="131">2</text><text fill="#233a54" font-size="12" font-weight="500" text-anchor="middle" x="232" y="158">Code + versions</text><path d="M306 145 H313" stroke="#426b91" stroke-width="2"></path><rect fill="#f6f1fd" height="88" rx="10" stroke="#bcd0e8" width="139" x="314" y="100"></rect><text fill="#526175" font-size="13" font-weight="500" text-anchor="middle" x="383" y="131">3</text><text fill="#233a54" font-size="12" font-weight="500" text-anchor="middle" x="383" y="158">Fitted Pipeline</text><path d="M457 145 H464" stroke="#426b91" stroke-width="2"></path><rect fill="#fff8e8" height="88" rx="10" stroke="#bcd0e8" width="139" x="465" y="100"></rect><text fill="#526175" font-size="13" font-weight="500" text-anchor="middle" x="534" y="131">4</text><text fill="#233a54" font-size="12" font-weight="500" text-anchor="middle" x="534" y="158">Metrics by group</text><path d="M608 145 H615" stroke="#426b91" stroke-width="2"></path><rect fill="#eaf2ff" height="88" rx="10" stroke="#bcd0e8" width="139" x="616" y="100"></rect><text fill="#526175" font-size="13" font-weight="500" text-anchor="middle" x="685" y="131">5</text><text fill="#233a54" font-size="12" font-weight="500" text-anchor="middle" x="685" y="158">Review + approval</text><text fill="#233a54" font-size="15" font-weight="500" text-anchor="middle" x="380" y="53">A model file alone is not a reproducible decision system</text><text fill="#233a54" font-size="13" font-weight="500" text-anchor="middle" x="380" y="240">Log results, access, limitations and ownership before release</text></svg><figcaption>Reproducible release requires data, code, dependencies, fitted Pipeline, evaluation evidence and oversight.</figcaption></figure></p>
+<p>This discipline connects directly to scientific inference: if we cannot establish which data generated a published metric, we cannot know whether the metric changed because of the model, the population, the threshold or a software dependency.</p>
+</section>
+<section class="guide-section blue" id="section-21"><h2>21. Data versions, model versions and experiment tracking</h2>
+<p>Data versioning and model versioning solve related but different problems. A <strong>data snapshot</strong> specifies the input records and schema at a reproducible point in time. A <strong>model artifact</strong> contains fitted preprocessing plus fitted predictor. An <strong>experiment run</strong> ties a particular data snapshot to code, configuration, outputs, diagnostics and a decision. One data snapshot can generate several model candidates; one model might later be evaluated on several untouched cohorts.</p>
+<p>Consider two illustrative runs: Run A uses Training median 55, travel scale 26.2202 and threshold 0.50; Run B changes the training source and learns median 60. Even if both are called <code>model.pkl</code>, they are not the same statistical predictor. A file with the latest timestamp does not replace a clear experiment identifier and immutable manifest. Reproducibility needs content- or version-addressed artifacts, not informal labels such as <code>final_v3_reallyfinal</code>.</p>
+<p>Tracking tools such as MLflow may store parameters, metrics and artifacts, but a tool does not itself ensure sound experimental design. The investigator must document population, sampling, temporal splitting, model search and what informed each choice. When recording protected data, restrict logging to permitted metadata; copying raw health records into an experiment dashboard can create another privacy risk.</p>
+<p>Before release, establish who owns the model, who can authorize replacement, how rollback works, what new outcomes trigger review and how the next evaluation remains independent. Those responsibilities are part of a reliable learning system, not optional paperwork.</p>
+</section>
+<section class="guide-section teal" id="section-22"><h2>22. A second reproducible lab: audit groups and record a manifest</h2>
+<p>The second program is independently executable. It rebuilds the synthetic dataset and fits the same Pipeline from scratch. It then applies the <strong>previously selected</strong> threshold 0.50 to Validation and Test, calculates group-level confusion counts and prints a manifest containing a SHA-256 digest and the essential training configuration. Both code examples are self-contained so that they can be pasted into separate notebook cells without hidden dependencies between them.</p>
+<p><pre class="code-sample"># Synthetic appointments; do not use to make clinical decisions.
+import numpy as np
+import pandas as pd
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, brier_score_loss
+
+rows = [
+    ('T01', 'Train', 'Central', 10, 'SMS', 0, 0),
+    ('T02', 'Train', 'Central', 20, 'Call', 0, 0),
+    ('T03', 'Train', 'Central', 30, 'SMS', 1, 1),
+    ('T04', 'Train', 'Central', 40, 'Call', 0, 0),
+    ('T05', 'Train', 'Central', 50, 'SMS', 0, 0),
+    ('T06', 'Train', 'Central', 60, 'Call', 1, 1),
+    ('T07', 'Train', 'Outlying', 70, 'SMS', 0, 0),
+    ('T08', 'Train', 'Outlying', 80, 'Call', 1, 1),
+    ('T09', 'Train', 'Outlying', 90, 'SMS', 1, 1),
+    ('T10', 'Train', 'Outlying', 100, 'Call', 1, 1),
+    ('T11', 'Train', 'Outlying', None, 'SMS', 0, 0),
+    ('T12', 'Train', 'Outlying', None, 'Call', 1, 1),
+    ('V01', 'Validation', 'Central', 15, 'SMS', 0, 0),
+    ('V02', 'Validation', 'Central', 25, 'Call', 1, 1),
+    ('V03', 'Validation', 'Central', 45, 'SMS', 0, 0),
+    ('V04', 'Validation', 'Central', 65, 'Call', 1, 1),
+    ('V05', 'Validation', 'Outlying', 55, 'SMS', 0, 0),
+    ('V06', 'Validation', 'Outlying', 75, 'Call', 1, 1),
+    ('V07', 'Validation', 'Outlying', 85, 'SMS', 1, 0),
+    ('V08', 'Validation', 'Outlying', 95, 'Call', 0, 1),
+    ('E01', 'Test', 'Central', 18, 'SMS', 0, 0),
+    ('E02', 'Test', 'Central', 28, 'Call', 1, 1),
+    ('E03', 'Test', 'Central', 48, 'SMS', 0, 0),
+    ('E04', 'Test', 'Central', 58, 'Call', 1, 1),
+    ('E05', 'Test', 'Outlying', 52, 'SMS', 0, 0),
+    ('E06', 'Test', 'Outlying', 78, 'Call', 1, 1),
+    ('E07', 'Test', 'Outlying', 88, 'SMS', 1, 1),
+    ('E08', 'Test', 'Outlying', 98, 'Call', 0, 0),
+]
+df = pd.DataFrame(rows, columns=["id","split","group","travel_min","reminder","prior_missed","missed"])
+train = df[df.split == "Train"].copy()
+valid = df[df.split == "Validation"].copy()
+test = df[df.split == "Test"].copy()
+features = ["travel_min","reminder","prior_missed"]
+prep = ColumnTransformer([
+    ("travel", Pipeline([("impute", SimpleImputer(strategy="median")), ("scale", StandardScaler())]), ["travel_min"]),
+    ("reminder", OneHotEncoder(handle_unknown="ignore", sparse_output=False), ["reminder"]),
+    ("prior", "passthrough", ["prior_missed"]),
+])
+clf = Pipeline([("prep", prep), ("model", LogisticRegression(C=1.0, solver="lbfgs", max_iter=2000, random_state=7))])
+clf.fit(train[features], train.missed)
+
+from sklearn.metrics import accuracy_score, precision_score, recall_score
+import hashlib, json, sklearn
+threshold=0.50  # Chosen on Validation, not on Test.
+for set_name,part in [("Validation",valid),("Test",test)]:
+    probs=clf.predict_proba(part[features])[:,1]
+    pred=(probs&gt;=threshold).astype(int)
+    print("\n",set_name,"accuracy",accuracy_score(part.missed,pred),"precision",precision_score(part.missed,pred),"recall",recall_score(part.missed,pred))
+    for group in ["Central","Outlying"]:
+        mask=(part.group==group).to_numpy()
+        tn,fp,fn,tp=confusion_matrix(part.missed.to_numpy()[mask],pred[mask],labels=[0,1]).ravel()
+        fpr=fp/(fp+tn) if fp+tn else float("nan")
+        tpr=tp/(tp+fn) if tp+fn else float("nan")
+        print(group,"TN FP FN TP",tn,fp,fn,tp,"FPR",fpr,"TPR",tpr)
+    assert int((pred!=part.missed.to_numpy()).sum())==1
+# Fix record format before hashing; a hash proves equality of these bytes, not data quality.
+record=df.to_csv(index=False,na_rep="NA",float_format="%.3f")
+manifest={"dataset_sha256":hashlib.sha256(record.encode()).hexdigest(),
+          "python_library_sklearn":sklearn.__version__,"seed":7,
+          "columns":features,"threshold":threshold,"positive_label":"missed=1"}
+print("\nManifest",json.dumps(manifest,indent=2))
+
+# Additional reproducibility checks: uncertainty and input-swap counterexample.
+# Wilson intervals are a mathematical illustration, not patient-level inference.
+from math import sqrt
+def wilson_illustration(k, n, z=1.96):
+    p = k / n
+    denominator = 1 + z*z/n
+    center = (p + z*z/(2*n)) / denominator
+    radius = z / denominator * sqrt(p*(1-p)/n + z*z/(4*n*n))
+    return center-radius, center+radius
+central_bounds = wilson_illustration(0, 2)
+outlying_bounds = wilson_illustration(1, 2)
+print("Illustrative Wilson FPR intervals", central_bounds, outlying_bounds)
+assert np.allclose(central_bounds, [0, 0.6576280471103807], atol=1e-12)
+assert np.allclose(outlying_bounds, [0.09452865480086614, 0.9054713451991339], atol=1e-12)
+
+# Historical V02's Call label is observed; the SMS label is a hypothetical input.
+v02 = valid.loc[valid.id == "V02", features].copy()
+p_call = clf.predict_proba(v02)[:, 1][0]
+v02_sms = v02.copy()
+v02_sms.loc[:, "reminder"] = "SMS"
+p_sms = clf.predict_proba(v02_sms)[:, 1][0]
+print("V02 input swap, not causal effect", round(p_call, 6), round(p_sms, 6), round(p_sms-p_call, 6))
+assert np.allclose([p_call, p_sms], [0.57351895, 0.44539885], atol=1e-8)
+assert np.isclose(p_sms-p_call, -0.1281201, atol=1e-7)
+
+# Frozen encoder distinguishes data-contract validity from numerical inference.
+v02_unknown = v02.copy()
+v02_unknown.loc[:, "reminder"] = "Email"
+encoded = clf.named_steps["prep"].transform(v02_unknown)[0]
+assert np.allclose(encoded[1:3], [0, 0])
+print("Unseen category encoded [0, 0]; governance review required")
+</pre></p>
+<p>Read the group results carefully. For both illustrative evaluation sets, Central has \((TN,FP,FN,TP)=(2,0,0,2)\); Outlying has \((1,1,0,2)\). The FPR denominator is \(FP+TN=2\) per group; the TPR denominator is \(TP+FN=2\). Zero observed False Negatives does not imply zero future False Negatives. Likewise, the printed hash verifies byte identity of the constructed CSV representation but provides no independent evidence about the origin or quality of medical data.</p>
+<p>Try an intentional change: replace V07's observed label from 0 to 1 <strong>only in a separate copy of the educational dataset</strong>, without refitting the model. What happens? The same five flags now yield \(TP=5,FP=0,FN=0,TN=3\) on Validation, but this edited dataset no longer represents the original canonical experiment. A trustworthy analyst would assign a new data version and would never quietly report the revised metrics under the original experiment ID.</p>
+</section>
+<section class="guide-section purple" id="section-23"><h2>23. Monitor drift without inventing certainty</h2>
+<p>After deployment, even a correctly evaluated model may meet different data. <strong>Data Drift</strong> means the input distribution changes; <strong>Concept Drift</strong> concerns changes in the relation between inputs and outcomes. These are not synonymous. A clinic could change its reminder scheduling software without changing the underlying missed-appointment behavior; this may change recorded Reminder categories. Conversely, transportation disruptions might alter the missed-appointment probability at the same reported travel time.</p>
+<p>Use the travel-time Feature to practice descriptive distribution monitoring. For the twelve Training rows, after missing values are imputed to 55, bins \([0,30)\), \([30,60)\), \([60,90)\) and \([90,\infty)\) contain <strong>2, 5, 3, 2</strong> records. Divide by 12 to obtain approximately <strong>16.67%, 41.67%, 25.00%, 16.67%</strong>. For eight Test rows the same bins contain <strong>2, 3, 2, 1</strong>, giving <strong>25%, 37.5%, 25%, 12.5%</strong>. Both use the <strong>same fixed bin boundaries</strong>; changing bins between cohorts would defeat comparison.</p>
+<p><figure aria-label="Descriptive bin shares for synthetic travel times; comparing distributions is not itself evidence of model failure." class="plot-svg"><svg aria-label="Distribution comparison training and test travel times" role="img" viewbox="0 0 760 290" xmlns="http://www.w3.org/2000/svg"><rect fill="#3178b9" height="45.00090000000001" rx="2" stroke="#3178b9" width="42" x="95" y="170.9991"></rect><rect fill="#15957e" height="67.5" rx="2" stroke="#15957e" width="42" x="143" y="148.5"></rect><text fill="#233a54" font-size="13" font-weight="500" text-anchor="middle" x="140" y="245">&lt;30</text><rect fill="#3178b9" height="112.50090000000002" rx="2" stroke="#3178b9" width="42" x="250" y="103.49909999999998"></rect><rect fill="#15957e" height="101.25" rx="2" stroke="#15957e" width="42" x="298" y="114.75"></rect><text fill="#233a54" font-size="13" font-weight="500" text-anchor="middle" x="295" y="245">30–59</text><rect fill="#3178b9" height="67.5" rx="2" stroke="#3178b9" width="42" x="405" y="148.5"></rect><rect fill="#15957e" height="67.5" rx="2" stroke="#15957e" width="42" x="453" y="148.5"></rect><text fill="#233a54" font-size="13" font-weight="500" text-anchor="middle" x="450" y="245">60–89</text><rect fill="#3178b9" height="45.00090000000001" rx="2" stroke="#3178b9" width="42" x="560" y="170.9991"></rect><rect fill="#15957e" height="33.75" rx="2" stroke="#15957e" width="42" x="608" y="182.25"></rect><text fill="#233a54" font-size="13" font-weight="500" text-anchor="middle" x="605" y="245">≥90</text><text fill="#233a54" font-size="14" font-weight="500" text-anchor="middle" x="379" y="42">Travel minutes: training vs test (missing train values imputed at 55)</text><rect fill="#3178b9" height="13" rx="1" stroke="#3178b9" width="16" x="260" y="260"></rect><text fill="#193b61" font-size="12" font-weight="500" text-anchor="start" x="290" y="271">Training</text><rect fill="#15957e" height="13" rx="1" stroke="#15957e" width="16" x="370" y="260"></rect><text fill="#193b61" font-size="12" font-weight="500" text-anchor="start" x="400" y="271">Test</text></svg><figcaption>Descriptive bin shares for synthetic travel times; comparing distributions is not itself evidence of model failure.</figcaption></figure></p>
+<p>Does this prove Drift? Not in a meaningful population sense: these sample sizes are extremely small, and Test was constructed for teaching. The monitoring protocol would also track missingness, novel categories, unexpected prediction ranges, delayed Target availability, Brier/Precision/Recall once outcomes mature, and subgroup errors with appropriate privacy thresholds. Alerts should trigger investigation, not automatic replacement of a model based on a single noisy chart.</p>
+</section>
+<section class="guide-section amber" id="section-24"><h2>24. Why calibration and predicted risk require additional evidence</h2>
+<p>A model can rank appointments correctly and still assign unreliable probability values. <strong>Discrimination</strong> is about separating higher from lower risk; <strong>Calibration</strong> means that among many cases assigned score near \(p\), roughly a proportion \(p\) should have positive outcomes, assuming a stable evaluation setting. Good discrimination does not guarantee good calibration. In applications with decision costs, this distinction matters because the chosen threshold is often interpreted as a risk level.</p>
+<p>Our Test Brier Score of about 0.1070 summarizes squared probability errors, but eight cases cannot establish fine-grained calibration. Consider a hypothetical large bin with 100 independent appointments, all scored near 0.70: if 70 are missed, that bin is consistent with calibration around 0.70; if only 30 are missed, the scores substantially overstate frequency. A bin with only two appointments cannot give comparably precise evidence. Brier blends calibration and refinement; it is not a standalone calibration guarantee.</p>
+<p>Probability calibration techniques such as Platt scaling or Isotonic Regression must themselves be fitted using an appropriate <strong>separate calibration set or cross-validated predictions</strong>. Fitting calibration on Test and then reporting its Test Brier score as independently validated repeats the very leakage error the Pipeline was designed to avoid. If calibration is introduced, its fitted mapping becomes another versioned stage of the prediction system.</p>
+<p>Finally, estimated missed-appointment risk is <strong>not</strong> the causal effect of a reminder. To conclude that contact reduces missed appointments, one needs an appropriate intervention study, ideally with randomized assignment where practical and ethical, and proper safeguards against unequal treatment.</p>
+<h3>A model-score change is not a reminder's treatment effect</h3>
+<p>To connect the earlier warning with an actual calculation, take <strong>V02</strong>, whose booking-time travel estimate is 25 minutes and whose prior-missed indicator is 1. Keep those two values unchanged, and change only the <em>input</em> reminder label. The fitted Pipeline gives these synthetic scores:</p>
+<div class="table-wrap"><table><caption>Same V02 features, different supplied reminder labels (not a randomized experiment)</caption><thead><tr><th scope="col">Input reminder</th><th scope="col">Encoded (Call, SMS)</th><th scope="col">Model score for missed=1</th></tr></thead><tbody><tr><td>Call (observed V02)</td><td>(1, 0)</td><td>0.573519</td></tr><tr><td>SMS (hypothetical input)</td><td>(0, 1)</td><td>0.445399</td></tr></tbody></table></div>
+<p>The arithmetic change is \(0.445399-0.573519=-0.128120\), or about <strong>−12.812 percentage points in the model score</strong>. It is tempting—but wrong—to claim that sending SMS instead of Call would reduce this patient's missed-appointment probability by that amount. The Training data are observational, reminder assignment may depend on circumstances not included in the features, and the historical outcome for V02 was observed only under the actual reminder. We do not know the counterfactual outcome under SMS. The Pipeline learns predictive associations, not a randomized intervention effect.</p>
+<p><strong>Decision-time contract:</strong> the reminder label is a permissible predictive input only when its value has actually been chosen and logged <em>before</em> scoring. If the clinic wants the model itself to choose Call versus SMS, the problem changes into a policy/intervention question: the required evidence cannot be obtained by naively swapping labels in the existing classifier. If reminder choice occurs <em>after</em> scoring, it must not be used as an input for that prediction. This is a temporal and causal validity constraint, independent of the numerical accuracy of the code.</p><figure aria-label="Same record, different model inputs" class="plot-svg"><svg aria-label="Same record, different model inputs" role="img" viewbox="0 0 760 300" xmlns="http://www.w3.org/2000/svg"><rect fill="#fbfdff" height="300" rx="18" width="760"></rect><text fill="#0b1f3a" font-size="20" font-weight="700" x="25" y="37">Same record, different model inputs</text><text fill="#526175" font-size="15" x="25" y="75">V02 · travel=25 min · prior_missed=1</text>
+<text fill="#102033" font-size="17" font-weight="700" x="105" y="129">Call</text><rect fill="#eaf2fb" height="36" rx="5" width="440" x="200" y="105"></rect><rect fill="#2563eb" height="36" rx="5" width="252.35" x="200" y="105"></rect><text fill="#0b1f3a" font-size="17" font-weight="700" x="465" y="131">0.573519</text>
+<text fill="#102033" font-size="17" font-weight="700" x="105" y="210">SMS</text><rect fill="#eaf2fb" height="36" rx="5" width="440" x="200" y="184"></rect><rect fill="#0e8e80" height="36" rx="5" width="195.98" x="200" y="184"></rect><text fill="#0b1f3a" font-size="17" font-weight="700" x="405" y="210">0.445399</text>
+<text fill="#526175" font-size="15" text-anchor="middle" x="420" y="266">0–1 · predicted missed-class score</text></svg><figcaption>Model scores are predictive associations; this is not the causal effect of changing a reminder.</figcaption></figure></section>
+<section class="guide-section blue" id="section-25"><h2>25. Production guardrails and human oversight</h2>
+<p>Deployment should reproduce the entire validated transformation, but that alone does not make it appropriate for real users. A production service needs input schema checks, allowed category and range policies, inference logs with restricted access, model and data version identifiers, timeout/failure handling, and a documented human escalation path. In healthcare operations, an error should not automatically deny access to appointments or label an individual as irresponsible.</p>
+<p>Consider an unseen travel estimate of 200 minutes: the mathematically valid standardized value is \((200-55)/26.2202\approx5.53\), far beyond the ordinary range of the synthetic Training data. Even if the Pipeline returns a numeric score, the system should flag that extrapolation. Similarly, an unseen Email reminder receives <code>[0,0]</code> from the encoder but may require manual review or a new category policy. A successful API response is <strong>not evidence that the estimate is meaningful</strong>.</p>
+<p>A documented release could use shadow evaluation first: predictions are logged for analysis but do not drive actions, while outcomes mature naturally and privacy safeguards remain in place. Rollout can then be gradual, with an approved intervention policy, clear complaint/appeal pathways, and rollback conditions. Monitoring must distinguish <strong>technical availability</strong>, <strong>predictive performance</strong>, <strong>fairness</strong>, <strong>patient experience</strong> and <strong>intervention effect</strong>; they are not interchangeable metrics.</p>
+<p>This guide does not teach clinical triage or treatment recommendations. Its synthetic classification task is a way to demonstrate engineering and ethical reasoning. Any actual healthcare application requires independent governance, domain expertise and contextual evaluation.</p>
+</section>
+<section class="guide-section teal" id="section-26"><h2>26. Common mistakes: diagnose the mechanism and correct it</h2>
+<table>
+<thead>
+<tr>
+<th>Mistake</th>
+<th>Why it fails</th>
+<th>Better procedure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fit imputation on all 28 rows</td>
+<td>Future distribution influences Training</td>
+<td>Fit only on 12 Training rows</td>
+</tr>
+<tr>
+<td>Standardize Test separately</td>
+<td>A new coordinate system changes the model input</td>
+<td>Reuse fitted Training mean and scale</td>
+</tr>
+<tr>
+<td>Encode categories separately by period</td>
+<td>Feature columns may differ or reorder</td>
+<td>Persist one fitted OneHotEncoder</td>
+</tr>
+<tr>
+<td>Use actual journey time</td>
+<td>It is unavailable at booking</td>
+<td>Use booking-time estimate with timestamp</td>
+</tr>
+<tr>
+<td>Treat a missing trip as 0 minutes</td>
+<td>Confuses absence of data with a measured quantity</td>
+<td>Apply documented Training median</td>
+</tr>
+<tr>
+<td>Regard a Score as a confirmed probability</td>
+<td>Calibration may be poor</td>
+<td>Use independent calibration evaluation</td>
+</tr>
+<tr>
+<td>Choose threshold from Test</td>
+<td>Test becomes selection data</td>
+<td>Select on Validation and freeze</td>
+</tr>
+<tr>
+<td>Optimize Accuracy alone</td>
+<td>Missed appointments and false alerts have distinct costs</td>
+<td>Compare appropriate metrics and utility</td>
+</tr>
+<tr>
+<td>Hide group attributes and skip audit</td>
+<td>Proxy Features and unequal errors may remain</td>
+<td>Audit controlled group metrics responsibly</td>
+</tr>
+<tr>
+<td>Claim significance from two negatives</td>
+<td>One decision changes FPR by 50 points</td>
+<td>Increase evidence and report uncertainty</td>
+</tr>
+<tr>
+<td>Treat model explanation as causation</td>
+<td>Predictors need not be interventions</td>
+<td>Separate prediction from causal analysis</td>
+</tr>
+<tr>
+<td>Believe SHA-256 proves data quality</td>
+<td>Hash checks bytes, not correctness or licensing</td>
+<td>Validate sources, schema and legal basis</td>
+</tr>
+<tr>
+<td>Publish patient-level logs</td>
+<td>Reidentification and privacy risks</td>
+<td>Access-controlled minimum-data logs</td>
+</tr>
+<tr>
+<td>Replace a model silently</td>
+<td>Results become impossible to reproduce</td>
+<td>Version data, code, Pipeline and threshold</td>
+</tr>
+<tr>
+<td>Interpret distribution shift as automatic failure</td>
+<td>Inputs may shift without changing outcome relation</td>
+<td>Investigate with mature outcomes</td>
+</tr>
+<tr>
+<td>Assume a working Pipeline means safe deployment</td>
+<td>Scientific and ethical conditions can still fail</td>
+<td>Add governance, monitoring and review</td>
+</tr>
+</tbody>
+</table>
+<p>These errors have different remedies. For example, a <em>reordered feature matrix</em> is a software-contract defect, while a <em>repeatedly inspected Test cohort</em> is a scientific evaluation defect. Fixing the first does not repair the second. Likewise, better predictive metrics do not establish that intervention policies are fair or effective.</p>
+<p><strong>Error diagnosis exercise:</strong> if an analyst reports that the test-set mean was used to standardize Test but the final MSE is low, why is the procedure still wrong? Because the evaluated predictor no longer matches the frozen Train-fitted transformation; favorable performance cannot retroactively legitimize use of forbidden information.</p>
+</section>
+<section class="guide-section purple" id="section-27"><h2>27. Exercises 1–8: reproduce the mathematical and modeling steps</h2>
+<p><strong>How to study this section:</strong> attempt each computation or explanation before expanding the solution. The solutions show the reasoning as well as the answer. These first eight activities revisit data transformations, learning, thresholding and evaluation under slightly changed conditions; they are not just definitions to memorize.</p>
+<p><details class="exercise"><summary>1. Median from Training — From the ten observed Training travel times, compute the median. Why do T11 and T12 not determine it?</summary><div class="answer"><p>Sorted observed times are 10,20,30,40,50,60,70,80,90,100. The middle positions are 50 and 60, so median=(50+60)/2=55 minutes. Missing observations are excluded when estimating the median and only then replaced by 55.</p></div></details><details class="exercise"><summary>2. Population variance — Explain why the fitted variance is 687.5 and not 750.</summary><div class="answer"><p>After imputation the sum of squared deviations from mean 55 is 8250 min², and there are 12 records. StandardScaler divides by 12: 8250/12=687.5 min². A sample variance would instead divide by n−1=11, giving 750 min²; that is not this transformer’s convention.</p></div></details><details class="exercise"><summary>3. Transform a new row — Encode travel=55, reminder=SMS, prior_missed=0 using the saved Pipeline.</summary><div class="answer"><p>Imputation is not needed. Travel z=(55−55)/26.2202=0. Learned category order [Call,SMS] makes SMS=[0,1], and prior_missed=0 passes through. Result [0,0,1,0], a 1×4 row.</p></div></details><details class="exercise"><summary>4. Unknown reminder — What does handle_unknown="ignore" do with an Email reminder and why is that not proof of model validity?</summary><div class="answer"><p>Email is absent from fitted categories, so both [Call,SMS] indicators become [0,0]. The model can calculate a score but has not been trained on Email examples. The application should record the new category and validate its effect.</p></div></details><details class="exercise"><summary>5. Detect Leakage numerically — Show how including one hypothetical 200-minute future journey changes the training mean.</summary><div class="answer"><p>The 12 imputed Training values sum to 660 minutes, mean 55. Adding 200 gives 860 across 13, mean 66.153846. Since the future value altered the preprocessing learned for Training, the fitting procedure contains Data Leakage.</p></div></details><details class="exercise"><summary>6. Logistic update — With x=1, y=1, w=b=0, learning rate 0.2, compute one gradient step and compare losses.</summary><div class="answer"><p>Initially p=0.5 and BCE=0.693147. Both derivatives are −0.5; updated w=b=0.1. New logit=0.2, p=0.549834, BCE=0.598139. The single-example loss falls about 0.095008, without implying a global guarantee for every learning rate.</p></div></details><details class="exercise"><summary>7. Confusion counts — At Validation threshold 0.50, list which rows produce FP and TP and compute Precision.</summary><div class="answer"><p>Positive predictions are V02,V04,V06,V07,V08. V07 is actually attended and is FP. V02,V04,V06,V08 are TP. Precision=4/(4+1)=0.8. The other three attended records are TN, and FN=0.</p></div></details><details class="exercise"><summary>8. Threshold cost — Calculate synthetic Validation cost for threshold 0.65 with FP penalty 1 and FN penalty 5.</summary><div class="answer"><p>Only V04,V06,V07 are flagged. V07 is FP=1; missed cases V02 and V08 are FN=2. Thus cost=1×1+5×2=11 units. This is worse than cost 1 at the two lower tested thresholds.</p></div></details></p>
+<p>A useful self-test is to explain each result aloud without quoting the formula mechanically. In particular, distinguish why StandardScaler's denominator is 12, why an unknown Email category receives [0,0] and why changing the Test threshold after seeing a mistake undermines evaluation. A correct number without the correct reasoning is not the intended learning outcome.</p>
+</section>
+<section class="guide-section amber" id="section-28"><h2>28. Exercises 9–19: fairness, versioning and transfer</h2>
+<p>The final eight activities demand transfer rather than simple repetition: reweight an illustrative future population, distinguish Brier Score from accuracy, diagnose a flawed Test decision, evaluate drift and design a privacy-preserving monitoring response. The last problem joins several new conditions at once, as a real governance review would.</p>
+<p><details class="exercise"><summary>9. False Positive Rates — Compute FPR for Central and Outlying Validation groups and explain why the difference is uncertain.</summary><div class="answer"><p>Central has FP=0 and TN=2, giving FPR=0/2=0. Outlying has FP=1 and TN=1, giving FPR=1/2=0.5. Each denominator is two, so one changed prediction shifts its group rate by 50 percentage points. This is an observed synthetic gap, not population evidence.</p></div></details><details class="exercise"><summary>10. Reweight a population — With group-specific error rates 0 for Central and 0.25 for Outlying, calculate a hypothetical 80/20 mix.</summary><div class="answer"><p>Expected standardized mixture arithmetic: 0.8×0 + 0.2×0.25=0.05. This requires assuming conditional error rates remain stable; it does not estimate future error or correct missing population coverage.</p></div></details><details class="exercise"><summary>11. Test discipline — A colleague changes threshold to 0.65 after seeing E08 is a Test False Positive. Is Test still untouched?</summary><div class="answer"><p>No. Test outcomes have now influenced a modeling choice. The former Test is development information and a new untouched cohort is required for a final claim. Merely renaming the set Test again cannot restore independence.</p></div></details><details class="exercise"><summary>12. Brier Score contribution — Calculate the squared probability error of Validation V01 and identify its units.</summary><div class="answer"><p>V01 has y=0, p=0.123357, contribution=(0.123357−0)²≈0.015217. Both p and y are dimensionless; so is squared error. Averaging the eight contributions gives Brier≈0.143379.</p></div></details><details class="exercise"><summary>13. Drift proportions — Compute share in [30,60) minutes for imputed Training and Test; can this alone prove Concept Drift?</summary><div class="answer"><p>Training contains 30,40,50,55,55: 5/12≈41.67%. Test contains 48,58,52: 3/8=37.5%. These are descriptive changes in input distributions; they do not demonstrate a change in the relationship between inputs and missed outcomes.</p></div></details><details class="exercise"><summary>14. Audit a version change — A second model learns median 60 rather than 55 while keeping the same filename. Can it share the original experiment ID?</summary><div class="answer"><p>No. Data or fitting state changed, hence the predictor changed. Log a new data snapshot, fitted median, scaler state, model artifact, evaluation metrics and version ID, then assess whether the new model qualifies for release.</p></div></details><details class="exercise"><summary>15. Design a privacy policy — Is publishing an appointment-level CSV necessary to make a hospital model reproducible? Name a safer alternative.</summary><div class="answer"><p>No. Publish code, a synthetic compatible dataset, schema, permissible package versions and aggregate checks; retain sensitive records under access control. Consider potential reidentification from combinations of dates, locations and rare histories.</p></div></details><details class="exercise"><summary>16. Final transfer problem — A new reminder method appears, travel distances double, and population mix shifts. Propose an evaluation order without touching the original Test for tuning.</summary><div class="answer"><p>First validate schema and point-in-time definitions; quantify novel categories and travel shift; investigate measurement vs behavior changes. Use new appropriately separated development and calibration data, examine group metrics and privacy constraints, and compare a versioned candidate. Hold out a fresh future evaluation set and document human oversight before release.</p></div></details></p>
+<details class="exercise"><summary>17. Fairness uncertainty — Explain why FPR 0/2 versus 1/2 is not a robust population comparison. Compute the 95% Wilson endpoints using the given formula.</summary><div class="answer"><p>With n=2 and z=1.96, the common denominator is 1+3.8416/2=2.9208. For k=0, center and radius are each approximately 0.328814, giving [0.0000,0.6576]. For k=1, the center is 0.5000 and radius 0.405471, giving [0.0945,0.9055]. The observed FPR gap is 0.50, but these wide group-specific intervals, synthetic selection and tiny denominators prevent claims of population fairness or discrimination. These are not confidence intervals for the gap.</p></div></details><details class="exercise"><summary>18. Input swap versus intervention — V02 scores 0.573519 under Call and 0.445399 under hypothetical SMS. Calculate the difference and explain what remains unknown.</summary><div class="answer"><p>Subtract 0.445399−0.573519=−0.128120, a drop of 12.812 percentage points in the classifier score. It is not the effect of switching the actual reminder, because historical reminder assignment was not randomized and only the Call outcome is observed for V02. A causal treatment study is needed; the classifier can only report conditional predictions under supplied feature values.</p></div></details><details class="exercise"><summary>19. Temporal contract — A clinic moves reminder selection from booking time to after prediction. Can reminder type remain a model feature? Propose a safe alternative.</summary><div class="answer"><p>No. If reminder type is only chosen after scoring, it is unavailable at prediction time and violates the feature-timing contract. Retrain and validate a version excluding that feature, using a new time-respecting split and documented schema. If the goal instead is to choose among reminders, design a distinct ethically reviewed intervention/policy evaluation rather than relying on observational input swaps. Do not refit preprocessing or select thresholds on the original Test set.</p></div></details><p><strong>Student Understanding Test.</strong> Could you (a) explain what each fitted transformation learns, (b) derive a numerical feature and a prediction, (c) reproduce a confusion matrix, (d) justify why a cost policy differs from a scoring model, (e) recognize leakage and sampling bias, and (f) describe what is not established by a tiny fairness table? If any answer remains unclear, trace the exact worked example rather than accepting the displayed solution on authority. Self-review supports learning but is not an empirical test with real students.</p>
+</section>
+<section class="guide-section blue" id="section-29"><h2>29. Glossary: essential language of reliable Machine Learning</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pipeline</td>
+<td>Ordered composition of fitted transformers and an estimator</td>
+</tr>
+<tr>
+<td>ColumnTransformer</td>
+<td>Applies separate processing to distinct feature subsets</td>
+</tr>
+<tr>
+<td>fit</td>
+<td>Learns a transformer's or model's parameters from permitted data</td>
+</tr>
+<tr>
+<td>transform</td>
+<td>Applies stored preprocessing without relearning parameters</td>
+</tr>
+<tr>
+<td>SimpleImputer</td>
+<td>Replaces missing values using a fitted rule</td>
+</tr>
+<tr>
+<td>StandardScaler</td>
+<td>Centers and scales numeric inputs using fitted mean and variance</td>
+</tr>
+<tr>
+<td>OneHotEncoder</td>
+<td>Converts learned categories into indicator columns</td>
+</tr>
+<tr>
+<td>Logistic Regression</td>
+<td>Linear logit mapped by Sigmoid to a binary-class score</td>
+</tr>
+<tr>
+<td>Threshold</td>
+<td>Decision cutoff applied after scoring</td>
+</tr>
+<tr>
+<td>Data Leakage</td>
+<td>Use of information unavailable or disallowed at model-development time</td>
+</tr>
+<tr>
+<td>FPR / TPR</td>
+<td>Error among negatives / detection among positives</td>
+</tr>
+<tr>
+<td>Calibration</td>
+<td>Agreement between estimated scores and observed event frequencies</td>
+</tr>
+<tr>
+<td>Sampling Bias</td>
+<td>Mismatch caused by how observations enter a dataset</td>
+</tr>
+<tr>
+<td>Data Drift</td>
+<td>Change in input distributions over time or populations</td>
+</tr>
+<tr>
+<td>Concept Drift</td>
+<td>Change in predictive relationship between inputs and outcomes</td>
+</tr>
+<tr>
+<td>Experiment Tracking</td>
+<td>Recording configuration, data, metrics and artifacts for each run</td>
+</tr>
+<tr>
+<td>Data Versioning</td>
+<td>Identifying exact source-data snapshots and schemas</td>
+</tr>
+<tr>
+<td>Model Artifact</td>
+<td>Saved fitted predictor, including preprocessing state</td>
+</tr>
+<tr>
+<td>Model Governance</td>
+<td>Roles, reviews, controls and release/rollback decisions</td>
+</tr>
+<tr>
+<td>SHA-256</td>
+<td>Cryptographic fingerprint of byte content; not a proof of truth</td>
+</tr>
+<tr>
+<td>Protected Audit Attribute</td>
+<td>Variable controlled for fairness analysis, not necessarily prediction</td>
+</tr>
+<tr>
+<td>Human Oversight</td>
+<td>Defined people and procedures accountable for high-impact decisions</td>
+</tr>
+</tbody>
+</table>
+<p>The glossary connects terms to concrete operations. For example, <code>fit</code> on the travel imputer learns 55 minutes; <code>transform</code> on a missing future trip applies 55. <code>Pipeline</code> keeps these operations synchronized. <code>Fairness</code> requires a separate question about error distributions and their actual consequences. A reproducible algorithm can still be scientifically invalid or ethically inappropriate; these checks complement rather than replace each other.</p>
+</section>
+<section class="guide-section teal" id="section-30"><h2>30. From reproducible Notebook to a responsible lifecycle</h2>
+<p>Return to the original decision. A clinic wants to help people keep appointments. A complete learning workflow begins by defining a legitimate prediction task and establishing when each feature becomes available. It then separates information in time, estimates preprocessing only on Training, learns model coefficients, selects the threshold on Validation and examines the frozen choice on an untouched Test cohort. Reproducibility captures the entire function, not just the last model file.</p>
+<p>The central calculations now connect: ten observed travel times yield Training median 55; after imputation, mean 55 and variance 687.5 produce T08's standardized coordinate 0.953463; categorical encoding produces the complete row <code>[0.953463,1,0,1]</code>; the Pipeline learns fitted Logistic Regression scores; at threshold 0.50, Validation and Test each show \(TP=4,FP=1,FN=0,TN=3\). The observed subgroup FPR difference is 50 percentage points in tiny synthetic groups, requiring caution rather than a sweeping fairness conclusion.</p>
+<p>The next engineering step is not to deploy merely because Accuracy is 87.5%. It is to confirm feature timing, provenance, permissions, calibration, subgroup harms, operational constraints, governance and monitoring on appropriate real evidence. Then any rollout needs versioned artifacts and explicit human accountability. <strong>Prediction is not intervention; reproducibility is not validity; interpretability is not causality.</strong></p>
+<p>This prepares the final curriculum guide on the full journey <strong>from Notebook to Deployment</strong>, which can integrate research, experimentation, packaging, monitoring and rollback. No actual patient deployment is justified by our deliberately small educational dataset.</p>
+</section></article></main><footer class="guide-footer"><div class="container">© Alfredo Saldana · Data Scientist · Economist · Educator · <a href="/tutorials.html">Learn</a></div></footer><script>document.addEventListener('DOMContentLoaded',()=>{const b=document.querySelector('.menu-btn'),n=document.getElementById('site-nav');if(b&&n)b.addEventListener('click',()=>{let opened=b.getAttribute('aria-expanded')==='true';b.setAttribute('aria-expanded',String(!opened));n.classList.toggle('open',!opened);});});</script></body></html>

@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="description" content="Learn how to distinguish Classification and Regression by the meaning of the target. Complete worked retail and healthcare datasets, model fitting, probabilities, metrics, thresholds, practical pitfalls, and explained exercises."/>
+<title>Classification vs. Regression: Understanding Prediction Problems</title>
+<link rel="stylesheet" href="/assets/css/style.css"/>
+<link rel="alternate" hreflang="es" href="/es/learn/machine-learning/classification-vs-regression-es.html"/>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>
+.guide-hero{padding:56px 0 38px;background:#fff;border-bottom:1px solid var(--line)}.guide-hero h1{font-size:clamp(2.15rem,4.5vw,3.65rem);max-width:980px;line-height:1.14}.guide-hero .lead{max-width:840px}.guide-meta{color:var(--muted);font-size:.88rem}.guide-main{padding:38px 0 80px}.guide-article{width:min(900px,calc(100% - 32px));margin:auto}.guide-section{background:white;border:1px solid var(--line);border-left:5px solid #3178b9;border-radius:0 17px 17px 0;padding:28px 34px;margin:0 0 22px;box-shadow:0 3px 12px rgba(11,31,58,.025)}.guide-section.teal{border-left-color:#15957e}.guide-section.purple{border-left-color:#8c69ba}.guide-section.amber{border-left-color:#d59a32}.guide-section h2{font-size:clamp(1.55rem,3vw,2.1rem);line-height:1.2;margin:0 0 18px}.guide-section h3{font-size:1.27rem;line-height:1.25;margin:26px 0 12px}.guide-section p{font-size:1.035rem;line-height:1.8}.callout{padding:20px 22px;border-left:4px solid #3178b9;background:#eff6ff;border-radius:0 12px 12px 0;margin:22px 0}.callout h3:first-child{margin-top:0}.callout p:last-child{margin-bottom:0}.callout.teal{background:#effaf7;border-color:#15957e}.callout.purple{background:#f6f1fd;border-color:#8c69ba}.callout.amber{background:#fff8e8;border-color:#d59a32}.formula{text-align:center;background:#f6f1fd;border:1px solid #e3d7f3;border-radius:12px;padding:22px 16px;font-size:clamp(1.35rem,3vw,1.85rem);overflow-x:auto;margin:20px 0}.table-wrap{overflow-x:auto;margin:24px 0}table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:500px}caption{text-align:left;font-weight:650;padding-bottom:10px;color:#536276}th,td{padding:12px 14px;text-align:left;border-bottom:1px solid #e1e9f1}th{background:#eaf2ff;color:#0b1f3a}tbody tr:nth-child(even){background:#f8fafc}.diagram{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:27px 0}.diagram div{background:#eaf2ff;border:1px solid #d9e6fa;border-radius:12px;padding:14px 10px;text-align:center;flex:1;min-width:105px;font-size:.82rem;font-weight:700;color:#0b1f3a}.diagram small{font-size:.76rem;font-weight:400}.diagram span{color:#2563eb;font-weight:700}.plot{margin:25px auto;max-width:680px}.plot svg{display:block;width:100%;height:auto;background:#fbfdff;border:1px solid #e5eaf1;border-radius:12px}.plot figcaption{font-size:.83rem;color:#526175;margin-top:10px;line-height:1.5}.steps{padding-left:22px}.steps li{padding:8px 0;line-height:1.75}.cluster-viz{display:flex;align-items:center;gap:12px;justify-content:space-around;padding:22px;background:#f6fafc;border-radius:12px;flex-wrap:wrap}.cluster-viz span{min-width:60px;text-align:center;border:2px solid #15957e;border-radius:22px;background:#dff5ed;padding:9px;font-weight:700}.cluster-viz .last{border-color:#8c69ba;background:#eee5fa}details{border:1px solid #dfe8f0;padding:16px 19px;border-radius:12px;margin:12px 0;background:#fbfdff}summary{font-weight:700;cursor:pointer;line-height:1.6}details p{padding-top:14px;margin:0}.glossary{display:grid;grid-template-columns:1fr 1fr;gap:12px}.glossary div{background:#f8fafc;border:1px solid #e5eaf1;border-radius:12px;padding:14px}.glossary dt{font-weight:700;color:#0b1f3a}.glossary dd{margin:5px 0 0;color:#506178;line-height:1.6}.guide-links{display:flex;gap:15px;flex-wrap:wrap;margin-top:20px}.guide-links a{color:#2563eb;font-weight:700}.guide-footer{background:#071426;color:#c4d2e2;padding:30px 0}.guide-footer a{color:white}.skip{position:absolute;top:-200px}.skip:focus{top:10px;left:10px;z-index:999;background:white;padding:12px}@media(max-width:650px){.guide-section{padding:22px 19px}.glossary{grid-template-columns:1fr}.diagram{gap:6px}.diagram div{min-width:115px}.diagram span{display:none}.guide-hero{padding:36px 0 30px}.guide-main{padding-top:22px}}
+
+.guide-section .table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.guide-section .table-wrap table{width:100%;font-variant-numeric:tabular-nums}.guide-section .formula{line-height:1.7}.guide-section .callout .formula{background:#fff}.guide-section h3{line-height:1.3}.guide-section p+ .formula{margin-top:14px}@media(max-width:650px){.guide-section .formula{font-size:1.05rem;padding:16px 10px}.guide-section .table-wrap th,.guide-section .table-wrap td{padding:10px 12px;white-space:nowrap;font-size:.9rem}}
+
+.guide-section .note-inline{font-size:.88rem;color:#526175}.guide-section .mini-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:22px 0}.mini-grid .tile{background:#f8fafc;border:1px solid #dfe8f0;border-radius:12px;padding:16px}.mini-grid .tile strong{display:block;color:#0b1f3a;margin-bottom:7px}.guide-section .mini-grid p{font-size:.91rem;line-height:1.55;margin:0}.guide-section .math-caption{font-size:.9rem;color:#536276;margin-top:-8px}.guide-section .table-wrap td{vertical-align:top}.guide-section .source-list li{padding:6px 0;line-height:1.7}.guide-section .source-list a{color:#2563eb;text-decoration:underline;text-underline-offset:3px}.guide-section .formula{overflow-wrap:normal}.guide-section svg text{font-family:Inter,Arial,sans-serif}.guide-section .section-intro{font-size:1.12rem;color:#42526a}.guide-section .algorithm{border-top:1px solid #e2eaf3;padding-top:7px;margin-top:20px}.guide-section .algorithm h3{margin-top:12px}.guide-section .algorithm p:last-child{margin-bottom:10px}@media(max-width:650px){.guide-section .mini-grid{grid-template-columns:1fr}.guide-section .formula{overflow-x:auto;white-space:normal}.guide-section .plot{overflow-x:auto}}
+
+.guide-section .inline-math{white-space:normal}.guide-section .plot-svg{margin:22px 0 26px}.guide-section .plot-svg svg{display:block;width:100%;height:auto;border:1px solid #dce6ef;border-radius:12px;background:#fbfdff}.guide-section .plot-svg figcaption{color:#526175;font-size:.88rem;line-height:1.65;margin-top:9px}.guide-section .table-wrap table{min-width:530px}.guide-section .diagram{justify-content:center}.guide-section .diagram div{min-width:120px}.guide-section details p{font-size:1rem;line-height:1.75}.guide-section details summary{color:#0b1f3a}.guide-section h3{scroll-margin-top:90px}.guide-section{scroll-margin-top:90px}.guide-section .formula{max-width:100%;overflow:auto}.guide-section .MathJax{max-width:100%}.guide-section .formula mjx-container[display="true"]{margin:0!important;min-width:max-content}.guide-section .table-wrap{max-width:100%}@media(max-width:650px){.guide-section .plot-svg figcaption{font-size:.82rem}.guide-section .formula{font-size:1.02rem}}
+
+/* Guide charts remain legible on narrow screens: scroll the figure, not the page. */
+@media(max-width:650px){.guide-main{overflow-x:clip}.guide-section .plot-svg{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.guide-section .plot-svg svg{width:660px;max-width:none}.guide-section .plot-svg figcaption{max-width:100%;font-size:.9rem}}
+</style>
+</head>
+<body>
+<a href="#main" class="skip">Skip to content</a>
+<header class="site-header"><div class="container nav-wrap"><div style="display:flex;align-items:center;gap:20px"><a class="brand" href="/index.html">Alfredo Saldana</a><div class="lang-switch" style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap"><a href="/learn/machine-learning/classification-vs-regression.html" lang="en" aria-current="page">EN</a><span aria-hidden="true"> | </span><a href="/es/learn/machine-learning/classification-vs-regression-es.html" lang="es">ES</a></div></div><button class="menu-btn" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Toggle navigation">☰</button><nav class="nav" id="site-nav" aria-label="Main navigation"><a href="/index.html">Home</a><a href="/tutorials.html" class="active">Learn</a><a href="/projects.html">Projects</a><a href="/open-box.html">Open Box</a><a href="/about.html">About</a><a href="/contact.html">Contact</a></nav></div></header>
+<section class="guide-hero"><div class="narrow"><div class="eyebrow">LEARN · MACHINE LEARNING</div><h1>Classification vs. Regression: Understanding Prediction Problems</h1><p class="lead">Learn how to distinguish Classification and Regression by the meaning of the target. Complete worked retail and healthcare datasets, model fitting, probabilities, metrics, thresholds, practical pitfalls, and explained exercises.</p><p class="guide-meta">Machine Learning · Guide 2 of 33 · Concepts, calculations and applications</p><div class="guide-links"><a href="/es/learn/machine-learning/classification-vs-regression-es.html" lang="es">Leer en español ↗</a><a href="/tutorials.html">Back to Learn ↗</a></div></div></section>
+<main id="main" class="guide-main"><article class="guide-article">
+<section class="guide-section blue" id="section-1"><h2>1. Start with the decision: what are we trying to predict?</h2>
+<p>Suppose a <strong>hospital outpatient clinic</strong> wants to estimate which appointments are likely to be missed. It wants to give patients appropriate reminders, not deny them care. A <strong>retailer</strong>, meanwhile, wants to forecast next week's sales revenue so it can plan staffing and inventory. Both have historical examples and known outcomes. Both can use <strong>Supervised Learning</strong>. But they ask fundamentally different questions.</p>
+<ul>
+<li><strong>Classification:</strong> <em>Which category will the outcome belong to?</em> For the clinic, the target can be <strong>missed appointment (1)</strong> versus <strong>attended appointment (0)</strong>.</li>
+<li><strong>Regression:</strong> <em>What numerical value should we expect?</em> For the retailer, the target can be <strong>weekly sales in thousands of dollars</strong>.</li>
+</ul>
+<div class="callout"><strong>Central idea.</strong> The distinction depends primarily on the <em>meaning of the target variable and the question to answer</em>, not on the algorithm's name, the file format, or whether numbers appear in the dataset. A 0/1 target represents classes; a dollar amount represents a quantity.</div>
+
+<p>We will develop the two cases independently, show their complete small datasets, work through the relevant arithmetic, compare evaluation metrics, and explain how to choose an approach responsibly. All datasets and example predictions in this guide are <strong>constructed for teaching</strong>; they are not reported research results or estimates from a real clinic or retailer.</p>
+<div class="diagram" aria-label="Comparison of the two questions"><div>Clinic data<br/><small>Who might miss an appointment?</small></div><span>→</span><div>Classification<br/><small>Missed / attended; probability</small></div><div>Retail data<br/><small>How much will we sell?</small></div><span>→</span><div>Regression<br/><small>Predicted sales amount</small></div></div>
+
+
+<h3>Learning objectives: what you should be able to do</h3><ol class="steps"><li>Turn an everyday decision into an observation, valid Features, and a clearly defined Target.</li><li>Recognize whether a Target represents a measured quantity, a category, an ordered category, or several simultaneous labels.</li><li>Fit and interpret a small Regression model, including its residuals and error metrics.</li><li>Convert Classification probabilities into labels using a Decision Threshold; reproduce a Confusion Matrix and its metrics.</li><li>Explain why Baselines, honest data splitting, uncertainty and operational consequences matter when comparing models.</li><li>Independently reformulate an unfamiliar dataset as a numerical forecast or class-risk prediction, justify the choice, and audit its implications.</li></ol>
+</section><section class="guide-section teal" id="section-2"><h2>2. First principles: rows, features, targets, and the prediction moment</h2>
+<p>A <strong>dataset</strong> is a collection of observations. One observation might be a clinic booking, one customer transaction, or one week of sales. <strong>Features</strong> are the pieces of information available to a model before it predicts. The <strong>target</strong> (also called response, outcome, or label) is the value the model is supposed to learn to predict.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Concept</th>
+  <th>Clinic Classification</th>
+  <th>Retail Regression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Unit of observation</td>
+  <td>One scheduled appointment</td>
+  <td>One week of sales</td>
+</tr>
+<tr>
+  <td>Example features</td>
+  <td>Appointment lead time, previous missed appointments, scheduled hour</td>
+  <td>Advertising spend, calendar period, promotion flag</td>
+</tr>
+<tr>
+  <td>Target</td>
+  <td>Missed (1) or attended (0)</td>
+  <td>Sales revenue (thousands of dollars)</td>
+</tr>
+<tr>
+  <td>Desired output</td>
+  <td>Probability and/or category</td>
+  <td>Predicted numerical amount</td>
+</tr>
+<tr>
+  <td>Error to consider</td>
+  <td>Missed at-risk appointment or unnecessary intervention</td>
+  <td>Under- or overforecasting sales</td>
+</tr>
+</tbody>
+</table></div>
+<p>Let the features for observation <em>i</em> be <span class="inline-math">\(x_i\)</span>, and the observed target be <span class="inline-math">\(y_i\)</span>. A model uses examples <span class="inline-math">\((x_i,y_i)\)</span> to learn a prediction rule. We write its output as <span class="inline-math">\(\hat y_i\)</span> for a numerical prediction or <span class="inline-math">\(\hat p_i\)</span> for the estimated probability of a class. The hat indicates a <em>model-produced estimate</em>, not a known fact.</p>
+<h3>Why timing changes what is a valid feature</h3>
+<p>The clinic must decide when its prediction will be made: perhaps <strong>24 hours before</strong> each appointment. A patient's eventual arrival status is unavailable at that moment and cannot be a predictor. Likewise, a retailer forecasting next week's sales cannot use next week's actual sales or advertising information that will only be recorded afterward.</p>
+<p>This principle is called <strong>prediction-time availability</strong>. Violating it creates <strong>Data Leakage</strong>: a model appears to predict well because the training data reveal information that would not exist when making the real decision.</p>
+<div class="callout amber"><strong>Important distinction.</strong> An identifier such as a customer number is stored as digits, but that does not make it a meaningful numerical target. Conversely, the number of returned products (0, 1, 2, …) is a quantitative count, even though it takes integer values. The <em>meaning</em> of the variable determines the task.</div>
+
+</section><section class="guide-section purple" id="section-3"><h2>3. What Regression estimates—and what a predicted number actually means</h2>
+<p><strong>Regression</strong> estimates a quantitative outcome conditional on input information. It answers questions such as “What is the expected revenue?” or “How many units might be demanded?” The prediction might be 8.4 thousand dollars, 17.2 kilowatt-hours, or 3.6 days—even if the training observations have different values.</p>
+<p>A general regression model can be written as:</p>
+<div class="formula">\[\hat y = f_{\theta}(x)\]</div>
+
+<p>Here, <span class="inline-math">\(x\)</span> is the set of features, <span class="inline-math">\(f\)</span> is a prediction function, <span class="inline-math">\(\theta\)</span> represents learned parameters, and <span class="inline-math">\(\hat y\)</span> is the predicted amount. Different methods use different functions: Linear Regression uses a linear combination, a Decision Tree averages targets within terminal regions, and a Neural Network can learn nonlinear relationships.</p>
+<h3>Expected values, observations, and residuals</h3>
+<p>A prediction need not equal the eventual observation. Revenue depends on weather, customer decisions, unexpected events, and other factors that are not fully measured. An <strong>error</strong> or <strong>residual</strong> compares an observed value with a fitted prediction:</p>
+<div class="formula">\[e_i = y_i-\hat y_i\]</div>
+
+<p>If actual sales are 8.0 and the prediction is 8.7 (both in thousands of dollars), the residual is <span class="inline-math">\(8.0-8.7=-0.7\)</span> thousand dollars, or <strong>−$700</strong>. The model <em>overpredicted</em> sales by $700. A positive residual indicates underprediction under this sign convention.</p>
+<p>Under Squared Error Loss, a sufficiently well-specified population regression function aims to approximate the <strong>conditional mean</strong>, <span class="inline-math">\(E[Y\mid X=x]\)</span>, whereas other losses can target a conditional median or quantile. Thus “regression” is not limited to drawing a straight line.</p>
+</section><section class="guide-section blue" id="section-4"><h2>4. Worked Regression example: forecasting a retailer's weekly sales</h2>
+<p>Our retailer records <strong>advertising spend</strong> and <strong>weekly sales</strong>. The table below is deliberately small so every number is inspectable. Advertising is measured in <strong>thousands of dollars</strong>, and sales are also measured in <strong>thousands of dollars</strong>. We first fit a one-feature model; that does not imply that advertising alone causes the sales changes.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Week</th>
+  <th style="text-align:right">Advertising, x ($1,000)</th>
+  <th style="text-align:right">Sales, y ($1,000)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">4</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td style="text-align:right">2</td>
+  <td style="text-align:right">5</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td style="text-align:right">3</td>
+  <td style="text-align:right">7</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td style="text-align:right">4</td>
+  <td style="text-align:right">8</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td style="text-align:right">5</td>
+  <td style="text-align:right">11</td>
+</tr>
+</tbody>
+</table></div>
+<p>We use <strong>Ordinary Least Squares (OLS)</strong>: choose the line <span class="inline-math">\(\hat y=b_0+b_1x\)</span> that minimizes the sum of squared residuals. The two fitted coefficients are the <strong>intercept</strong> <span class="inline-math">\(b_0\)</span> and <strong>slope</strong> <span class="inline-math">\(b_1\)</span>.</p>
+<div class="formula">\[b_1=\frac{\sum_{i=1}^n(x_i-\bar x)(y_i-\bar y)}{\sum_{i=1}^n(x_i-\bar x)^2},\qquad b_0=\bar y-b_1\bar x\]</div>
+
+<p>Here <span class="inline-math">\(n=5\)</span>, <span class="inline-math">\(\bar x\)</span> is mean advertising, and <span class="inline-math">\(\bar y\)</span> is mean sales. The denominator measures how the advertising values vary; the numerator records how advertising and sales vary together. We need nonzero variation in <span class="inline-math">\(x\)</span> to estimate a slope.</p>
+<h3>Step A — Compute the means explicitly</h3>
+<div class="formula">\[\bar x=\frac{1+2+3+4+5}{5}=\frac{15}{5}=3\]</div>
+<div class="formula">\[\bar y=\frac{4+5+7+8+11}{5}=\frac{35}{5}=7\]</div>
+
+<h3>Step B — Calculate the deviation products for all five weeks</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Week</th>
+  <th style="text-align:right">x − 3</th>
+  <th style="text-align:right">y − 7</th>
+  <th style="text-align:right">(x − 3)(y − 7)</th>
+  <th style="text-align:right">(x − 3)²</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <td style="text-align:right">−2</td>
+  <td style="text-align:right">−3</td>
+  <td style="text-align:right">6</td>
+  <td style="text-align:right">4</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td style="text-align:right">−1</td>
+  <td style="text-align:right">−2</td>
+  <td style="text-align:right">2</td>
+  <td style="text-align:right">1</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">1</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td style="text-align:right">2</td>
+  <td style="text-align:right">4</td>
+  <td style="text-align:right">8</td>
+  <td style="text-align:right">4</td>
+</tr>
+<tr>
+  <td><strong>Total</strong></td>
+  <td style="text-align:right"><strong>0</strong></td>
+  <td style="text-align:right"><strong>0</strong></td>
+  <td style="text-align:right"><strong>17</strong></td>
+  <td style="text-align:right"><strong>10</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>The deviations add to zero because each variable was centered on its mean. The product total is <strong>17</strong>, and the squared advertising-deviation total is <strong>10</strong>.</p>
+<h3>Step C — Estimate the parameters and interpret their units</h3>
+<div class="formula">\[b_1=\frac{17}{10}=1.7,\quad b_0=7-(1.7)(3)=1.9\]</div>
+<div class="formula">\[\boxed{\hat y=1.9+1.7x}\]</div>
+
+<p>When advertising is $1,000 higher (that is, <span class="inline-math">\(x\)</span> increases by 1), the fitted line predicts sales <strong>$1,700 higher</strong>, holding the model specification fixed. The intercept predicts $1,900 at zero advertising, but zero is outside the observed advertising range; interpreting that extrapolation needs care. Neither coefficient, by itself, establishes causation.</p>
+<h3>Step D — Predict each week and compute each residual</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Week</th>
+  <th style="text-align:right">Observed y</th>
+  <th style="text-align:right">Fitted ŷ</th>
+  <th style="text-align:right">e = y − ŷ</th>
+  <th style="text-align:right">|e|</th>
+  <th style="text-align:right">e²</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <td style="text-align:right">4.0</td>
+  <td style="text-align:right">3.6</td>
+  <td style="text-align:right">0.4</td>
+  <td style="text-align:right">0.4</td>
+  <td style="text-align:right">0.16</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td style="text-align:right">5.0</td>
+  <td style="text-align:right">5.3</td>
+  <td style="text-align:right">−0.3</td>
+  <td style="text-align:right">0.3</td>
+  <td style="text-align:right">0.09</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td style="text-align:right">7.0</td>
+  <td style="text-align:right">7.0</td>
+  <td style="text-align:right">0.0</td>
+  <td style="text-align:right">0.0</td>
+  <td style="text-align:right">0.00</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td style="text-align:right">8.0</td>
+  <td style="text-align:right">8.7</td>
+  <td style="text-align:right">−0.7</td>
+  <td style="text-align:right">0.7</td>
+  <td style="text-align:right">0.49</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td style="text-align:right">11.0</td>
+  <td style="text-align:right">10.4</td>
+  <td style="text-align:right">0.6</td>
+  <td style="text-align:right">0.6</td>
+  <td style="text-align:right">0.36</td>
+</tr>
+<tr>
+  <td><strong>Sum</strong></td>
+  <td style="text-align:right"></td>
+  <td style="text-align:right"></td>
+  <td style="text-align:right"><strong>0.0</strong></td>
+  <td style="text-align:right"><strong>2.0</strong></td>
+  <td style="text-align:right"><strong>1.10</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>For example, Week 4 gives <span class="inline-math">\(\hat y=1.9+1.7(4)=8.7\)</span>, so the residual is <span class="inline-math">\(8-8.7=-0.7\)</span>. The fitted residuals sum to zero here because the OLS model includes an intercept; <strong>this does not imply zero prediction error</strong>.</p>
+<div class="callout teal"><strong>Sanity check.</strong> The line passes through <span class="inline-math">\((\bar x,\bar y)=(3,7)\)</span>: <span class="inline-math">\(1.9+1.7(3)=7\)</span>. That is a property of OLS with an intercept, and it helps verify our calculation.</div>
+
+<figure class="plot-svg"><svg viewBox="0 0 700 350" role="img" aria-label="Weekly sales and fitted OLS line"><title>Weekly sales and fitted OLS line</title><line x1="92" y1="286.0" x2="622" y2="286.0" stroke="#e6eef5"/><text x="76" y="290.0" text-anchor="end" font-size="12" fill="#536276">2</text><line x1="92" y1="238.0" x2="622" y2="238.0" stroke="#e6eef5"/><text x="76" y="242.0" text-anchor="end" font-size="12" fill="#536276">4</text><line x1="92" y1="190.0" x2="622" y2="190.0" stroke="#e6eef5"/><text x="76" y="194.0" text-anchor="end" font-size="12" fill="#536276">6</text><line x1="92" y1="142.0" x2="622" y2="142.0" stroke="#e6eef5"/><text x="76" y="146.0" text-anchor="end" font-size="12" fill="#536276">8</text><line x1="92" y1="94.0" x2="622" y2="94.0" stroke="#e6eef5"/><text x="76" y="98.0" text-anchor="end" font-size="12" fill="#536276">10</text><line x1="92" y1="46.0" x2="622" y2="46.0" stroke="#e6eef5"/><text x="76" y="50.0" text-anchor="end" font-size="12" fill="#536276">12</text><text x="145.0" y="305" text-anchor="middle" font-size="12" fill="#536276">1</text><text x="251.0" y="305" text-anchor="middle" font-size="12" fill="#536276">2</text><text x="357.0" y="305" text-anchor="middle" font-size="12" fill="#536276">3</text><text x="463.0" y="305" text-anchor="middle" font-size="12" fill="#536276">4</text><text x="569.0" y="305" text-anchor="middle" font-size="12" fill="#536276">5</text><line x1="92" y1="286" x2="622" y2="286" stroke="#40516a"/><line x1="92" y1="46.0" x2="92" y2="286" stroke="#40516a"/><line x1="145.0" y1="247.6" x2="569.0" y2="84.4" stroke="#8c69ba" stroke-width="3"/><line x1="145.0" y1="238.0" x2="145.0" y2="247.6" stroke="#d59a32" stroke-width="2" stroke-dasharray="4 3"/><circle cx="145.0" cy="238.0" r="6" fill="#15957e" stroke="#fff" stroke-width="1.5"/><line x1="251.0" y1="214.0" x2="251.0" y2="206.8" stroke="#d59a32" stroke-width="2" stroke-dasharray="4 3"/><circle cx="251.0" cy="214.0" r="6" fill="#15957e" stroke="#fff" stroke-width="1.5"/><line x1="357.0" y1="166.0" x2="357.0" y2="166.0" stroke="#d59a32" stroke-width="2" stroke-dasharray="4 3"/><circle cx="357.0" cy="166.0" r="6" fill="#15957e" stroke="#fff" stroke-width="1.5"/><line x1="463.0" y1="142.0" x2="463.0" y2="125.2" stroke="#d59a32" stroke-width="2" stroke-dasharray="4 3"/><circle cx="463.0" cy="142.0" r="6" fill="#15957e" stroke="#fff" stroke-width="1.5"/><line x1="569.0" y1="70.0" x2="569.0" y2="84.4" stroke="#d59a32" stroke-width="2" stroke-dasharray="4 3"/><circle cx="569.0" cy="70.0" r="6" fill="#15957e" stroke="#fff" stroke-width="1.5"/><text x="357" y="337" font-size="14" text-anchor="middle" fill="#40516a">Advertising (USD thousands)</text><text transform="translate(20 164) rotate(-90)" font-size="14" text-anchor="middle" fill="#40516a">Sales (USD thousands)</text><circle cx="110" cy="21" r="5" fill="#15957e"/><text x="123" y="25" font-size="12" fill="#40516a">Observed</text><line x1="255" y1="21" x2="287" y2="21" stroke="#8c69ba" stroke-width="3"/><text x="295" y="25" font-size="12" fill="#40516a">Fitted line</text><line x1="445" y1="21" x2="477" y2="21" stroke="#d59a32" stroke-dasharray="4 3" stroke-width="2"/><text x="485" y="25" font-size="12" fill="#40516a">Residual</text></svg><figcaption>Five illustrative weeks: green dots are observed sales, the purple line is ŷ = 1.9 + 1.7x, and amber segments show vertical residual gaps. Both axes use thousands of dollars.</figcaption></figure></section><section class="guide-section teal" id="section-5"><h2>5. Evaluating the Regression example: do not confuse fit with forecasting skill</h2>
+<p>Different evaluation metrics tell different stories about the same residuals. Using the five observed and fitted values above:</p>
+<div class="formula">\[\mathrm{MAE}=\frac{\sum|e_i|}{n}=\frac{0.4+0.3+0+0.7+0.6}{5}=\frac{2.0}{5}=0.40\]</div>
+<div class="formula">\[\mathrm{MSE}=\frac{\sum e_i^2}{n}=\frac{0.16+0.09+0+0.49+0.36}{5}=\frac{1.10}{5}=0.22\]</div>
+<div class="formula">\[\mathrm{RMSE}=\sqrt{0.22}\approx0.469\]</div>
+
+<ul>
+<li><strong>Mean Absolute Error (MAE):</strong> average absolute error is <strong>0.40 thousand dollars = $400</strong>; easy to express in business units.</li>
+<li><strong>Mean Squared Error (MSE):</strong> average squared error is <strong>0.22 (thousand dollars)²</strong>; large mistakes receive disproportionate weight.</li>
+<li><strong>Root Mean Squared Error (RMSE):</strong> about <strong>$469</strong>; returns to the target's original units but remains sensitive to larger errors.</li>
+</ul>
+<h3>Compare against a simple Baseline</h3>
+<p>A <strong>Baseline</strong> is a simple reference method. Suppose the retailer always predicts the historical mean sales, <strong>7</strong>, for every week. Its absolute errors are <span class="inline-math">\(3,2,0,1,4\)</span>; therefore:</p>
+<div class="formula">\[\mathrm{MAE}_{\mathrm{baseline}}=\frac{3+2+0+1+4}{5}=2.00\]</div>
+
+<p>The fitted line's in-sample MAE (0.40) is smaller than the constant baseline's (2.00). This means the line describes <strong>these five training observations</strong> better under MAE. It does <strong>not</strong> prove that the line will forecast future weeks well, because both fitting and measurement used the same data. A future, untouched Test set is necessary for an honest generalization claim.</p>
+<div class="callout amber"><strong>Do not extrapolate casually.</strong> Plugging <span class="inline-math">\(x=20\)</span> into the formula gives <span class="inline-math">\(\hat y=35.9\)</span>, but advertising levels from 1 to 5 were the only levels observed. A mathematical output outside the training range is not evidence that the business relationship continues unchanged.</div>
+
+</section><section class="guide-section purple" id="section-6"><h2>6. What Classification estimates: categories, scores, and probabilities</h2>
+<p><strong>Classification</strong> predicts membership in one or more discrete categories. For the clinic we define the <strong>positive class</strong> as a missed appointment, coded <span class="inline-math">\(y=1\)</span>, and the <strong>negative class</strong> as attendance, coded <span class="inline-math">\(y=0\)</span>. Positive does not mean desirable: it is simply the class we are focusing on.</p>
+<p>A binary classifier may produce a <strong>score</strong>. Some models provide an estimated probability <span class="inline-math">\(\hat p=P(Y=1\mid X=x)\)</span>; other models output a score that cannot automatically be interpreted as a probability. A decision rule then converts an appropriate score or probability into an action or class label.</p>
+<div class="formula">\[\hat y=\begin{cases}1,&\hat p\ge t\\0,&\hat p&lt;t\end{cases}\]</div>
+
+<p>Here, <span class="inline-math">\(t\)</span> is the <strong>Decision Threshold</strong>; when <span class="inline-math">\(t=0.50\)</span>, probabilities at or above 0.50 are labeled “missed.” This does not mean the patient will definitely miss the appointment. A probability of 0.80 expresses estimated uncertainty, not an observed fact, and model probabilities may need <strong>Calibration</strong> before we trust their numerical meaning.</p>
+<h3>Why Logistic Regression is Classification</h3>
+<p>A commonly taught classifier is <strong>Logistic Regression</strong>. Despite its name, its usual binary output is a class probability. It starts from a linear score <span class="inline-math">\(z=b_0+b_1x_1+\cdots+b_px_p\)</span> and applies the <strong>sigmoid</strong> function:</p>
+<div class="formula">\[\hat p=\frac{1}{1+e^{-z}}\]</div>
+
+<p>If <span class="inline-math">\(z=0.5\)</span>, then <span class="inline-math">\(e^{-0.5}\approx0.6065\)</span>, so <span class="inline-math">\(\hat p\approx1/(1+0.6065)=0.6225\)</span>. A threshold of 0.50 yields class 1; a threshold of 0.70 yields class 0. The underlying estimated probability is unchanged. This is an illustration of the transformation—not a fitted model or clinical finding.</p>
+
+<h3>From probability to a two-feature decision boundary</h3><p>A model can use more than one Feature. To visualize the distinction between a <em>probability surface</em> and a <em>discrete decision</em>, consider an independent, deliberately hypothetical Logistic Regression model using <strong>d</strong> = days between booking and appointment and <strong>m</strong> = number of previous missed appointments. This example does not estimate a clinical relationship; its coefficients are chosen for teaching.</p><div class="formula">\[z=-2+0.4d+0.8m,\qquad \hat p=\frac{1}{1+e^{-z}}\]</div><p>If <span class="inline-math">\(d=1,m=0\)</span>, then <span class="inline-math">\(z=-2+0.4=-1.6\)</span>, so <span class="inline-math">\(\hat p\approx0.168\)</span>; the model predicts attendance at a 0.50 threshold. If <span class="inline-math">\(d=4,m=1\)</span>, then <span class="inline-math">\(z=-2+1.6+0.8=0.4\)</span>, so <span class="inline-math">\(\hat p\approx0.599\)</span>; the model predicts a missed appointment. At the 0.50 threshold, Sigmoid outputs at least 0.50 exactly when <span class="inline-math">\(z\ge0\)</span>. Thus the boundary satisfies <span class="inline-math">\(d+2m=5\)</span>. Points on different sides of that line receive different <em>labels</em>, while their numerical probabilities change smoothly.</p><figure class="plot-svg" aria-label="Illustrative Classification decision regions">
+<svg viewBox="0 0 760 400" role="img" aria-labelledby="boundary-title boundary-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="boundary-title">Decision boundary using two features</title>
+<desc id="boundary-desc">Regions with model probability above and below 0.5 in a hypothetical model. Horizontal axis: days booked ahead. Vertical axis: previous missed appointments.</desc>
+<rect x="96" y="62" width="552" height="248" fill="#E7F5EF"/>
+<polygon points="96,310 556.0,310 96,103.33333333333334" fill="#EAF2FF"/>
+<line x1="96" y1="310" x2="556.0" y2="310" stroke="none"/>
+<line x1="96.0" y1="62" x2="96.0" y2="310" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="96.0" y="336" text-anchor="middle" font-size="13" fill="#30465A">0</text>
+<line x1="188.0" y1="62" x2="188.0" y2="310" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="188.0" y="336" text-anchor="middle" font-size="13" fill="#30465A">1</text>
+<line x1="280.0" y1="62" x2="280.0" y2="310" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="280.0" y="336" text-anchor="middle" font-size="13" fill="#30465A">2</text>
+<line x1="372.0" y1="62" x2="372.0" y2="310" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="372.0" y="336" text-anchor="middle" font-size="13" fill="#30465A">3</text>
+<line x1="464.0" y1="62" x2="464.0" y2="310" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="464.0" y="336" text-anchor="middle" font-size="13" fill="#30465A">4</text>
+<line x1="556.0" y1="62" x2="556.0" y2="310" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="556.0" y="336" text-anchor="middle" font-size="13" fill="#30465A">5</text>
+<line x1="648.0" y1="62" x2="648.0" y2="310" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="648.0" y="336" text-anchor="middle" font-size="13" fill="#30465A">6</text>
+<line x1="96" y1="310.0" x2="648" y2="310.0" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="75" y="315.0" text-anchor="middle" font-size="13" fill="#30465A">0</text>
+<line x1="96" y1="227.3" x2="648" y2="227.3" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="75" y="232.3" text-anchor="middle" font-size="13" fill="#30465A">1</text>
+<line x1="96" y1="144.7" x2="648" y2="144.7" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="75" y="149.7" text-anchor="middle" font-size="13" fill="#30465A">2</text>
+<line x1="96" y1="62.0" x2="648" y2="62.0" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="75" y="67.0" text-anchor="middle" font-size="13" fill="#30465A">3</text>
+<line x1="96" y1="310" x2="648" y2="310" stroke="#4C5F72" stroke-width="1.5"/>
+<line x1="96" y1="62" x2="96" y2="310" stroke="#4C5F72" stroke-width="1.5"/>
+<line x1="96" y1="103.3" x2="556.0" y2="310" stroke="#7C3AED" stroke-width="3"/>
+<text x="372.0" y="368" text-anchor="middle" font-weight="600" font-size="16" fill="#24364A">Days booked ahead (d)</text>
+<text transform="translate(29,186.0) rotate(-90)" text-anchor="middle" font-size="15" fill="#24364A">Previous missed appointments (m)</text>
+<text x="533.0" y="95.1" text-anchor="middle" font-weight="650" font-size="15" fill="#176955">Predict: missed</text>
+<text x="224.8" y="264.5" text-anchor="middle" font-weight="650" font-size="15" fill="#2558A8">Predict: attended</text>
+<circle cx="188.0" cy="310.0" r="7.5" fill="#fff" stroke="#0B1F3A" stroke-width="2"/>
+<circle cx="464.0" cy="310.0" r="7.5" fill="#fff" stroke="#0B1F3A" stroke-width="2"/>
+<circle cx="280.0" cy="227.3" r="7.5" fill="#fff" stroke="#0B1F3A" stroke-width="2"/>
+<circle cx="464.0" cy="227.3" r="7.5" fill="#fff" stroke="#0B1F3A" stroke-width="2"/>
+<circle cx="188.0" cy="62.0" r="7.5" fill="#fff" stroke="#0B1F3A" stroke-width="2"/>
+<circle cx="556.0" cy="144.7" r="7.5" fill="#fff" stroke="#0B1F3A" stroke-width="2"/>
+<text x="546.8" y="267.0" font-size="13" fill="#7140A8" transform="rotate(-19 546.8 267.0)">d + 2m = 5</text>
+</svg>
+<figcaption>Synthetic example, independent of the 12 evaluated appointments. The hypothetical model predicts a missed appointment when <strong>d + 2m ≥ 5</strong>. Circles mark feature combinations, not observed outcome labels. A decision boundary separates model decisions, not guaranteed outcomes.</figcaption></figure>
+</section><section class="guide-section blue" id="section-7"><h2>7. Worked Classification example: identifying missed appointments</h2>
+<p>Imagine that a clinic has an <strong>untouched illustrative evaluation set</strong> of 12 appointments, each with a model-assigned estimated risk of being missed. We show all 12 to make the calculations auditable. For this exercise, predictions were produced by a model trained elsewhere; we are not estimating these probabilities from the 12 observations.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Appointment</th>
+  <th style="text-align:right">Estimated probability of missed appointment</th>
+  <th style="text-align:right">Actual y (1 = missed)</th>
+  <th style="text-align:right">Predicted at t = 0.50</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>A</td>
+  <td style="text-align:right">0.90</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">1</td>
+</tr>
+<tr>
+  <td>B</td>
+  <td style="text-align:right">0.80</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">1</td>
+</tr>
+<tr>
+  <td>C</td>
+  <td style="text-align:right">0.72</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">1</td>
+</tr>
+<tr>
+  <td>D</td>
+  <td style="text-align:right">0.65</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">1</td>
+</tr>
+<tr>
+  <td>E</td>
+  <td style="text-align:right">0.60</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">1</td>
+</tr>
+<tr>
+  <td>F</td>
+  <td style="text-align:right">0.52</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">1</td>
+</tr>
+<tr>
+  <td>G</td>
+  <td style="text-align:right">0.48</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+</tr>
+<tr>
+  <td>H</td>
+  <td style="text-align:right">0.40</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">0</td>
+</tr>
+<tr>
+  <td>I</td>
+  <td style="text-align:right">0.32</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+</tr>
+<tr>
+  <td>J</td>
+  <td style="text-align:right">0.28</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+</tr>
+<tr>
+  <td>K</td>
+  <td style="text-align:right">0.15</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+</tr>
+<tr>
+  <td>L</td>
+  <td style="text-align:right">0.10</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Step A — Count the outcomes carefully</h3>
+<p>A model makes a <strong>True Positive (TP)</strong> when it flags a missed appointment and that appointment is missed: A, B, D, F → <strong>TP = 4</strong>. A <strong>False Positive (FP)</strong> is flagged but attended: C, E → <strong>FP = 2</strong>. A <strong>False Negative (FN)</strong> is predicted attended but missed: H → <strong>FN = 1</strong>. A <strong>True Negative (TN)</strong> is predicted attended and attended: G, I, J, K, L → <strong>TN = 5</strong>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Actual / Predicted</th>
+  <th style="text-align:right">Predicted missed (1)</th>
+  <th style="text-align:right">Predicted attended (0)</th>
+  <th style="text-align:right">Row total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Actually missed (1)</td>
+  <td style="text-align:right">TP = 4</td>
+  <td style="text-align:right">FN = 1</td>
+  <td style="text-align:right">5</td>
+</tr>
+<tr>
+  <td>Actually attended (0)</td>
+  <td style="text-align:right">FP = 2</td>
+  <td style="text-align:right">TN = 5</td>
+  <td style="text-align:right">7</td>
+</tr>
+<tr>
+  <td>Column total</td>
+  <td style="text-align:right">6</td>
+  <td style="text-align:right">6</td>
+  <td style="text-align:right"><strong>12</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Verify: <span class="inline-math">\(4+2+1+5=12\)</span>. There are five actual missed appointments and seven attended appointments. Confusing actual and predicted rows is a common source of incorrect metrics.</p>
+<h3>Step B — Calculate and interpret the evaluation metrics</h3>
+<div class="formula">\[\mathrm{Accuracy}=\frac{TP+TN}{N}=\frac{4+5}{12}=\frac{9}{12}=0.75\]</div>
+<div class="formula">\[\mathrm{Precision}=\frac{TP}{TP+FP}=\frac{4}{4+2}=\frac46\approx0.667\]</div>
+<div class="formula">\[\mathrm{Recall}=\frac{TP}{TP+FN}=\frac{4}{4+1}=\frac45=0.80\]</div>
+<div class="formula">\[\mathrm{Specificity}=\frac{TN}{TN+FP}=\frac5{5+2}=\frac57\approx0.714\]</div>
+<div class="formula">\[F_1=\frac{2PR}{P+R}=\frac{2TP}{2TP+FP+FN}=\frac8{8+2+1}=\frac8{11}\approx0.727\]</div>
+
+<p><strong>Accuracy = 75%</strong> means nine of 12 labels were correct. <strong>Precision ≈ 66.7%</strong> means four of the six flagged appointments were actually missed. <strong>Recall = 80%</strong> means four of the five missed appointments were found. <strong>Specificity ≈ 71.4%</strong> means five of the seven attended appointments were correctly left unflagged. <strong>F1 ≈ 72.7%</strong> combines Precision and Recall into their harmonic mean; it does not measure costs or calibration.</p>
+<div class="callout teal"><strong>Interpretation matters more than memorization.</strong> Precision asks, “When we send a special reminder, what fraction of flagged bookings really would have been missed in these data?” Recall asks, “Of the appointments actually missed, what fraction did the model identify?” Different clinic policies may prioritize these questions differently.</div>
+
+<figure class="plot-svg"><svg viewBox="0 0 720 350" role="img" aria-label="Missed-appointment probabilities and decision threshold"><title>Missed-appointment probabilities and decision threshold</title><line x1="75.0" x2="75.0" y1="65" y2="279" stroke="#e5ecf3"/><text x="75.0" y="306" font-size="12" text-anchor="middle" fill="#536276">0.00</text><line x1="218.8" x2="218.8" y1="65" y2="279" stroke="#e5ecf3"/><text x="218.8" y="306" font-size="12" text-anchor="middle" fill="#536276">0.25</text><line x1="362.5" x2="362.5" y1="65" y2="279" stroke="#e5ecf3"/><text x="362.5" y="306" font-size="12" text-anchor="middle" fill="#536276">0.50</text><line x1="506.2" x2="506.2" y1="65" y2="279" stroke="#e5ecf3"/><text x="506.2" y="306" font-size="12" text-anchor="middle" fill="#536276">0.75</text><line x1="650.0" x2="650.0" y1="65" y2="279" stroke="#e5ecf3"/><text x="650.0" y="306" font-size="12" text-anchor="middle" fill="#536276">1.00</text><line x1="362.5" x2="362.5" y1="49" y2="279" stroke="#8c69ba" stroke-dasharray="6 4" stroke-width="2.5"/><text x="369.5" y="47" font-size="13" fill="#8c69ba">t = 0.50</text><circle cx="592.5" cy="77.0" r="9" fill="#d59a32" stroke="#fff" stroke-width="2"/><text x="606.5" y="81.0" font-size="12" fill="#26374c">A</text><circle cx="535.0" cy="114.0" r="9" fill="#d59a32" stroke="#fff" stroke-width="2"/><text x="549.0" y="118.0" font-size="12" fill="#26374c">B</text><circle cx="489.0" cy="151.0" r="9" fill="#15957e" stroke="#fff" stroke-width="2"/><text x="503.0" y="155.0" font-size="12" fill="#26374c">C</text><circle cx="448.8" cy="188.0" r="9" fill="#d59a32" stroke="#fff" stroke-width="2"/><text x="462.8" y="192.0" font-size="12" fill="#26374c">D</text><circle cx="420.0" cy="225.0" r="9" fill="#15957e" stroke="#fff" stroke-width="2"/><text x="434.0" y="229.0" font-size="12" fill="#26374c">E</text><circle cx="374.0" cy="262.0" r="9" fill="#d59a32" stroke="#fff" stroke-width="2"/><text x="388.0" y="266.0" font-size="12" fill="#26374c">F</text><circle cx="351.0" cy="84.0" r="9" fill="#15957e" stroke="#fff" stroke-width="2"/><text x="365.0" y="88.0" font-size="12" fill="#26374c">G</text><circle cx="305.0" cy="121.0" r="9" fill="#d59a32" stroke="#fff" stroke-width="2"/><text x="319.0" y="125.0" font-size="12" fill="#26374c">H</text><circle cx="259.0" cy="158.0" r="9" fill="#15957e" stroke="#fff" stroke-width="2"/><text x="273.0" y="162.0" font-size="12" fill="#26374c">I</text><circle cx="236.0" cy="195.0" r="9" fill="#15957e" stroke="#fff" stroke-width="2"/><text x="250.0" y="199.0" font-size="12" fill="#26374c">J</text><circle cx="161.2" cy="232.0" r="9" fill="#15957e" stroke="#fff" stroke-width="2"/><text x="175.2" y="236.0" font-size="12" fill="#26374c">K</text><circle cx="132.5" cy="269.0" r="9" fill="#15957e" stroke="#fff" stroke-width="2"/><text x="146.5" y="273.0" font-size="12" fill="#26374c">L</text><line x1="75" y1="282" x2="650" y2="282" stroke="#40516a"/><text x="363" y="335" font-size="14" text-anchor="middle" fill="#40516a">Estimated probability of missing appointment</text><circle cx="95" cy="26" r="7" fill="#d59a32"/><text x="109" y="30" font-size="12" fill="#40516a">Missed (y=1)</text><circle cx="283" cy="26" r="7" fill="#15957e"/><text x="297" y="30" font-size="12" fill="#40516a">Attended (y=0)</text></svg><figcaption>Each dot is one of the 12 appointments; its horizontal location is estimated risk and its color indicates the actual outcome. The purple line marks the 0.50 threshold. Vertical placement separates labels and has no additional statistical meaning.</figcaption></figure>
+<h3>Score distributions: where do predictions concentrate?</h3><p>A dot plot lets us inspect individual appointments; a binned distribution instead counts how many fall in each probability range. We use the <strong>same 12 synthetic records</strong>, without refitting the model. Each bin includes its left endpoint and excludes its right endpoint, except the last, which also includes 1.0.</p><figure class="plot-svg" aria-label="Distribution of estimated probabilities: 12 synthetic appointments"><svg viewBox="0 0 760 395" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="g02-dist-title-en g02-dist-desc-en"><title id="g02-dist-title-en">Distribution of estimated probabilities: 12 synthetic appointments</title><desc id="g02-dist-desc-en">Each bar groups appointments by estimated probability and observed outcome. All five bins are nonoverlapping.</desc><rect x="0" y="0" width="760" height="395" fill="#fbfdff"/><line x1="104" y1="300" x2="690" y2="300" stroke="#40516a" stroke-width="1.5"/><line x1="104" y1="65" x2="104" y2="300" stroke="#40516a" stroke-width="1.5"/><line x1="104" y1="300" x2="690" y2="300" stroke="#dde6ef" stroke-width="1"/><text x="89" y="305" text-anchor="end" font-size="15" fill="#334155">0</text><line x1="104" y1="245" x2="690" y2="245" stroke="#dde6ef" stroke-width="1"/><text x="89" y="250" text-anchor="end" font-size="15" fill="#334155">1</text><line x1="104" y1="190" x2="690" y2="190" stroke="#dde6ef" stroke-width="1"/><text x="89" y="195" text-anchor="end" font-size="15" fill="#334155">2</text><line x1="104" y1="135" x2="690" y2="135" stroke="#dde6ef" stroke-width="1"/><text x="89" y="140" text-anchor="end" font-size="15" fill="#334155">3</text><rect x="145" y="190" width="66" height="110" fill="#15957e" opacity="0.9"/><text x="178" y="181" text-anchor="middle" font-size="14" fill="#20354e" font-weight="700">2</text><text x="178" y="325" text-anchor="middle" font-size="13" fill="#334155">0–0.2</text><rect x="256" y="190" width="66" height="110" fill="#15957e" opacity="0.9"/><text x="289" y="181" text-anchor="middle" font-size="14" fill="#20354e" font-weight="700">2</text><text x="289" y="325" text-anchor="middle" font-size="13" fill="#334155">0.2–0.4</text><rect x="367" y="245" width="66" height="55" fill="#15957e" opacity="0.9"/><rect x="367" y="135" width="66" height="110" fill="#d59a32" opacity="0.92"/><text x="400" y="126" text-anchor="middle" font-size="14" fill="#20354e" font-weight="700">3</text><text x="400" y="325" text-anchor="middle" font-size="13" fill="#334155">0.4–0.6</text><rect x="478" y="190" width="66" height="110" fill="#15957e" opacity="0.9"/><rect x="478" y="135" width="66" height="55" fill="#d59a32" opacity="0.92"/><text x="511" y="126" text-anchor="middle" font-size="14" fill="#20354e" font-weight="700">3</text><text x="511" y="325" text-anchor="middle" font-size="13" fill="#334155">0.6–0.8</text><rect x="589" y="190" width="66" height="110" fill="#d59a32" opacity="0.92"/><text x="622" y="181" text-anchor="middle" font-size="14" fill="#20354e" font-weight="700">2</text><text x="622" y="325" text-anchor="middle" font-size="13" fill="#334155">0.8–1.0</text><text x="400" y="361" text-anchor="middle" font-size="15" fill="#24364a">Estimated probability of missing the appointment</text><text x="36" y="205" transform="rotate(-90 36 205)" text-anchor="middle" font-size="15" fill="#24364a">Number of appointments</text><rect x="340" y="22" width="15" height="15" fill="#15957e"/><text x="361" y="35" font-size="13" fill="#20354e">Attended (y=0)</text><rect x="530" y="22" width="15" height="15" fill="#d59a32"/><text x="551" y="35" font-size="13" fill="#20354e">Missed (y=1)</text></svg><figcaption>Every appointment A–L appears in exactly one bin: [0.0,0.2), [0.2,0.4), [0.4,0.6), [0.6,0.8), or [0.8,1.0]. Missed counts are 0, 0, 2, 1, and 2; attended counts are 2, 2, 1, 2, and 0. This is a frequency display, NOT proof of Calibration: twelve appointments cannot establish it.</figcaption></figure>
+</section><section class="guide-section teal" id="section-8"><h2>8. Decision Thresholds and real operating trade-offs</h2>
+<p>The probability estimates in the clinic example do not change when we move the threshold. What changes is which appointments receive a positive label—and therefore TP, FP, FN, and TN.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Threshold</th>
+  <th style="text-align:right">TP</th>
+  <th style="text-align:right">FP</th>
+  <th style="text-align:right">FN</th>
+  <th style="text-align:right">TN</th>
+  <th style="text-align:right">Precision</th>
+  <th style="text-align:right">Recall</th>
+  <th style="text-align:right">Accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>t = 0.70</td>
+  <td style="text-align:right">2</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">3</td>
+  <td style="text-align:right">6</td>
+  <td style="text-align:right">2/3 = 66.7%</td>
+  <td style="text-align:right">2/5 = 40%</td>
+  <td style="text-align:right">8/12 = 66.7%</td>
+</tr>
+<tr>
+  <td>t = 0.50</td>
+  <td style="text-align:right">4</td>
+  <td style="text-align:right">2</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">5</td>
+  <td style="text-align:right">4/6 = 66.7%</td>
+  <td style="text-align:right">4/5 = 80%</td>
+  <td style="text-align:right">9/12 = 75%</td>
+</tr>
+<tr>
+  <td>t = 0.30</td>
+  <td style="text-align:right">5</td>
+  <td style="text-align:right">4</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">3</td>
+  <td style="text-align:right">5/9 = 55.6%</td>
+  <td style="text-align:right">5/5 = 100%</td>
+  <td style="text-align:right">8/12 = 66.7%</td>
+</tr>
+</tbody>
+</table></div>
+<p>At 0.70, only A, B, and C are flagged. We identify two of five misses (Recall 40%). At 0.30, A through I are flagged; all five misses are caught, but four attended bookings are flagged unnecessarily. This is the fundamental <strong>Precision–Recall trade-off</strong> under threshold changes: improving one dimension may worsen another; not every dataset exhibits a strictly monotone Precision pattern.</p>
+<h3>A cost-based example—with explicit assumptions</h3>
+<p>Suppose, solely to illustrate decisions, an unflagged missed appointment has an opportunity cost of <strong>$80</strong> and an unnecessary reminder intervention costs <strong>$20</strong>. Treat correct predictions as having zero incremental cost and assume these costs do not vary by appointment.</p>
+<ul>
+<li>At <strong>0.70:</strong> three FN and one FP cost <span class="inline-math">\(3(80)+1(20)=\$260\)</span>.</li>
+<li>At <strong>0.50:</strong> one FN and two FP cost <span class="inline-math">\(1(80)+2(20)=\$120\)</span>.</li>
+<li>At <strong>0.30:</strong> zero FN and four FP cost <span class="inline-math">\(0(80)+4(20)=\$80\)</span>.</li>
+</ul>
+<p>The threshold with the lowest illustrated cost among these three is <strong>0.30</strong>—even though its Accuracy is lower than that of 0.50. This shows why selecting a threshold by Accuracy alone can misalign with the operational objective.</p>
+<div class="callout amber"><strong>Evaluation discipline.</strong> These costs are invented and ignore effects of the reminder itself. In reality, an intervention can change patient behavior, costs vary, and a clinic must consider access and fairness. Thresholds should be selected on a separate <em>Validation</em> set using a justified objective, then assessed on an untouched <em>Test</em> set. Do not optimize on the same Test set you later claim is independent.</div>
+
+
+<figure class="plot-svg" aria-label="Precision and Recall across three thresholds">
+<svg viewBox="0 0 760 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="threshold-title threshold-desc">
+<title id="threshold-title">Precision and Recall by decision threshold</title>
+<desc id="threshold-desc">At thresholds 0.30, 0.50, and 0.70, Precision is 55.6, 66.7, and 66.7 percent; Recall is 100, 80, and 40 percent.</desc>
+<line x1="95" y1="304.0" x2="670" y2="304.0" stroke="#DFE8F1"/>
+<text x="75" y="309.0" text-anchor="end" font-size="13" fill="#506178">0%</text>
+<line x1="95" y1="246.5" x2="670" y2="246.5" stroke="#DFE8F1"/>
+<text x="75" y="251.5" text-anchor="end" font-size="13" fill="#506178">25%</text>
+<line x1="95" y1="189.0" x2="670" y2="189.0" stroke="#DFE8F1"/>
+<text x="75" y="194.0" text-anchor="end" font-size="13" fill="#506178">50%</text>
+<line x1="95" y1="131.5" x2="670" y2="131.5" stroke="#DFE8F1"/>
+<text x="75" y="136.5" text-anchor="end" font-size="13" fill="#506178">75%</text>
+<line x1="95" y1="74.0" x2="670" y2="74.0" stroke="#DFE8F1"/>
+<text x="75" y="79.0" text-anchor="end" font-size="13" fill="#506178">100%</text>
+<line x1="95" y1="74" x2="95" y2="304" stroke="#536276" stroke-width="1.5"/>
+<line x1="95" y1="304" x2="670" y2="304" stroke="#536276" stroke-width="1.5"/>
+<text x="135" y="330" text-anchor="middle" font-size="15" fill="#253B54">0.30</text>
+<text x="385" y="330" text-anchor="middle" font-size="15" fill="#253B54">0.50</text>
+<text x="635" y="330" text-anchor="middle" font-size="15" fill="#253B54">0.70</text>
+<path d="M135,176.2 L385,150.7 L635,150.7" fill="none" stroke="#2563EB" stroke-width="3"/>
+<circle cx="135" cy="176.2" r="5.5" fill="#2563EB" stroke="#fff" stroke-width="1.5"/>
+<circle cx="385" cy="150.7" r="5.5" fill="#2563EB" stroke="#fff" stroke-width="1.5"/>
+<circle cx="635" cy="150.7" r="5.5" fill="#2563EB" stroke="#fff" stroke-width="1.5"/>
+<path d="M135,74.0 L385,120.0 L635,212.0" fill="none" stroke="#15957E" stroke-width="3"/>
+<circle cx="135" cy="74.0" r="5.5" fill="#15957E" stroke="#fff" stroke-width="1.5"/>
+<circle cx="385" cy="120.0" r="5.5" fill="#15957E" stroke="#fff" stroke-width="1.5"/>
+<circle cx="635" cy="212.0" r="5.5" fill="#15957E" stroke="#fff" stroke-width="1.5"/>
+<line x1="300" y1="35" x2="328" y2="35" stroke="#2563EB" stroke-width="4"/>
+<text x="334" y="40" font-size="14" fill="#24364A">Precision</text>
+<line x1="440" y1="35" x2="468" y2="35" stroke="#15957E" stroke-width="4"/>
+<text x="474" y="40" font-size="14" fill="#24364A">Recall</text>
+<text x="380" y="370" text-anchor="middle" font-size="15" fill="#24364A">Decision Threshold</text>
+</svg>
+<figcaption>These values match the preceding table for the 12 illustrative appointments. As the threshold rises, Recall falls because fewer actual misses are flagged. Precision is not guaranteed to increase monotonically with every threshold change.</figcaption></figure><div class="callout purple"><h3>Derive a cost-based threshold rather than memorize it</h3>
+<p>Suppose <span class="inline-math">\(p=P(Y=1\mid X=x)\)</span> is a <strong>calibrated</strong> estimate for one future appointment. Assume a false positive incurs <span class="inline-math">\(C_{FP}=\$20\)</span>, a false negative incurs <span class="inline-math">\(C_{FN}=\$80\)</span>, and correct decisions have zero extra cost. These are <em>illustrative monetary assumptions</em>, not measured clinic economics.</p>
+<div class="formula">\[\begin{aligned}
+E[\mathrm{cost}\mid \mathrm{flag}] &= (1-p)C_{FP}+p(0)=20(1-p),\\
+E[\mathrm{cost}\mid \mathrm{do\ not\ flag}] &=pC_{FN}+(1-p)(0)=80p.
+\end{aligned}\]</div>
+<p>Flag when its expected cost is no greater: <span class="inline-math">\(20(1-p)\le 80p\)</span>. Expand: <span class="inline-math">\(20-20p\le80p\)</span>, hence <span class="inline-math">\(20\le100p\)</span> and <span class="inline-math">\(p\ge 0.20\)</span>. In general, <span class="inline-math">\(t=C_{FP}/(C_{FP}+C_{FN})\)</span> when both costs are positive and the assumptions apply.</p>
+<p><strong>Do not conflate expected and realized cost.</strong> The earlier table compares three realized error totals on only 12 historical cases and finds that 0.30 costs $80 among those choices. It does <em>not</em> validate the theoretical 0.20 threshold, nor authorize choosing a threshold on a final Test set. In actual reminder programs, interventions can alter attendance; then these simplified expected-cost formulas may no longer represent the real decision. Fit and select policies with Training/Validation evidence; evaluate the frozen rule on untouched Test data.</p></div>
+</section><section class="guide-section purple" id="section-9"><h2>9. Beyond yes/no: Binary, Multiclass, Multilabel, and Ordinal Classification</h2>
+<p>The target's structure determines what sort of Classification problem we have. Treating every problem as a binary decision loses important information.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Type</th>
+  <th>Meaning</th>
+  <th>Example</th>
+  <th>What the prediction represents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Binary</td>
+  <td>Exactly two mutually exclusive categories</td>
+  <td>Fraud / not fraud</td>
+  <td>One of two classes; often one positive-class score</td>
+</tr>
+<tr>
+  <td>Multiclass</td>
+  <td>One of three or more mutually exclusive categories</td>
+  <td>Support ticket: billing / technical / delivery</td>
+  <td>One class from a set of alternatives</td>
+</tr>
+<tr>
+  <td>Multilabel</td>
+  <td>Zero, one, or several labels can apply simultaneously</td>
+  <td>Article tags: finance, health, policy</td>
+  <td>A set of independently applicable labels</td>
+</tr>
+<tr>
+  <td>Ordinal</td>
+  <td>Categories have a meaningful order</td>
+  <td>Customer satisfaction: low / medium / high</td>
+  <td>An ordered category, not a measured distance</td>
+</tr>
+</tbody>
+</table></div>
+<p>For <strong>Multiclass Classification</strong>, three mutually exclusive probabilities might be <span class="inline-math">\(0.10,0.70,0.20\)</span> for billing, technical, and delivery; they sum to one, and the highest-probability label is technical. For <strong>Multilabel Classification</strong>, the same item can be simultaneously “finance” and “policy”; those labels are not mutually exclusive, and each may have its own threshold.</p>
+<p>For <strong>Ordinal Classification</strong>, high exceeds medium in ordering, but the numerical codes 1, 2, and 3 do not prove that the psychological distance from low to medium equals that from medium to high. Treating the codes as continuous Regression targets can silently impose an unsupported assumption.</p>
+</section><section class="guide-section blue" id="section-10"><h2>10. How to identify the task when the target is tricky</h2>
+<p>Some datasets make task selection less obvious than “dollars versus yes/no.” Ask what the outcome <em>means</em>, what the end user needs, and how errors will be evaluated.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Question</th>
+  <th>Target</th>
+  <th>Usually</th>
+  <th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>How much electricity will a home consume tomorrow?</td>
+  <td>kWh</td>
+  <td>Regression</td>
+  <td>Numerical physical quantity</td>
+</tr>
+<tr>
+  <td>Will consumption exceed 30 kWh tomorrow?</td>
+  <td>Yes / no</td>
+  <td>Classification</td>
+  <td>Category defined by a threshold</td>
+</tr>
+<tr>
+  <td>How many support calls will arrive tomorrow?</td>
+  <td>Nonnegative count</td>
+  <td>Count Regression</td>
+  <td>Quantitative number with count structure</td>
+</tr>
+<tr>
+  <td>Is this product code 001, 002, or 003?</td>
+  <td>Product category identifier</td>
+  <td>Classification</td>
+  <td>Digits are codes, not measured distances</td>
+</tr>
+<tr>
+  <td>Which two diagnoses apply to a record?</td>
+  <td>Multiple labels</td>
+  <td>Multilabel Classification</td>
+  <td>Multiple labels may be simultaneously true</td>
+</tr>
+<tr>
+  <td>Which satisfaction level will a customer select?</td>
+  <td>Low / medium / high</td>
+  <td>Ordinal Classification</td>
+  <td>Ordered categories without guaranteed equal spacing</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Two-stage and combined systems</h3>
+<p>A delivery company could first predict <strong>whether a package will be late</strong> (Classification) and then, among relevant cases, estimate <strong>how many hours late</strong> (Regression). Alternatively, it could predict arrival time with Regression and derive a late/not-late rule afterward. The two designs are not automatically equivalent: the former can directly optimize detection of delays, whereas the latter preserves a continuous forecast but may need a suitable loss near the deadline.</p>
+<div class="callout purple"><strong>Practical lesson.</strong> A categorical target does not become Regression merely because someone encoded its labels as integers. A numerical target does not become Classification merely because the final report groups predictions into bands. Write the decision question first, then define the outcome.</div>
+
+
+<h3>New worked transfer case: one delivery history, two different Targets</h3>
+<p>A <strong>last-mile logistics company</strong> wants to answer either (a) “How many minutes will delivery take?” or (b) “Will it take <em>more than 24 minutes</em>?” Both questions use the same observations but different Targets. These four routes are <strong>synthetic</strong>. Distance is measured in kilometers; time is measured from dispatch to delivery in minutes. For a new route, distance must be known or estimated when the prediction is made.</p>
+<div class="table-wrap"><table><caption>Four synthetic, fully observed deliveries</caption><thead><tr><th>Route</th><th>Distance x (km)</th><th>Duration T (minutes)</th><th>Late label, 1 if T &gt; 24</th></tr></thead><tbody><tr><td>A</td><td>1</td><td>12</td><td>0</td></tr><tr><td>B</td><td>2</td><td>18</td><td>0</td></tr><tr><td>C</td><td>3</td><td>25</td><td>1</td></tr><tr><td>D</td><td>4</td><td>29</td><td>1</td></tr></tbody></table></div>
+<p><strong>Regression:</strong> Target <span class="inline-math">\(T\)</span> has units of minutes. Fit a simple least-squares line to this deliberately small sample. First calculate the means:</p>
+<div class="formula">\[\bar x=(1+2+3+4)/4=2.5\ \mathrm{km},\qquad \bar T=(12+18+25+29)/4=21\ \mathrm{min}.\]</div>
+<p>To make the slope auditable, calculate each deviation product and its squared-distance contribution:</p>
+<div class="table-wrap"><table><thead><tr><th>Route</th><th>x − 2.5</th><th>T − 21</th><th>Product</th><th>(x − 2.5)²</th></tr></thead><tbody><tr><td>A</td><td>−1.5</td><td>−9</td><td>13.5</td><td>2.25</td></tr><tr><td>B</td><td>−0.5</td><td>−3</td><td>1.5</td><td>0.25</td></tr><tr><td>C</td><td>0.5</td><td>4</td><td>2.0</td><td>0.25</td></tr><tr><td>D</td><td>1.5</td><td>8</td><td>12.0</td><td>2.25</td></tr><tr><td><strong>Sum</strong></td><td>0</td><td>0</td><td><strong>29.0</strong></td><td><strong>5.00</strong></td></tr></tbody></table></div>
+<div class="formula">\[b_1=29/5=5.8\ \mathrm{min/km},\quad b_0=21-(5.8)(2.5)=6.5\ \mathrm{min},\quad \boxed{\widehat T=6.5+5.8x}.\]</div>
+<p><strong>Verification and prediction:</strong> at the mean distance <span class="inline-math">\(x=2.5\)</span> km, the fitted duration is <span class="inline-math">\(6.5+5.8(2.5)=21\)</span> minutes, exactly the sample mean. For a <em>new</em> 2.5-km route, that is a point forecast, not a guarantee or a measured actual duration. Here, no held-out evaluation has been performed.</p>
+<p><strong>Classification:</strong> redefine the target as <span class="inline-math">\(Y_{late}=1\)</span> if the <em>actual</em> duration exceeds 24 minutes, otherwise 0. The observed labels are <span class="inline-math">\((0,0,1,1)\)</span>. A classifier could model <span class="inline-math">\(P(T&gt;24\mid X=x)\)</span> and choose a justified Decision Threshold. <strong>But the regression point estimate does not supply that probability.</strong> For route C, the line predicts <span class="inline-math">\(6.5+5.8(3)=23.9\)</span> minutes (below 24), whereas the observed time was 25 minutes (late). Thresholding the fitted mean would incorrectly label that route as on time. This is only a within-sample illustration, not a comparison of generalization performance.</p>
+<div class="callout teal"><strong>Why this matters.</strong> “Predict minutes” and “predict probability of late delivery” express distinct uncertainty questions. Inferring the second from a single regression forecast requires information about the <em>distribution of travel times around that forecast</em>; the mean alone is insufficient. A direct classifier is another option. The full comparison belongs to later model-building guides.</div>
+</section><section class="guide-section teal" id="section-11"><h2>11. Which algorithms perform Classification, Regression, or both?</h2>
+<p><strong>Classification and Regression are types of prediction problems; algorithms are tools for solving them.</strong> Several algorithm families have variants for both tasks. What changes is the target, training objective, output structure, and way predictions are evaluated.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Algorithm family</th>
+  <th>Regression example</th>
+  <th>Classification example</th>
+  <th>Main intuition and caution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Linear Regression</td>
+  <td>Forecast weekly sales</td>
+  <td>Not usually used directly for class probabilities</td>
+  <td>Adds weighted feature contributions; may miss nonlinear structure</td>
+</tr>
+<tr>
+  <td>Logistic Regression</td>
+  <td>Not conventional numerical Regression</td>
+  <td>Predict missed appointment</td>
+  <td>Linear score → sigmoid → probability estimate; name is misleading</td>
+</tr>
+<tr>
+  <td>Decision Tree</td>
+  <td>Predict average sales in a terminal region</td>
+  <td>Predict missed/attended from class frequencies</td>
+  <td>Sequential splits; deep trees can overfit</td>
+</tr>
+<tr>
+  <td>Random Forest</td>
+  <td>Average many tree predictions</td>
+  <td>Aggregate class votes/probabilities from trees</td>
+  <td>Reduces instability through varied trees; less transparent than one tree</td>
+</tr>
+<tr>
+  <td>Gradient Boosting / XGBoost</td>
+  <td>Model residual-related updates for a numerical target</td>
+  <td>Optimize a Classification loss sequentially</td>
+  <td>Strong on structured data; requires validation and tuning</td>
+</tr>
+<tr>
+  <td>k-Nearest Neighbors (k-NN)</td>
+  <td>Average target values of neighbors</td>
+  <td>Use neighbors' class frequencies</td>
+  <td>Similarity depends on feature scales and distance definition</td>
+</tr>
+<tr>
+  <td>Support Vector Machines (SVM)</td>
+  <td>Support Vector Regression (SVR)</td>
+  <td>Margin-based Classification (SVC)</td>
+  <td>Geometric constraints; scaling can be important</td>
+</tr>
+<tr>
+  <td>Neural Networks</td>
+  <td>Predict demand or revenue</td>
+  <td>Predict class scores/probabilities</td>
+  <td>Flexible nonlinear functions; need careful design and sufficient evidence</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Same Tree family, different leaf prediction</h3>
+<p>Imagine a tree that splits retail observations at “advertising spend ≥ $3,000.” In a <strong>Regression Tree</strong>, a leaf may contain sales <span class="inline-math">\(7,8,11\)</span>, leading to a simple leaf prediction of <span class="inline-math">\((7+8+11)/3\approx8.67\)</span> thousand dollars. In a <strong>Classification Tree</strong>, a leaf containing four missed and one attended appointment might estimate the missed fraction as <span class="inline-math">\(4/5=0.80\)</span> before any calibration adjustments. The tree structure is similar, but the response and loss differ.</p>
+<h3>How to choose among algorithms</h3>
+<p>Start with an interpretable <strong>Baseline</strong> (mean forecast, majority class, Linear/Logistic Regression), then compare alternatives under the same fair validation design. Also ask: Are explanations required? Are errors costly? Is the dataset small? Are relationships nonlinear? How much latency is acceptable? A sophisticated model is not automatically preferable if it brings negligible benefit or operational risk.</p>
+</section><section class="guide-section purple" id="section-12"><h2>12. Learning objectives: why Regression and Classification use different losses</h2>
+<p>A <strong>Loss Function</strong> converts disagreement between model output and observed target into a number the training algorithm tries to reduce. It is not just a reporting statistic: its mathematical shape influences what parameters the algorithm learns.</p>
+<h3>Regression: Squared Error emphasizes magnitude</h3>
+<p>For one observation, Squared Error is <span class="inline-math">\((y-\hat y)^2\)</span>. If sales are 8.0 and the forecast is 8.7, then <span class="inline-math">\((8-8.7)^2=(-0.7)^2=0.49\)</span> in squared thousand-dollar units. If the error doubles in magnitude to 1.4, Squared Error becomes <span class="inline-math">\(1.4^2=1.96\)</span>—<strong>four times</strong> as large, not twice.</p>
+<p>For <span class="inline-math">\(n\)</span> observations, Mean Squared Error averages these squared discrepancies:</p>
+<div class="formula">\[L_{\mathrm{MSE}}=\frac1n\sum_{i=1}^n (y_i-\hat y_i)^2\]</div>
+
+<p>This helps explain why MSE is sensitive to large errors. Mean Absolute Error instead averages <span class="inline-math">\(|y_i-\hat y_i|\)</span>, with a linear penalty in error magnitude. Both can be appropriate, but they train and favor models differently.</p>
+<h3>Classification: Log Loss evaluates probability quality</h3>
+<p>For a binary target <span class="inline-math">\(y\in\{0,1\}\)</span> and predicted probability <span class="inline-math">\(0&lt;\hat p&lt;1\)</span>, <strong>Binary Cross-Entropy (Log Loss)</strong> for one case is:</p>
+<div class="formula">\[\ell(y,\hat p)=-\big[y\ln(\hat p)+(1-y)\ln(1-\hat p)\big]\]</div>
+
+<p>If the appointment is actually missed (<span class="inline-math">\(y=1\)</span>) and the model predicts <span class="inline-math">\(\hat p=0.80\)</span>, the loss is <span class="inline-math">\(-\ln(0.80)\approx0.2231\)</span>. If it predicts <span class="inline-math">\(\hat p=0.10\)</span> for that same missed appointment, the loss rises to <span class="inline-math">\(-\ln(0.10)\approx2.3026\)</span>. The second prediction was <strong>confidently wrong</strong>, so it is penalized much more.</p>
+<p>If the appointment is attended (<span class="inline-math">\(y=0\)</span>) and <span class="inline-math">\(\hat p=0.20\)</span>, the loss becomes <span class="inline-math">\(-\ln(1-0.20)\approx0.2231\)</span>. These calculations show that Log Loss rewards informative probabilities and strongly penalizes unwarranted confidence; Accuracy, by contrast, evaluates thresholded labels.</p>
+<h3>Why not use one universal loss?</h3>
+<p>A category encoded as 0 or 1 is not inherently a measured quantity whose numerical deviations reflect business consequences. Squared Error can technically be used to train a probability model in some settings (it is related to the Brier Score), but standard Classification commonly uses losses chosen for probabilistic class outcomes. Conversely, class Accuracy does not tell a retail manager whether a sales forecast missed by $100 or $100,000.</p>
+</section><section class="guide-section blue" id="section-13"><h2>13. Metrics, baselines, and the dangers of Class Imbalance</h2>
+<p>A useful evaluation metric must connect model behavior to the task and the practical cost of mistakes. An isolated “score” without a Baseline, uncertainty, and an explanation of what it measures can be misleading.</p>
+<h3>Regression: judge size and direction of errors</h3>
+<p><strong>MAE</strong> conveys a typical absolute miss in target units. <strong>RMSE</strong> highlights large forecast misses more strongly. A signed average error can reveal systematic under- or overprediction, but positive and negative errors can cancel; therefore use a magnitude metric too. In business forecasting, performance may also be sliced by season, store, or product because average accuracy can hide systematic failures in particular groups.</p>
+<p>A credible Baseline for time-series sales might be <strong>last week's sales</strong> or <strong>the same week last year</strong>, not the mean of all periods. Which one is valid depends on what is known at the forecast date. Compare models on identical future periods, not on an easy but irrelevant historical split.</p>
+<h3>Classification: judge whom we detect and whom we burden</h3>
+<p>Accuracy counts correct labels equally. Precision and Recall focus on the positive category from different angles. <strong>Specificity</strong> assesses the actual negatives. <strong>F1</strong> combines Precision and Recall; it intentionally ignores TN in its formula. Threshold-independent ranking metrics such as <strong>ROC AUC</strong> (Area Under the Receiver Operating Characteristic Curve) and <strong>PR AUC</strong> (Area Under the Precision–Recall Curve) summarize performance across thresholds, but they answer different questions and still need contextual interpretation.</p>
+<h3>The rare-event trap, calculated</h3>
+<p>Imagine <strong>1,000 bank transactions</strong>, of which <strong>10 are fraudulent</strong> and <strong>990 legitimate</strong>. An “always legitimate” model predicts zero fraud cases. It therefore has <span class="inline-math">\(TN=990\)</span>, <span class="inline-math">\(FN=10\)</span>, <span class="inline-math">\(TP=0\)</span>, and <span class="inline-math">\(FP=0\)</span>.</p>
+<div class="formula">\[\mathrm{Accuracy}=\frac{990}{1000}=99\%,\qquad \mathrm{Recall}_{\mathrm{fraud}}=\frac0{10}=0\%\]</div>
+
+<p>The <strong>99% Accuracy</strong> sounds excellent, yet the model detects <strong>none</strong> of the fraud. Its Precision for fraud is mathematically <strong>undefined</strong> because it predicts no positives (software packages sometimes assign zero by convention). This example explains why you must examine the class distribution and the Confusion Matrix rather than celebrate a single percentage.</p>
+<div class="callout amber"><strong>Additional subtlety.</strong> When prevalence changes between training and deployment, Precision may change even if Recall and Specificity stay approximately constant. For risk models, check probability Calibration and performance across meaningful groups rather than relying only on an overall average.</div>
+
+</section><section class="guide-section teal" id="section-14"><h2>14. Training, Validation, Test, and Data Leakage: a worked clinic scenario</h2>
+<p>To evaluate whether a model learned generalizable patterns, we must separate <strong>fitting</strong> from <strong>selecting</strong> and <strong>final assessment</strong>. The three roles are related but distinct.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Split</th>
+  <th>What it is for</th>
+  <th>What must not happen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Training</td>
+  <td>Estimate coefficients, tree splits, weights, preprocessing values</td>
+  <td>Claim performance on these same rows proves future accuracy</td>
+</tr>
+<tr>
+  <td>Validation</td>
+  <td>Compare algorithms, tune Hyperparameters and thresholds</td>
+  <td>Treat repeated tuning results as an independent final estimate</td>
+</tr>
+<tr>
+  <td>Test</td>
+  <td>One final assessment of a frozen modeling procedure</td>
+  <td>Repeatedly revisit and optimize after seeing Test results</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Why a realistic time split matters</h3>
+<p>Suppose appointment records span January through September. If the model will predict October appointments, a reasonable simulation is to <strong>train on earlier months</strong>, validate on later pre-October months, and reserve a subsequent period for testing. An exact split must account for the data volume, changing operational conditions, repeated patients, and when labels become observable. A random split could allow information from a patient's later appointments to help predict their earlier ones or otherwise overstate real-world generalization.</p>
+<h3>Example of Data Leakage</h3>
+<p>A feature called “appointment outcome status” is filled in after the visit. If you use it to predict whether that visit was missed, the feature nearly reveals the answer. A more subtle version is “number of reminders actually completed,” if those reminders were sent after the prediction date. A preprocessing leak occurs when we calculate a normalization mean using <strong>all</strong> rows before splitting: held-out rows then influence how Training data are transformed.</p>
+<p><strong>Correct procedure:</strong> split first according to the real prediction setting; fit imputation, scaling, encoding, and feature selection on Training only; apply the learned transformations to Validation and Test. Select the model and threshold on Validation, then report untouched Test performance once.</p>
+<h3>Cross-Validation is useful, not magic</h3>
+<p><strong>Cross-Validation</strong> repeats training and validation over multiple partitions to reduce dependence on one arbitrary split. For time-ordered forecasting, use methods that preserve chronology rather than ordinary random folds. For patient data, grouping by patient or clinical episode may be required to prevent one person's near-duplicate records appearing on both sides of a split. More folds cannot repair a fundamentally invalid prediction-time design.</p>
+</section><section class="guide-section purple" id="section-15"><h2>15. Probability Calibration, uncertainty, and consequences of decisions</h2>
+<p>A classifier's estimated probability is useful only if its numerical interpretation is reasonably trustworthy. A model can rank appointments correctly while <strong>systematically overstating</strong> the chance of a miss. <strong>Calibration</strong> addresses this mismatch between predicted probabilities and observed frequencies.</p>
+<p>Suppose 100 appointments each receive an estimated missed-appointment probability near <strong>0.80</strong>. If about 80 are missed under a stable evaluation setting, that group is consistent with calibration; if only 30 are missed, the probabilities are severely overconfident. This is a frequency-based illustration, not a guarantee about any individual appointment. Small sample sizes, changing populations, and selection effects complicate calibration assessment.</p>
+<h3>Brier Score: a simple probability calculation</h3>
+<p>For one binary observation, the Brier contribution is <span class="inline-math">\((\hat p-y)^2\)</span>. If <span class="inline-math">\(y=1\)</span> and <span class="inline-math">\(\hat p=0.8\)</span>, it is <span class="inline-math">\((0.8-1)^2=0.04\)</span>; if <span class="inline-math">\(\hat p=0.1\)</span>, it is <span class="inline-math">\((0.1-1)^2=0.81\)</span>. The <strong>Brier Score</strong> averages these terms. Lower is better, but interpreting scores requires accounting for class prevalence and a suitable reference model.</p>
+<p>Regression models also need uncertainty thinking: a sales forecast of $8,700 is not a guarantee of exactly $8,700. A <strong>Prediction Interval</strong> aims to describe a range for a future observation, distinct from a <strong>Confidence Interval</strong> for an estimated mean or parameter. A point prediction without context may induce unwarranted certainty in operational decisions.</p>
+<div class="callout purple"><strong>Model output is not a policy.</strong> Even a well-calibrated prediction does not determine which intervention is appropriate. Policies must consider actual costs, available resources, fairness, legal constraints, and whether an action changes the outcome being predicted.</div>
+
+
+<h3>Calculate the complete Brier Score for our 12 appointments</h3><p>Our clinic dataset already contains all 12 estimated probabilities and outcomes. Squaring every probability error in the same A–L order gives:</p><div class="formula">\[\begin{aligned}
+\text{Sum of squared errors}\; &=0.0100+0.0400+0.5184+0.1225\\
+&\quad+0.3600+0.2304+0.2304+0.3600\\
+&\quad+0.1024+0.0784+0.0225+0.0100\\
+&=2.0850
+\end{aligned}\]</div><div class="formula">\[\mathrm{Brier}=\frac{1}{12}\sum_{i=1}^{12}(\hat p_i-y_i)^2=\frac{2.0850}{12}=\boxed{0.17375}\]</div><p>For comparison, suppose a simple Baseline predicted a probability of 0.40 for <em>every</em> appointment, chosen independently of these 12 evaluation labels. There are five actual misses and seven attendances, so the baseline's Brier Score would be <span class="inline-math">\([5(0.4-1)^2+7(0.4-0)^2]/12=[5(0.36)+7(0.16)]/12=2.92/12\approx0.2433\)</span>. Our illustrative predictions score better than that particular Baseline on this set. But <strong>12 appointments are far too few to establish reliable probability Calibration</strong>; that requires adequate held-out data, appropriate grouping and performance checks across probability ranges.</p>
+</section><section class="guide-section blue" id="section-16"><h2>16. Interpretability, causation, and responsible application</h2>
+<p>Prediction asks whether observed information helps estimate an outcome. <strong>Causation</strong> asks whether changing a particular factor would change the outcome. A strong relationship between advertising spend and sales does not prove that increasing advertising by $1,000 will <em>cause</em> sales to rise by $1,700. Promotions may coincide with high-demand seasons, managers may spend more when demand is already rising, and other variables may confound the relationship.</p>
+<p>Similarly, a clinic may identify patients with higher missed-appointment risk, but those patterns may reflect transportation constraints, work schedules, accessibility, or the clinic's own booking processes. The responsible use of that estimate may be to offer flexible reminders or appointment support—never to presume that a prediction describes a person's motivation or deservingness of care.</p>
+<h3>A practical interpretation checklist</h3>
+<ol>
+<li>State <strong>what is being predicted</strong> and when the available features are measured.</li>
+<li>Identify <strong>who could be affected</strong> by false positives and false negatives.</li>
+<li>Explain whether a value is a <strong>class label, uncalibrated score, calibrated probability, numerical forecast, or interval</strong>.</li>
+<li>Check performance in populations, time periods, and groups relevant to deployment.</li>
+<li>Avoid claiming the model discovered a cause simply because it predicts well.</li>
+</ol>
+<p>These considerations are part of technical model quality, not separate from it. A highly accurate model that cannot be applied safely or transparently may be unsuitable for the real decision.</p>
+</section><section class="guide-section teal" id="section-17"><h2>17. A practical start-to-finish choice framework</h2>
+<p>A practitioner can use the following sequence for either industry without confusing a modeling demonstration with a deployable system.</p>
+<div class="diagram" aria-label="Modeling selection process"><div>Define decision<br/><small>Question, time, units</small></div><span>→</span><div>Define target<br/><small>Class or quantity?</small></div><span>→</span><div>Choose baseline<br/><small>Fair comparison</small></div><span>→</span><div>Validate<br/><small>Metric + real costs</small></div></div>
+
+<p><strong>Step 1 — Write the question in one sentence.</strong> “At 24 hours before the appointment, identify likely no-shows” or “On Friday, forecast next week's sales in dollars.” Avoid a vague objective like “apply Machine Learning.”</p>
+<p><strong>Step 2 — Define the observation and outcome.</strong> For appointments: one booking, labeled missed or attended after the visit. For sales: one store-week, labeled by finalized revenue. Specify units and whether targets can be missing or delayed.</p>
+<p><strong>Step 3 — Audit valid features.</strong> Exclude information not available by prediction time. Document missing data, class prevalence, unusual values, and how representative the sample is of future cases.</p>
+<p><strong>Step 4 — Prepare a defensible split.</strong> Respect chronology, patient/customer grouping, and any other dependency. Keep the Test set untouched while making modeling choices.</p>
+<p><strong>Step 5 — Build a Baseline and an interpretable first model.</strong> For sales, compare against a seasonal naive forecast and a simple Regression. For missed appointments, compare against a majority-class rule and Logistic Regression. Ensure both use the same validation rows.</p>
+<p><strong>Step 6 — Choose meaningful metrics and thresholds.</strong> Use MAE/RMSE with monetary interpretation for sales; use Precision, Recall, calibration, and intervention costs for clinic probabilities. Inspect subgroup performance and uncertainty.</p>
+<p><strong>Step 7 — Evaluate and monitor.</strong> Freeze the full processing procedure, test it once, then monitor data quality, outcomes, prediction distributions, and drift after deployment. Redesign or retrain when evidence justifies it rather than assuming accuracy remains constant.</p>
+
+<h3>Prepare for the companion Jupyter laboratory</h3><p>After understanding the calculations, a reproducible lab can follow exactly the same logic rather than immediately hiding it behind a library call. First, create the five-row retail table and independently calculate its coefficients and errors using NumPy; compare those numbers with a scikit-learn linear model. Second, enter the 12 clinic probabilities and observed labels, calculate TP, FP, FN and TN at several thresholds, and verify Precision, Recall and Brier Score. Finally, change the assumed FP/FN costs and explain whether the preferred threshold changes. This is a proposed lab sequence—not evidence of a trained clinic classifier or proof that the illustrative data support deployment.</p>
+</section><section class="guide-section amber" id="section-18"><h2>18. Common mistakes: detailed corrections, not slogans</h2>
+<p>Each misconception below is accompanied by the reason it fails and a practical correction. These are essential because choosing the wrong problem formulation can invalidate every subsequent modeling step.</p>
+<h3>1. “Logistic Regression must predict a quantity because its name says Regression.”</h3>
+<p><strong>Why it is wrong:</strong> Standard binary Logistic Regression maps a linear score through the sigmoid function to estimate class probability. <strong>Correct approach:</strong> inspect the target and the output, not the method's historical name. A missed/attended outcome is Classification.</p>
+<h3>2. “If a variable has values 0, 1, and 2, it is automatically Regression.”</h3>
+<p><strong>Why it is wrong:</strong> Digits can identify unrelated categories such as billing, technical, and delivery. Their mathematical differences have no natural size. <strong>Correct approach:</strong> describe what each value represents. Use Multiclass Classification if the values are class identifiers.</p>
+<h3>3. “If the outcome is an integer, it must be Classification.”</h3>
+<p><strong>Why it is wrong:</strong> Counts of customer calls or defective units are quantitative, though integer-valued. <strong>Correct approach:</strong> consider Count Regression methods when the goal is to predict the number, and Classification when predicting a category such as “more than 10 calls.”</p>
+<h3>4. “A probability of 0.80 means the event will happen.”</h3>
+<p><strong>Why it is wrong:</strong> A probability summarizes uncertainty; even well-calibrated 0.80 predictions can correspond to non-events. <strong>Correct approach:</strong> interpret it as estimated event risk and evaluate Calibration.</p>
+<h3>5. “The label and the probability are interchangeable.”</h3>
+<p><strong>Why it is wrong:</strong> A 0.52 and a 0.95 probability can both become label 1 at a 0.50 threshold, but they express very different degrees of modeled risk. <strong>Correct approach:</strong> retain probability estimates when decisions require ranking, resource allocation, or threshold adjustment.</p>
+<h3>6. “The Decision Threshold must always be 0.50.”</h3>
+<p><strong>Why it is wrong:</strong> False negatives and false positives often carry unequal consequences. Our clinic example had a lower illustrative cost at 0.30 despite lower Accuracy. <strong>Correct approach:</strong> choose a threshold from justified costs or operational constraints using Validation data, not by reflex.</p>
+<h3>7. “High Accuracy proves a rare-event model works.”</h3>
+<p><strong>Why it is wrong:</strong> Predicting no fraud in 1,000 transactions with 10 frauds gave 99% Accuracy and 0% fraud Recall. <strong>Correct approach:</strong> compare against a meaningful Baseline and inspect the Confusion Matrix, Precision, Recall, and PR behavior.</p>
+<h3>8. “The model with the lowest Training Error is the best.”</h3>
+<p><strong>Why it is wrong:</strong> Flexible models can memorize idiosyncrasies, and the retailer's fitted MAE used the very same five weeks employed for estimation. <strong>Correct approach:</strong> compare performance on properly separated Validation data, then report Test results only after model selection.</p>
+<h3>9. “It is safe to scale or impute using all the data before splitting.”</h3>
+<p><strong>Why it is wrong:</strong> Even unsupervised transformations can transmit Test-set information into model development. <strong>Correct approach:</strong> fit preprocessing only on Training and apply learned settings to held-out rows within a Pipeline.</p>
+<h3>10. “A low Regression error means the estimate is causal.”</h3>
+<p><strong>Why it is wrong:</strong> Predictive association can arise from confounding, reverse causation, or shared time trends. <strong>Correct approach:</strong> describe the coefficient as predictive unless a credible causal design justifies stronger claims.</p>
+<h3>11. “Precision and Recall mean the same thing.”</h3>
+<p><strong>Why it is wrong:</strong> Precision divides by predicted positives; Recall divides by actual positives. In our 0.50 clinic example they were 4/6 and 4/5, respectively. <strong>Correct approach:</strong> name the denominator aloud to avoid mixing them up.</p>
+<h3>12. “All continuous scores are Regression outputs.”</h3>
+<p><strong>Why it is wrong:</strong> A classifier may return an unbounded decision score or a number between zero and one, yet it still predicts a category. <strong>Correct approach:</strong> classify the task by the underlying target and the objective used for learning.</p>
+<h3>13. “The lowest overall error is enough for deployment.”</h3>
+<p><strong>Why it is wrong:</strong> A low average can mask serious errors for specific clinics, seasons, regions, or patient groups; deployment also brings changing data and constraints. <strong>Correct approach:</strong> report relevant slices, uncertainty, stability, and operational impact.</p>
+<h3>14. “If I threshold a Regression forecast, it is exactly the same as training a classifier.”</h3>
+<p><strong>Why it is wrong:</strong> A Regression model optimizes numerical errors across the full target range, while a classifier can optimize prediction of the thresholded event. <strong>Correct approach:</strong> compare both strategies on the same decision metric and held-out data; choose based on actual use.</p>
+<h3>15. “An impressive metric on the Test set means I can now tune until it improves.”</h3>
+<p><strong>Why it is wrong:</strong> Repeatedly choosing settings based on Test performance makes that set part of training decisions. <strong>Correct approach:</strong> return to proper Validation data and reserve a genuinely untouched final evaluation where feasible.</p>
+</section><section class="guide-section teal" id="section-19"><h2>19. Check your understanding: show your reasoning</h2>
+<p>Attempt each question before opening the explanation. These problems revisit the real decisions, calculations, and limitations rather than asking for definitions alone.</p>
+<details><summary>1. A hospital predicts the number of available beds tomorrow. Classification or Regression?</summary><p><strong>Regression.</strong> The target is a numerical count of available beds; although integer-valued, it represents a quantity. A count-specific Regression model may be appropriate. If the hospital instead asks whether capacity will drop below five beds, it has defined a Binary Classification target.</p></details>
+
+<details><summary>2. An online store labels a transaction “high risk” whenever the estimated fraud probability is at least 0.60. What is the target and what is the decision rule?</summary><p>The underlying target is the discrete fraud/not-fraud outcome, so it is Binary Classification. The probability is an intermediate model output; the decision rule maps <span class="inline-math">\(\hat p\ge0.60\)</span> to “high risk.” The threshold is a policy choice, not a mathematical law.</p></details>
+
+<details><summary>3. In the retail data, recompute the OLS slope from the totals 17 and 10.</summary><p>The slope is <span class="inline-math">\(b_1=17/10=1.7\)</span>. Since advertising and sales are each expressed in $1,000, an extra $1,000 of advertising corresponds to $1,700 greater <em>fitted</em> sales in this simple model—not a demonstrated causal effect.</p></details>
+
+<details><summary>4. Predict sales when advertising x = 4, then interpret a residual of −0.7.</summary><p>Substitute into <span class="inline-math">\(\hat y=1.9+1.7x\)</span>: <span class="inline-math">\(1.9+1.7(4)=8.7\)</span> thousand dollars. An actual outcome of 8.0 gives <span class="inline-math">\(e=8.0-8.7=-0.7\)</span>, meaning the model overpredicted sales by $700.</p></details>
+
+<details><summary>5. Using absolute residuals 0.4, 0.3, 0, 0.7, 0.6, calculate MAE.</summary><p>Add all absolute errors: <span class="inline-math">\(0.4+0.3+0+0.7+0.6=2.0\)</span>. Divide by five observations: <span class="inline-math">\(\mathrm{MAE}=2/5=0.4\)</span> thousand dollars, or $400. MAE is nonnegative and has the target's original units.</p></details>
+
+<details><summary>6. At the clinic threshold of 0.50, why are Precision and Recall different?</summary><p>There are four TP, two FP, and one FN. Precision asks how many flagged cases really missed: <span class="inline-math">\(4/(4+2)=4/6\)</span>. Recall asks how many actual misses were flagged: <span class="inline-math">\(4/(4+1)=4/5\)</span>. Different denominators describe different operational questions.</p></details>
+
+<details><summary>7. At t = 0.30, calculate clinic Recall and Precision.</summary><p>All five actual missed appointments are flagged, so <span class="inline-math">\(TP=5\)</span>, <span class="inline-math">\(FN=0\)</span>, and Recall is <span class="inline-math">\(5/5=100\%\)</span>. Four attended appointments are also flagged, so Precision is <span class="inline-math">\(5/(5+4)=5/9\approx55.6\%\)</span>.</p></details>
+
+<details><summary>8. Why might a clinic prefer the 0.30 threshold over the 0.50 threshold even though Accuracy is lower?</summary><p>With the stated illustrative costs, the 0.30 threshold has four FP and no FN, producing <span class="inline-math">\(4(20)=\$80\)</span>. The 0.50 threshold has two FP and one FN, producing <span class="inline-math">\(2(20)+1(80)=\$120\)</span>. The lower-cost choice is not necessarily the highest-Accuracy choice. Actual decisions require validated costs and fairness review.</p></details>
+
+<details><summary>9. A model flags no fraud in 1,000 transactions, 10 of which are fraud. Give Accuracy and Recall.</summary><p>The model gets 990 legitimate cases right and misses all 10 frauds. Accuracy is <span class="inline-math">\(990/1000=99\%\)</span>; fraud Recall is <span class="inline-math">\(0/10=0\%\)</span>. Precision is undefined because no positive predictions were made. The high Accuracy hides a complete failure to detect fraud.</p></details>
+
+<details><summary>10. A target takes values 1, 2, and 3 for “bronze,” “silver,” and “gold.” Which task is appropriate?</summary><p>These are ordered categories rather than guaranteed equally spaced measured quantities, so Ordinal Classification is appropriate. The integer representation does not by itself make the target numerical Regression.</p></details>
+
+<details><summary>11. What is wrong with using a “patient attended” flag recorded after the visit to predict that visit's absence?</summary><p>It is Data Leakage. The flag contains the target outcome and cannot be known 24 hours before the appointment. Training with it gives deceptive results. Only use predictors genuinely available at the prediction moment.</p></details>
+
+<details><summary>12. For a missed appointment y = 1, compare Log Loss at p = 0.80 and p = 0.10.</summary><p>Because <span class="inline-math">\(y=1\)</span>, the loss is <span class="inline-math">\(-\ln(\hat p)\)</span>. At 0.80 it is about 0.2231; at 0.10 it is about 2.3026. The confident incorrect forecast incurs more than ten times the loss of the 0.80 forecast, even before converting scores into class labels.</p></details>
+
+<details><summary>13. Why can't we treat the retailer's Training MAE of $400 as its verified future forecasting error?</summary><p>We estimated the line and measured the error on the same five observations. In-sample fit is optimistic about future performance, especially with few examples. Future weeks, evaluated under a time-respecting split and compared against an appropriate Baseline, are required.</p></details>
+
+<details><summary>14. A support-ticket classifier assigns both “billing” and “technical” to a message. Is this Multiclass or Multilabel?</summary><p><strong>Multilabel Classification</strong>, because two labels apply simultaneously. Multiclass Classification assumes each observation belongs to exactly one among several mutually exclusive classes.</p></details>
+
+
+<details><summary>15. Why can the same estimated probability produce different class labels?</summary><p>Suppose <span class="inline-math">\(\hat p=0.60\)</span>. At <span class="inline-math">\(t=0.50\)</span>, the rule <span class="inline-math">\(\hat p\ge t\)</span> predicts class 1. At <span class="inline-math">\(t=0.70\)</span>, it predicts class 0. The model has produced the same 0.60 in both cases; the policy rule changed. A threshold does not make the probability more or less calibrated, and its choice should reflect validated costs and objectives.</p></details><details><summary>16. Calculate the clinic model's Brier Score from a squared-error sum of 2.0850 over 12 appointments.</summary><p>By definition, the binary Brier Score is the average of <span class="inline-math">\((\hat p_i-y_i)^2\)</span>. Therefore <span class="inline-math">\(2.0850/12=0.17375\)</span>. Lower is better for this metric, but a single score is not a Calibration curve, and 12 cases are insufficient to validate probability quality in a clinical population.</p></details>
+
+<h3>New transfer challenges: use data not solved in the main examples</h3>
+<details><summary>17. New transport records: calculate an error metric and late-delivery recall.</summary><p>Three independent illustrative deliveries have (actual duration, forecast duration) in minutes: (18,20), (27,23), and (30,29). The absolute Regression errors are <span class="inline-math">\(|18-20|=2\)</span>, <span class="inline-math">\(|27-23|=4\)</span>, and <span class="inline-math">\(|30-29|=1\)</span>; therefore <span class="inline-math">\(\mathrm{MAE}=(2+4+1)/3=7/3\approx2.33\)</span> minutes. Define <em>late</em> as a duration strictly greater than 24 minutes. Actual labels are (0,1,1), and labels obtained by thresholding forecasts are (0,0,1). Thus <span class="inline-math">\(TP=1,FN=1,TN=1,FP=0\)</span>, <span class="inline-math">\(\mathrm{Recall}=TP/(TP+FN)=1/(1+1)=50\%\)</span> and <span class="inline-math">\(\mathrm{Accuracy}=(1+1)/3\approx66.7\%\)</span>. This exercise applies the same data to two distinct target questions; it does <strong>not</strong> establish how a separately trained classifier would perform.</p></details>
+<details><summary>18. A new insurance risk score: can a small group verify probability Calibration?</summary><p>Four synthetic claims have (estimated fraud probability, actual fraud label): (0.10,0), (0.40,1), (0.65,0), (0.90,1). At Threshold 0.50, only cases 3 and 4 are flagged, so <span class="inline-math">\(TP=1, FP=1, FN=1, TN=1\)</span>. Precision is <span class="inline-math">\(1/(1+1)=0.50\)</span>, and Recall is also <span class="inline-math">\(1/(1+1)=0.50\)</span>. At Threshold 0.30, cases 2, 3, and 4 are flagged: <span class="inline-math">\(TP=2,FP=1,FN=0,TN=1\)</span>, Precision <span class="inline-math">\(2/3\approx66.7\%\)</span> and Recall <span class="inline-math">\(2/2=100\%\)</span>. Four outcomes cannot validate Calibration, and these are illustrative evaluations, not permission to optimize a threshold on final Test data.</p></details>
+<details><summary>19. Electricity demand: which Task and which Target if a manager changes the question?</summary><p>“Predict tomorrow's consumption in kilowatt-hours” is Regression, with quantitative Target <span class="inline-math">\(E\)</span> measured in kWh. “Will tomorrow's consumption exceed 30 kWh?” is Binary Classification, with <span class="inline-math">\(Y=\mathbf{1}\{E&gt;30\}\)</span>. A meter code such as “001” is an identifier, not a quantitative Target merely because it has digits. The features must be available before the forecast time. Even a Regression forecast of exactly 29 kWh does not alone establish the probability that consumption exceeds 30 kWh.</p></details>
+</section><section class="guide-section purple" id="section-20"><h2>20. Glossary, conceptual connections, and final takeaway</h2>
+<p>The glossary connects each term to what you should actually do with it. Return to the numerical examples whenever a definition feels abstract.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Term</th>
+  <th>Meaning and practical implication</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Supervised Learning</td>
+  <td>Learn from examples with observed targets; both Classification and Regression belong here.</td>
+</tr>
+<tr>
+  <td>Target / Label</td>
+  <td>Outcome to be predicted; its meaning establishes the problem type.</td>
+</tr>
+<tr>
+  <td>Feature</td>
+  <td>Information available before the decision; future-only values cause Data Leakage.</td>
+</tr>
+<tr>
+  <td>Regression</td>
+  <td>Predict a quantitative amount, possibly with uncertainty intervals.</td>
+</tr>
+<tr>
+  <td>Classification</td>
+  <td>Predict a discrete category, commonly via scores or probabilities.</td>
+</tr>
+<tr>
+  <td>Binary / Multiclass / Multilabel</td>
+  <td>Two categories / one of several categories / several labels at once.</td>
+</tr>
+<tr>
+  <td>Ordinal Classification</td>
+  <td>Predict categories that have an order but not necessarily equal spacing.</td>
+</tr>
+<tr>
+  <td>Model Parameter</td>
+  <td>Learned quantity, such as the 1.7 retail regression slope.</td>
+</tr>
+<tr>
+  <td>Hyperparameter</td>
+  <td>Configuration selected by the practitioner, such as tree depth or regularization strength.</td>
+</tr>
+<tr>
+  <td>Residual</td>
+  <td>Observed minus predicted numerical value; preserve its sign when interpreting direction.</td>
+</tr>
+<tr>
+  <td>MAE / MSE / RMSE</td>
+  <td>Regression error measures; MAE and RMSE have original target units, MSE squared units.</td>
+</tr>
+<tr>
+  <td>Decision Threshold</td>
+  <td>Cutoff used to convert a probability/score into a class decision.</td>
+</tr>
+<tr>
+  <td>TP / FP / FN / TN</td>
+  <td>The four outcome counts for a specified positive class and threshold.</td>
+</tr>
+<tr>
+  <td>Precision</td>
+  <td>Fraction of predicted positives that are truly positive.</td>
+</tr>
+<tr>
+  <td>Recall / Sensitivity</td>
+  <td>Fraction of actual positives identified by the model.</td>
+</tr>
+<tr>
+  <td>Specificity</td>
+  <td>Fraction of actual negatives identified as negative.</td>
+</tr>
+<tr>
+  <td>Calibration</td>
+  <td>Agreement between forecast probabilities and observed event frequencies.</td>
+</tr>
+<tr>
+  <td>Log Loss</td>
+  <td>Classification probability loss; strongly penalizes confident wrong forecasts.</td>
+</tr>
+<tr>
+  <td>Baseline</td>
+  <td>Simple reference predictor that establishes whether complexity adds value.</td>
+</tr>
+<tr>
+  <td>Training / Validation / Test</td>
+  <td>Fit models / choose settings / independently assess the chosen procedure.</td>
+</tr>
+<tr>
+  <td>Data Leakage</td>
+  <td>Using information unavailable at prediction time or leaked from held-out data.</td>
+</tr>
+<tr>
+  <td>Class Imbalance</td>
+  <td>Strongly unequal class frequencies; overall Accuracy can be misleading.</td>
+</tr>
+<tr>
+  <td>Generalization</td>
+  <td>Ability to perform on appropriately representative, genuinely unseen examples.</td>
+</tr>
+<tr><td>Decision Boundary</td><td>The set of Feature combinations where a model changes predicted classes at a chosen threshold; not necessarily a hard boundary in estimated probability.</td></tr><tr><td>Brier Score</td><td>Average squared error between predicted binary probabilities and observed 0/1 labels; lower is better.</td></tr><tr><td>Conditional Mean</td><td>Average outcome expected among observations sharing a Feature pattern; an important target of Squared Error Regression.</td></tr>
+</tbody>
+</table></div>
+<h3>The single most useful final question</h3>
+<p>Before choosing any Machine Learning algorithm, finish this sentence: <strong>“For one observation, using information available at time ___, I need to predict ___, and a useful prediction will be judged by ___.”</strong> If the blank is a measurable quantity, consider Regression; if it is membership in a category, consider Classification. If the application combines both, explicitly define the two tasks rather than concealing them under one generic score.</p>
+<p>Both approaches demand mathematical care, honest evaluation, and responsible interpretation. The method should serve the question—not the other way around.</p>
+</section>
+</article></main>
+<footer class="guide-footer"><div class="container"><p>Educational guide · Illustrative data · © Alfredo Saldana</p><a href="/tutorials.html">Learn</a></div></footer>
+<script>(function(){var b=document.querySelector('.menu-btn'),n=document.querySelector('#site-nav');if(b&&n){b.addEventListener('click',function(){var o=n.classList.toggle('open');b.setAttribute('aria-expanded',o?'true':'false');});}})();</script>
+</body></html>

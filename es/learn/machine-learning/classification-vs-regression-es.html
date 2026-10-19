@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="description" content="Aprende a distinguir Classification y Regression desde el significado del Target. Incluye aplicaciones clínicas, comerciales y financieras, dos datasets completos, cálculos paso a paso, probabilidades, métricas, Thresholds, errores comunes y ejercicios resueltos."/>
+<title>Classification vs. Regression: cómo identificar problemas de predicción</title>
+<link rel="stylesheet" href="/assets/css/style.css"/>
+<link rel="alternate" hreflang="en" href="/learn/machine-learning/classification-vs-regression.html"/>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>
+.guide-hero{padding:56px 0 38px;background:#fff;border-bottom:1px solid var(--line)}.guide-hero h1{font-size:clamp(2.15rem,4.5vw,3.65rem);max-width:980px;line-height:1.14}.guide-hero .lead{max-width:840px}.guide-meta{color:var(--muted);font-size:.88rem}.guide-main{padding:38px 0 80px}.guide-article{width:min(900px,calc(100% - 32px));margin:auto}.guide-section{background:white;border:1px solid var(--line);border-left:5px solid #3178b9;border-radius:0 17px 17px 0;padding:28px 34px;margin:0 0 22px;box-shadow:0 3px 12px rgba(11,31,58,.025)}.guide-section.teal{border-left-color:#15957e}.guide-section.purple{border-left-color:#8c69ba}.guide-section.amber{border-left-color:#d59a32}.guide-section h2{font-size:clamp(1.55rem,3vw,2.1rem);line-height:1.2;margin:0 0 18px}.guide-section h3{font-size:1.27rem;line-height:1.25;margin:26px 0 12px}.guide-section p{font-size:1.035rem;line-height:1.8}.callout{padding:20px 22px;border-left:4px solid #3178b9;background:#eff6ff;border-radius:0 12px 12px 0;margin:22px 0}.callout h3:first-child{margin-top:0}.callout p:last-child{margin-bottom:0}.callout.teal{background:#effaf7;border-color:#15957e}.callout.purple{background:#f6f1fd;border-color:#8c69ba}.callout.amber{background:#fff8e8;border-color:#d59a32}.formula{text-align:center;background:#f6f1fd;border:1px solid #e3d7f3;border-radius:12px;padding:22px 16px;font-size:clamp(1.35rem,3vw,1.85rem);overflow-x:auto;margin:20px 0}.table-wrap{overflow-x:auto;margin:24px 0}table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:500px}caption{text-align:left;font-weight:650;padding-bottom:10px;color:#536276}th,td{padding:12px 14px;text-align:left;border-bottom:1px solid #e1e9f1}th{background:#eaf2ff;color:#0b1f3a}tbody tr:nth-child(even){background:#f8fafc}.diagram{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:27px 0}.diagram div{background:#eaf2ff;border:1px solid #d9e6fa;border-radius:12px;padding:14px 10px;text-align:center;flex:1;min-width:105px;font-size:.82rem;font-weight:700;color:#0b1f3a}.diagram small{font-size:.76rem;font-weight:400}.diagram span{color:#2563eb;font-weight:700}.plot{margin:25px auto;max-width:680px}.plot svg{display:block;width:100%;height:auto;background:#fbfdff;border:1px solid #e5eaf1;border-radius:12px}.plot figcaption{font-size:.83rem;color:#526175;margin-top:10px;line-height:1.5}.steps{padding-left:22px}.steps li{padding:8px 0;line-height:1.75}.cluster-viz{display:flex;align-items:center;gap:12px;justify-content:space-around;padding:22px;background:#f6fafc;border-radius:12px;flex-wrap:wrap}.cluster-viz span{min-width:60px;text-align:center;border:2px solid #15957e;border-radius:22px;background:#dff5ed;padding:9px;font-weight:700}.cluster-viz .last{border-color:#8c69ba;background:#eee5fa}details{border:1px solid #dfe8f0;padding:16px 19px;border-radius:12px;margin:12px 0;background:#fbfdff}summary{font-weight:700;cursor:pointer;line-height:1.6}details p{padding-top:14px;margin:0}.glossary{display:grid;grid-template-columns:1fr 1fr;gap:12px}.glossary div{background:#f8fafc;border:1px solid #e5eaf1;border-radius:12px;padding:14px}.glossary dt{font-weight:700;color:#0b1f3a}.glossary dd{margin:5px 0 0;color:#506178;line-height:1.6}.guide-links{display:flex;gap:15px;flex-wrap:wrap;margin-top:20px}.guide-links a{color:#2563eb;font-weight:700}.guide-footer{background:#071426;color:#c4d2e2;padding:30px 0}.guide-footer a{color:white}.skip{position:absolute;top:-200px}.skip:focus{top:10px;left:10px;z-index:999;background:white;padding:12px}@media(max-width:650px){.guide-section{padding:22px 19px}.glossary{grid-template-columns:1fr}.diagram{gap:6px}.diagram div{min-width:115px}.diagram span{display:none}.guide-hero{padding:36px 0 30px}.guide-main{padding-top:22px}}
+
+.guide-section .table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.guide-section .table-wrap table{width:100%;font-variant-numeric:tabular-nums}.guide-section .formula{line-height:1.7}.guide-section .callout .formula{background:#fff}.guide-section h3{line-height:1.3}.guide-section p+ .formula{margin-top:14px}@media(max-width:650px){.guide-section .formula{font-size:1.05rem;padding:16px 10px}.guide-section .table-wrap th,.guide-section .table-wrap td{padding:10px 12px;white-space:nowrap;font-size:.9rem}}
+
+.guide-section .note-inline{font-size:.88rem;color:#526175}.guide-section .mini-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:22px 0}.mini-grid .tile{background:#f8fafc;border:1px solid #dfe8f0;border-radius:12px;padding:16px}.mini-grid .tile strong{display:block;color:#0b1f3a;margin-bottom:7px}.guide-section .mini-grid p{font-size:.91rem;line-height:1.55;margin:0}.guide-section .math-caption{font-size:.9rem;color:#536276;margin-top:-8px}.guide-section .table-wrap td{vertical-align:top}.guide-section .source-list li{padding:6px 0;line-height:1.7}.guide-section .source-list a{color:#2563eb;text-decoration:underline;text-underline-offset:3px}.guide-section .formula{overflow-wrap:normal}.guide-section svg text{font-family:Inter,Arial,sans-serif}.guide-section .section-intro{font-size:1.12rem;color:#42526a}.guide-section .algorithm{border-top:1px solid #e2eaf3;padding-top:7px;margin-top:20px}.guide-section .algorithm h3{margin-top:12px}.guide-section .algorithm p:last-child{margin-bottom:10px}@media(max-width:650px){.guide-section .mini-grid{grid-template-columns:1fr}.guide-section .formula{overflow-x:auto;white-space:normal}.guide-section .plot{overflow-x:auto}}
+
+.guide-section .inline-math{white-space:normal}.guide-section .plot-svg{margin:22px 0 26px}.guide-section .plot-svg svg{display:block;width:100%;height:auto;border:1px solid #dce6ef;border-radius:12px;background:#fbfdff}.guide-section .plot-svg figcaption{color:#526175;font-size:.88rem;line-height:1.65;margin-top:9px}.guide-section .table-wrap table{min-width:530px}.guide-section .diagram{justify-content:center}.guide-section .diagram div{min-width:120px}.guide-section details p{font-size:1rem;line-height:1.75}.guide-section details summary{color:#0b1f3a}.guide-section h3{scroll-margin-top:90px}.guide-section{scroll-margin-top:90px}.guide-section .formula{max-width:100%;overflow:auto}.guide-section .MathJax{max-width:100%}.guide-section .formula mjx-container[display="true"]{margin:0!important;min-width:max-content}.guide-section .table-wrap{max-width:100%}@media(max-width:650px){.guide-section .plot-svg figcaption{font-size:.82rem}.guide-section .formula{font-size:1.02rem}}
+
+/* Guide charts remain legible on narrow screens: scroll the figure, not the page. */
+@media(max-width:650px){.guide-main{overflow-x:clip}.guide-section .plot-svg{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.guide-section .plot-svg svg{width:660px;max-width:none}.guide-section .plot-svg figcaption{max-width:100%;font-size:.9rem}}
+</style>
+</head>
+<body>
+<a href="#main" class="skip">Saltar al contenido</a>
+<header class="site-header"><div class="container nav-wrap"><div style="display:flex;align-items:center;gap:20px"><a class="brand" href="/es/index.html">Alfredo Saldana</a><div class="lang-switch" style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap"><a href="/learn/machine-learning/classification-vs-regression.html" lang="en">EN</a><span aria-hidden="true"> | </span><a href="/es/learn/machine-learning/classification-vs-regression-es.html" lang="es" aria-current="page">ES</a></div></div><button class="menu-btn" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Abrir navegación">☰</button><nav class="nav" id="site-nav" aria-label="Navegación principal"><a href="/es/index.html">Inicio</a><a href="/es/tutorials.html" class="active">Recursos</a><a href="/es/projects.html">Proyectos</a><a href="/es/open-box.html">Open Box</a><a href="/es/about.html">Acerca de</a><a href="/es/contact.html">Contacto</a></nav></div></header>
+<section class="guide-hero"><div class="narrow"><div class="eyebrow">LEARN · MACHINE LEARNING</div><h1>Classification vs. Regression: cómo identificar problemas de predicción</h1><p class="lead">Aprende a distinguir Classification y Regression desde el significado del Target. Incluye aplicaciones clínicas, comerciales y financieras, dos datasets completos, cálculos paso a paso, probabilidades, métricas, Thresholds, errores comunes y ejercicios resueltos.</p><p class="guide-meta">Machine Learning · Guía 2 de 33 · Conceptos, cálculos y aplicaciones</p><div class="guide-links"><a href="/learn/machine-learning/classification-vs-regression.html" lang="en">Read in English ↗</a><a href="/es/tutorials.html">Volver a Learn ↗</a></div></div></section>
+<main id="main" class="guide-main"><article class="guide-article">
+<section class="guide-section blue" id="section-1"><h2>1. Empecemos por la decisión: ¿qué queremos predecir?</h2>
+<p>Supongamos que una <strong>clínica de consultas externas</strong> desea identificar qué citas tienen mayor probabilidad de no ser atendidas por el paciente. Su finalidad es ofrecer recordatorios adecuados, no negar atención. Por otra parte, una <strong>empresa minorista</strong> necesita pronosticar sus ventas de la próxima semana para planificar personal e inventario. Ambos problemas tienen ejemplos históricos y resultados conocidos. Ambos pertenecen a <strong>Supervised Learning</strong>. Sin embargo, las preguntas son fundamentalmente diferentes.</p>
+<ul>
+<li><strong>Classification:</strong> <em>¿A qué categoría pertenecerá el resultado?</em> Para la clínica, el Target puede ser <strong>cita perdida (1)</strong> frente a <strong>cita atendida (0)</strong>.</li>
+<li><strong>Regression:</strong> <em>¿Qué cantidad numérica esperamos obtener?</em> Para la empresa, el Target puede ser <strong>ventas semanales expresadas en miles de dólares</strong>.</li>
+</ul>
+<div class="callout"><strong>Idea central.</strong> La distinción depende principalmente del <em>significado del Target y de la pregunta que queremos responder</em>, no del nombre del algoritmo, el formato del archivo ni de que el dataset contenga números. Un Target 0/1 representa clases; una cantidad monetaria representa una magnitud.</div>
+
+<p>Desarrollaremos los dos casos de manera independiente, presentaremos sus pequeños datasets completos, calcularemos los resultados paso a paso y compararemos las métricas de evaluación y las decisiones prácticas. Todos los datasets y las predicciones utilizados aquí son <strong>ejemplos construidos con fines educativos</strong>; no representan resultados de investigación ni estimaciones reales de una clínica o empresa.</p>
+<div class="diagram" aria-label="Dos preguntas de predicción"><div>Datos clínicos<br/><small>¿Quién podría faltar?</small></div><span>→</span><div>Classification<br/><small>Faltó / asistió; probabilidad</small></div><div>Datos comerciales<br/><small>¿Cuánto venderemos?</small></div><span>→</span><div>Regression<br/><small>Importe pronosticado</small></div></div>
+
+
+<h3>Objetivos de aprendizaje: qué podrás hacer al finalizar</h3><ol class="steps"><li>Convertir una decisión real en una unidad de observación, Features válidas y un Target claramente definido.</li><li>Reconocer si el Target es una cantidad medida, una categoría, una categoría ordenada o varias etiquetas simultáneas.</li><li>Estimar e interpretar un modelo sencillo de Regression, sus Residuals y métricas de error.</li><li>Transformar probabilidades de Classification en categorías mediante un Decision Threshold, y calcular una Confusion Matrix con sus métricas.</li><li>Explicar por qué los Baselines, las divisiones correctas de datos, la incertidumbre y los costos operativos son esenciales para comparar modelos.</li><li>Reformular de manera independiente un dataset nuevo como pronóstico numérico o riesgo de una clase, justificar la elección y revisar sus consecuencias.</li></ol>
+</section><section class="guide-section teal" id="section-2"><h2>2. Desde los fundamentos: observaciones, Features, Targets y momento de predicción</h2>
+<p>Un <strong>dataset</strong> reúne observaciones. Una observación puede corresponder a una cita programada, una transacción de un cliente o una semana de ventas. Las <strong>Features</strong> son datos que el modelo puede conocer antes de predecir. El <strong>Target</strong> —también llamado variable respuesta, resultado o Label— es aquello que queremos aprender a pronosticar.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Concepto</th>
+  <th>Classification clínica</th>
+  <th>Regression comercial</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Unidad de observación</td>
+  <td>Una cita programada</td>
+  <td>Una semana de ventas</td>
+</tr>
+<tr>
+  <td>Ejemplos de Features</td>
+  <td>Días entre reserva y cita, ausencias previas, hora programada</td>
+  <td>Inversión publicitaria, período, indicador de promoción</td>
+</tr>
+<tr>
+  <td>Target</td>
+  <td>Faltó (1) o asistió (0)</td>
+  <td>Ingreso por ventas (miles de dólares)</td>
+</tr>
+<tr>
+  <td>Output deseado</td>
+  <td>Probabilidad y/o categoría</td>
+  <td>Cantidad numérica estimada</td>
+</tr>
+<tr>
+  <td>Error relevante</td>
+  <td>Omitir una cita de riesgo o intervenir innecesariamente</td>
+  <td>Subestimar o sobreestimar ventas</td>
+</tr>
+</tbody>
+</table></div>
+<p>Representemos por <span class="inline-math">\(x_i\)</span> las Features de la observación <em>i</em> y por <span class="inline-math">\(y_i\)</span> el Target observado. Con ejemplos <span class="inline-math">\((x_i,y_i)\)</span>, el modelo aprende una regla de predicción. Escribimos <span class="inline-math">\(\hat y_i\)</span> para una predicción numérica y <span class="inline-math">\(\hat p_i\)</span> para la probabilidad estimada de una clase. El símbolo de sombrero indica una <em>estimación generada por el modelo</em>, no un hecho observado.</p>
+<h3>Por qué importa el momento en que vamos a predecir</h3>
+<p>La clínica debe determinar cuándo hará la predicción: por ejemplo, <strong>24 horas antes</strong> de la cita. En ese momento todavía no conoce si el paciente finalmente asistirá. Ese resultado futuro no puede usarse como Feature. De manera similar, una empresa que pronostica las ventas de la próxima semana no puede usar las ventas reales de esa semana ni información publicitaria que solo se registrará después.</p>
+<p>La regla se denomina <strong>disponibilidad en el momento de predicción</strong>. Incumplirla genera <strong>Data Leakage</strong>: el modelo parece funcionar bien porque durante su desarrollo recibió información imposible de conocer cuando se toma la decisión real.</p>
+<div class="callout amber"><strong>Distinción importante.</strong> Un identificador de cliente se almacena con dígitos, pero no por ello representa una cantidad numérica. En cambio, el número de productos devueltos (0, 1, 2, …) es un conteo cuantitativo, aunque solo adopte valores enteros. Lo decisivo es el <em>significado</em> de la variable.</div>
+
+</section><section class="guide-section purple" id="section-3"><h2>3. ¿Qué estima Regression y cómo se interpreta un número pronosticado?</h2>
+<p><strong>Regression</strong> estima un resultado cuantitativo a partir de la información disponible. Responde preguntas como «¿cuánto ingreso esperamos?» o «¿cuántas unidades podrían demandarse?». La predicción puede ser 8.4 miles de dólares, 17.2 kilovatios-hora o 3.6 días, incluso si los datos originales tienen valores distintos.</p>
+<p>Un modelo general de Regression se representa así:</p>
+<div class="formula">\[\hat y = f_{\theta}(x)\]</div>
+
+<p>En esta expresión, <span class="inline-math">\(x\)</span> reúne las Features, <span class="inline-math">\(f\)</span> es una función predictiva, <span class="inline-math">\(\theta\)</span> representa los parámetros aprendidos y <span class="inline-math">\(\hat y\)</span> es la cantidad pronosticada. Los métodos pueden utilizar funciones diferentes: Linear Regression combina variables de forma lineal; un Decision Tree calcula predicciones dentro de regiones finales; una Neural Network puede aprender relaciones no lineales.</p>
+<h3>Valor esperado, observación real y Residual</h3>
+<p>La predicción no tiene por qué coincidir exactamente con el resultado observado. Las ventas dependen del clima, las decisiones de los compradores, acontecimientos imprevistos y muchos factores que no siempre se miden. El <strong>Residual</strong> compara el resultado real con la predicción ajustada:</p>
+<div class="formula">\[e_i=y_i-\hat y_i\]</div>
+
+<p>Si las ventas reales son 8.0 y el modelo predice 8.7 (ambos en miles de dólares), el Residual es <span class="inline-math">\(8.0-8.7=-0.7\)</span> miles de dólares, es decir, <strong>−$700</strong>. El modelo <strong>sobreestimó</strong> las ventas en $700. Con nuestra convención de signos, un Residual positivo significa que el modelo subestimó el resultado.</p>
+<p>Cuando se minimiza Squared Error, una función de Regression poblacional correctamente especificada intenta aproximar la <strong>media condicional</strong>, <span class="inline-math">\(E[Y\mid X=x]\)</span>. Otras Loss Functions pueden estimar una mediana o un cuantil condicional. Por tanto, Regression no significa solamente dibujar una línea recta.</p>
+</section><section class="guide-section blue" id="section-4"><h2>4. Ejemplo completo de Regression: pronosticar las ventas semanales</h2>
+<p>Nuestra tienda registra la <strong>inversión publicitaria</strong> y las <strong>ventas de cada semana</strong>. El dataset tiene solamente cinco observaciones para poder verificar cada cálculo. Ambas variables se miden en <strong>miles de dólares</strong>. Ajustaremos un modelo con una sola Feature; esto no significa que la publicidad, por sí sola, provoque los cambios observados en ventas.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Semana</th>
+  <th style="text-align:right">Publicidad, x ($1,000)</th>
+  <th style="text-align:right">Ventas, y ($1,000)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">4</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td style="text-align:right">2</td>
+  <td style="text-align:right">5</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td style="text-align:right">3</td>
+  <td style="text-align:right">7</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td style="text-align:right">4</td>
+  <td style="text-align:right">8</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td style="text-align:right">5</td>
+  <td style="text-align:right">11</td>
+</tr>
+</tbody>
+</table></div>
+<p>Utilizaremos <strong>Ordinary Least Squares (OLS)</strong>, o Mínimos Cuadrados Ordinarios: elegimos la recta <span class="inline-math">\(\hat y=b_0+b_1x\)</span> que minimiza la suma de Residuals al cuadrado. Sus parámetros son el <strong>Intercept</strong> <span class="inline-math">\(b_0\)</span> y la <strong>Slope</strong> o pendiente <span class="inline-math">\(b_1\)</span>.</p>
+<div class="formula">\[b_1=\frac{\sum_{i=1}^{n}(x_i-\bar x)(y_i-\bar y)}{\sum_{i=1}^{n}(x_i-\bar x)^2},\qquad b_0=\bar y-b_1\bar x\]</div>
+
+<p>Aquí <span class="inline-math">\(n=5\)</span>, <span class="inline-math">\(\bar x\)</span> es la media de publicidad y <span class="inline-math">\(\bar y\)</span> es la media de ventas. El denominador mide la variación de la publicidad; el numerador muestra cómo varían conjuntamente publicidad y ventas. Para calcular una pendiente necesitamos que <span class="inline-math">\(x\)</span> presente variación distinta de cero.</p>
+<h3>Paso A — Calcular ambas medias sin omitir operaciones</h3>
+<div class="formula">\[\bar x=\frac{1+2+3+4+5}{5}=\frac{15}{5}=3\]</div>
+<div class="formula">\[\bar y=\frac{4+5+7+8+11}{5}=\frac{35}{5}=7\]</div>
+
+<h3>Paso B — Calcular las desviaciones y productos fila por fila</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Semana</th>
+  <th style="text-align:right">x − 3</th>
+  <th style="text-align:right">y − 7</th>
+  <th style="text-align:right">(x − 3)(y − 7)</th>
+  <th style="text-align:right">(x − 3)²</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <td style="text-align:right">−2</td>
+  <td style="text-align:right">−3</td>
+  <td style="text-align:right">6</td>
+  <td style="text-align:right">4</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td style="text-align:right">−1</td>
+  <td style="text-align:right">−2</td>
+  <td style="text-align:right">2</td>
+  <td style="text-align:right">1</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">1</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td style="text-align:right">2</td>
+  <td style="text-align:right">4</td>
+  <td style="text-align:right">8</td>
+  <td style="text-align:right">4</td>
+</tr>
+<tr>
+  <td><strong>Total</strong></td>
+  <td style="text-align:right"><strong>0</strong></td>
+  <td style="text-align:right"><strong>0</strong></td>
+  <td style="text-align:right"><strong>17</strong></td>
+  <td style="text-align:right"><strong>10</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Las desviaciones suman cero porque cada variable se centró en su propia media. La suma de productos es <strong>17</strong> y la suma de desviaciones cuadráticas de publicidad es <strong>10</strong>.</p>
+<h3>Paso C — Estimar los parámetros e interpretar sus unidades</h3>
+<div class="formula">\[b_1=\frac{17}{10}=1.7,\quad b_0=7-(1.7)(3)=1.9\]</div>
+<div class="formula">\[\boxed{\hat y=1.9+1.7x}\]</div>
+
+<p>Cuando la publicidad aumenta en $1,000 (es decir, <span class="inline-math">\(x\)</span> aumenta una unidad), la recta ajustada predice ventas <strong>$1,700 mayores</strong>, manteniendo fija la especificación del modelo. El Intercept pronostica $1,900 con publicidad cero, pero ese valor está fuera del rango observado; extrapolar requiere cautela. Ninguno de estos coeficientes demuestra, por sí solo, una relación causal.</p>
+<h3>Paso D — Predecir cada semana y calcular cada Residual</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Semana</th>
+  <th style="text-align:right">Ventas reales y</th>
+  <th style="text-align:right">Predicción ŷ</th>
+  <th style="text-align:right">e = y − ŷ</th>
+  <th style="text-align:right">|e|</th>
+  <th style="text-align:right">e²</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <td style="text-align:right">4.0</td>
+  <td style="text-align:right">3.6</td>
+  <td style="text-align:right">0.4</td>
+  <td style="text-align:right">0.4</td>
+  <td style="text-align:right">0.16</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td style="text-align:right">5.0</td>
+  <td style="text-align:right">5.3</td>
+  <td style="text-align:right">−0.3</td>
+  <td style="text-align:right">0.3</td>
+  <td style="text-align:right">0.09</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td style="text-align:right">7.0</td>
+  <td style="text-align:right">7.0</td>
+  <td style="text-align:right">0.0</td>
+  <td style="text-align:right">0.0</td>
+  <td style="text-align:right">0.00</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td style="text-align:right">8.0</td>
+  <td style="text-align:right">8.7</td>
+  <td style="text-align:right">−0.7</td>
+  <td style="text-align:right">0.7</td>
+  <td style="text-align:right">0.49</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td style="text-align:right">11.0</td>
+  <td style="text-align:right">10.4</td>
+  <td style="text-align:right">0.6</td>
+  <td style="text-align:right">0.6</td>
+  <td style="text-align:right">0.36</td>
+</tr>
+<tr>
+  <td><strong>Suma</strong></td>
+  <td style="text-align:right"></td>
+  <td style="text-align:right"></td>
+  <td style="text-align:right"><strong>0.0</strong></td>
+  <td style="text-align:right"><strong>2.0</strong></td>
+  <td style="text-align:right"><strong>1.10</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>En la semana 4, por ejemplo, <span class="inline-math">\(\hat y=1.9+1.7(4)=8.7\)</span>, así que el Residual es <span class="inline-math">\(8-8.7=-0.7\)</span>. Los Residuals ajustados suman cero porque utilizamos OLS con Intercept; <strong>esto no significa que las predicciones carezcan de error</strong>.</p>
+<div class="callout teal"><strong>Comprobación.</strong> La recta pasa por <span class="inline-math">\((\bar x,\bar y)=(3,7)\)</span>: <span class="inline-math">\(1.9+1.7(3)=7\)</span>. Esta propiedad de OLS con Intercept nos permite verificar el resultado.</div>
+
+<figure class="plot-svg"><svg viewBox="0 0 700 350" role="img" aria-label="Ventas semanales y recta ajustada por OLS"><title>Ventas semanales y recta ajustada por OLS</title><line x1="92" y1="286.0" x2="622" y2="286.0" stroke="#e6eef5"/><text x="76" y="290.0" text-anchor="end" font-size="12" fill="#536276">2</text><line x1="92" y1="238.0" x2="622" y2="238.0" stroke="#e6eef5"/><text x="76" y="242.0" text-anchor="end" font-size="12" fill="#536276">4</text><line x1="92" y1="190.0" x2="622" y2="190.0" stroke="#e6eef5"/><text x="76" y="194.0" text-anchor="end" font-size="12" fill="#536276">6</text><line x1="92" y1="142.0" x2="622" y2="142.0" stroke="#e6eef5"/><text x="76" y="146.0" text-anchor="end" font-size="12" fill="#536276">8</text><line x1="92" y1="94.0" x2="622" y2="94.0" stroke="#e6eef5"/><text x="76" y="98.0" text-anchor="end" font-size="12" fill="#536276">10</text><line x1="92" y1="46.0" x2="622" y2="46.0" stroke="#e6eef5"/><text x="76" y="50.0" text-anchor="end" font-size="12" fill="#536276">12</text><text x="145.0" y="305" text-anchor="middle" font-size="12" fill="#536276">1</text><text x="251.0" y="305" text-anchor="middle" font-size="12" fill="#536276">2</text><text x="357.0" y="305" text-anchor="middle" font-size="12" fill="#536276">3</text><text x="463.0" y="305" text-anchor="middle" font-size="12" fill="#536276">4</text><text x="569.0" y="305" text-anchor="middle" font-size="12" fill="#536276">5</text><line x1="92" y1="286" x2="622" y2="286" stroke="#40516a"/><line x1="92" y1="46.0" x2="92" y2="286" stroke="#40516a"/><line x1="145.0" y1="247.6" x2="569.0" y2="84.4" stroke="#8c69ba" stroke-width="3"/><line x1="145.0" y1="238.0" x2="145.0" y2="247.6" stroke="#d59a32" stroke-width="2" stroke-dasharray="4 3"/><circle cx="145.0" cy="238.0" r="6" fill="#15957e" stroke="#fff" stroke-width="1.5"/><line x1="251.0" y1="214.0" x2="251.0" y2="206.8" stroke="#d59a32" stroke-width="2" stroke-dasharray="4 3"/><circle cx="251.0" cy="214.0" r="6" fill="#15957e" stroke="#fff" stroke-width="1.5"/><line x1="357.0" y1="166.0" x2="357.0" y2="166.0" stroke="#d59a32" stroke-width="2" stroke-dasharray="4 3"/><circle cx="357.0" cy="166.0" r="6" fill="#15957e" stroke="#fff" stroke-width="1.5"/><line x1="463.0" y1="142.0" x2="463.0" y2="125.2" stroke="#d59a32" stroke-width="2" stroke-dasharray="4 3"/><circle cx="463.0" cy="142.0" r="6" fill="#15957e" stroke="#fff" stroke-width="1.5"/><line x1="569.0" y1="70.0" x2="569.0" y2="84.4" stroke="#d59a32" stroke-width="2" stroke-dasharray="4 3"/><circle cx="569.0" cy="70.0" r="6" fill="#15957e" stroke="#fff" stroke-width="1.5"/><text x="357" y="337" font-size="14" text-anchor="middle" fill="#40516a">Publicidad (miles de USD)</text><text transform="translate(20 164) rotate(-90)" font-size="14" text-anchor="middle" fill="#40516a">Ventas (miles de USD)</text><circle cx="110" cy="21" r="5" fill="#15957e"/><text x="123" y="25" font-size="12" fill="#40516a">Observación</text><line x1="255" y1="21" x2="287" y2="21" stroke="#8c69ba" stroke-width="3"/><text x="295" y="25" font-size="12" fill="#40516a">Recta ajustada</text><line x1="445" y1="21" x2="477" y2="21" stroke="#d59a32" stroke-dasharray="4 3" stroke-width="2"/><text x="485" y="25" font-size="12" fill="#40516a">Residual</text></svg><figcaption>Cinco semanas ilustrativas: los puntos verdes son las ventas observadas, la recta púrpura representa ŷ = 1.9 + 1.7x y las líneas ámbar muestran los errores verticales. Los ejes utilizan miles de dólares.</figcaption></figure></section><section class="guide-section teal" id="section-5"><h2>5. Evaluación de Regression: un buen ajuste no garantiza buenos pronósticos</h2>
+<p>Las métricas de evaluación describen distintos aspectos de los mismos Residuals. Emplearemos todos los valores obtenidos en las cinco semanas:</p>
+<div class="formula">\[\mathrm{MAE}=\frac{\sum|e_i|}{n}=\frac{0.4+0.3+0+0.7+0.6}{5}=\frac{2.0}{5}=0.40\]</div>
+<div class="formula">\[\mathrm{MSE}=\frac{\sum e_i^2}{n}=\frac{0.16+0.09+0+0.49+0.36}{5}=\frac{1.10}{5}=0.22\]</div>
+<div class="formula">\[\mathrm{RMSE}=\sqrt{0.22}\approx0.469\]</div>
+
+<ul>
+<li><strong>Mean Absolute Error (MAE):</strong> error absoluto promedio de <strong>0.40 miles de dólares = $400</strong>; es fácil interpretarlo en las unidades del negocio.</li>
+<li><strong>Mean Squared Error (MSE):</strong> error cuadrático promedio de <strong>0.22 (miles de dólares)²</strong>; penaliza proporcionalmente más los errores grandes.</li>
+<li><strong>Root Mean Squared Error (RMSE):</strong> aproximadamente <strong>$469</strong>; vuelve a las unidades originales, pero sigue otorgando mayor peso a errores grandes.</li>
+</ul>
+<h3>Comparación con un Baseline sencillo</h3>
+<p>Un <strong>Baseline</strong> es una referencia simple. Supongamos que siempre pronosticamos las ventas promedio históricas, <strong>7</strong>, para todas las semanas. Los errores absolutos serían <span class="inline-math">\(3,2,0,1,4\)</span>. Por tanto:</p>
+<div class="formula">\[\mathrm{MAE}_{\mathrm{baseline}}=\frac{3+2+0+1+4}{5}=2.00\]</div>
+
+<p>El MAE dentro de la muestra de la recta (0.40) es menor que el del Baseline constante (2.00). Esto demuestra que la recta describe <strong>estas cinco observaciones utilizadas para entrenarla</strong> mejor bajo MAE. <strong>No demuestra</strong> que pronosticará correctamente nuevas semanas porque ajustamos y evaluamos utilizando los mismos datos. Para sostener una afirmación sobre Generalization necesitamos un Test set futuro, separado e intacto.</p>
+<div class="callout amber"><strong>Cuidado con extrapolar.</strong> Si reemplazamos <span class="inline-math">\(x=20\)</span>, obtenemos <span class="inline-math">\(\hat y=35.9\)</span>, pero solo observamos publicidad entre 1 y 5. Que la fórmula produzca un número fuera del rango no es evidencia de que la relación comercial continúe igual.</div>
+
+</section><section class="guide-section purple" id="section-6"><h2>6. ¿Qué estima Classification? Categorías, Scores y probabilidades</h2>
+<p><strong>Classification</strong> predice pertenencia a una o varias categorías discretas. Para la clínica definiremos como <strong>Positive Class</strong> la cita perdida, codificada como <span class="inline-math">\(y=1\)</span>, y como <strong>Negative Class</strong> la cita atendida, codificada como <span class="inline-math">\(y=0\)</span>. «Positivo» no significa que el resultado sea deseable: solo indica la categoría de interés.</p>
+<p>Un clasificador binario puede producir un <strong>Score</strong>. Algunos modelos generan una probabilidad estimada <span class="inline-math">\(\hat p=P(Y=1\mid X=x)\)</span>; otros devuelven un Score que no puede interpretarse automáticamente como probabilidad. Posteriormente, una regla de decisión transforma el Score o la probabilidad pertinente en una etiqueta.</p>
+<div class="formula">\[\hat y=\begin{cases}1,&\hat p\ge t\\0,&\hat p&lt;t\end{cases}\]</div>
+
+<p>Aquí <span class="inline-math">\(t\)</span> es el <strong>Decision Threshold</strong>. Si <span class="inline-math">\(t=0.50\)</span>, una probabilidad mayor o igual a 0.50 se transforma en «cita perdida». Eso <strong>no</strong> significa que el paciente faltará con certeza. Una probabilidad de 0.80 expresa incertidumbre estimada, no un hecho. Incluso puede ser necesario aplicar <strong>Calibration</strong> antes de confiar en su interpretación numérica.</p>
+<h3>Por qué Logistic Regression es Classification</h3>
+<p>Un método frecuente es <strong>Logistic Regression</strong>. Aunque su nombre contiene «Regression», su salida habitual en un problema binario es una probabilidad de clase. Primero calcula un Score lineal <span class="inline-math">\(z=b_0+b_1x_1+\cdots+b_px_p\)</span> y después aplica la función <strong>sigmoid</strong>:</p>
+<div class="formula">\[\hat p=\frac{1}{1+e^{-z}}\]</div>
+
+<p>Si <span class="inline-math">\(z=0.5\)</span>, entonces <span class="inline-math">\(e^{-0.5}\approx0.6065\)</span>, de modo que <span class="inline-math">\(\hat p\approx1/(1+0.6065)=0.6225\)</span>. Con Threshold 0.50 se predice clase 1; con Threshold 0.70, clase 0. La probabilidad estimada no cambió. Es un ejemplo de la transformación matemática, no un modelo clínico realmente entrenado.</p>
+
+<h3>De las probabilidades a una Decision Boundary con dos Features</h3><p>Un modelo puede utilizar más de una Feature. Para distinguir visualmente una <em>superficie de probabilidad</em> de una <em>decisión categórica</em>, consideremos otro modelo de Logistic Regression totalmente hipotético. Usa <strong>d</strong> = días entre la reserva y la cita, y <strong>m</strong> = número de citas perdidas anteriormente. Sus coeficientes son únicamente ilustrativos: no provienen de ningún estudio ni estiman relaciones clínicas reales.</p><div class="formula">\[z=-2+0.4d+0.8m,\qquad \hat p=\frac{1}{1+e^{-z}}\]</div><p>Si <span class="inline-math">\(d=1,m=0\)</span>, obtenemos <span class="inline-math">\(z=-2+0.4=-1.6\)</span> y, por tanto, <span class="inline-math">\(\hat p\approx0.168\)</span>: con Threshold 0.50, la predicción es «asiste». Si <span class="inline-math">\(d=4,m=1\)</span>, obtenemos <span class="inline-math">\(z=-2+1.6+0.8=0.4\)</span> y <span class="inline-math">\(\hat p\approx0.599\)</span>: la predicción cambia a «falta». Con Threshold 0.50, la Sigmoid devuelve al menos 0.50 exactamente cuando <span class="inline-math">\(z\ge0\)</span>. En consecuencia, la frontera cumple <span class="inline-math">\(d+2m=5\)</span>. A cada lado se asignan <em>categorías</em> diferentes, aunque las probabilidades varían de forma continua.</p><figure class="plot-svg" aria-label="Regiones de decisión ilustrativas">
+<svg viewBox="0 0 760 400" role="img" aria-labelledby="boundary-title boundary-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="boundary-title">Frontera de decisión para dos variables</title>
+<desc id="boundary-desc">Regiones de probabilidad por encima y por debajo de 0.5 en un modelo hipotético. Eje horizontal: días de anticipación. Eje vertical: ausencias anteriores.</desc>
+<rect x="96" y="62" width="552" height="248" fill="#E7F5EF"/>
+<polygon points="96,310 556.0,310 96,103.33333333333334" fill="#EAF2FF"/>
+<line x1="96" y1="310" x2="556.0" y2="310" stroke="none"/>
+<line x1="96.0" y1="62" x2="96.0" y2="310" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="96.0" y="336" text-anchor="middle" font-size="13" fill="#30465A">0</text>
+<line x1="188.0" y1="62" x2="188.0" y2="310" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="188.0" y="336" text-anchor="middle" font-size="13" fill="#30465A">1</text>
+<line x1="280.0" y1="62" x2="280.0" y2="310" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="280.0" y="336" text-anchor="middle" font-size="13" fill="#30465A">2</text>
+<line x1="372.0" y1="62" x2="372.0" y2="310" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="372.0" y="336" text-anchor="middle" font-size="13" fill="#30465A">3</text>
+<line x1="464.0" y1="62" x2="464.0" y2="310" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="464.0" y="336" text-anchor="middle" font-size="13" fill="#30465A">4</text>
+<line x1="556.0" y1="62" x2="556.0" y2="310" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="556.0" y="336" text-anchor="middle" font-size="13" fill="#30465A">5</text>
+<line x1="648.0" y1="62" x2="648.0" y2="310" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="648.0" y="336" text-anchor="middle" font-size="13" fill="#30465A">6</text>
+<line x1="96" y1="310.0" x2="648" y2="310.0" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="75" y="315.0" text-anchor="middle" font-size="13" fill="#30465A">0</text>
+<line x1="96" y1="227.3" x2="648" y2="227.3" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="75" y="232.3" text-anchor="middle" font-size="13" fill="#30465A">1</text>
+<line x1="96" y1="144.7" x2="648" y2="144.7" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="75" y="149.7" text-anchor="middle" font-size="13" fill="#30465A">2</text>
+<line x1="96" y1="62.0" x2="648" y2="62.0" stroke="#D9E6EF" stroke-dasharray="3 5"/>
+<text x="75" y="67.0" text-anchor="middle" font-size="13" fill="#30465A">3</text>
+<line x1="96" y1="310" x2="648" y2="310" stroke="#4C5F72" stroke-width="1.5"/>
+<line x1="96" y1="62" x2="96" y2="310" stroke="#4C5F72" stroke-width="1.5"/>
+<line x1="96" y1="103.3" x2="556.0" y2="310" stroke="#7C3AED" stroke-width="3"/>
+<text x="372.0" y="368" text-anchor="middle" font-weight="600" font-size="16" fill="#24364A">Días de anticipación de la cita (d)</text>
+<text transform="translate(29,186.0) rotate(-90)" text-anchor="middle" font-size="15" fill="#24364A">Ausencias anteriores (m)</text>
+<text x="533.0" y="95.1" text-anchor="middle" font-weight="650" font-size="15" fill="#176955">Predicción: falta</text>
+<text x="224.8" y="264.5" text-anchor="middle" font-weight="650" font-size="15" fill="#2558A8">Predicción: asiste</text>
+<circle cx="188.0" cy="310.0" r="7.5" fill="#fff" stroke="#0B1F3A" stroke-width="2"/>
+<circle cx="464.0" cy="310.0" r="7.5" fill="#fff" stroke="#0B1F3A" stroke-width="2"/>
+<circle cx="280.0" cy="227.3" r="7.5" fill="#fff" stroke="#0B1F3A" stroke-width="2"/>
+<circle cx="464.0" cy="227.3" r="7.5" fill="#fff" stroke="#0B1F3A" stroke-width="2"/>
+<circle cx="188.0" cy="62.0" r="7.5" fill="#fff" stroke="#0B1F3A" stroke-width="2"/>
+<circle cx="556.0" cy="144.7" r="7.5" fill="#fff" stroke="#0B1F3A" stroke-width="2"/>
+<text x="546.8" y="267.0" font-size="13" fill="#7140A8" transform="rotate(-19 546.8 267.0)">d + 2m = 5</text>
+</svg>
+<figcaption>Ejemplo sintético independiente de las 12 citas evaluadas. El modelo hipotético predice una falta cuando <strong>d + 2m ≥ 5</strong>. Los círculos muestran combinaciones de Features, no etiquetas reales. La frontera separa decisiones, no personas con certezas distintas.</figcaption></figure>
+</section><section class="guide-section blue" id="section-7"><h2>7. Ejemplo completo de Classification: identificar citas perdidas</h2>
+<p>Imaginemos un <strong>conjunto ilustrativo de evaluación</strong> con 12 citas y sus probabilidades estimadas de inasistencia. Presentamos las 12 observaciones para comprobar todos los cálculos. Para este ejercicio, el modelo fue entrenado en otros datos; no estamos estimando sus probabilidades a partir de estas 12 filas.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Cita</th>
+  <th style="text-align:right">Probabilidad estimada de faltar</th>
+  <th style="text-align:right">Real y (1 = faltó)</th>
+  <th style="text-align:right">Predicción con t = 0.50</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>A</td>
+  <td style="text-align:right">0.90</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">1</td>
+</tr>
+<tr>
+  <td>B</td>
+  <td style="text-align:right">0.80</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">1</td>
+</tr>
+<tr>
+  <td>C</td>
+  <td style="text-align:right">0.72</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">1</td>
+</tr>
+<tr>
+  <td>D</td>
+  <td style="text-align:right">0.65</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">1</td>
+</tr>
+<tr>
+  <td>E</td>
+  <td style="text-align:right">0.60</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">1</td>
+</tr>
+<tr>
+  <td>F</td>
+  <td style="text-align:right">0.52</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">1</td>
+</tr>
+<tr>
+  <td>G</td>
+  <td style="text-align:right">0.48</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+</tr>
+<tr>
+  <td>H</td>
+  <td style="text-align:right">0.40</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">0</td>
+</tr>
+<tr>
+  <td>I</td>
+  <td style="text-align:right">0.32</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+</tr>
+<tr>
+  <td>J</td>
+  <td style="text-align:right">0.28</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+</tr>
+<tr>
+  <td>K</td>
+  <td style="text-align:right">0.15</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+</tr>
+<tr>
+  <td>L</td>
+  <td style="text-align:right">0.10</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">0</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Paso A — Contar correctamente los cuatro resultados</h3>
+<p>Un <strong>True Positive (TP)</strong> ocurre cuando el modelo identifica una cita perdida y efectivamente se pierde: A, B, D, F → <strong>TP = 4</strong>. Un <strong>False Positive (FP)</strong> indica que la cita se marcó como perdida, pero el paciente asistió: C, E → <strong>FP = 2</strong>. Un <strong>False Negative (FN)</strong> es una cita que el modelo consideró atendida, pero terminó perdida: H → <strong>FN = 1</strong>. Un <strong>True Negative (TN)</strong> corresponde a una cita prevista como atendida y realmente atendida: G, I, J, K, L → <strong>TN = 5</strong>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Real / Predicho</th>
+  <th style="text-align:right">Predijo falta (1)</th>
+  <th style="text-align:right">Predijo asistencia (0)</th>
+  <th style="text-align:right">Total fila</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Realmente faltó (1)</td>
+  <td style="text-align:right">TP = 4</td>
+  <td style="text-align:right">FN = 1</td>
+  <td style="text-align:right">5</td>
+</tr>
+<tr>
+  <td>Realmente asistió (0)</td>
+  <td style="text-align:right">FP = 2</td>
+  <td style="text-align:right">TN = 5</td>
+  <td style="text-align:right">7</td>
+</tr>
+<tr>
+  <td>Total columna</td>
+  <td style="text-align:right">6</td>
+  <td style="text-align:right">6</td>
+  <td style="text-align:right"><strong>12</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Comprobación: <span class="inline-math">\(4+2+1+5=12\)</span>. Tenemos cinco ausencias reales y siete asistencias. Confundir las filas de resultados reales con las columnas de predicciones provoca muchos errores al calcular métricas.</p>
+<h3>Paso B — Calcular e interpretar las métricas</h3>
+<div class="formula">\[\mathrm{Accuracy}=\frac{TP+TN}{N}=\frac{4+5}{12}=\frac{9}{12}=0.75\]</div>
+<div class="formula">\[\mathrm{Precision}=\frac{TP}{TP+FP}=\frac4{4+2}=\frac46\approx0.667\]</div>
+<div class="formula">\[\mathrm{Recall}=\frac{TP}{TP+FN}=\frac4{4+1}=\frac45=0.80\]</div>
+<div class="formula">\[\mathrm{Specificity}=\frac{TN}{TN+FP}=\frac5{5+2}=\frac57\approx0.714\]</div>
+<div class="formula">\[F_1=\frac{2PR}{P+R}=\frac{2TP}{2TP+FP+FN}=\frac8{8+2+1}=\frac8{11}\approx0.727\]</div>
+
+<p><strong>Accuracy = 75%</strong> significa que acertamos nueve de doce etiquetas. <strong>Precision ≈ 66.7%</strong> significa que, entre seis citas marcadas como posibles ausencias, cuatro realmente se perdieron. <strong>Recall = 80%</strong> significa que identificamos cuatro de las cinco ausencias. <strong>Specificity ≈ 71.4%</strong> significa que identificamos correctamente cinco de las siete citas atendidas. <strong>F1 ≈ 72.7%</strong> combina Precision y Recall mediante su media armónica; no mide costos ni Calibration.</p>
+<div class="callout teal"><strong>La interpretación importa más que memorizar fórmulas.</strong> Precision pregunta: «Entre las citas a las que enviaríamos un recordatorio especial, ¿qué proporción efectivamente se perdería en estos datos?». Recall pregunta: «De todas las citas que terminaron perdiéndose, ¿qué proporción identificó el modelo?». Son preguntas operativas diferentes.</div>
+
+<figure class="plot-svg"><svg viewBox="0 0 720 350" role="img" aria-label="Probabilidades de ausencia y Decision Threshold"><title>Probabilidades de ausencia y Decision Threshold</title><line x1="75.0" x2="75.0" y1="65" y2="279" stroke="#e5ecf3"/><text x="75.0" y="306" font-size="12" text-anchor="middle" fill="#536276">0.00</text><line x1="218.8" x2="218.8" y1="65" y2="279" stroke="#e5ecf3"/><text x="218.8" y="306" font-size="12" text-anchor="middle" fill="#536276">0.25</text><line x1="362.5" x2="362.5" y1="65" y2="279" stroke="#e5ecf3"/><text x="362.5" y="306" font-size="12" text-anchor="middle" fill="#536276">0.50</text><line x1="506.2" x2="506.2" y1="65" y2="279" stroke="#e5ecf3"/><text x="506.2" y="306" font-size="12" text-anchor="middle" fill="#536276">0.75</text><line x1="650.0" x2="650.0" y1="65" y2="279" stroke="#e5ecf3"/><text x="650.0" y="306" font-size="12" text-anchor="middle" fill="#536276">1.00</text><line x1="362.5" x2="362.5" y1="49" y2="279" stroke="#8c69ba" stroke-dasharray="6 4" stroke-width="2.5"/><text x="369.5" y="47" font-size="13" fill="#8c69ba">t = 0.50</text><circle cx="592.5" cy="77.0" r="9" fill="#d59a32" stroke="#fff" stroke-width="2"/><text x="606.5" y="81.0" font-size="12" fill="#26374c">A</text><circle cx="535.0" cy="114.0" r="9" fill="#d59a32" stroke="#fff" stroke-width="2"/><text x="549.0" y="118.0" font-size="12" fill="#26374c">B</text><circle cx="489.0" cy="151.0" r="9" fill="#15957e" stroke="#fff" stroke-width="2"/><text x="503.0" y="155.0" font-size="12" fill="#26374c">C</text><circle cx="448.8" cy="188.0" r="9" fill="#d59a32" stroke="#fff" stroke-width="2"/><text x="462.8" y="192.0" font-size="12" fill="#26374c">D</text><circle cx="420.0" cy="225.0" r="9" fill="#15957e" stroke="#fff" stroke-width="2"/><text x="434.0" y="229.0" font-size="12" fill="#26374c">E</text><circle cx="374.0" cy="262.0" r="9" fill="#d59a32" stroke="#fff" stroke-width="2"/><text x="388.0" y="266.0" font-size="12" fill="#26374c">F</text><circle cx="351.0" cy="84.0" r="9" fill="#15957e" stroke="#fff" stroke-width="2"/><text x="365.0" y="88.0" font-size="12" fill="#26374c">G</text><circle cx="305.0" cy="121.0" r="9" fill="#d59a32" stroke="#fff" stroke-width="2"/><text x="319.0" y="125.0" font-size="12" fill="#26374c">H</text><circle cx="259.0" cy="158.0" r="9" fill="#15957e" stroke="#fff" stroke-width="2"/><text x="273.0" y="162.0" font-size="12" fill="#26374c">I</text><circle cx="236.0" cy="195.0" r="9" fill="#15957e" stroke="#fff" stroke-width="2"/><text x="250.0" y="199.0" font-size="12" fill="#26374c">J</text><circle cx="161.2" cy="232.0" r="9" fill="#15957e" stroke="#fff" stroke-width="2"/><text x="175.2" y="236.0" font-size="12" fill="#26374c">K</text><circle cx="132.5" cy="269.0" r="9" fill="#15957e" stroke="#fff" stroke-width="2"/><text x="146.5" y="273.0" font-size="12" fill="#26374c">L</text><line x1="75" y1="282" x2="650" y2="282" stroke="#40516a"/><text x="363" y="335" font-size="14" text-anchor="middle" fill="#40516a">Probabilidad estimada de faltar</text><circle cx="95" cy="26" r="7" fill="#d59a32"/><text x="109" y="30" font-size="12" fill="#40516a">Faltó (y=1)</text><circle cx="283" cy="26" r="7" fill="#15957e"/><text x="297" y="30" font-size="12" fill="#40516a">Asistió (y=0)</text></svg><figcaption>Cada punto es una de las 12 citas; su posición horizontal es la probabilidad estimada y su color representa el resultado real. La línea púrpura es el Threshold 0.50. Las posiciones verticales separan etiquetas y no expresan una variable adicional.</figcaption></figure>
+<h3>Distribuciones: leer dónde se concentran los Scores</h3><p>Un gráfico de puntos permite inspeccionar casos individuales; una distribución por intervalos permite contar cuántas citas caen en cada rango de probabilidad. Utilizamos los mismos <strong>12 registros sintéticos</strong>, sin volver a entrenar el modelo. En estos intervalos, el extremo izquierdo está incluido y el derecho excluido, excepto el último intervalo, que también admite 1.0.</p><figure class="plot-svg" aria-label="Distribución de probabilidades estimadas: 12 citas sintéticas"><svg viewBox="0 0 760 395" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="g02-dist-title-es g02-dist-desc-es"><title id="g02-dist-title-es">Distribución de probabilidades estimadas: 12 citas sintéticas</title><desc id="g02-dist-desc-es">Cada barra agrupa citas por probabilidad estimada, con sus resultados observados. Los cinco intervalos no se superponen.</desc><rect x="0" y="0" width="760" height="395" fill="#fbfdff"/><line x1="104" y1="300" x2="690" y2="300" stroke="#40516a" stroke-width="1.5"/><line x1="104" y1="65" x2="104" y2="300" stroke="#40516a" stroke-width="1.5"/><line x1="104" y1="300" x2="690" y2="300" stroke="#dde6ef" stroke-width="1"/><text x="89" y="305" text-anchor="end" font-size="15" fill="#334155">0</text><line x1="104" y1="245" x2="690" y2="245" stroke="#dde6ef" stroke-width="1"/><text x="89" y="250" text-anchor="end" font-size="15" fill="#334155">1</text><line x1="104" y1="190" x2="690" y2="190" stroke="#dde6ef" stroke-width="1"/><text x="89" y="195" text-anchor="end" font-size="15" fill="#334155">2</text><line x1="104" y1="135" x2="690" y2="135" stroke="#dde6ef" stroke-width="1"/><text x="89" y="140" text-anchor="end" font-size="15" fill="#334155">3</text><rect x="145" y="190" width="66" height="110" fill="#15957e" opacity="0.9"/><text x="178" y="181" text-anchor="middle" font-size="14" fill="#20354e" font-weight="700">2</text><text x="178" y="325" text-anchor="middle" font-size="13" fill="#334155">0–0.2</text><rect x="256" y="190" width="66" height="110" fill="#15957e" opacity="0.9"/><text x="289" y="181" text-anchor="middle" font-size="14" fill="#20354e" font-weight="700">2</text><text x="289" y="325" text-anchor="middle" font-size="13" fill="#334155">0.2–0.4</text><rect x="367" y="245" width="66" height="55" fill="#15957e" opacity="0.9"/><rect x="367" y="135" width="66" height="110" fill="#d59a32" opacity="0.92"/><text x="400" y="126" text-anchor="middle" font-size="14" fill="#20354e" font-weight="700">3</text><text x="400" y="325" text-anchor="middle" font-size="13" fill="#334155">0.4–0.6</text><rect x="478" y="190" width="66" height="110" fill="#15957e" opacity="0.9"/><rect x="478" y="135" width="66" height="55" fill="#d59a32" opacity="0.92"/><text x="511" y="126" text-anchor="middle" font-size="14" fill="#20354e" font-weight="700">3</text><text x="511" y="325" text-anchor="middle" font-size="13" fill="#334155">0.6–0.8</text><rect x="589" y="190" width="66" height="110" fill="#d59a32" opacity="0.92"/><text x="622" y="181" text-anchor="middle" font-size="14" fill="#20354e" font-weight="700">2</text><text x="622" y="325" text-anchor="middle" font-size="13" fill="#334155">0.8–1.0</text><text x="400" y="361" text-anchor="middle" font-size="15" fill="#24364a">Probabilidad estimada de faltar a la cita</text><text x="36" y="205" transform="rotate(-90 36 205)" text-anchor="middle" font-size="15" fill="#24364a">Número de citas</text><rect x="340" y="22" width="15" height="15" fill="#15957e"/><text x="361" y="35" font-size="13" fill="#20354e">Asistió (y=0)</text><rect x="530" y="22" width="15" height="15" fill="#d59a32"/><text x="551" y="35" font-size="13" fill="#20354e">No asistió (y=1)</text></svg><figcaption>Cada cita A–L aparece en un único intervalo: [0.0,0.2), [0.2,0.4), [0.4,0.6), [0.6,0.8) o [0.8,1.0]. En los cinco intervalos, los conteos de citas perdidas son 0, 0, 2, 1 y 2, mientras que los de asistencia son 2, 2, 1, 2 y 0. La figura muestra frecuencias, NO prueba Calibration: doce observaciones son insuficientes para validarla.</figcaption></figure>
+</section><section class="guide-section teal" id="section-8"><h2>8. Decision Thresholds: costos y compromisos entre métricas</h2>
+<p>Las probabilidades estimadas no cambian cuando modificamos el Threshold. Lo que cambia es qué citas quedan clasificadas como positivas y, por lo tanto, los conteos TP, FP, FN y TN.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Threshold</th>
+  <th style="text-align:right">TP</th>
+  <th style="text-align:right">FP</th>
+  <th style="text-align:right">FN</th>
+  <th style="text-align:right">TN</th>
+  <th style="text-align:right">Precision</th>
+  <th style="text-align:right">Recall</th>
+  <th style="text-align:right">Accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>t = 0.70</td>
+  <td style="text-align:right">2</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">3</td>
+  <td style="text-align:right">6</td>
+  <td style="text-align:right">2/3 = 66.7%</td>
+  <td style="text-align:right">2/5 = 40%</td>
+  <td style="text-align:right">8/12 = 66.7%</td>
+</tr>
+<tr>
+  <td>t = 0.50</td>
+  <td style="text-align:right">4</td>
+  <td style="text-align:right">2</td>
+  <td style="text-align:right">1</td>
+  <td style="text-align:right">5</td>
+  <td style="text-align:right">4/6 = 66.7%</td>
+  <td style="text-align:right">4/5 = 80%</td>
+  <td style="text-align:right">9/12 = 75%</td>
+</tr>
+<tr>
+  <td>t = 0.30</td>
+  <td style="text-align:right">5</td>
+  <td style="text-align:right">4</td>
+  <td style="text-align:right">0</td>
+  <td style="text-align:right">3</td>
+  <td style="text-align:right">5/9 = 55.6%</td>
+  <td style="text-align:right">5/5 = 100%</td>
+  <td style="text-align:right">8/12 = 66.7%</td>
+</tr>
+</tbody>
+</table></div>
+<p>Con Threshold 0.70 se marcan solamente A, B y C. Detectamos dos de cinco ausencias (Recall 40%). Con Threshold 0.30 se marcan A hasta I: capturamos las cinco ausencias, pero señalamos innecesariamente cuatro citas que sí fueron atendidas. Este es el <strong>trade-off entre Precision y Recall</strong>: mejorar una dimensión puede empeorar otra. Precision no necesariamente sigue una evolución estrictamente monótona en todos los datasets.</p>
+<h3>Ejemplo de costos con supuestos explícitos</h3>
+<p>Para ilustrar la toma de decisiones, supongamos que no identificar una ausencia genera un costo de oportunidad de <strong>$80</strong>, mientras que intervenir innecesariamente en una cita atendida cuesta <strong>$20</strong>. Asumamos costos constantes y ningún costo incremental cuando la clasificación es correcta.</p>
+<ul>
+<li>Con <strong>0.70:</strong> tres FN y un FP cuestan <span class="inline-math">\(3(80)+1(20)=\$260\)</span>.</li>
+<li>Con <strong>0.50:</strong> un FN y dos FP cuestan <span class="inline-math">\(1(80)+2(20)=\$120\)</span>.</li>
+<li>Con <strong>0.30:</strong> cero FN y cuatro FP cuestan <span class="inline-math">\(0(80)+4(20)=\$80\)</span>.</li>
+</ul>
+<p>Entre estos tres Thresholds, el de menor costo ilustrativo es <strong>0.30</strong>, aunque su Accuracy sea inferior a la de 0.50. Por eso elegir el Threshold que maximiza Accuracy puede no coincidir con el objetivo de la organización.</p>
+<div class="callout amber"><strong>Disciplina de evaluación.</strong> Estos costos son inventados y no incorporan la posibilidad de que el recordatorio modifique la asistencia. En la práctica, las intervenciones cambian conductas, los costos varían y la clínica debe considerar el acceso equitativo a la atención. Se debe seleccionar el Threshold en un conjunto de <em>Validation</em> con un objetivo justificado y evaluarlo después en un <em>Test</em> independiente. No optimices repetidamente sobre el mismo Test que presentarás como evaluación final.</div>
+
+
+<figure class="plot-svg" aria-label="Comparación de métricas con tres umbrales">
+<svg viewBox="0 0 760 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="threshold-title threshold-desc">
+<title id="threshold-title">Precision y Recall según el Decision Threshold</title>
+<desc id="threshold-desc">En los umbrales 0.30, 0.50 y 0.70, Precision es 55.6, 66.7 y 66.7 por ciento; Recall es 100, 80 y 40 por ciento.</desc>
+<line x1="95" y1="304.0" x2="670" y2="304.0" stroke="#DFE8F1"/>
+<text x="75" y="309.0" text-anchor="end" font-size="13" fill="#506178">0%</text>
+<line x1="95" y1="246.5" x2="670" y2="246.5" stroke="#DFE8F1"/>
+<text x="75" y="251.5" text-anchor="end" font-size="13" fill="#506178">25%</text>
+<line x1="95" y1="189.0" x2="670" y2="189.0" stroke="#DFE8F1"/>
+<text x="75" y="194.0" text-anchor="end" font-size="13" fill="#506178">50%</text>
+<line x1="95" y1="131.5" x2="670" y2="131.5" stroke="#DFE8F1"/>
+<text x="75" y="136.5" text-anchor="end" font-size="13" fill="#506178">75%</text>
+<line x1="95" y1="74.0" x2="670" y2="74.0" stroke="#DFE8F1"/>
+<text x="75" y="79.0" text-anchor="end" font-size="13" fill="#506178">100%</text>
+<line x1="95" y1="74" x2="95" y2="304" stroke="#536276" stroke-width="1.5"/>
+<line x1="95" y1="304" x2="670" y2="304" stroke="#536276" stroke-width="1.5"/>
+<text x="135" y="330" text-anchor="middle" font-size="15" fill="#253B54">0.30</text>
+<text x="385" y="330" text-anchor="middle" font-size="15" fill="#253B54">0.50</text>
+<text x="635" y="330" text-anchor="middle" font-size="15" fill="#253B54">0.70</text>
+<path d="M135,176.2 L385,150.7 L635,150.7" fill="none" stroke="#2563EB" stroke-width="3"/>
+<circle cx="135" cy="176.2" r="5.5" fill="#2563EB" stroke="#fff" stroke-width="1.5"/>
+<circle cx="385" cy="150.7" r="5.5" fill="#2563EB" stroke="#fff" stroke-width="1.5"/>
+<circle cx="635" cy="150.7" r="5.5" fill="#2563EB" stroke="#fff" stroke-width="1.5"/>
+<path d="M135,74.0 L385,120.0 L635,212.0" fill="none" stroke="#15957E" stroke-width="3"/>
+<circle cx="135" cy="74.0" r="5.5" fill="#15957E" stroke="#fff" stroke-width="1.5"/>
+<circle cx="385" cy="120.0" r="5.5" fill="#15957E" stroke="#fff" stroke-width="1.5"/>
+<circle cx="635" cy="212.0" r="5.5" fill="#15957E" stroke="#fff" stroke-width="1.5"/>
+<line x1="300" y1="35" x2="328" y2="35" stroke="#2563EB" stroke-width="4"/>
+<text x="334" y="40" font-size="14" fill="#24364A">Precision</text>
+<line x1="440" y1="35" x2="468" y2="35" stroke="#15957E" stroke-width="4"/>
+<text x="474" y="40" font-size="14" fill="#24364A">Recall</text>
+<text x="380" y="370" text-anchor="middle" font-size="15" fill="#24364A">Decision Threshold</text>
+</svg>
+<figcaption>Representación fiel de los valores calculados en la tabla anterior, exclusivamente sobre las 12 citas ilustrativas. La caída de Recall al elevar el umbral refleja que se identifican menos citas realmente perdidas; no implica que Precision aumente siempre.</figcaption></figure><div class="callout purple"><h3>Derivación de un Decision Threshold a partir de costos</h3>
+<p>Supongamos que <span class="inline-math">\(p=P(Y=1\mid X=x)\)</span> es una probabilidad estimada <strong>calibrada</strong> para una cita futura. Un False Positive cuesta <span class="inline-math">\(C_{FP}=\$20\)</span>, un False Negative cuesta <span class="inline-math">\(C_{FN}=\$80\)</span>, y las decisiones acertadas no tienen costo incremental. Son <em>supuestos monetarios didácticos</em>, no costos reales de una clínica.</p>
+<div class="formula">\[\begin{aligned}
+E[\mathrm{costo}\mid \mathrm{intervenir}] &= (1-p)C_{FP}+p(0)=20(1-p),\\
+E[\mathrm{costo}\mid \mathrm{no\ intervenir}] &=pC_{FN}+(1-p)(0)=80p.
+\end{aligned}\]</div>
+<p>Intervenimos cuando su costo esperado no supera al de no intervenir: <span class="inline-math">\(20(1-p)\le80p\)</span>. Desarrollamos: <span class="inline-math">\(20-20p\le80p\)</span>; entonces <span class="inline-math">\(20\le100p\)</span> y <span class="inline-math">\(p\ge0.20\)</span>. En general, <span class="inline-math">\(t=C_{FP}/(C_{FP}+C_{FN})\)</span> si ambos costos son positivos y se cumplen los supuestos.</p>
+<p><strong>No confundas costo esperado con costo observado.</strong> La tabla anterior compara tres costos observados en apenas 12 citas y encuentra $80 con el Threshold 0.30 entre esas opciones. Eso <em>no</em> valida el Threshold teórico 0.20 ni permite elegir un Threshold con el Test set final. En la práctica, un recordatorio puede modificar la asistencia y estas fórmulas dejarían de representar adecuadamente la decisión. Ajusta y selecciona reglas con Training/Validation; evalúa la regla congelada en Test sin contaminarlo.</p></div>
+</section><section class="guide-section purple" id="section-9"><h2>9. Más allá de sí/no: Binary, Multiclass, Multilabel y Ordinal Classification</h2>
+<p>La estructura del Target determina la variante de Classification. Si reducimos todos los problemas a decisiones binarias, perdemos información relevante.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Tipo</th>
+  <th>Significado</th>
+  <th>Ejemplo</th>
+  <th>Qué representa la predicción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Binary</td>
+  <td>Dos categorías excluyentes</td>
+  <td>Fraude / no fraude</td>
+  <td>Una de dos clases; a menudo, Score de la clase positiva</td>
+</tr>
+<tr>
+  <td>Multiclass</td>
+  <td>Una entre tres o más categorías excluyentes</td>
+  <td>Ticket: facturación / soporte técnico / entrega</td>
+  <td>Una sola clase dentro de varias posibilidades</td>
+</tr>
+<tr>
+  <td>Multilabel</td>
+  <td>Pueden aplicarse varias etiquetas simultáneas</td>
+  <td>Etiquetas: finanzas, salud, política</td>
+  <td>Conjunto de etiquetas que pueden coexistir</td>
+</tr>
+<tr>
+  <td>Ordinal</td>
+  <td>Categorías con un orden significativo</td>
+  <td>Satisfacción: baja / media / alta</td>
+  <td>Categoría ordenada, no distancia numérica medida</td>
+</tr>
+</tbody>
+</table></div>
+<p>En <strong>Multiclass Classification</strong>, las probabilidades para tres categorías excluyentes pueden ser <span class="inline-math">\(0.10,0.70,0.20\)</span> para facturación, soporte técnico y entrega. Suman uno, y la categoría más probable es soporte técnico. En <strong>Multilabel Classification</strong>, un mismo documento puede pertenecer tanto a «finanzas» como a «política»; las etiquetas no son excluyentes y cada una puede tener su propio Threshold.</p>
+<p>En <strong>Ordinal Classification</strong>, «alta» supera a «media», pero codificar los valores como 1, 2 y 3 no demuestra que la distancia psicológica entre baja y media sea igual a la distancia entre media y alta. Tratar esas categorías como Regression continua puede introducir una suposición injustificada.</p>
+</section><section class="guide-section blue" id="section-10"><h2>10. ¿Cómo identificar el tipo de problema cuando el Target es ambiguo?</h2>
+<p>Algunos datasets requieren más atención que simplemente distinguir entre «dólares» y «sí/no». Debemos preguntarnos qué significa el resultado, qué necesita el usuario y cómo se evaluarán los errores.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Pregunta</th>
+  <th>Target</th>
+  <th>Tipo habitual</th>
+  <th>Razón</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>¿Cuánta electricidad consumirá una vivienda mañana?</td>
+  <td>kWh</td>
+  <td>Regression</td>
+  <td>Magnitud física numérica</td>
+</tr>
+<tr>
+  <td>¿El consumo superará 30 kWh?</td>
+  <td>Sí / no</td>
+  <td>Classification</td>
+  <td>Categoría definida mediante un umbral</td>
+</tr>
+<tr>
+  <td>¿Cuántas llamadas de soporte recibiremos?</td>
+  <td>Conteo entero no negativo</td>
+  <td>Count Regression</td>
+  <td>Número de eventos con estructura de conteo</td>
+</tr>
+<tr>
+  <td>¿El código de producto es 001, 002 o 003?</td>
+  <td>Identificador de categoría</td>
+  <td>Classification</td>
+  <td>Los dígitos son códigos, no distancias medidas</td>
+</tr>
+<tr>
+  <td>¿Qué dos diagnósticos aplican a un registro?</td>
+  <td>Múltiples etiquetas</td>
+  <td>Multilabel Classification</td>
+  <td>Puede haber varias etiquetas verdaderas</td>
+</tr>
+<tr>
+  <td>¿Qué nivel de satisfacción elegirá un cliente?</td>
+  <td>Baja / media / alta</td>
+  <td>Ordinal Classification</td>
+  <td>Categorías ordenadas sin intervalos necesariamente iguales</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Sistemas con dos etapas y métodos combinados</h3>
+<p>Una compañía de entregas podría predecir primero <strong>si un paquete llegará tarde</strong> (Classification) y después estimar <strong>cuántas horas de retraso</strong> tendrá (Regression). Otra estrategia consistiría en pronosticar directamente la hora de llegada mediante Regression y luego aplicar una regla para identificar retrasos. Las dos estrategias no son automáticamente equivalentes: la primera puede optimizar directamente la detección de retrasos; la segunda mantiene un pronóstico continuo, pero quizá necesite una Loss Function apropiada cerca de la hora límite.</p>
+<div class="callout purple"><strong>Lección práctica.</strong> Un Target categórico no se convierte en Regression porque lo codifiquemos con números enteros. Un Target cuantitativo tampoco se convierte en Classification solo porque el reporte agrupe las predicciones en intervalos. Primero define la pregunta y el resultado que necesitas.</div>
+
+
+<h3>Nuevo caso resuelto de transferencia: un historial de entregas, dos Targets diferentes</h3>
+<p>Una empresa de <strong>logística de última milla</strong> quiere responder (a) «¿Cuántos minutos tardará una entrega?» o (b) «¿Durará <em>más de 24 minutos</em>?». Son dos preguntas sobre las mismas observaciones, pero con diferentes Targets. Estas cuatro rutas son <strong>sintéticas</strong>. La distancia se mide en kilómetros y el tiempo desde el despacho hasta la entrega en minutos. Para una ruta futura, la distancia debe conocerse o estimarse al momento de predecir.</p>
+<div class="table-wrap"><table><caption>Cuatro entregas sintéticas con resultados completos</caption><thead><tr><th>Ruta</th><th>Distancia x (km)</th><th>Duración T (minutos)</th><th>Etiqueta de retraso: 1 si T &gt; 24</th></tr></thead><tbody><tr><td>A</td><td>1</td><td>12</td><td>0</td></tr><tr><td>B</td><td>2</td><td>18</td><td>0</td></tr><tr><td>C</td><td>3</td><td>25</td><td>1</td></tr><tr><td>D</td><td>4</td><td>29</td><td>1</td></tr></tbody></table></div>
+<p><strong>Regression:</strong> el Target <span class="inline-math">\(T\)</span> se mide en minutos. Ajustamos una recta mediante Ordinary Least Squares con esta muestra intencionalmente pequeña. Primero calculamos las medias:</p>
+<div class="formula">\[\bar x=(1+2+3+4)/4=2.5\ \mathrm{km},\qquad \bar T=(12+18+25+29)/4=21\ \mathrm{min}.\]</div>
+<p>Para reproducir la pendiente, calculamos en cada fila el producto de desviaciones y el cuadrado de la desviación de distancia:</p>
+<div class="table-wrap"><table><thead><tr><th>Ruta</th><th>x − 2.5</th><th>T − 21</th><th>Producto</th><th>(x − 2.5)²</th></tr></thead><tbody><tr><td>A</td><td>−1.5</td><td>−9</td><td>13.5</td><td>2.25</td></tr><tr><td>B</td><td>−0.5</td><td>−3</td><td>1.5</td><td>0.25</td></tr><tr><td>C</td><td>0.5</td><td>4</td><td>2.0</td><td>0.25</td></tr><tr><td>D</td><td>1.5</td><td>8</td><td>12.0</td><td>2.25</td></tr><tr><td><strong>Suma</strong></td><td>0</td><td>0</td><td><strong>29.0</strong></td><td><strong>5.00</strong></td></tr></tbody></table></div>
+<div class="formula">\[b_1=29/5=5.8\ \mathrm{min/km},\quad b_0=21-(5.8)(2.5)=6.5\ \mathrm{min},\quad \boxed{\widehat T=6.5+5.8x}.\]</div>
+<p><strong>Verificación y nueva predicción:</strong> para la distancia media <span class="inline-math">\(x=2.5\)</span> km, el ajuste da <span class="inline-math">\(6.5+5.8(2.5)=21\)</span> minutos, exactamente la media de la muestra. Para una ruta <em>nueva</em> de 2.5 km, esto es un pronóstico puntual, no una garantía ni un tiempo observado. Aquí no hemos evaluado aún un conjunto Test independiente.</p>
+<p><strong>Classification:</strong> ahora definimos el Target <span class="inline-math">\(Y_{late}=1\)</span> si la duración <em>real</em> supera los 24 minutos, y 0 en caso contrario. Las etiquetas observadas son <span class="inline-math">\((0,0,1,1)\)</span>. Un Classifier podría modelar <span class="inline-math">\(P(T&gt;24\mid X=x)\)</span> y adoptar un Decision Threshold justificado. <strong>Sin embargo, el pronóstico puntual de Regression no proporciona esa probabilidad.</strong> En la ruta C, la recta predice <span class="inline-math">\(6.5+5.8(3)=23.9\)</span> minutos (menor que 24), mientras el tiempo real fue 25 minutos (hubo retraso). Aplicar el umbral al pronóstico medio clasificaría incorrectamente esa ruta como puntual. Es una ilustración dentro de la muestra, no una comparación de generalización.</p>
+<div class="callout teal"><strong>Por qué importa.</strong> «Predecir minutos» y «predecir la probabilidad de llegar tarde» son preguntas distintas sobre la incertidumbre. Deducir la segunda de un único pronóstico de Regression requeriría conocer la <em>distribución de duraciones alrededor del pronóstico</em>: conocer la media no es suficiente. Otra opción es entrenar directamente un Classifier. La comparación completa corresponde a guías posteriores.</div>
+</section><section class="guide-section teal" id="section-11"><h2>11. ¿Qué algoritmos sirven para Classification, Regression o ambos?</h2>
+<p><strong>Classification y Regression son tipos de problemas predictivos; los algoritmos son herramientas para resolverlos.</strong> Varias familias poseen versiones para ambas tareas. Lo que cambia es el Target, la función de entrenamiento, la estructura del Output y las métricas de evaluación.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Familia de algoritmos</th>
+  <th>Ejemplo de Regression</th>
+  <th>Ejemplo de Classification</th>
+  <th>Intuición y precaución</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Linear Regression</td>
+  <td>Pronosticar ventas semanales</td>
+  <td>No suele utilizarse directamente para probabilidades de clase</td>
+  <td>Suma contribuciones ponderadas; puede omitir relaciones no lineales</td>
+</tr>
+<tr>
+  <td>Logistic Regression</td>
+  <td>No es la Regression numérica convencional</td>
+  <td>Predecir ausencias a citas</td>
+  <td>Score lineal → sigmoid → probabilidad; nombre engañoso</td>
+</tr>
+<tr>
+  <td>Decision Tree</td>
+  <td>Predecir las ventas medias de una región final</td>
+  <td>Predecir falta/asistencia mediante frecuencias por clase</td>
+  <td>Reglas sucesivas; árboles profundos pueden sufrir Overfitting</td>
+</tr>
+<tr>
+  <td>Random Forest</td>
+  <td>Promediar predicciones de numerosos árboles</td>
+  <td>Combinar votos/probabilidades de diferentes árboles</td>
+  <td>Reduce inestabilidad con árboles variados; menor transparencia</td>
+</tr>
+<tr>
+  <td>Gradient Boosting / XGBoost</td>
+  <td>Actualizar progresivamente un modelo de cantidad</td>
+  <td>Optimizar secuencialmente una Loss Function de Classification</td>
+  <td>Potentes con datos tabulares; requieren Validation y Tuning</td>
+</tr>
+<tr>
+  <td>k-Nearest Neighbors (k-NN)</td>
+  <td>Promediar Targets de vecinos</td>
+  <td>Usar proporciones de clases entre vecinos</td>
+  <td>La similitud depende de las escalas y la distancia</td>
+</tr>
+<tr>
+  <td>Support Vector Machines (SVM)</td>
+  <td>Support Vector Regression (SVR)</td>
+  <td>Margin-based Classification (SVC)</td>
+  <td>Restricciones geométricas; Scaling puede ser importante</td>
+</tr>
+<tr>
+  <td>Neural Networks</td>
+  <td>Predecir demanda o ingresos</td>
+  <td>Producir Scores/probabilidades de clase</td>
+  <td>Funciones no lineales flexibles; requieren diseño y evidencia adecuados</td>
+</tr>
+</tbody>
+</table></div>
+<h3>La misma familia Decision Tree, pero diferente predicción</h3>
+<p>Imaginemos un árbol que divide observaciones comerciales según «publicidad ≥ $3,000». En un <strong>Regression Tree</strong>, una región final podría contener ventas <span class="inline-math">\(7,8,11\)</span>, con predicción promedio <span class="inline-math">\((7+8+11)/3\approx8.67\)</span> miles de dólares. En un <strong>Classification Tree</strong>, una región con cuatro ausencias y una asistencia puede estimar una proporción de ausencias de <span class="inline-math">\(4/5=0.80\)</span> antes de realizar posibles ajustes de Calibration. La estructura de reglas se parece, pero el resultado y la Loss Function son diferentes.</p>
+<h3>Cómo escoger un algoritmo</h3>
+<p>Conviene comenzar con un <strong>Baseline</strong> interpretable (pronóstico promedio, clase mayoritaria, Linear/Logistic Regression) y comparar alternativas bajo el mismo esquema de Validation. También debemos preguntar: ¿necesitamos explicaciones?, ¿son costosos ciertos errores?, ¿cuántas observaciones tenemos?, ¿existen relaciones no lineales?, ¿cuánto tiempo puede tardar una predicción? Un modelo complejo no es automáticamente superior si aporta mejoras marginales o riesgos operativos innecesarios.</p>
+</section><section class="guide-section purple" id="section-12"><h2>12. Loss Functions: por qué Regression y Classification aprenden de manera distinta</h2>
+<p>Una <strong>Loss Function</strong> transforma la discrepancia entre una predicción y el Target observado en un valor que el algoritmo intenta reducir. No es solamente una estadística para el reporte: su forma matemática influye en los parámetros que terminamos aprendiendo.</p>
+<h3>Regression: Squared Error penaliza la magnitud del error</h3>
+<p>Para una observación, Squared Error es <span class="inline-math">\((y-\hat y)^2\)</span>. Si las ventas son 8.0 y el pronóstico 8.7, obtenemos <span class="inline-math">\((8-8.7)^2=(-0.7)^2=0.49\)</span> en unidades monetarias al cuadrado. Si el error se duplica hasta 1.4, Squared Error es <span class="inline-math">\(1.4^2=1.96\)</span>: ¡<strong>cuatro veces</strong> mayor y no solo el doble!</p>
+<p>Para <span class="inline-math">\(n\)</span> observaciones, Mean Squared Error promedia los errores al cuadrado:</p>
+<div class="formula">\[L_{\mathrm{MSE}}=\frac1n\sum_{i=1}^n(y_i-\hat y_i)^2\]</div>
+
+<p>Así se explica por qué MSE es sensible a los errores grandes. En cambio, Mean Absolute Error promedia <span class="inline-math">\(|y_i-\hat y_i|\)</span> y penaliza linealmente la magnitud del error. Ambos son válidos en diferentes contextos, pero favorecen distintas soluciones.</p>
+<h3>Classification: Log Loss evalúa la calidad de las probabilidades</h3>
+<p>Para un Target binario <span class="inline-math">\(y\in\{0,1\}\)</span> y una probabilidad pronosticada <span class="inline-math">\(0&lt;\hat p&lt;1\)</span>, <strong>Binary Cross-Entropy (Log Loss)</strong> para una observación es:</p>
+<div class="formula">\[\ell(y,\hat p)=-\big[y\ln(\hat p)+(1-y)\ln(1-\hat p)\big]\]</div>
+
+<p>Si el paciente realmente faltó (<span class="inline-math">\(y=1\)</span>) y el modelo estimó <span class="inline-math">\(\hat p=0.80\)</span>, el Loss es <span class="inline-math">\(-\ln(0.80)\approx0.2231\)</span>. Si asignó solamente <span class="inline-math">\(\hat p=0.10\)</span> a esa misma ausencia, el Loss asciende a <span class="inline-math">\(-\ln(0.10)\approx2.3026\)</span>. En el segundo caso, el pronóstico fue <strong>erróneo con mucha confianza</strong>, por lo que la penalización es mayor.</p>
+<p>Si el paciente asistió (<span class="inline-math">\(y=0\)</span>) y <span class="inline-math">\(\hat p=0.20\)</span>, el resultado es <span class="inline-math">\(-\ln(1-0.20)\approx0.2231\)</span>. Estos ejemplos muestran que Log Loss premia probabilidades informativas y penaliza la confianza injustificada. Accuracy, en cambio, evalúa etiquetas después de aplicar el Threshold.</p>
+<h3>¿Por qué no usar una Loss Function universal?</h3>
+<p>Una categoría codificada como 0 o 1 no representa necesariamente una magnitud medible cuyos errores numéricos reflejen los costos reales. Técnicamente, Squared Error también puede entrenar modelos probabilísticos en algunos contextos (y se relaciona con Brier Score), pero Classification suele utilizar objetivos diseñados para resultados categóricos. Por su parte, Accuracy no le dice al gerente si el pronóstico de ventas falló por $100 o por $100,000.</p>
+</section><section class="guide-section blue" id="section-13"><h2>13. Métricas, Baselines y los riesgos de Class Imbalance</h2>
+<p>La métrica debe conectarse con la tarea y con el impacto real de equivocarse. Un «Score» aislado, sin Baseline, incertidumbre ni interpretación, puede inducir conclusiones equivocadas.</p>
+<h3>Regression: evaluar el tamaño y la dirección de los errores</h3>
+<p><strong>MAE</strong> expresa cuánto nos equivocamos en promedio, en las unidades del Target. <strong>RMSE</strong> da mayor importancia a errores grandes. El error promedio con signo puede detectar sobreestimación o subestimación sistemática, pero los errores positivos y negativos pueden cancelarse; por ello también necesitamos una métrica de magnitud. En pronósticos empresariales conviene evaluar por temporada, tienda o producto porque un buen promedio puede ocultar fallas en determinados segmentos.</p>
+<p>Un Baseline razonable para una serie temporal de ventas puede ser <strong>las ventas de la semana anterior</strong> o <strong>de la misma semana del año previo</strong>, en lugar de la media de todos los períodos. La referencia apropiada depende de lo que se conoce al pronosticar. Debemos comparar los modelos en los mismos períodos futuros, no en un Split histórico artificialmente fácil.</p>
+<h3>Classification: evaluar a quién detectamos y a quién perjudicamos con falsas alarmas</h3>
+<p>Accuracy cuenta etiquetas correctas por igual. Precision y Recall examinan la Positive Class desde dos perspectivas. <strong>Specificity</strong> evalúa los negativos reales. <strong>F1</strong> combina Precision y Recall, pero no incluye TN en su fórmula. Otras métricas como <strong>ROC AUC</strong> (Area Under the Receiver Operating Characteristic Curve) y <strong>PR AUC</strong> (Area Under the Precision–Recall Curve) resumen el rendimiento a través de distintos Thresholds. Responden preguntas diferentes y también requieren interpretación contextual.</p>
+<h3>La trampa de los eventos raros: cálculo completo</h3>
+<p>Imaginemos <strong>1,000 transacciones bancarias</strong>, de las cuales <strong>10 son fraudulentas</strong> y <strong>990 legítimas</strong>. Un modelo que siempre predice «legítima» no detecta ningún fraude. Sus resultados son <span class="inline-math">\(TN=990\)</span>, <span class="inline-math">\(FN=10\)</span>, <span class="inline-math">\(TP=0\)</span> y <span class="inline-math">\(FP=0\)</span>.</p>
+<div class="formula">\[\mathrm{Accuracy}=\frac{990}{1000}=99\%,\qquad \mathrm{Recall}_{\mathrm{fraud}}=\frac0{10}=0\%\]</div>
+
+<p>El <strong>99% de Accuracy</strong> suena excelente, pero el modelo no detecta <strong>ninguno</strong> de los fraudes. Precision para fraude es matemáticamente <strong>indefinida</strong> porque no existen predicciones positivas (algunas herramientas le asignan cero por convención). Este ejemplo explica por qué debemos mirar la distribución de clases y los resultados de clasificación, no celebrar un porcentaje aislado.</p>
+<div class="callout amber"><strong>Una sutileza adicional.</strong> Cuando cambia la prevalencia del evento entre entrenamiento y producción, Precision puede cambiar aunque Recall y Specificity permanezcan aproximadamente constantes. En modelos de riesgo también debemos revisar Calibration y el rendimiento en grupos relevantes.</div>
+
+</section><section class="guide-section teal" id="section-14"><h2>14. Training, Validation, Test y Data Leakage: un escenario clínico completo</h2>
+<p>Para comprobar si el modelo aprendió patrones generalizables, debemos separar <strong>ajuste</strong>, <strong>selección</strong> y <strong>evaluación final</strong>. Las tres funciones se complementan, pero no son intercambiables.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Conjunto</th>
+  <th>Para qué sirve</th>
+  <th>Qué debemos evitar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Training</td>
+  <td>Aprender coeficientes, reglas, pesos y parámetros de preparación</td>
+  <td>Considerar el rendimiento en estas filas una prueba de futuro éxito</td>
+</tr>
+<tr>
+  <td>Validation</td>
+  <td>Comparar algoritmos, ajustar Hyperparameters y Thresholds</td>
+  <td>Presentar resultados usados repetidamente para Tuning como independientes</td>
+</tr>
+<tr>
+  <td>Test</td>
+  <td>Evaluación final de un procedimiento ya seleccionado</td>
+  <td>Regresar una y otra vez para optimizar decisiones tras ver sus resultados</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Por qué puede ser necesario un Split temporal</h3>
+<p>Supongamos que tenemos citas registradas entre enero y septiembre y queremos predecir las de octubre. Una simulación razonable consiste en <strong>entrenar con meses anteriores</strong>, validar en meses posteriores pero previos a octubre y reservar un período subsiguiente para evaluación. El Split concreto depende del volumen de datos, los cambios operativos, la repetición de pacientes y el momento en que se conocen las etiquetas. Un Split aleatorio podría permitir que información de citas futuras de una persona ayudara a predecir citas anteriores, o sobreestimar de otras maneras el rendimiento real.</p>
+<h3>Ejemplo de Data Leakage</h3>
+<p>Una Feature denominada «estado final de la cita» se completa después de la consulta. Si la utilizamos para predecir la ausencia correspondiente, la variable casi revela la respuesta. Una versión más sutil sería usar el «número de recordatorios enviados», cuando esos mensajes se enviaron después de la fecha de predicción. También aparece Leakage si calculamos la media para Normalization con <strong>todas</strong> las filas antes de separar los datos: las observaciones reservadas influyen entonces en la transformación del Training set.</p>
+<p><strong>Procedimiento correcto:</strong> crear primero los Splits que correspondan al escenario real; estimar Imputation, Scaling, Encoding y Feature Selection usando solamente Training; aplicar las transformaciones aprendidas a Validation y Test. Seleccionar modelo y Threshold con Validation y evaluar posteriormente una sola vez en un Test independiente.</p>
+<h3>Cross-Validation ayuda, pero no soluciona un diseño incorrecto</h3>
+<p><strong>Cross-Validation</strong> repite Training y Validation en diferentes particiones para reducir la dependencia de un único Split. Para pronósticos temporales, debemos conservar la cronología y evitar folds aleatorios inapropiados. En datos clínicos, quizá debamos agrupar registros por paciente o episodio para impedir que observaciones casi duplicadas de una persona aparezcan a ambos lados del Split. Aumentar el número de folds no corrige un diseño que utiliza información futura.</p>
+</section><section class="guide-section purple" id="section-15"><h2>15. Probability Calibration, incertidumbre y consecuencias de las decisiones</h2>
+<p>Una probabilidad estimada solo es útil como probabilidad si su interpretación numérica resulta razonablemente confiable. Un clasificador puede ordenar correctamente las citas según riesgo y, al mismo tiempo, <strong>exagerar sistemáticamente</strong> sus probabilidades de ausencia. <strong>Calibration</strong> estudia la correspondencia entre probabilidades pronosticadas y frecuencias observadas.</p>
+<p>Imaginemos 100 citas con probabilidades estimadas cercanas a <strong>0.80</strong>. Si aproximadamente 80 terminan perdiéndose bajo condiciones de evaluación estables, ese grupo es compatible con una buena Calibration. Si solamente faltan 30, las probabilidades son excesivamente altas. Se trata de una interpretación de frecuencias, no de una garantía acerca de una persona específica. Las muestras pequeñas, los cambios poblacionales y los mecanismos de selección complican la evaluación de Calibration.</p>
+<h3>Brier Score: un cálculo probabilístico sencillo</h3>
+<p>Para un resultado binario, la contribución individual al Brier Score es <span class="inline-math">\((\hat p-y)^2\)</span>. Si <span class="inline-math">\(y=1\)</span> y <span class="inline-math">\(\hat p=0.8\)</span>, obtenemos <span class="inline-math">\((0.8-1)^2=0.04\)</span>. Si <span class="inline-math">\(\hat p=0.1\)</span>, obtenemos <span class="inline-math">\((0.1-1)^2=0.81\)</span>. El <strong>Brier Score</strong> promedia esas contribuciones. Un valor menor es preferible, pero su interpretación requiere tener en cuenta la frecuencia de clases y compararlo con una referencia apropiada.</p>
+<p>Los modelos de Regression también requieren pensar en incertidumbre: pronosticar $8,700 de ventas no garantiza exactamente $8,700. Un <strong>Prediction Interval</strong> busca describir un rango para una nueva observación; no es lo mismo que un <strong>Confidence Interval</strong> para la media o un parámetro estimado. Un valor puntual sin contexto puede provocar una seguridad injustificada en decisiones comerciales.</p>
+<div class="callout purple"><strong>El Output de un modelo no constituye por sí mismo una política.</strong> Incluso una predicción bien calibrada no determina qué intervención debemos realizar. Las decisiones también dependen de costos reales, recursos disponibles, equidad, requisitos legales y del posible efecto de intervenir sobre el evento pronosticado.</div>
+
+
+<h3>Calculemos el Brier Score completo de las 12 citas</h3><p>El dataset de la clínica ya contiene las 12 probabilidades estimadas y sus Targets observados. Al elevar al cuadrado cada error de probabilidad, en el orden A–L, obtenemos:</p><div class="formula">\[\begin{aligned}
+\text{Suma de errores cuadrados}\; &=0.0100+0.0400+0.5184+0.1225\\
+&\quad+0.3600+0.2304+0.2304+0.3600\\
+&\quad+0.1024+0.0784+0.0225+0.0100\\
+&=2.0850
+\end{aligned}\]</div><div class="formula">\[\mathrm{Brier}=\frac{1}{12}\sum_{i=1}^{12}(\hat p_i-y_i)^2=\frac{2.0850}{12}=\boxed{0.17375}\]</div><p>Compáralo con un Baseline que asigna probabilidad 0.40 a <em>todas</em> las citas, escogida sin consultar las 12 etiquetas de evaluación. Existen cinco faltas reales y siete asistencias, por lo que su Brier Score sería <span class="inline-math">\([5(0.4-1)^2+7(0.4-0)^2]/12=[5(0.36)+7(0.16)]/12=2.92/12\approx0.2433\)</span>. Las predicciones ilustrativas son mejores que ese Baseline específico en esta muestra. Sin embargo, <strong>12 citas no permiten demostrar una Calibration fiable</strong>; necesitamos más observaciones reservadas para evaluación, agrupaciones pertinentes y revisar el desempeño en diferentes rangos de probabilidad.</p>
+</section><section class="guide-section blue" id="section-16"><h2>16. Interpretabilidad, causalidad y aplicaciones responsables</h2>
+<p>Prediction pregunta si la información disponible permite estimar un resultado. <strong>Causality</strong> pregunta si cambiar un factor específico produciría un cambio en el resultado. Una relación fuerte entre inversión publicitaria y ventas no demuestra que invertir $1,000 adicionales <strong>cause</strong> $1,700 más de ventas. Las promociones pueden coincidir con temporadas de gran demanda, la dirección puede gastar más precisamente cuando espera más clientes y otras variables pueden influir simultáneamente en ambas magnitudes.</p>
+<p>Del mismo modo, una clínica puede identificar pacientes con mayor probabilidad de faltar, pero estos patrones podrían reflejar problemas de transporte, horarios laborales, accesibilidad o procedimientos de reserva de la propia clínica. Una aplicación responsable sería ofrecer recordatorios flexibles o facilitar la asistencia, nunca utilizar la predicción para suponer que una persona no merece atención o tiene determinada motivación.</p>
+<h3>Lista práctica de interpretación</h3>
+<ol>
+<li>Precisar <strong>qué estamos pronosticando</strong> y en qué momento se observan las Features.</li>
+<li>Identificar <strong>quién puede resultar afectado</strong> por False Positives y False Negatives.</li>
+<li>Distinguir entre <strong>etiqueta, Score no calibrado, probabilidad calibrada, cantidad pronosticada e intervalo</strong>.</li>
+<li>Revisar el rendimiento en las poblaciones, períodos y grupos relevantes para la aplicación.</li>
+<li>No afirmar que encontramos una causa solamente porque el modelo predice bien.</li>
+</ol>
+<p>Estas precauciones forman parte de la calidad técnica. Un modelo con un buen promedio estadístico que no puede aplicarse de manera segura o transparente puede resultar inadecuado para el objetivo real.</p>
+</section><section class="guide-section teal" id="section-17"><h2>17. Un procedimiento práctico para escoger y evaluar el enfoque</h2>
+<p>Podemos utilizar esta secuencia para ambas industrias sin confundir una demostración numérica con un sistema listo para producción.</p>
+<div class="diagram" aria-label="Proceso de selección de modelo"><div>Definir decisión<br/><small>Pregunta, momento, unidades</small></div><span>→</span><div>Definir Target<br/><small>¿Clase o cantidad?</small></div><span>→</span><div>Escoger Baseline<br/><small>Referencia justa</small></div><span>→</span><div>Validar<br/><small>Métrica y costos</small></div></div>
+
+<p><strong>Paso 1 — Escribir la pregunta en una oración.</strong> «Con la información disponible 24 horas antes de una cita, identificar posibles ausencias» o «cada viernes, pronosticar en dólares las ventas de la próxima semana». Evitar objetivos vagos como «aplicar Machine Learning».</p>
+<p><strong>Paso 2 — Definir observación y Target.</strong> Para la clínica, una reserva cuya etiqueta final indica falta o asistencia; para la tienda, una semana y su ingreso definitivo. Precisar unidades y si hay Targets incompletos o registrados con retraso.</p>
+<p><strong>Paso 3 — Auditar Features válidas.</strong> Excluir información inaccesible en el momento de predicción. Documentar datos faltantes, prevalencia de las clases, valores atípicos y qué tan representativa es la muestra de los casos futuros.</p>
+<p><strong>Paso 4 — Preparar Splits defendibles.</strong> Respetar cronología, agrupación de pacientes o clientes y otras dependencias. Mantener el Test set intacto durante la selección del modelo.</p>
+<p><strong>Paso 5 — Construir Baseline y primer modelo interpretable.</strong> Para ventas, comparar un pronóstico estacional sencillo y una Regression. Para ausencias, una regla de clase mayoritaria y Logistic Regression. Evaluar ambos sobre las mismas filas de Validation.</p>
+<p><strong>Paso 6 — Elegir métricas y Thresholds pertinentes.</strong> Usar MAE/RMSE con interpretación monetaria para ventas y Precision, Recall, Calibration y costos de intervención para el modelo clínico. Examinar grupos y márgenes de incertidumbre.</p>
+<p><strong>Paso 7 — Evaluar y monitorear.</strong> Fijar el procedimiento completo, probarlo una vez y después vigilar calidad de datos, resultados, distribución de predicciones y Drift. Rediseñar o reentrenar cuando exista evidencia; nunca suponer que el rendimiento se mantiene indefinidamente.</p>
+
+<h3>Preparación para el futuro laboratorio en Jupyter</h3><p>Después de dominar los cálculos, el laboratorio reproducible puede seguir la misma lógica, sin ocultarla desde el comienzo detrás de una biblioteca. Primero, introducir los cinco registros de ventas y calcular de forma independiente los coeficientes y errores con NumPy; después, comparar los valores con un modelo de scikit-learn. Segundo, introducir las 12 probabilidades clínicas y las etiquetas observadas, calcular TP, FP, FN y TN para varios Thresholds y verificar Precision, Recall y Brier Score. Por último, modificar los costos supuestos de FP y FN y explicar si cambia el Threshold preferido. Es una propuesta para el futuro laboratorio, no evidencia de que se haya entrenado realmente un clasificador clínico ni de que estos datos ilustrativos justifiquen su uso operativo.</p>
+</section><section class="guide-section amber" id="section-18"><h2>18. Errores comunes: explicaciones y correcciones detalladas</h2>
+<p>Cada error incluye por qué falla y cómo corregirlo. Reconocerlos es fundamental: una formulación incorrecta puede invalidar todas las etapas posteriores del proyecto.</p>
+<h3>1. «Logistic Regression debe predecir una cantidad porque su nombre dice Regression».</h3>
+<p><strong>Por qué es incorrecto:</strong> Logistic Regression binaria transforma un Score lineal con sigmoid para estimar la probabilidad de una clase. <strong>Corrección:</strong> observar el Target y el Output, no el nombre histórico del método. Falta/asistencia es Classification.</p>
+<h3>2. «Si una variable tiene valores 0, 1 y 2, automáticamente corresponde a Regression».</h3>
+<p><strong>Por qué es incorrecto:</strong> Los dígitos pueden identificar categorías independientes, como facturación, soporte técnico y entrega. Las diferencias numéricas no representan magnitudes naturales. <strong>Corrección:</strong> describir qué significa cada código y usar Multiclass Classification cuando se trate de categorías.</p>
+<h3>3. «Si el resultado es entero, obligatoriamente es Classification».</h3>
+<p><strong>Por qué es incorrecto:</strong> El número de llamadas recibidas o de productos defectuosos es una cantidad, aunque sea entera. <strong>Corrección:</strong> utilizar Count Regression cuando queremos el número y Classification cuando queremos una categoría como «más de diez llamadas».</p>
+<h3>4. «Una probabilidad de 0.80 significa que el evento ocurrirá».</h3>
+<p><strong>Por qué es incorrecto:</strong> Una probabilidad expresa incertidumbre. Incluso entre predicciones perfectamente calibradas cercanas a 0.80, algunas no se materializarán. <strong>Corrección:</strong> interpretarla como riesgo estimado y evaluar Calibration.</p>
+<h3>5. «La etiqueta y la probabilidad son equivalentes».</h3>
+<p><strong>Por qué es incorrecto:</strong> Tanto 0.52 como 0.95 generan clase 1 con Threshold 0.50, pero expresan riesgos estimados muy diferentes. <strong>Corrección:</strong> conservar probabilidades cuando necesitamos priorizar recursos, ordenar casos o modificar el Threshold.</p>
+<h3>6. «Siempre debemos utilizar Decision Threshold = 0.50».</h3>
+<p><strong>Por qué es incorrecto:</strong> Los False Negatives y False Positives suelen producir consecuencias distintas. En nuestro ejemplo, 0.30 tuvo menor costo ilustrativo aun con menor Accuracy. <strong>Corrección:</strong> seleccionar un Threshold según costos o restricciones justificadas y datos de Validation.</p>
+<h3>7. «Un Accuracy alto demuestra que un modelo para eventos raros es bueno».</h3>
+<p><strong>Por qué es incorrecto:</strong> Predecir «sin fraude» en 1,000 transacciones con diez fraudes proporcionó 99% Accuracy y 0% Recall para fraude. <strong>Corrección:</strong> comparar contra un Baseline adecuado e inspeccionar Precision, Recall, la distribución de clases y las métricas relevantes.</p>
+<h3>8. «El modelo con menor Training Error es necesariamente el mejor».</h3>
+<p><strong>Por qué es incorrecto:</strong> Un modelo flexible puede memorizar peculiaridades de los datos. El MAE comercial se calculó sobre las mismas cinco semanas que sirvieron para estimar la recta. <strong>Corrección:</strong> comparar sobre Validation correctamente separado y utilizar Test solo después de seleccionar el procedimiento.</p>
+<h3>9. «Podemos aplicar Scaling o Imputation a todos los datos antes de separarlos».</h3>
+<p><strong>Por qué es incorrecto:</strong> Incluso una transformación no supervisada puede transmitir información del Test set al desarrollo del modelo. <strong>Corrección:</strong> estimar transformaciones únicamente en Training y aplicarlas posteriormente dentro de un Pipeline.</p>
+<h3>10. «Un error pequeño en Regression demuestra causalidad».</h3>
+<p><strong>Por qué es incorrecto:</strong> La asociación predictiva puede deberse a Confounding, causalidad inversa o tendencias comunes. <strong>Corrección:</strong> describir los coeficientes como predictivos salvo que un diseño causal convincente respalde conclusiones más fuertes.</p>
+<h3>11. «Precision y Recall significan lo mismo».</h3>
+<p><strong>Por qué es incorrecto:</strong> Precision divide entre predicciones positivas; Recall divide entre positivos reales. Para la clínica con Threshold 0.50 eran <span class="inline-math">\(4/6\)</span> y <span class="inline-math">\(4/5\)</span>, respectivamente. <strong>Corrección:</strong> explicar verbalmente el denominador antes de aplicar cada fórmula.</p>
+<h3>12. «Todos los Scores continuos son salidas de Regression».</h3>
+<p><strong>Por qué es incorrecto:</strong> Un clasificador puede producir un Score numérico sin límites o entre cero y uno sin dejar de resolver un problema categórico. <strong>Corrección:</strong> identificar la tarea a partir del Target y del objetivo de aprendizaje.</p>
+<h3>13. «Basta con obtener el menor error promedio para desplegar un modelo».</h3>
+<p><strong>Por qué es incorrecto:</strong> Un promedio puede ocultar errores graves en ciertas clínicas, temporadas, regiones o grupos. La producción añade cambios de datos y nuevas restricciones. <strong>Corrección:</strong> revisar segmentos relevantes, incertidumbre, estabilidad e impacto operativo.</p>
+<h3>14. «Aplicar un umbral a una predicción de Regression equivale exactamente a entrenar Classification».</h3>
+<p><strong>Por qué es incorrecto:</strong> Regression optimiza errores numéricos sobre todo el rango del Target; Classification puede optimizar directamente la detección del evento definido por el umbral. <strong>Corrección:</strong> comparar ambas estrategias con la misma métrica de decisión y datos reservados.</p>
+<h3>15. «Si el Test Score es excelente, puedo seguir ajustando hasta que mejore aún más».</h3>
+<p><strong>Por qué es incorrecto:</strong> Elegir repetidamente configuraciones según Test convierte ese conjunto en parte de las decisiones de entrenamiento. <strong>Corrección:</strong> volver a Validation y conservar una evaluación final verdaderamente independiente cuando sea posible.</p>
+</section><section class="guide-section teal" id="section-19"><h2>19. Comprueba lo aprendido: razona y verifica cada respuesta</h2>
+<p>Intenta resolver cada pregunta antes de expandir su explicación. Los ejercicios vuelven a las aplicaciones, cálculos y limitaciones, en lugar de pedir únicamente definiciones.</p>
+<details><summary>1. Un hospital predice cuántas camas estarán disponibles mañana. ¿Classification o Regression?</summary><p><strong>Regression.</strong> El Target es un conteo numérico de camas disponibles; aunque sus valores sean enteros, representa una cantidad. Podría convenir un modelo específico para conteos. Si el hospital pregunta si la capacidad caerá por debajo de cinco camas, habrá definido un problema de Binary Classification.</p></details>
+
+<details><summary>2. Una tienda online considera «alto riesgo» una transacción cuando su probabilidad estimada de fraude es al menos 0.60. ¿Cuál es el Target y cuál la regla?</summary><p>El Target subyacente es fraude/no fraude, por lo que se trata de Binary Classification. La probabilidad es un Output intermedio; la regla convierte <span class="inline-math">\(\hat p\ge0.60\)</span> en «alto riesgo». El Threshold es una decisión práctica y no una ley matemática.</p></details>
+
+<details><summary>3. Con los totales 17 y 10, vuelve a calcular la pendiente OLS de la tienda.</summary><p>La pendiente es <span class="inline-math">\(b_1=17/10=1.7\)</span>. Como publicidad y ventas están expresadas en miles de dólares, aumentar $1,000 de publicidad se asocia con $1,700 más de ventas <em>ajustadas</em> por el modelo; no demuestra un efecto causal.</p></details>
+
+<details><summary>4. Pronostica ventas para x = 4 e interpreta un Residual de −0.7.</summary><p>En <span class="inline-math">\(\hat y=1.9+1.7x\)</span>, sustituimos <span class="inline-math">\(x=4\)</span>: <span class="inline-math">\(\hat y=1.9+1.7(4)=8.7\)</span> miles de dólares. Si el valor real fue 8.0, entonces <span class="inline-math">\(e=8.0-8.7=-0.7\)</span>; el modelo sobreestimó las ventas en $700.</p></details>
+
+<details><summary>5. Calcula MAE con errores absolutos 0.4, 0.3, 0, 0.7 y 0.6.</summary><p>Sumamos todos: <span class="inline-math">\(0.4+0.3+0+0.7+0.6=2.0\)</span>. Dividimos entre cinco: <span class="inline-math">\(\mathrm{MAE}=2/5=0.4\)</span> miles de dólares, es decir, $400. MAE no puede ser negativo y conserva las unidades originales del Target.</p></details>
+
+<details><summary>6. En la clínica con Threshold 0.50, ¿por qué Precision y Recall son distintos?</summary><p>Tenemos cuatro TP, dos FP y un FN. Precision pregunta cuántos casos marcados realmente faltaron: <span class="inline-math">\(4/(4+2)=4/6\)</span>. Recall pregunta cuántas ausencias reales fueron detectadas: <span class="inline-math">\(4/(4+1)=4/5\)</span>. Sus denominadores corresponden a preguntas operativas diferentes.</p></details>
+
+<details><summary>7. Con Threshold 0.30, calcula Recall y Precision.</summary><p>Las cinco ausencias reales se detectaron: <span class="inline-math">\(TP=5\)</span>, <span class="inline-math">\(FN=0\)</span>, Recall <span class="inline-math">\(=5/5=100\%\)</span>. También se marcaron cuatro citas atendidas: Precision <span class="inline-math">\(=5/(5+4)=5/9\approx55.6\%\)</span>.</p></details>
+
+<details><summary>8. ¿Por qué la clínica podría preferir Threshold 0.30 frente a 0.50 si Accuracy es menor?</summary><p>Con los costos ilustrativos, 0.30 produce cuatro FP y cero FN: <span class="inline-math">\(4(20)=\$80\)</span>. Con 0.50 aparecen dos FP y un FN: <span class="inline-math">\(2(20)+1(80)=\$120\)</span>. La solución de menor costo no siempre tiene máximo Accuracy. Una aplicación real también exige justificar costos y evaluar equidad.</p></details>
+
+<details><summary>9. Un modelo no detecta fraude en 1,000 transacciones con diez fraudes. ¿Accuracy y Recall?</summary><p>Acertó las 990 transacciones legítimas y omitió los diez fraudes. Accuracy <span class="inline-math">\(=990/1000=99\%\)</span>; Recall para fraude <span class="inline-math">\(=0/10=0\%\)</span>. Precision es indefinida porque no hizo predicciones positivas. El Accuracy elevado oculta la incapacidad total de detectar fraude.</p></details>
+
+<details><summary>10. Un Target utiliza códigos 1, 2 y 3 para «bronce», «plata» y «oro». ¿Qué tarea corresponde?</summary><p>Se trata de categorías ordenadas, pero sin garantía de distancias numéricas iguales. Corresponde Ordinal Classification; los códigos enteros no convierten la variable automáticamente en Regression.</p></details>
+
+<details><summary>11. ¿Qué problema aparece al utilizar «el paciente asistió» registrado después de la consulta para predecir esa ausencia?</summary><p>Es Data Leakage. La variable contiene el resultado final, imposible de conocer 24 horas antes. El entrenamiento daría resultados engañosos. Solo pueden utilizarse Features disponibles cuando realmente se hace la predicción.</p></details>
+
+<details><summary>12. Para una ausencia real y = 1, compara Log Loss con p = 0.80 y p = 0.10.</summary><p>Si <span class="inline-math">\(y=1\)</span>, el Loss es <span class="inline-math">\(-\ln(\hat p)\)</span>. Para 0.80 vale aproximadamente 0.2231; para 0.10 vale 2.3026. La predicción muy segura pero incorrecta recibe más de diez veces la penalización de la predicción 0.80.</p></details>
+
+<details><summary>13. ¿Por qué no podemos afirmar que el error futuro de ventas será $400 solo por el Training MAE?</summary><p>Estimamos la recta y calculamos el error sobre las mismas cinco observaciones. Ese ajuste dentro de la muestra es optimista para nuevas semanas, especialmente con tan pocos datos. Necesitamos períodos futuros reservados, un Split temporal válido y comparación con un Baseline apropiado.</p></details>
+
+<details><summary>14. Un sistema asigna a un ticket las etiquetas «facturación» y «soporte técnico» a la vez. ¿Multiclass o Multilabel?</summary><p><strong>Multilabel Classification</strong>, porque dos etiquetas pueden ser verdaderas simultáneamente. Multiclass Classification supone que cada observación pertenece a una sola clase entre varias alternativas excluyentes.</p></details>
+
+
+<details><summary>15. ¿Por qué una misma probabilidad estimada puede producir etiquetas diferentes?</summary><p>Supongamos <span class="inline-math">\(\hat p=0.60\)</span>. Con <span class="inline-math">\(t=0.50\)</span>, la regla <span class="inline-math">\(\hat p\ge t\)</span> predice clase 1. Con <span class="inline-math">\(t=0.70\)</span>, predice clase 0. El modelo produjo el mismo 0.60 en ambos casos; cambió la regla de decisión. Modificar un Threshold no mejora por sí mismo la Calibration; debemos escogerlo según objetivos y costos validados.</p></details><details><summary>16. Calcula el Brier Score de la clínica si la suma de errores cuadrados es 2.0850 y hay 12 citas.</summary><p>Por definición, el Brier Score binario es la media de <span class="inline-math">\((\hat p_i-y_i)^2\)</span>. Por lo tanto, <span class="inline-math">\(2.0850/12=0.17375\)</span>. En esta métrica, menos es mejor, pero un solo número no equivale a una curva de Calibration y 12 casos no bastan para validar la calidad de las probabilidades en una población clínica.</p></details>
+
+<h3>Nuevos desafíos de transferencia: datos distintos de los ejemplos resueltos</h3>
+<details><summary>17. Nuevos registros de transporte: calcula un error y el Recall de entregas tardías.</summary><p>Tres entregas ilustrativas independientes tienen parejas (duración real, duración pronosticada), en minutos: (18,20), (27,23) y (30,29). Los errores absolutos de Regression son <span class="inline-math">\(|18-20|=2\)</span>, <span class="inline-math">\(|27-23|=4\)</span> y <span class="inline-math">\(|30-29|=1\)</span>. Por tanto, <span class="inline-math">\(\mathrm{MAE}=(2+4+1)/3=7/3\approx2.33\)</span> minutos. Llamaremos <em>tardía</em> a una entrega con duración estrictamente mayor de 24 minutos. Las etiquetas reales son (0,1,1), y las derivadas de los pronósticos son (0,0,1). Así, <span class="inline-math">\(TP=1,FN=1,TN=1,FP=0\)</span>, <span class="inline-math">\(\mathrm{Recall}=TP/(TP+FN)=1/(1+1)=50\%\)</span> y <span class="inline-math">\(\mathrm{Accuracy}=(1+1)/3\approx66.7\%\)</span>. El mismo conjunto permite formular dos preguntas distintas, pero <strong>no</strong> permite afirmar cómo rendiría un Classifier entrenado por separado.</p></details>
+<details><summary>18. Nuevos Scores en seguros: ¿cuatro casos validan Probability Calibration?</summary><p>Cuatro reclamaciones sintéticas tienen (probabilidad estimada de fraude, etiqueta real): (0.10,0), (0.40,1), (0.65,0), (0.90,1). Con Threshold 0.50 se marcan solo los casos 3 y 4: <span class="inline-math">\(TP=1,FP=1,FN=1,TN=1\)</span>. Precision es <span class="inline-math">\(1/(1+1)=0.50\)</span> y Recall es también <span class="inline-math">\(1/(1+1)=0.50\)</span>. Con Threshold 0.30 se marcan los casos 2, 3 y 4: <span class="inline-math">\(TP=2,FP=1,FN=0,TN=1\)</span>, Precision <span class="inline-math">\(2/3\approx66.7\%\)</span> y Recall <span class="inline-math">\(2/2=100\%\)</span>. Cuatro resultados no permiten validar Calibration y estas son evaluaciones didácticas, no una autorización para optimizar el Threshold sobre el Test final.</p></details>
+<details><summary>19. Demanda eléctrica: ¿qué Task y qué Target corresponde si cambia la pregunta?</summary><p>«Predecir el consumo de mañana en kilowatt-hours (kWh)» es Regression, con Target cuantitativo <span class="inline-math">\(E\)</span> medido en kWh. «¿Superará el consumo de mañana 30 kWh?» es Binary Classification, con <span class="inline-math">\(Y=\mathbf{1}\{E&gt;30\}\)</span>. Un código de medidor como «001» es un identificador, no un Target cuantitativo porque esté escrito con dígitos. Las Features deben existir al momento del pronóstico. Incluso un pronóstico de Regression de exactamente 29 kWh no establece por sí solo la probabilidad de superar 30 kWh.</p></details>
+</section><section class="guide-section purple" id="section-20"><h2>20. Glosario, conexiones conceptuales y conclusión</h2>
+<p>Este glosario conecta cada término con su uso práctico. Vuelve a los ejemplos numéricos cuando una definición te parezca demasiado abstracta.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Término</th>
+  <th>Significado y consecuencia práctica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Supervised Learning</td>
+  <td>Aprender con Targets observados; incluye Classification y Regression.</td>
+</tr>
+<tr>
+  <td>Target / Label</td>
+  <td>Resultado que queremos predecir; su significado establece el problema.</td>
+</tr>
+<tr>
+  <td>Feature</td>
+  <td>Información disponible antes de decidir; valores futuros crean Data Leakage.</td>
+</tr>
+<tr>
+  <td>Regression</td>
+  <td>Predecir una cantidad, idealmente considerando también su incertidumbre.</td>
+</tr>
+<tr>
+  <td>Classification</td>
+  <td>Predecir una categoría discreta, frecuentemente mediante Scores o probabilidades.</td>
+</tr>
+<tr>
+  <td>Binary / Multiclass / Multilabel</td>
+  <td>Dos categorías / una entre varias / varias etiquetas simultáneas.</td>
+</tr>
+<tr>
+  <td>Ordinal Classification</td>
+  <td>Categorías ordenadas sin intervalos necesariamente iguales.</td>
+</tr>
+<tr>
+  <td>Model Parameter</td>
+  <td>Cantidad aprendida, como la pendiente 1.7 del ejemplo comercial.</td>
+</tr>
+<tr>
+  <td>Hyperparameter</td>
+  <td>Configuración escogida por quien desarrolla el modelo, como profundidad del árbol.</td>
+</tr>
+<tr>
+  <td>Residual</td>
+  <td>Valor observado menos predicción numérica; el signo indica dirección del error.</td>
+</tr>
+<tr>
+  <td>MAE / MSE / RMSE</td>
+  <td>Métricas de Regression; MAE y RMSE tienen unidades originales, MSE al cuadrado.</td>
+</tr>
+<tr>
+  <td>Decision Threshold</td>
+  <td>Valor límite para convertir Score/probabilidad en decisión categórica.</td>
+</tr>
+<tr>
+  <td>TP / FP / FN / TN</td>
+  <td>Cuatro conteos para una Positive Class y Threshold definidos.</td>
+</tr>
+<tr>
+  <td>Precision</td>
+  <td>Proporción de predicciones positivas que realmente son positivas.</td>
+</tr>
+<tr>
+  <td>Recall / Sensitivity</td>
+  <td>Proporción de positivos reales que el modelo identifica.</td>
+</tr>
+<tr>
+  <td>Specificity</td>
+  <td>Proporción de negativos reales identificados como negativos.</td>
+</tr>
+<tr>
+  <td>Calibration</td>
+  <td>Correspondencia entre probabilidades estimadas y frecuencias observadas.</td>
+</tr>
+<tr>
+  <td>Log Loss</td>
+  <td>Loss probabilístico de Classification; penaliza errores muy seguros.</td>
+</tr>
+<tr>
+  <td>Baseline</td>
+  <td>Predictor simple que sirve para medir si la complejidad agrega valor.</td>
+</tr>
+<tr>
+  <td>Training / Validation / Test</td>
+  <td>Aprender parámetros / seleccionar decisiones / evaluación independiente.</td>
+</tr>
+<tr>
+  <td>Data Leakage</td>
+  <td>Uso de datos futuros o información filtrada desde observaciones reservadas.</td>
+</tr>
+<tr>
+  <td>Class Imbalance</td>
+  <td>Frecuencias muy diferentes entre clases; Accuracy puede engañar.</td>
+</tr>
+<tr>
+  <td>Generalization</td>
+  <td>Capacidad de rendir bien en observaciones nuevas y representativas.</td>
+</tr>
+<tr><td>Decision Boundary</td><td>Conjunto de combinaciones de Features donde cambia la clase predicha para un Threshold dado; la probabilidad estimada puede variar continuamente.</td></tr><tr><td>Brier Score</td><td>Media de los errores cuadrados entre probabilidades binarias y Targets observados 0/1; valores menores indican mejor puntuación.</td></tr><tr><td>Conditional Mean</td><td>Valor promedio esperado del Target entre observaciones con un mismo patrón de Features; es un objetivo central de Regression con Squared Error.</td></tr>
+</tbody>
+</table></div>
+<h3>La pregunta final más útil</h3>
+<p>Antes de escoger cualquier algoritmo, completa esta frase: <strong>«Para cada observación, utilizando la información disponible en el momento ___, necesito predecir ___, y consideraré útil una predicción cuando ___».</strong> Si el resultado buscado es una cantidad medible, considera Regression; si es pertenencia a una categoría, considera Classification. Si la aplicación combina ambas, define explícitamente las dos tareas en vez de ocultarlas detrás de un único Score.</p>
+<p>Ambos enfoques requieren rigor matemático, evaluación honesta e interpretación responsable. <strong>El método debe servir a la pregunta, y no al revés.</strong></p>
+</section>
+</article></main>
+<footer class="guide-footer"><div class="container"><p>Guía educativa · Datos ilustrativos · © Alfredo Saldana</p><a href="/es/tutorials.html">Learn</a></div></footer>
+<script>(function(){var b=document.querySelector('.menu-btn'),n=document.querySelector('#site-nav');if(b&&n){b.addEventListener('click',function(){var o=n.classList.toggle('open');b.setAttribute('aria-expanded',o?'true':'false');});}})();</script>
+</body></html>
