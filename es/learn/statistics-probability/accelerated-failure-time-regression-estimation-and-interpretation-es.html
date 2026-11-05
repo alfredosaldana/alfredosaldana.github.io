@@ -1,0 +1,3333 @@
+<!doctype html>
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="Alfredo Saldana" name="author"/><meta content="Guía didáctica de regresión AFT con Lognormal y Weibull, censura, Time Ratios y ejercicios resueltos." name="description"/><title>79 · Accelerated Failure Time Regression: Estimation and Interpretation | Alfredo Saldana</title><link href="/es/learn/statistics-probability/accelerated-failure-time-regression-estimation-and-interpretation-es.html" rel="canonical"/><link href="/learn/statistics-probability/accelerated-failure-time-regression-estimation-and-interpretation.html" hreflang="en" rel="alternate"/><link href="/es/learn/statistics-probability/accelerated-failure-time-regression-estimation-and-interpretation-es.html" hreflang="es" rel="alternate"/><style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:wght@500;600;700&display=swap');
+:root{--navy:#0b1f3a;--blue:#2563eb;--ink:#1a314e;--muted:#56677c;--rule:#dbe6f2;--paper:#f6f9fe;--soft:#eef5ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font:16px/1.78 Inter,system-ui,sans-serif;color:var(--ink);background:var(--paper)}a{color:#2059b8}a:focus-visible,button:focus-visible{outline:3px solid #f59e0b;outline-offset:3px}.container{width:min(1150px,calc(100% - 32px));margin:auto}.site-header{position:sticky;top:0;z-index:30;background:#ffffffed;border-bottom:1px solid var(--rule);backdrop-filter:blur(16px)}.nav-wrap{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:14px}.identity{display:flex;align-items:center;gap:17px;min-width:0;flex-shrink:0}.brand{font-size:1.04rem;font-weight:800;letter-spacing:-.025em;text-decoration:none;color:var(--navy);white-space:nowrap}.lang-switch{display:flex;align-items:center;gap:9px;white-space:nowrap;font-size:.94rem}.lang-switch a{color:#111827;text-decoration:none;font-weight:700;padding:8px 2px}.lang-switch a[aria-current=page]{color:var(--blue);font-weight:800}.lang-switch span{color:#8b98a9}.nav{display:flex;gap:20px;align-items:center}.nav a{font-size:.89rem;color:#40516a;text-decoration:none}.nav a.active{font-weight:750;color:#2563eb}.menu-btn{display:none;border:0;background:transparent;font-size:1.5rem;line-height:1;cursor:pointer;color:var(--navy)}.study-hero{background:linear-gradient(115deg,#e6f1ff,#fff 65%,#f0f5ff);padding:62px 0 55px;border-bottom:1px solid var(--rule)}.eyebrow{color:#2865bd;font-size:.75rem;letter-spacing:.135em;font-weight:800;text-transform:uppercase}.study-hero h1{font:700 clamp(2.3rem,4.7vw,4.8rem)/1.1 'Source Serif 4',Georgia,serif;max-width:1050px;letter-spacing:-.035em;color:#071d3c;margin:14px 0 18px}.study-hero .lead{max-width:860px;color:#3c536d;font-size:clamp(1.03rem,1.9vw,1.22rem)}.meta{display:flex;flex-wrap:wrap;gap:9px;margin:24px 0 0}.meta span{font-size:.79rem;font-weight:650;border:1px solid #dbe8fa;border-radius:40px;padding:7px 11px;background:white}.layout{display:grid;grid-template-columns:minmax(0,1fr) 245px;align-items:start;gap:25px;padding:30px 0 90px}.prose{min-width:0;overflow-wrap:anywhere;background:white;border:1px solid #e2e9f4;border-radius:19px;box-shadow:0 10px 35px #0b1f3a09;padding:clamp(20px,3.7vw,49px)}.prose section{border-top:1px solid var(--rule);padding-top:28px;margin-top:65px;scroll-margin-top:94px}.prose section:first-child{margin-top:0;border:0;padding-top:0}.chapter-label{font-weight:800;letter-spacing:.15em;color:#2c63ae;font-size:.72rem}.prose h2{font:700 clamp(1.65rem,2.6vw,2.5rem)/1.18 'Source Serif 4',Georgia,serif;color:#091f3a;letter-spacing:-.022em;margin:8px 0 22px}.prose p{overflow-wrap:anywhere;font-size:1rem;line-height:1.92;margin:0 0 19px}.prose section>p:first-of-type{font-size:1.04rem;color:#1e416b}.prose strong{color:#0b376c}.prose .equation-card{border-radius:13px;background:linear-gradient(110deg,#f1f7ff,#fff);border:1px solid #d6e6fb;border-left:4px solid #3d76d7;padding:20px 18px;margin:22px 0 25px;max-width:100%}.equation-label{display:block;font-size:.68rem;color:#3267ad;font-weight:800;letter-spacing:.11em;margin:0 0 12px}.math-scroll{width:100%;overflow-x:auto;overflow-y:hidden;padding:8px 2px;max-width:100%;font-size:1.14rem}.math-scroll mjx-container[display=true]{margin:6px 0!important;max-width:100%;overflow-x:auto}.prose mjx-container[jax=CHTML][display=true]{overflow-x:auto;overflow-y:hidden;max-width:100%}.prose .table-wrap{overflow-x:auto;border:1px solid #d8e5f4;border-radius:10px;margin:19px 0 26px}.prose table{border-collapse:collapse;width:100%;min-width:480px;font-size:.88rem}.prose th{background:#ebf3ff;color:#123969;text-align:left;font-weight:800}.prose th,.prose td{border-bottom:1px solid #d9e5f3;padding:10px 13px;vertical-align:top}.prose tr:last-child td{border-bottom:0}.prose tr:nth-child(even) td{background:#fafcff}.prose figure{border:1px solid #deebf9;border-radius:16px;padding:18px;margin:28px 0;background:#fbfdff}.prose figure img,.prose figure svg{display:block;width:100%;height:auto}.prose figcaption{font-size:.88rem;color:#526880;line-height:1.6;margin-top:9px}.prose blockquote{border-left:4px solid #d9a24a;background:#fffaf1;padding:15px 20px;margin:24px 0;border-radius:0 12px 12px 0}.prose blockquote p:last-child{margin-bottom:0}.prose section:nth-child(5n+2)>p:nth-of-type(3){background:#f2f8ff;border-left:3px solid #7bb4f1;padding:15px 18px;border-radius:0 12px 12px 0}.toc{position:sticky;top:98px;max-height:calc(100vh - 120px);overflow:auto;background:#fff;border:1px solid var(--rule);border-radius:16px;padding:18px}.toc h2{font:800 .81rem Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px;color:#163e75}.toc a{display:block;text-decoration:none;color:#405875;font-size:.79rem;line-height:1.43;padding:7px 3px;border-bottom:1px solid #edf2f7}.toc a:hover{color:#2563eb}.foot{background:#0b1f3a;color:#dde9f8;padding:30px 0;font-size:.82rem}.foot p{margin:0}.skip{position:absolute;left:-9999px;top:0;background:white;color:#1f3c65;padding:12px}.skip:focus{left:12px;z-index:99}@media(max-width:950px){.layout{grid-template-columns:minmax(0,1fr)}.toc{position:static;max-height:260px;order:-1}.prose{order:1}.nav{display:none;position:absolute;top:72px;left:0;right:0;padding:17px 22px;background:white;border-bottom:1px solid var(--rule);flex-direction:column;align-items:flex-start}.nav.open{display:flex}.menu-btn{display:block}}@media(max-width:520px){.container{width:calc(100% - 22px)}.nav-wrap{min-height:69px}.identity{gap:10px}.brand{font-size:.92rem}.lang-switch{font-size:.82rem;gap:6px}.study-hero{padding:38px 0 33px}.prose{padding:20px 14px;border-radius:13px}.prose p{font-size:.95rem}.prose section{margin-top:51px}.equation-card{padding:14px 11px!important}.math-scroll{font-size:1.02rem}.prose figure{margin:23px 0;padding:9px}.toc{padding:13px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.prose section:nth-child(7n+3) blockquote{border-color:#2563eb;background:#f1f7ff}.prose section:last-child{padding-bottom:28px}.math-scroll mjx-container{max-width:none}.prose .equation-card:focus-within{outline:2px solid #2563eb}.prose figure svg{max-width:100%;overflow:visible}.prose section h2{max-width:38ch}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']],processEscapes:true,packages:{'[+]':['ams']}},options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']},chtml:{scale:1,matchFontHeight:false}};</script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script><style id="stats80-responsive-correction-v1-2">
+
+/* Statistics & Probability responsive equation/table correction v1.2.
+   Localized to previously flagged guides; preserves font size and academic content. */
+html,body{max-width:100%;}
+main,main article,main section,main .container,main .content,main .prose,
+main .layout,main .study-layout,main .study-content,main .article-body,
+main .chapter,main .card,main .grid,main .equation-card,
+main .math-scroll,main .table-wrap,main .table-scroll,main .datawrap,
+main .table-responsive{min-width:0;max-width:100%;}
+main .table-wrap,main .table-scroll,main .datawrap,main .table-responsive,
+main .table-container,main .table-wrapper{overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;}
+/* Tables without an existing scroll wrapper retain native semantic table elements. */
+main table.stats80-responsive-table{display:block;max-width:100%;overflow-x:auto;
+ overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;}
+main table.stats80-responsive-table tbody,main table.stats80-responsive-table thead,
+main table.stats80-responsive-table tfoot{width:max-content;min-width:100%;}
+/* MathJax display math scrolls within its own box; never scale symbols to illegibility. */
+main mjx-container[jax="CHTML"][display="true"],main mjx-container[jax="SVG"][display="true"],
+main .math-display,main .math-block,main .math-scroll,main .equation-card,
+main .equation,main .formula,main .eq,main .display-math{
+ max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;
+ overscroll-behavior-x:contain;}
+main mjx-container[jax="CHTML"]:not([display="true"]),
+main mjx-container[jax="SVG"]:not([display="true"]){max-width:100%;vertical-align:middle;overflow-x:auto;overflow-y:hidden;}
+main p,main li,main figcaption,main td,main th{overflow-wrap:anywhere;}
+main img,main svg,main canvas{max-width:100%;height:auto;}
+@media(max-width:768px){main figure{max-width:100%;min-width:0;}}
+
+
+
+/* Additional containment after browser diagnostics: paragraphs with long inline
+   formulae, worked examples, and long display derivations can scroll locally. */
+main p,main li,main blockquote,main .chapter,main .equation-card,
+main .mathbox,main .formula-box,main .worked-example,main .example,
+main .solution,main .math-panel,main .equation-block{
+ min-width:0;max-width:100%;overflow-x:auto;
+ overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;}
+main table.stats80-responsive-table{min-width:0!important;width:100%!important;}
+
+</style></head><body><a class="skip" href="#main">Saltar al contenido</a><header class="site-header"><div class="container nav-wrap"><div class="identity"><a class="brand" href="https://alfredosaldana.github.io/es/index.html">Alfredo Saldana</a><div aria-label="Idioma" class="lang-switch"><a href="/learn/statistics-probability/accelerated-failure-time-regression-estimation-and-interpretation.html" lang="en">EN</a><span aria-hidden="true">|</span><a aria-current="page" href="/es/learn/statistics-probability/accelerated-failure-time-regression-estimation-and-interpretation-es.html" lang="es">ES</a></div></div><nav aria-label="Navegación principal" class="nav" id="global-nav"><a href="https://alfredosaldana.github.io/es/index.html">Inicio</a><a href="https://alfredosaldana.github.io/es/projects.html">Proyectos</a><a class="active" href="/es/tutorials.html">Aprender</a><a href="https://alfredosaldana.github.io/es/open-box.html">Open Box</a><a href="https://alfredosaldana.github.io/es/about.html">Acerca de</a><a href="https://alfredosaldana.github.io/es/contact.html">Contacto</a></nav><button aria-controls="global-nav" aria-expanded="false" aria-label="Abrir menú" class="menu-btn" id="menu-btn">☰</button></div></header><main id="main"><div class="study-hero"><div class="container"><div class="eyebrow">LEARN · STATISTICS &amp; PROBABILITY · GUIDE 79</div><h1>Regresión Accelerated Failure Time: estimación e interpretación</h1><p class="lead">Deriva y verifica Time Ratios, predicciones cuantílicas, Likelihood censurada y la equivalencia especial Weibull AFT–PH.</p><div class="meta"><span>Prerrequisitos: 32, 53, 76, 78</span><span>Dataset sintético completo</span><span>MathJax 3</span><span>32 módulos</span></div></div></div><div class="container layout"><article class="prose"><section id="section-1"><div class="chapter-label">MÓDULO 01 / 32</div><h2>1. La pregunta cambia: de una distribución a una regresión</h2><p>La Guía 78 explicó una distribución de vida útil: la probabilidad de sobrevivir más allá de cierto tiempo, el hazard instantáneo entre unidades todavía operativas y la contribución de una observación censurada a la Likelihood. Esos conceptos constituyen nuestra base. Sin embargo, los componentes industriales rara vez funcionan todos bajo condiciones idénticas. Algunos trabajan con carga normal y otros bajo carga elevada. Quien organiza el mantenimiento necesita saber no solo cuánto dura un equipo en promedio, sino <strong>cómo cambia toda la distribución de tiempos de falla según sus condiciones</strong>. Esa es la pregunta que responde la regresión Accelerated Failure Time (AFT).</p>
+<p>Un modelo AFT relaciona covariables con el logaritmo del tiempo hasta el evento. Su interpretación principal es multiplicativa en la escala temporal original: las covariables pueden comprimir o estirar la distribución de duración. Un factor 0.70 significa que los cuantiles temporales comparables equivalen al 70% de los del grupo de referencia, no que la probabilidad de falla sea 70%. Un factor 1.30 representa duraciones comparables 30% mayores, no un aumento de treinta puntos porcentuales en la supervivencia.</p>
+<p>Estudiaremos módulos industriales hipotéticos, registrando el primer fallo funcional en operación estándar o con carga elevada. <strong>El dataset completo es sintético y se construyó exclusivamente para enseñanza</strong>. Permitirá reconstruir las operaciones de Likelihood, los coeficientes estimados y las curvas mostradas. Una diferencia entre los dos grupos representa una asociación estadística dentro de datos inventados; no demuestra que la carga cause cambios de vida útil en dispositivos reales.</p>
+<p>Los prerrequisitos esenciales son las guías 32 (distribuciones continuas), 53 (interpretación de regresión y forma funcional), 76 (Cox Regression) y 78 (distribuciones Exponential, Weibull y Lognormal). Repondremos los conceptos indispensables para lograr autonomía. Al terminar podrás explicar un Time Ratio, derivar la Likelihood censurada, comprobar una mediana predicha, diferenciar AFT y Proportional Hazards (PH), e identificar supuestos que invalidarían una conclusión.</p>
+<blockquote>
+<p><strong>Objetivo de aprendizaje.</strong> A cada relación matemática importante le sigue una explicación, una comprobación numérica y un límite. No basta con leer un coeficiente: hay que comprender por qué representa un cambio multiplicativo de duración.</p>
+</blockquote>
+</section><section id="section-2"><div class="chapter-label">MÓDULO 02 / 32</div><h2>2. El reloj, el evento y la covariable deben definirse primero</h2><p>Un análisis de supervivencia comienza con un origen temporal preciso. En nuestro caso el tiempo cero corresponde al inicio de la operación supervisada. El evento es la <strong>primera falla funcional</strong> según un criterio de prueba establecido. Una duración termina porque ocurrió la falla observada o porque finalizó el seguimiento mientras el módulo aún funcionaba. Esa diferencia importa: un módulo operativo al cumplirse 1,400 horas podría fallar al día siguiente. El valor registrado 14 no es necesariamente su verdadero tiempo de falla.</p>
+<p>Definimos \(T&gt;0\) como tiempo real hasta la primera falla; \(C&gt;0\) como tiempo de censura administrativa; \(Y=\min(T,C)\) como duración observada; y \(\delta=I(T\le C)\) como indicador del evento. El valor 1 identifica una falla efectivamente observada y 0 indica Right Censoring. La covariable \(x=0\) denota operación estándar; \(x=1\), carga elevada. Medimos el tiempo en <strong>centenas de horas de operación</strong>: un 5 representa 500 horas, no cinco días calendario.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th scope="col">ID</th>
+<th scope="col">Condición</th>
+<th style="text-align:right" scope="col">\(x\)</th>
+<th style="text-align:right" scope="col">\(Y\), ×100 h</th>
+<th style="text-align:right" scope="col">Evento \(\delta\)</th>
+<th scope="col">Interpretación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Estándar</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">1</td>
+<td>Falla a las 500 h</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Estándar</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">0</td>
+<td>Funciona a las 700 h</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Estándar</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">1</td>
+<td>Falla a las 900 h</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Estándar</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">1</td>
+<td>Falla a las 1,200 h</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Estándar</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">0</td>
+<td>Funciona a las 1,400 h</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Estándar</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">18</td>
+<td style="text-align:right">1</td>
+<td>Falla a las 1,800 h</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Carga alta</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">1</td>
+<td>Falla a las 300 h</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Carga alta</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">1</td>
+<td>Falla a las 500 h</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Carga alta</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">0</td>
+<td>Funciona a las 600 h</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Carga alta</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">1</td>
+<td>Falla a las 800 h</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Carga alta</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">1</td>
+<td>Falla a las 1,000 h</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Carga alta</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">0</td>
+<td>Funciona a las 1,200 h</td>
+</tr>
+</tbody>
+</table></div>
+<p>Estos son los doce registros completos, no una muestra de una tabla mayor. El grupo estándar presenta cuatro eventos, dos censuras y exposición observada \(5+7+9+12+14+18=65\) centenas de horas. El de carga alta también registra cuatro eventos y dos censuras, pero su exposición es \(3+5+6+8+10+12=44\) centenas. En total hay 8 fallas y 4 censuras, con 109 centenas de horas observadas. Los totales sirven para comprobar operaciones; <strong>no</strong> estiman por sí mismos la vida útil media completa.</p>
+<p>Supondremos independencia de módulos, definición coherente del evento y del origen temporal, tiempos positivos, familia de error bien especificada y censura independiente del verdadero tiempo de falla <strong>condicional en las covariables incluidas</strong>. Si los operadores retiran anticipadamente equipos que muestran deterioro, habría que cuestionar este último supuesto.</p>
+</section><section id="section-3"><div class="chapter-label">MÓDULO 03 / 32</div><h2>3. AFT como una transformación de la escala temporal</h2><p>Imaginemos que el componente de referencia tiene una mediana de 1,200 horas. Si la carga alta multiplica todos los cuantiles por 0.70, la mediana baja a 840 horas. También su percentil 90 resulta multiplicado por 0.70. Es una afirmación más fuerte que comparar dos medias, pues describe la relación entre cuantiles correspondientes en distintas condiciones.</p>
+<p>Una formulación útil define el tiempo de referencia aleatorio \(T_0\) y un factor temporal positivo \(a(x)\):</p>
+<div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[T_x=a(x)T_0,\qquad a(x)=\exp(x^{\mathsf T}\beta)&gt;0.\]</div></div>
+<p>Tomar logaritmos naturales transforma la multiplicación en suma:</p>
+<div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\log T_x=x^{\mathsf T}\beta+\log T_0.\]</div></div>
+<p>El término de referencia \(\log T_0\) aún necesita una distribución de probabilidad. Lo representaremos mediante localización, escala y un error estandarizado; la familia elegida diferencia los modelos AFT Lognormal y Weibull. El factor \(a(x)\) no posee unidades, porque multiplica duraciones; por ello su logaritmo tampoco lleva unidades. En cambio, el intercepto de \(\log T\) depende de la unidad temporal elegida y debe interpretarse respecto de ella.</p>
+<p>Si \(a(x)&lt;1\), la distribución de tiempos se <strong>comprime</strong>; si \(a(x)&gt;1\), se <strong>estira</strong>. La expresión “acelerar fallas” puede confundir porque algunos libros llaman acceleration factor al recíproco \(1/a(x)\). Aquí estableceremos explícitamente que <strong>Time Ratio = \(a(x)\)</strong>. Un Time Ratio pequeño corresponde a tiempos modelados menores. No confundamos convenciones al interpretar software o artículos.</p>
+<p>La hipótesis supone que el mismo multiplicador corresponde a los cuantiles de un perfil, pero no que dos máquinas individuales deban presentar tiempos exactamente proporcionales: ambas conservan variabilidad aleatoria. Tampoco demuestra por sí sola causalidad. Un factor estadístico de tiempo no representa necesariamente un mecanismo físico identificado.</p>
+</section><section id="section-4"><div class="chapter-label">MÓDULO 04 / 32</div><h2>4. Ecuación log-lineal, símbolos y dominios</h2><p>La regresión AFT suele expresarse como una regresión lineal de log-tiempo:</p>
+<div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\boxed{\log T=\beta_0+\beta_1x_1+\cdots+\beta_px_p+\sigma\varepsilon},\qquad \sigma&gt;0.\]</div></div>
+<p>Aquí \(T\) es el tiempo estrictamente positivo hasta la falla; \(x_j\) representa la covariable \(j\); \(\beta_0\) es el intercepto de log-tiempo; \(\beta_j\) indica el efecto condicional de una unidad de \(x_j\) sobre log-tiempo; \(\sigma\) es la escala positiva del error; y \(\varepsilon\) es una variable de error estandarizada con distribución definida. Si una covariable mide temperatura en grados Celsius, su coeficiente corresponde a un grado adicional, salvo reescalamiento explícito.</p>
+<p>Para un perfil, la localización condicional de log-tiempo es \(\mu(x)=\beta_0+x^{\mathsf T}\beta\). Ningún componente individual falla necesariamente en \(e^{\mu(x)}\), porque \(\sigma\varepsilon\) sigue siendo aleatorio. El modelo predice <strong>distribuciones y cuantiles</strong>, no fechas de falla ciertas. Con error Normal estándar, \(\log T\mid x\) es Normal con media \(\mu(x)\) y desviación estándar \(\sigma\); con el error extremo apropiado se obtiene Weibull.</p>
+<p>Consideremos dos perfiles que difieren una unidad de \(x_j\), manteniendo iguales las demás covariables. Restar sus localizaciones de log-tiempo produce \(\beta_j\); exponentiar convierte esa diferencia aditiva en una razón de tiempos. Si la familia del error y \(\sigma\) son comunes, esta razón se mantiene para todos los cuantiles correspondientes.</p>
+<div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\frac{t_p(x_j+1,x_{-j})}{t_p(x_j,x_{-j})}=e^{\beta_j}\equiv\mathrm{TR}_j.\]</div></div>
+<p>El numerador y el denominador son <strong>tiempos correspondientes al mismo percentil de falla</strong>. No representan porcentajes de supervivencia observados a cierta hora fija. En regresión múltiple el contraste es condicional: las otras variables permanecen iguales. Además, debe comprobarse que los perfiles comparados sean relevantes y tengan apoyo en los datos.</p>
+</section><section id="section-5"><div class="chapter-label">MÓDULO 05 / 32</div><h2>5. Interpretar un coeficiente sin confundir porcentajes</h2><p>Tomemos un coeficiente ilustrativo \(\beta_{\mathrm{carga}}=-0.40\). El Time Ratio es \(e^{-0.40}=0.670320\). Los cuantiles modelados con carga alta equivalen aproximadamente al 67.0% de sus comparables con carga estándar: son <strong>32.97% más cortos</strong>. No sería correcto afirmar que “la probabilidad de falla es 67% menor”, que la duración baja 0.40 horas ni que el hazard aumenta 33%. Esas magnitudes son diferentes.</p>
+<div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\mathrm{TR}=e^{-0.40}=0.670320,\qquad 100(0.670320-1)=-32.968\%.\]</div></div>
+<p>Si la mediana estándar fuera 1,200 horas, la mediana bajo carga alta sería \(1200(0.670320)=804.384\) horas. Multiplicamos en la escala temporal original; no restamos 0.40 horas. Si el percentil 80 estándar fuera 2,000 horas, el percentil 80 del grupo comparado resultaría \(2000(0.670320)=1340.64\) horas. Esta proporcionalidad entre cuantiles es el núcleo del modelo AFT.</p>
+<p>Al invertir la comparación, estándar frente a carga alta, la razón es \(1/0.670320=1.491825\): aproximadamente 49.2% más duración en el grupo estándar, tomando como base el grupo menor. ¿Por qué 33.0% y 49.2% no coinciden? Porque cada porcentaje divide entre una referencia distinta. La dirección de la comparación debe acompañar todo Time Ratio reportado.</p>
+<p>Para una covariable continua el cambio de \(\Delta\) unidades da \(e^{\beta_j\Delta}\). Con \(\beta_j=0.03\) por grado y aumento de cinco grados, corresponde \(e^{0.15}\approx1.1618\), cerca de 16.2% más duración modelada. Tal signo requeriría explicación física en un estudio real; una operación algebraica correcta no valida automáticamente una relación científica.</p>
+</section><section id="section-6"><div class="chapter-label">MÓDULO 06 / 32</div><h2>6. Transformación de Survival, Density y Hazard</h2><p>Si \(T_x=a(x)T_0\), superar el tiempo \(t\) equivale a que el tiempo de referencia supere \(t/a(x)\). Así obtenemos la función de supervivencia condicional mediante un desplazamiento horizontal en la escala del tiempo:</p>
+<div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[S(t\mid x)=S_0\!\left(\frac{t}{a(x)}\right).\]</div></div>
+<p>Esta igualdad es exacta bajo la hipótesis de escalamiento AFT; no es una aproximación cercana a la mediana. Para \(a=0.8\), la supervivencia a 800 horas equivale a la supervivencia de referencia a \(800/0.8=1000\) horas. Por ello la curva comprimida suele indicar menor supervivencia en la misma hora de seguimiento, siempre que la supervivencia basal disminuya con el tiempo.</p>
+<p>Derivamos respecto de \(t\). Como \(f(t)=-S'(t)\), la regla de la cadena introduce \(1/a\) en la Density. Dividir Density entre Survival produce Hazard:</p>
+<div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\begin{aligned}
+f(t\mid x)&amp;=\frac{1}{a(x)}f_0\!\left(\frac{t}{a(x)}\right),\\
+h(t\mid x)&amp;=\frac{1}{a(x)}h_0\!\left(\frac{t}{a(x)}\right).
+\end{aligned}\]</div></div>
+<p>La Density y el Hazard tienen unidades inversas del tiempo; la función Survival es una probabilidad sin unidades. Observemos que el Hazard no tiene por qué ser siempre un múltiplo constante del Hazard basal <strong>en el mismo instante</strong>, pues se evalúa también en \(t/a\). Esta es la razón fundamental por la cual Time Ratio y Hazard Ratio no son sinónimos ni recíprocos universales.</p>
+<p>Un modelo AFT puede producir Hazard Ratios cambiantes con el tiempo, según la familia de distribución. Su hipótesis principal es el <strong>escalamiento de los tiempos</strong> y no necesariamente Proportional Hazards. Al analizar datos reales debemos explorar si un multiplicador común es compatible con distintos segmentos de la distribución, en lugar de darlo por probado al obtener coeficientes numéricos.</p>
+</section><section id="section-7"><div class="chapter-label">MÓDULO 07 / 32</div><h2>7. Por qué OLS sobre tiempos observados no es una solución válida</h2><p>Una estrategia aparentemente sencilla sería calcular \(\log Y\) para cada fila y ajustar Ordinary Least Squares (OLS). Esa estrategia no respeta Right Censoring. En registros censurados, \(Y\) no equivale al verdadero tiempo \(T\). Un módulo todavía operativo a las 1,400 horas aporta evidencia de que \(T&gt;1400\), pero OLS lo trata equivocadamente como si hubiera fallado exactamente en ese instante. Se estaría inventando el resultado de la variable dependiente.</p>
+<p>Tampoco sirve eliminar las filas censuradas y ajustar OLS únicamente entre las fallas. La selección de observaciones que fallaron antes de la censura favorece duraciones cortas. En el grupo estándar observamos fallas en 5, 9, 12 y 18 centenas, pero las dos unidades censuradas podrían haber tenido vidas mucho más largas. Excluirlas elimina información real y altera la distribución de los tiempos usados para ajustar la regresión.</p>
+<p>Una Likelihood AFT distingue ambos casos. Cuando ocurre una falla a \(y\), la observación contribuye la Density condicional \(f(y\mid x)\). Si el seguimiento termina sin falla, aporta la probabilidad \(S(y\mid x)\) de sobrevivir más allá del tiempo conocido. La combinación de ambos aportes es:</p>
+<div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[L(\theta)=\prod_{i=1}^{n} f(y_i\mid x_i;\theta)^{\delta_i}\,S(y_i\mid x_i;\theta)^{1-\delta_i}.\]</div></div>
+<p>El vector \(\theta\) contiene coeficientes de regresión y parámetros de escala o forma. Esta construcción requiere independencia entre unidades, censura no informativa condicional y una distribución de evento especificada correctamente. El programa puede maximizar la fórmula sin error técnico y, aun así, ofrecer inferencias inválidas si el origen temporal o el mecanismo de censura son inadecuados.</p>
+</section><section id="section-8"><div class="chapter-label">MÓDULO 08 / 32</div><h2>8. AFT Lognormal: derivación, no memorización</h2><p>Supongamos \(\varepsilon\sim N(0,1)\), una variable Normal estándar. La ecuación AFT implica \(\log T\mid x\sim N(\mu(x),\sigma^2)\), donde \(\mu(x)=\beta_0+x^{\mathsf T}\beta\) y \(\sigma&gt;0\). Para obtener probabilidades en tiempo original estandarizamos el log-tiempo: \(z(t,x)=[\log t-\mu(x)]/\sigma\). La función \(\Phi\) es la CDF Normal estándar, mientras \(\phi\) es su Density.</p>
+<p>La supervivencia es el complemento de la CDF de falla. La densidad de \(T\) requiere además el Jacobiano \(d(\log t)/dt=1/t\). Sin ese factor, la expresión en la variable original no representa una Density válida, porque el cambio de variables modificaría erróneamente las áreas de probabilidad.</p>
+<div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\begin{aligned}
+z(t,x)&amp;=\frac{\log t-\mu(x)}{\sigma},\\
+S(t\mid x)&amp;=1-\Phi(z(t,x)),\\
+f(t\mid x)&amp;=\frac{\phi(z(t,x))}{t\sigma},\\
+h(t\mid x)&amp;=\frac{\phi(z(t,x))}{t\sigma[1-\Phi(z(t,x))]}.
+\end{aligned}\]</div></div>
+<p>Cuando \(t=e^{\mu(x)}\), \(z=0\) y \(S=0.5\); por eso la mediana condicional es \(e^{\mu(x)}\). La media condicional es distinta: \(e^{\mu(x)+\sigma^2/2}\), mayor que la mediana cuando \(\sigma&gt;0\). Es frecuente confundir la exponencial de la localización con el valor esperado, error que cambia las predicciones reportadas.</p>
+<p>Con \(\mu(0)=\log12\), \(\sigma=0.50\) y \(\beta_1=-0.40\), la mediana estándar es 12 centenas, equivalentes a 1,200 horas. La mediana con carga alta es \(12e^{-0.4}=8.04384\) centenas, unas 804.4 horas. El percentil 90 de cada grupo utiliza el mismo valor Normal \(z_{0.90}=1.28155\), por lo que su Time Ratio también es \(e^{-0.4}\).</p>
+</section><section id="section-9"><div class="chapter-label">MÓDULO 09 / 32</div><h2>9. Cuantiles Lognormal y significado temporal completo</h2><p>Un percentil \(t_p(x)\) satisface \(P(T\le t_p\mid x)=p\) para \(0&lt;p&lt;1\). En Lognormal, escribimos \(\Phi([\log t_p-\mu(x)]/\sigma)=p\), aplicamos la inversa \(\Phi^{-1}\) y exponenciamos. La secuencia importa: buscar cuantiles directamente en la distribución Normal de \(T\) en lugar de \(\log T\) produciría resultados erróneos, incluso tiempos negativos.</p>
+<div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\boxed{t_p(x)=\exp\!\left[\mu(x)+\sigma\Phi^{-1}(p)\right]}.\]</div></div>
+<p>Para \(p=0.5\), \(\Phi^{-1}(0.5)=0\), y obtenemos la mediana \(e^{\mu(x)}\). Para \(p=0.90\), usamos \(\Phi^{-1}(0.90)\approx1.28155\). Con \(\mu(0)=\log12\) y \(\sigma=0.5\), el percentil 90 estándar es \(12\exp(0.640775)\approx22.775\) centenas. Bajo carga alta y coeficiente \(-0.4\), corresponde aproximadamente \(22.775(0.67032)\approx15.267\) centenas de horas. La razón se conserva porque suponemos escala de error común.</p>
+<p>El percentil 90 representa el momento antes del cual el modelo ubica 90% de las fallas; <strong>no</strong> el momento en que 90% de los equipos continúan funcionando. En términos de supervivencia, allí \(S=0.10\). Confundir percentiles de la CDF con niveles de Survival invierte el significado de una recomendación de mantenimiento.</p>
+<p>Comprobemos el percentil sustituyendo: \([\log(12e^{0.640775})-\log12]/0.5=1.28155\), cuya CDF Normal es aproximadamente 0.90. Este control independiente detecta errores de signo, unidades o uso de logaritmos. Cada predicción queda condicionada a la distribución adoptada, que debe ser evaluada empíricamente cuando se disponga de datos reales.</p>
+</section><section id="section-10"><div class="chapter-label">MÓDULO 10 / 32</div><h2>10. Construir la Likelihood Lognormal registro por registro</h2><p>Ante una falla observada, evaluamos la Density en el instante de evento; ante censura, evaluamos Survival en el último instante conocido. Sustituimos las funciones Lognormal y aplicamos logaritmos para convertir productos en sumas. La expresión resultante es:</p>
+<div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\ell(\beta,\sigma)=\sum_{i=1}^{n}\left\{\delta_i\left[-\log y_i-\log\sigma-\tfrac12\log(2\pi)-\tfrac12 z_i^2\right]+(1-\delta_i)\log[1-\Phi(z_i)]\right\}.\]</div></div>
+<p>Definimos \(z_i=[\log y_i-x_i^{\mathsf T}\beta]/\sigma\), incluyendo el intercepto en el vector de predictores. El término \(-\log y_i\) proviene del Jacobiano, y no debe suprimirse. Para un censurado, \(\log S\) suele ser negativo porque una probabilidad entre cero y uno tiene logaritmo no positivo. Una censura tardía puede influir de forma considerable, pues informa que el equipo sobrevivió hasta una duración grande.</p>
+<p>Para el registro 2, estándar y censurado a \(y=7\), la contribución es \(\log\{1-\Phi[(\log7-\beta_0)/\sigma]\}\); <strong>no</strong> corresponde evaluar la log-density a las siete centenas. Para el registro 7, falla con carga alta a \(y=3\), corresponde \(-\log3-\log\sigma-\tfrac12\log(2\pi)-\tfrac12[(\log3-\beta_0-\beta_1)/\sigma]^2\). Ambos usan los mismos parámetros, pero codifican evidencias distintas.</p>
+<p>Maximum Likelihood Estimation elige los coeficientes y \(\sigma&gt;0\) para maximizar la suma. Computacionalmente conviene parametrizar \(\rho=\log\sigma\), de modo que \(\sigma=e^\rho&gt;0\) siempre. Debemos informar esta convención al presentar los resultados. Nuestro dataset contiene solamente doce filas sintéticas: que una optimización converja no demuestra validez para equipos reales.</p>
+</section><section id="section-11"><div class="chapter-label">MÓDULO 11 / 32</div><h2>11. Ajustar los doce registros: AFT Lognormal</h2><p>La maximización numérica independiente de la Likelihood Lognormal con Right Censoring produce las siguientes estimaciones aproximadas. Redondeamos para la explicación, aunque las comprobaciones computacionales utilizan parámetros sin redondear. La optimización opera sobre \((\beta_0,\beta_1,\rho)\), donde \(\rho=\log\sigma\), y contempla las doce observaciones, no solamente las ocho fallas.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th scope="col">Parámetro</th>
+<th style="text-align:right" scope="col">Estimación</th>
+<th scope="col">Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Intercepto \(\hat\beta_0\)</td>
+<td style="text-align:right">2.473683</td>
+<td>Log-mediana bajo operación estándar</td>
+</tr>
+<tr>
+<td>Coeficiente carga alta \(\hat\beta_1\)</td>
+<td style="text-align:right">-0.438057</td>
+<td>Diferencia de localización en log-tiempo</td>
+</tr>
+<tr>
+<td>Log-escala \(\hat\rho\)</td>
+<td style="text-align:right">-0.601592</td>
+<td>Parámetro de optimización sin restricción</td>
+</tr>
+<tr>
+<td>Escala \(\hat\sigma=e^{\hat\rho}\)</td>
+<td style="text-align:right">0.547939</td>
+<td>Desviación estándar condicional del log-tiempo</td>
+</tr>
+<tr>
+<td>Log-Likelihood máxima</td>
+<td style="text-align:right">-25.482348</td>
+<td>Incluye contribuciones de censura</td>
+</tr>
+<tr>
+<td>Observaciones</td>
+<td style="text-align:right">12</td>
+<td>Ocho eventos y cuatro censuras</td>
+</tr>
+</tbody>
+</table></div>
+<p>Primero transformamos el coeficiente: \(e^{-0.438057}\approx0.645289\). Los cuantiles temporales bajo carga alta son aproximadamente <strong>35.5% más cortos</strong> que los comparables estándar, según este modelo. Después calculamos la mediana estándar: \(e^{2.473683}\approx11.8661\) centenas, es decir cerca de 1,186.6 horas. Finalmente incorporamos el coeficiente de carga: \(e^{2.473683-0.438057}\approx7.6570\) centenas, o alrededor de 765.7 horas.</p>
+<div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\begin{aligned}
+\widehat{\mathrm{TR}}&amp;=e^{-0.438057}\approx0.645289,\\
+\widehat t_{0.5}(0)&amp;=e^{2.473683}\approx11.8661,\\
+\widehat t_{0.5}(1)&amp;=e^{2.473683-0.438057}\approx7.6570.
+\end{aligned}\]</div></div>
+<p>Verificamos independientemente: \(7.6570/11.8661\approx0.6453\), de acuerdo con \(e^{\hat\beta_1}\). La concordancia no es casual: la exige la estructura AFT. Las medianas son predicciones condicionales sujetas a incertidumbre, no fechas garantizadas. Al ser datos inventados, no representan estimaciones industriales de desempeño ni evidencia causal.</p>
+</section><section id="section-12"><div class="chapter-label">MÓDULO 12 / 32</div><h2>12. AFT Weibull: declarar la parametrización de valores extremos</h2><p>La familia Weibull también puede expresarse en log-tiempo. Consideremos un error \(\varepsilon\) con distribución de <em>mínimos de valores extremos</em>, definida por \(P(\varepsilon\le e)=1-\exp[-\exp(e)]\). En consecuencia, \(P(\varepsilon&gt;e)=\exp[-\exp(e)]\). Utilizamos \(\log T=\mu(x)+\sigma\varepsilon\) con \(\sigma&gt;0\) y definimos la forma \(k=1/\sigma\) y la escala Weibull \(\eta(x)=e^{\mu(x)}\).</p>
+<p>Para \(t&gt;0\), \(T&gt;t\) equivale a \(\varepsilon&gt;[\log t-\mu(x)]/\sigma\). Sustituimos este umbral en la función Survival del error y simplificamos para obtener:</p>
+<div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\boxed{S(t\mid x)=\exp\!\left[-\left(\frac{t}{\eta(x)}\right)^k\right]},\quad \eta(x)=e^{\beta_0+x^{\mathsf T}\beta},\quad k=1/\sigma.\]</div></div>
+<p>La derivación precisa el significado del intercepto. En Weibull, \(e^{\mu(x)}=\eta(x)\) representa la escala donde \(S=e^{-1}\approx0.3679\); <strong>no</strong> es normalmente la mediana. Esta última es \(\eta(x)(\log2)^{1/k}\). No obstante, la <strong>razón de medianas</strong> entre perfiles continúa siendo \(e^{\beta_1}\), porque la forma \(k\) común hace que \((\log2)^{1/k}\) se cancele al dividir.</p>
+<p>El Hazard Weibull es \(h(t\mid x)=k t^{k-1}/\eta(x)^k\). Es creciente si \(k&gt;1\), decreciente si \(0&lt;k&lt;1\) y constante cuando \(k=1\). Debemos usar una convención de error inequívoca: cambiar el signo de la distribución extrema sin transformar adecuadamente los coeficientes podría invertir la interpretación del Time Ratio.</p>
+</section><section id="section-13"><div class="chapter-label">MÓDULO 13 / 32</div><h2>13. Likelihood censurada Weibull y ajuste al ejemplo</h2><p>Sean \(\mu_i=\beta_0+\beta_1x_i\), \(\sigma&gt;0\), \(k=1/\sigma\) y \(u_i=\exp[(\log y_i-\mu_i)/\sigma]=(y_i/e^{\mu_i})^k\). Una falla contribuye \(\log h(y_i)+\log S(y_i)\), mientras que una censura aporta solamente \(\log S(y_i)=-u_i\). Podemos expresar ambas situaciones en una sola suma:</p>
+<div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\ell(\beta,\sigma)=\sum_i\left\{\delta_i\left[\log k-\log y_i+\frac{\log y_i-\mu_i}{\sigma}\right]-\exp\!\left(\frac{\log y_i-\mu_i}{\sigma}\right)\right\}.\]</div></div>
+<p>El término exponencial final aparece para <strong>todas</strong> las unidades, incluidos los censurados. La censura elimina el término de evento, pero no la contribución Survival. Este detalle permite auditar una implementación: un programa que descarta filas censuradas no maximiza nuestra Likelihood. Para conservar positividad, optimizamos \(\beta_0,\beta_1,\rho=\log\sigma\) y transformamos \(\sigma=e^\rho\), \(k=e^{-\rho}\).</p>
+<p>Con los mismos doce registros, las estimaciones Weibull AFT aproximadas son \(\hat\beta_0=2.653043\), \(\hat\beta_1=-0.386243\), \(\hat\rho=-0.889503\). En consecuencia \(\hat\sigma\approx0.4109\) y \(\hat k\approx2.4339\). La Log-Likelihood máxima es \(-25.449226\). Su Time Ratio es \(e^{-0.386243}\approx0.679606\), que indica una escala temporal 32.0% menor para carga alta bajo la familia Weibull.</p>
+<p>La mediana estándar es \(e^{2.653043}(\log2)^{1/2.4339}\approx12.2125\) centenas; la mediana con carga alta es aproximadamente 8.2997 centenas. Dividirlas da cerca de 0.6796, una comprobación independiente. La similitud aproximada entre los coeficientes de Weibull y Lognormal no convierte ambas distribuciones en equivalentes. Doce registros sintéticos no bastan para establecer un mecanismo físico real de falla.</p>
+</section><section id="section-14"><div class="chapter-label">MÓDULO 14 / 32</div><h2>14. AFT frente a Cox PH: dos preguntas y dos razones distintas</h2><p>La Guía 76 introdujo el modelo Cox Proportional Hazards \(h(t\mid x)=h_0(t)\exp(x^{\mathsf T}\gamma)\). Manteniendo las demás variables, \(e^{\gamma_j}\) es un <strong>Hazard Ratio (HR)</strong>: una razón de tasas instantáneas condicionales de evento, en el mismo tiempo, entre individuos todavía expuestos al riesgo. Un coeficiente AFT produce un <strong>Time Ratio (TR)</strong>: una razón de tiempos correspondientes a cuantiles comparables mediante compresión o estiramiento horizontal de las curvas.</p>
+<div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\begin{aligned}
+\mathrm{AFT:}\quad &amp;\mathrm{TR}_j=e^{\beta_j},\\
+\mathrm{PH:}\quad &amp;\mathrm{HR}_j=e^{\gamma_j}.
+\end{aligned}\]</div></div>
+<p>Las razones comparan objetos distintos y descansan en supuestos diferentes. Un HR igual a 2 <strong>no</strong> significa universalmente que la mediana se reduzca a la mitad. Un TR igual a 0.7 <strong>no</strong> implica automáticamente que el Hazard instantáneo sea \(1/0.7\) veces mayor a cualquier tiempo. Esas cantidades se relacionan mediante una transformación específica solamente bajo familias y parametrizaciones compatibles.</p>
+<p>En AFT, el Hazard Ratio puede variar con el tiempo porque interviene \(h_0(t/a)\). En PH, el Hazard Ratio debe mantenerse constante, pero no se exige que las razones de cuantiles sean iguales en toda la distribución. Ninguna perspectiva es automáticamente superior: para planificar mantenimiento puede resultar natural expresar horas de duración, mientras otro análisis puede concentrarse en tasas instantáneas.</p>
+<p>Además, Cox suele estimar efectos mediante Partial Likelihood sin especificar paramétricamente el Hazard basal, mientras AFT paramétrico define una distribución completa del tiempo de falla. Esto facilita predecir cuantiles, a cambio de sensibilidad a la familia de error, en especial al extrapolar. Ningún modelo convierte una asociación observacional en un efecto causal sin un diseño apropiado.</p>
+</section><section id="section-15"><div class="chapter-label">MÓDULO 15 / 32</div><h2>15. Equivalencia especial Weibull AFT–PH: derivación completa</h2><p>Weibull es un caso especial en el cual la misma familia de forma común admite representaciones AFT y PH. Empecemos con \(k&gt;0\) y escala \(\eta(x)=e^{\beta_0+x^{\mathsf T}\beta}\). El Hazard acumulado es \(H(t\mid x)=(t/\eta(x))^k\). Derivar respecto del tiempo produce:</p>
+<div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\begin{aligned}
+h(t\mid x)&amp;=k t^{k-1}\exp[-k(\beta_0+x^{\mathsf T}\beta)]\\
+&amp;=\underbrace{k t^{k-1}e^{-k\beta_0}}_{h_0(t)}\exp[-k x^{\mathsf T}\beta].
+\end{aligned}\]</div></div>
+<p>Al comparar con \(h(t\mid x)=h_0(t)e^{x^{\mathsf T}\gamma}\), encontramos \(\gamma=-k\beta\), donde \(k=1/\sigma\) bajo la convención extrema declarada. Para un contraste de una unidad se cumple:</p>
+<div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\boxed{\mathrm{HR}=e^{-k\beta}=\mathrm{TR}^{-k}},\qquad \boxed{\mathrm{TR}=\mathrm{HR}^{-1/k}}.\]</div></div>
+<p>Sustituimos los valores <strong>ajustados Weibull</strong>: \(\widehat{\mathrm{TR}}\approx0.679606\) y \(\hat k\approx2.4339\). Obtenemos \(0.679606^{-2.4339}\approx2.5602\), y no el recíproco simple \(1/0.679606\approx1.4714\). La forma modifica la conversión. El HR cercano a 2.56 representa una tasa instantánea modelada para carga alta aproximadamente 2.56 veces la estándar en cada tiempo, <strong>si</strong> la distribución Weibull de forma común fuera adecuada.</p>
+<p>Esta fórmula <strong>no se traslada automáticamente a Lognormal AFT</strong>, donde generalmente el Hazard Ratio cambia con el tiempo. Tampoco procede cuando la forma Weibull varía entre perfiles. Nunca conviertas un HR Cox en Time Ratio solo tomando su inverso: primero debes justificar una distribución que relacione las dos interpretaciones y comprobar la parametrización.</p>
+</section><section id="section-16"><div class="chapter-label">MÓDULO 16 / 32</div><h2>16. Confidence Intervals: transformar también la incertidumbre</h2><p>Un coeficiente estimado es incierto porque procede de una muestra finita. Bajo condiciones regulares y un modelo correcto, una aproximación a la covarianza se obtiene invirtiendo la matriz de información observada, es decir, la Hessiana negativa de la Log-Likelihood en su máximo. La raíz cuadrada de la entrada diagonal correspondiente representa el error estándar aproximado del coeficiente. Con muestras pequeñas o muchas censuras, las aproximaciones asintóticas pueden ser poco fiables; conviene considerar Profile Likelihood, Bootstrap o análisis de sensibilidad.</p>
+<p>Supongamos, en un <strong>ejercicio independiente de intervalos</strong>, que \(\hat\beta=-0.40\) tiene error estándar \(0.15\). Un intervalo Wald bilateral aproximado del 95% en escala de log-tiempo es \(-0.40\pm1.96(0.15)\). Primero multiplicamos: \(1.96(0.15)=0.294\). Los extremos son \(-0.694\) y \(-0.106\). Después exponenciamos para obtener el intervalo del Time Ratio.</p>
+<div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\begin{aligned}
+CI_{95\%}(\beta)&amp;=[-0.694,-0.106],\\
+CI_{95\%}(\mathrm{TR})&amp;=[e^{-0.694},e^{-0.106}]\approx[0.500,0.899].
+\end{aligned}\]</div></div>
+<p>Esos números se eligieron para enseñar; <strong>no</strong> son el error estándar calculado del ajuste de doce módulos. El intervalo del Time Ratio es asimétrico alrededor de \(e^{-0.4}\approx0.6703\), porque la función exponencial no es lineal. El intervalo no contiene 1 en este ejemplo, pero ello tampoco demuestra que la carga cause la diferencia: la inferencia depende del diseño, los supuestos, la censura y la estimación de incertidumbre.</p>
+<p>Para una mediana Lognormal, \(\log t_{0.5}(x)=x^{\mathsf T}\beta\). Una varianza aproximada se calcula como \(x^{\mathsf T}\widehat{\mathrm{Var}}(\hat\beta)x\); importa la covarianza entre intercepto y pendiente. Los extremos del intervalo en log-mediana se exponencian. No se debe crear un intervalo sumando y restando cierta cantidad de horas a una mediana sin atender la transformación logarítmica.</p>
+</section><section id="section-17"><div class="chapter-label">MÓDULO 17 / 32</div><h2>17. Predicciones por perfil: percentiles, Survival y unidades</h2><p>El beneficio práctico del modelo AFT es que describe una distribución condicional de duraciones para cada perfil. En Lognormal calculamos \(t_p(x)=\exp[\mu(x)+\sigma\Phi^{-1}(p)]\). En Weibull usamos \(t_p(x)=\eta(x)[-\log(1-p)]^{1/k}\). Los percentiles responden preguntas diferentes: el percentil 10 anticipa fallas tempranas y el percentil 90 describe una duración mucho más tardía.</p>
+<div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\begin{aligned}
+\mathrm{Lognormal:}\quad t_p(x)&amp;=e^{\mu(x)+\sigma\Phi^{-1}(p)},\\
+\mathrm{Weibull:}\quad t_p(x)&amp;=\eta(x)[-\log(1-p)]^{1/k}.
+\end{aligned}\]</div></div>
+<p>Las medianas Lognormal estimadas en nuestro ejemplo son aproximadamente 1,186.6 y 765.7 horas para estándar y carga alta. Se obtienen multiplicando por 100 las medianas expresadas en centenas de horas. Si reexpresáramos todos los tiempos en horas en lugar de centenas, el intercepto de log-tiempo aumentaría \(\log100\), pero el coeficiente de carga y el Time Ratio permanecerían iguales. La localización basal depende de la unidad; los contrastes temporales entre perfiles bajo un mismo cambio de unidad, no.</p>
+<p>También podemos calcular supervivencia en un instante fijo. Con \(\hat\mu_0\approx2.473683\), \(\hat\mu_1\approx2.035626\) y \(\hat\sigma\approx0.547939\), para \(t=10\) centenas estandarizamos \((\log10-\hat\mu_x)/\hat\sigma\). Aplicar \(1-\Phi(z)\) da la probabilidad modelada de seguir funcionando después de 1,000 horas. La curva de carga alta debería alcanzar los mismos niveles de supervivencia a tiempos menores que la curva estándar.</p>
+<p>Una probabilidad Survival a tiempo \(t\) y un percentil temporal \(t_p\) son respuestas inversas: la primera fija el tiempo y calcula probabilidad; la segunda fija probabilidad y calcula tiempo. Ninguna garantiza el destino de una máquina individual. Predecir en perfiles ausentes o períodos mucho más largos que el seguimiento observado exige cautela por extrapolación.</p>
+</section><section id="section-18"><div class="chapter-label">MÓDULO 18 / 32</div><h2>18. Leer curvas Survival como desplazamiento horizontal</h2><p>Imaginemos las curvas Survival estimadas de ambas condiciones. Si el Time Ratio es menor que uno, la curva de carga alta llega antes a cada nivel de supervivencia. En el nivel 50%, los puntos de intersección dan las medianas. Al nivel 10%, la diferencia absoluta entre tiempos puede ser mayor, pero la <strong>razón de tiempos horizontales</strong> debería mantenerse bajo una especificación AFT de escala común.</p>
+<figure><svg aria-label="Survival curves for fitted Lognormal and Weibull AFT models" height="352.8pt" role="img" version="1.1" viewbox="0 0 648 352.8" width="648pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<metadata>
+<rdf:rdf xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<cc:work>
+<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"></dc:type>
+<dc:date>2026-11-03T05:05:52.650778</dc:date>
+<dc:format>image/svg+xml</dc:format>
+<dc:creator>
+<cc:agent>
+<dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+</cc:agent>
+</dc:creator>
+</cc:work>
+</rdf:rdf>
+</metadata>
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="a11yfig1-figure_1">
+<g id="a11yfig1-patch_1">
+<path d="M 0 352.8 
+L 648 352.8 
+L 648 0 
+L 0 0 
+z
+" style="fill: #ffffff"></path>
+</g>
+<g id="a11yfig1-axes_1">
+<g id="a11yfig1-patch_2">
+<path d="M 47.72 310.84 
+L 630.9 310.84 
+L 630.9 10.8 
+L 47.72 10.8 
+z
+" style="fill: #ffffff"></path>
+</g>
+<g id="a11yfig1-matplotlib.axis_1">
+<g id="a11yfig1-xtick_1">
+<g id="a11yfig1-line2d_1">
+<path clip-path="url(#a11yfig1-p17dd1786e4)" d="M 160.593548 310.84 
+L 160.593548 10.8 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-line2d_2">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="a11yfig1-m93a191e052" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="160.593548" xlink:href="#a11yfig1-m93a191e052" y="310.84"></use>
+</g>
+</g>
+<g id="a11yfig1-text_1">
+<!-- 5 -->
+<g transform="translate(157.412298 325.438438) scale(0.1 -0.1)">
+<defs>
+<path d="M 691 4666 
+L 3169 4666 
+L 3169 4134 
+L 1269 4134 
+L 1269 2991 
+Q 1406 3038 1543 3061 
+Q 1681 3084 1819 3084 
+Q 2600 3084 3056 2656 
+Q 3513 2228 3513 1497 
+Q 3513 744 3044 326 
+Q 2575 -91 1722 -91 
+Q 1428 -91 1123 -41 
+Q 819 9 494 109 
+L 494 744 
+Q 775 591 1075 516 
+Q 1375 441 1709 441 
+Q 2250 441 2565 725 
+Q 2881 1009 2881 1497 
+Q 2881 1984 2565 2268 
+Q 2250 2553 1709 2553 
+Q 1456 2553 1204 2497 
+Q 953 2441 691 2322 
+L 691 4666 
+z
+" id="a11yfig1-DejaVuSans-35" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig1-DejaVuSans-35"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig1-xtick_2">
+<g id="a11yfig1-line2d_3">
+<path clip-path="url(#a11yfig1-p17dd1786e4)" d="M 278.170161 310.84 
+L 278.170161 10.8 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-line2d_4">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="278.170161" xlink:href="#a11yfig1-m93a191e052" y="310.84"></use>
+</g>
+</g>
+<g id="a11yfig1-text_2">
+<!-- 10 -->
+<g transform="translate(271.807661 325.438438) scale(0.1 -0.1)">
+<defs>
+<path d="M 794 531 
+L 1825 531 
+L 1825 4091 
+L 703 3866 
+L 703 4441 
+L 1819 4666 
+L 2450 4666 
+L 2450 531 
+L 3481 531 
+L 3481 0 
+L 794 0 
+L 794 531 
+z
+" id="a11yfig1-DejaVuSans-31" transform="scale(0.015625)"></path>
+<path d="M 2034 4250 
+Q 1547 4250 1301 3770 
+Q 1056 3291 1056 2328 
+Q 1056 1369 1301 889 
+Q 1547 409 2034 409 
+Q 2525 409 2770 889 
+Q 3016 1369 3016 2328 
+Q 3016 3291 2770 3770 
+Q 2525 4250 2034 4250 
+z
+M 2034 4750 
+Q 2819 4750 3233 4129 
+Q 3647 3509 3647 2328 
+Q 3647 1150 3233 529 
+Q 2819 -91 2034 -91 
+Q 1250 -91 836 529 
+Q 422 1150 422 2328 
+Q 422 3509 836 4129 
+Q 1250 4750 2034 4750 
+z
+" id="a11yfig1-DejaVuSans-30" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig1-DejaVuSans-31"></use>
+<use transform="translate(63.623047 0)" xlink:href="#a11yfig1-DejaVuSans-30"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig1-xtick_3">
+<g id="a11yfig1-line2d_5">
+<path clip-path="url(#a11yfig1-p17dd1786e4)" d="M 395.746774 310.84 
+L 395.746774 10.8 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-line2d_6">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="395.746774" xlink:href="#a11yfig1-m93a191e052" y="310.84"></use>
+</g>
+</g>
+<g id="a11yfig1-text_3">
+<!-- 15 -->
+<g transform="translate(389.384274 325.438438) scale(0.1 -0.1)">
+<use xlink:href="#a11yfig1-DejaVuSans-31"></use>
+<use transform="translate(63.623047 0)" xlink:href="#a11yfig1-DejaVuSans-35"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig1-xtick_4">
+<g id="a11yfig1-line2d_7">
+<path clip-path="url(#a11yfig1-p17dd1786e4)" d="M 513.323387 310.84 
+L 513.323387 10.8 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-line2d_8">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="513.323387" xlink:href="#a11yfig1-m93a191e052" y="310.84"></use>
+</g>
+</g>
+<g id="a11yfig1-text_4">
+<!-- 20 -->
+<g transform="translate(506.960887 325.438438) scale(0.1 -0.1)">
+<defs>
+<path d="M 1228 531 
+L 3431 531 
+L 3431 0 
+L 469 0 
+L 469 531 
+Q 828 903 1448 1529 
+Q 2069 2156 2228 2338 
+Q 2531 2678 2651 2914 
+Q 2772 3150 2772 3378 
+Q 2772 3750 2511 3984 
+Q 2250 4219 1831 4219 
+Q 1534 4219 1204 4116 
+Q 875 4013 500 3803 
+L 500 4441 
+Q 881 4594 1212 4672 
+Q 1544 4750 1819 4750 
+Q 2544 4750 2975 4387 
+Q 3406 4025 3406 3419 
+Q 3406 3131 3298 2873 
+Q 3191 2616 2906 2266 
+Q 2828 2175 2409 1742 
+Q 1991 1309 1228 531 
+z
+" id="a11yfig1-DejaVuSans-32" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig1-DejaVuSans-32"></use>
+<use transform="translate(63.623047 0)" xlink:href="#a11yfig1-DejaVuSans-30"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig1-xtick_5">
+<g id="a11yfig1-line2d_9">
+<path clip-path="url(#a11yfig1-p17dd1786e4)" d="M 630.9 310.84 
+L 630.9 10.8 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-line2d_10">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="630.9" xlink:href="#a11yfig1-m93a191e052" y="310.84"></use>
+</g>
+</g>
+<g id="a11yfig1-text_5">
+<!-- 25 -->
+<g transform="translate(624.5375 325.438438) scale(0.1 -0.1)">
+<use xlink:href="#a11yfig1-DejaVuSans-32"></use>
+<use transform="translate(63.623047 0)" xlink:href="#a11yfig1-DejaVuSans-35"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig1-text_6">
+<!-- Time (hundreds of operating hours) -->
+<g transform="translate(250.34125 339.116563) scale(0.1 -0.1)">
+<defs>
+<path d="M -19 4666 
+L 3928 4666 
+L 3928 4134 
+L 2272 4134 
+L 2272 0 
+L 1638 0 
+L 1638 4134 
+L -19 4134 
+L -19 4666 
+z
+" id="a11yfig1-DejaVuSans-54" transform="scale(0.015625)"></path>
+<path d="M 603 3500 
+L 1178 3500 
+L 1178 0 
+L 603 0 
+L 603 3500 
+z
+M 603 4863 
+L 1178 4863 
+L 1178 4134 
+L 603 4134 
+L 603 4863 
+z
+" id="a11yfig1-DejaVuSans-69" transform="scale(0.015625)"></path>
+<path d="M 3328 2828 
+Q 3544 3216 3844 3400 
+Q 4144 3584 4550 3584 
+Q 5097 3584 5394 3201 
+Q 5691 2819 5691 2113 
+L 5691 0 
+L 5113 0 
+L 5113 2094 
+Q 5113 2597 4934 2840 
+Q 4756 3084 4391 3084 
+Q 3944 3084 3684 2787 
+Q 3425 2491 3425 1978 
+L 3425 0 
+L 2847 0 
+L 2847 2094 
+Q 2847 2600 2669 2842 
+Q 2491 3084 2119 3084 
+Q 1678 3084 1418 2786 
+Q 1159 2488 1159 1978 
+L 1159 0 
+L 581 0 
+L 581 3500 
+L 1159 3500 
+L 1159 2956 
+Q 1356 3278 1631 3431 
+Q 1906 3584 2284 3584 
+Q 2666 3584 2933 3390 
+Q 3200 3197 3328 2828 
+z
+" id="a11yfig1-DejaVuSans-6d" transform="scale(0.015625)"></path>
+<path d="M 3597 1894 
+L 3597 1613 
+L 953 1613 
+Q 991 1019 1311 708 
+Q 1631 397 2203 397 
+Q 2534 397 2845 478 
+Q 3156 559 3463 722 
+L 3463 178 
+Q 3153 47 2828 -22 
+Q 2503 -91 2169 -91 
+Q 1331 -91 842 396 
+Q 353 884 353 1716 
+Q 353 2575 817 3079 
+Q 1281 3584 2069 3584 
+Q 2775 3584 3186 3129 
+Q 3597 2675 3597 1894 
+z
+M 3022 2063 
+Q 3016 2534 2758 2815 
+Q 2500 3097 2075 3097 
+Q 1594 3097 1305 2825 
+Q 1016 2553 972 2059 
+L 3022 2063 
+z
+" id="a11yfig1-DejaVuSans-65" transform="scale(0.015625)"></path>
+<path id="a11yfig1-DejaVuSans-20" transform="scale(0.015625)"></path>
+<path d="M 1984 4856 
+Q 1566 4138 1362 3434 
+Q 1159 2731 1159 2009 
+Q 1159 1288 1364 580 
+Q 1569 -128 1984 -844 
+L 1484 -844 
+Q 1016 -109 783 600 
+Q 550 1309 550 2009 
+Q 550 2706 781 3412 
+Q 1013 4119 1484 4856 
+L 1984 4856 
+z
+" id="a11yfig1-DejaVuSans-28" transform="scale(0.015625)"></path>
+<path d="M 3513 2113 
+L 3513 0 
+L 2938 0 
+L 2938 2094 
+Q 2938 2591 2744 2837 
+Q 2550 3084 2163 3084 
+Q 1697 3084 1428 2787 
+Q 1159 2491 1159 1978 
+L 1159 0 
+L 581 0 
+L 581 4863 
+L 1159 4863 
+L 1159 2956 
+Q 1366 3272 1645 3428 
+Q 1925 3584 2291 3584 
+Q 2894 3584 3203 3211 
+Q 3513 2838 3513 2113 
+z
+" id="a11yfig1-DejaVuSans-68" transform="scale(0.015625)"></path>
+<path d="M 544 1381 
+L 544 3500 
+L 1119 3500 
+L 1119 1403 
+Q 1119 906 1312 657 
+Q 1506 409 1894 409 
+Q 2359 409 2629 706 
+Q 2900 1003 2900 1516 
+L 2900 3500 
+L 3475 3500 
+L 3475 0 
+L 2900 0 
+L 2900 538 
+Q 2691 219 2414 64 
+Q 2138 -91 1772 -91 
+Q 1169 -91 856 284 
+Q 544 659 544 1381 
+z
+M 1991 3584 
+L 1991 3584 
+z
+" id="a11yfig1-DejaVuSans-75" transform="scale(0.015625)"></path>
+<path d="M 3513 2113 
+L 3513 0 
+L 2938 0 
+L 2938 2094 
+Q 2938 2591 2744 2837 
+Q 2550 3084 2163 3084 
+Q 1697 3084 1428 2787 
+Q 1159 2491 1159 1978 
+L 1159 0 
+L 581 0 
+L 581 3500 
+L 1159 3500 
+L 1159 2956 
+Q 1366 3272 1645 3428 
+Q 1925 3584 2291 3584 
+Q 2894 3584 3203 3211 
+Q 3513 2838 3513 2113 
+z
+" id="a11yfig1-DejaVuSans-6e" transform="scale(0.015625)"></path>
+<path d="M 2906 2969 
+L 2906 4863 
+L 3481 4863 
+L 3481 0 
+L 2906 0 
+L 2906 525 
+Q 2725 213 2448 61 
+Q 2172 -91 1784 -91 
+Q 1150 -91 751 415 
+Q 353 922 353 1747 
+Q 353 2572 751 3078 
+Q 1150 3584 1784 3584 
+Q 2172 3584 2448 3432 
+Q 2725 3281 2906 2969 
+z
+M 947 1747 
+Q 947 1113 1208 752 
+Q 1469 391 1925 391 
+Q 2381 391 2643 752 
+Q 2906 1113 2906 1747 
+Q 2906 2381 2643 2742 
+Q 2381 3103 1925 3103 
+Q 1469 3103 1208 2742 
+Q 947 2381 947 1747 
+z
+" id="a11yfig1-DejaVuSans-64" transform="scale(0.015625)"></path>
+<path d="M 2631 2963 
+Q 2534 3019 2420 3045 
+Q 2306 3072 2169 3072 
+Q 1681 3072 1420 2755 
+Q 1159 2438 1159 1844 
+L 1159 0 
+L 581 0 
+L 581 3500 
+L 1159 3500 
+L 1159 2956 
+Q 1341 3275 1631 3429 
+Q 1922 3584 2338 3584 
+Q 2397 3584 2469 3576 
+Q 2541 3569 2628 3553 
+L 2631 2963 
+z
+" id="a11yfig1-DejaVuSans-72" transform="scale(0.015625)"></path>
+<path d="M 2834 3397 
+L 2834 2853 
+Q 2591 2978 2328 3040 
+Q 2066 3103 1784 3103 
+Q 1356 3103 1142 2972 
+Q 928 2841 928 2578 
+Q 928 2378 1081 2264 
+Q 1234 2150 1697 2047 
+L 1894 2003 
+Q 2506 1872 2764 1633 
+Q 3022 1394 3022 966 
+Q 3022 478 2636 193 
+Q 2250 -91 1575 -91 
+Q 1294 -91 989 -36 
+Q 684 19 347 128 
+L 347 722 
+Q 666 556 975 473 
+Q 1284 391 1588 391 
+Q 1994 391 2212 530 
+Q 2431 669 2431 922 
+Q 2431 1156 2273 1281 
+Q 2116 1406 1581 1522 
+L 1381 1569 
+Q 847 1681 609 1914 
+Q 372 2147 372 2553 
+Q 372 3047 722 3315 
+Q 1072 3584 1716 3584 
+Q 2034 3584 2315 3537 
+Q 2597 3491 2834 3397 
+z
+" id="a11yfig1-DejaVuSans-73" transform="scale(0.015625)"></path>
+<path d="M 1959 3097 
+Q 1497 3097 1228 2736 
+Q 959 2375 959 1747 
+Q 959 1119 1226 758 
+Q 1494 397 1959 397 
+Q 2419 397 2687 759 
+Q 2956 1122 2956 1747 
+Q 2956 2369 2687 2733 
+Q 2419 3097 1959 3097 
+z
+M 1959 3584 
+Q 2709 3584 3137 3096 
+Q 3566 2609 3566 1747 
+Q 3566 888 3137 398 
+Q 2709 -91 1959 -91 
+Q 1206 -91 779 398 
+Q 353 888 353 1747 
+Q 353 2609 779 3096 
+Q 1206 3584 1959 3584 
+z
+" id="a11yfig1-DejaVuSans-6f" transform="scale(0.015625)"></path>
+<path d="M 2375 4863 
+L 2375 4384 
+L 1825 4384 
+Q 1516 4384 1395 4259 
+Q 1275 4134 1275 3809 
+L 1275 3500 
+L 2222 3500 
+L 2222 3053 
+L 1275 3053 
+L 1275 0 
+L 697 0 
+L 697 3053 
+L 147 3053 
+L 147 3500 
+L 697 3500 
+L 697 3744 
+Q 697 4328 969 4595 
+Q 1241 4863 1831 4863 
+L 2375 4863 
+z
+" id="a11yfig1-DejaVuSans-66" transform="scale(0.015625)"></path>
+<path d="M 1159 525 
+L 1159 -1331 
+L 581 -1331 
+L 581 3500 
+L 1159 3500 
+L 1159 2969 
+Q 1341 3281 1617 3432 
+Q 1894 3584 2278 3584 
+Q 2916 3584 3314 3078 
+Q 3713 2572 3713 1747 
+Q 3713 922 3314 415 
+Q 2916 -91 2278 -91 
+Q 1894 -91 1617 61 
+Q 1341 213 1159 525 
+z
+M 3116 1747 
+Q 3116 2381 2855 2742 
+Q 2594 3103 2138 3103 
+Q 1681 3103 1420 2742 
+Q 1159 2381 1159 1747 
+Q 1159 1113 1420 752 
+Q 1681 391 2138 391 
+Q 2594 391 2855 752 
+Q 3116 1113 3116 1747 
+z
+" id="a11yfig1-DejaVuSans-70" transform="scale(0.015625)"></path>
+<path d="M 2194 1759 
+Q 1497 1759 1228 1600 
+Q 959 1441 959 1056 
+Q 959 750 1161 570 
+Q 1363 391 1709 391 
+Q 2188 391 2477 730 
+Q 2766 1069 2766 1631 
+L 2766 1759 
+L 2194 1759 
+z
+M 3341 1997 
+L 3341 0 
+L 2766 0 
+L 2766 531 
+Q 2569 213 2275 61 
+Q 1981 -91 1556 -91 
+Q 1019 -91 701 211 
+Q 384 513 384 1019 
+Q 384 1609 779 1909 
+Q 1175 2209 1959 2209 
+L 2766 2209 
+L 2766 2266 
+Q 2766 2663 2505 2880 
+Q 2244 3097 1772 3097 
+Q 1472 3097 1187 3025 
+Q 903 2953 641 2809 
+L 641 3341 
+Q 956 3463 1253 3523 
+Q 1550 3584 1831 3584 
+Q 2591 3584 2966 3190 
+Q 3341 2797 3341 1997 
+z
+" id="a11yfig1-DejaVuSans-61" transform="scale(0.015625)"></path>
+<path d="M 1172 4494 
+L 1172 3500 
+L 2356 3500 
+L 2356 3053 
+L 1172 3053 
+L 1172 1153 
+Q 1172 725 1289 603 
+Q 1406 481 1766 481 
+L 2356 481 
+L 2356 0 
+L 1766 0 
+Q 1100 0 847 248 
+Q 594 497 594 1153 
+L 594 3053 
+L 172 3053 
+L 172 3500 
+L 594 3500 
+L 594 4494 
+L 1172 4494 
+z
+" id="a11yfig1-DejaVuSans-74" transform="scale(0.015625)"></path>
+<path d="M 2906 1791 
+Q 2906 2416 2648 2759 
+Q 2391 3103 1925 3103 
+Q 1463 3103 1205 2759 
+Q 947 2416 947 1791 
+Q 947 1169 1205 825 
+Q 1463 481 1925 481 
+Q 2391 481 2648 825 
+Q 2906 1169 2906 1791 
+z
+M 3481 434 
+Q 3481 -459 3084 -895 
+Q 2688 -1331 1869 -1331 
+Q 1566 -1331 1297 -1286 
+Q 1028 -1241 775 -1147 
+L 775 -588 
+Q 1028 -725 1275 -790 
+Q 1522 -856 1778 -856 
+Q 2344 -856 2625 -561 
+Q 2906 -266 2906 331 
+L 2906 616 
+Q 2728 306 2450 153 
+Q 2172 0 1784 0 
+Q 1141 0 747 490 
+Q 353 981 353 1791 
+Q 353 2603 747 3093 
+Q 1141 3584 1784 3584 
+Q 2172 3584 2450 3431 
+Q 2728 3278 2906 2969 
+L 2906 3500 
+L 3481 3500 
+L 3481 434 
+z
+" id="a11yfig1-DejaVuSans-67" transform="scale(0.015625)"></path>
+<path d="M 513 4856 
+L 1013 4856 
+Q 1481 4119 1714 3412 
+Q 1947 2706 1947 2009 
+Q 1947 1309 1714 600 
+Q 1481 -109 1013 -844 
+L 513 -844 
+Q 928 -128 1133 580 
+Q 1338 1288 1338 2009 
+Q 1338 2731 1133 3434 
+Q 928 4138 513 4856 
+z
+" id="a11yfig1-DejaVuSans-29" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig1-DejaVuSans-54"></use>
+<use transform="translate(57.958984 0)" xlink:href="#a11yfig1-DejaVuSans-69"></use>
+<use transform="translate(85.742188 0)" xlink:href="#a11yfig1-DejaVuSans-6d"></use>
+<use transform="translate(183.154297 0)" xlink:href="#a11yfig1-DejaVuSans-65"></use>
+<use transform="translate(244.677734 0)" xlink:href="#a11yfig1-DejaVuSans-20"></use>
+<use transform="translate(276.464844 0)" xlink:href="#a11yfig1-DejaVuSans-28"></use>
+<use transform="translate(315.478516 0)" xlink:href="#a11yfig1-DejaVuSans-68"></use>
+<use transform="translate(378.857422 0)" xlink:href="#a11yfig1-DejaVuSans-75"></use>
+<use transform="translate(442.236328 0)" xlink:href="#a11yfig1-DejaVuSans-6e"></use>
+<use transform="translate(505.615234 0)" xlink:href="#a11yfig1-DejaVuSans-64"></use>
+<use transform="translate(569.091797 0)" xlink:href="#a11yfig1-DejaVuSans-72"></use>
+<use transform="translate(607.955078 0)" xlink:href="#a11yfig1-DejaVuSans-65"></use>
+<use transform="translate(669.478516 0)" xlink:href="#a11yfig1-DejaVuSans-64"></use>
+<use transform="translate(732.955078 0)" xlink:href="#a11yfig1-DejaVuSans-73"></use>
+<use transform="translate(785.054688 0)" xlink:href="#a11yfig1-DejaVuSans-20"></use>
+<use transform="translate(816.841797 0)" xlink:href="#a11yfig1-DejaVuSans-6f"></use>
+<use transform="translate(878.023438 0)" xlink:href="#a11yfig1-DejaVuSans-66"></use>
+<use transform="translate(913.228516 0)" xlink:href="#a11yfig1-DejaVuSans-20"></use>
+<use transform="translate(945.015625 0)" xlink:href="#a11yfig1-DejaVuSans-6f"></use>
+<use transform="translate(1006.197266 0)" xlink:href="#a11yfig1-DejaVuSans-70"></use>
+<use transform="translate(1069.673828 0)" xlink:href="#a11yfig1-DejaVuSans-65"></use>
+<use transform="translate(1131.197266 0)" xlink:href="#a11yfig1-DejaVuSans-72"></use>
+<use transform="translate(1172.310547 0)" xlink:href="#a11yfig1-DejaVuSans-61"></use>
+<use transform="translate(1233.589844 0)" xlink:href="#a11yfig1-DejaVuSans-74"></use>
+<use transform="translate(1272.798828 0)" xlink:href="#a11yfig1-DejaVuSans-69"></use>
+<use transform="translate(1300.582031 0)" xlink:href="#a11yfig1-DejaVuSans-6e"></use>
+<use transform="translate(1363.960938 0)" xlink:href="#a11yfig1-DejaVuSans-67"></use>
+<use transform="translate(1427.4375 0)" xlink:href="#a11yfig1-DejaVuSans-20"></use>
+<use transform="translate(1459.224609 0)" xlink:href="#a11yfig1-DejaVuSans-68"></use>
+<use transform="translate(1522.603516 0)" xlink:href="#a11yfig1-DejaVuSans-6f"></use>
+<use transform="translate(1583.785156 0)" xlink:href="#a11yfig1-DejaVuSans-75"></use>
+<use transform="translate(1647.164062 0)" xlink:href="#a11yfig1-DejaVuSans-72"></use>
+<use transform="translate(1688.277344 0)" xlink:href="#a11yfig1-DejaVuSans-73"></use>
+<use transform="translate(1740.376953 0)" xlink:href="#a11yfig1-DejaVuSans-29"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig1-matplotlib.axis_2">
+<g id="a11yfig1-ytick_1">
+<g id="a11yfig1-line2d_11">
+<path clip-path="url(#a11yfig1-p17dd1786e4)" d="M 47.72 310.84 
+L 630.9 310.84 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-line2d_12">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="a11yfig1-md39413732a" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig1-md39413732a" y="310.84"></use>
+</g>
+</g>
+<g id="a11yfig1-text_7">
+<!-- 0.0 -->
+<g transform="translate(24.816875 314.639219) scale(0.1 -0.1)">
+<defs>
+<path d="M 684 794 
+L 1344 794 
+L 1344 0 
+L 684 0 
+L 684 794 
+z
+" id="a11yfig1-DejaVuSans-2e" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig1-DejaVuSans-30"></use>
+<use transform="translate(63.623047 0)" xlink:href="#a11yfig1-DejaVuSans-2e"></use>
+<use transform="translate(95.410156 0)" xlink:href="#a11yfig1-DejaVuSans-30"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig1-ytick_2">
+<g id="a11yfig1-line2d_13">
+<path clip-path="url(#a11yfig1-p17dd1786e4)" d="M 47.72 252.579806 
+L 630.9 252.579806 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-line2d_14">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig1-md39413732a" y="252.579806"></use>
+</g>
+</g>
+<g id="a11yfig1-text_8">
+<!-- 0.2 -->
+<g transform="translate(24.816875 256.379025) scale(0.1 -0.1)">
+<use xlink:href="#a11yfig1-DejaVuSans-30"></use>
+<use transform="translate(63.623047 0)" xlink:href="#a11yfig1-DejaVuSans-2e"></use>
+<use transform="translate(95.410156 0)" xlink:href="#a11yfig1-DejaVuSans-32"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig1-ytick_3">
+<g id="a11yfig1-line2d_15">
+<path clip-path="url(#a11yfig1-p17dd1786e4)" d="M 47.72 194.319612 
+L 630.9 194.319612 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-line2d_16">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig1-md39413732a" y="194.319612"></use>
+</g>
+</g>
+<g id="a11yfig1-text_9">
+<!-- 0.4 -->
+<g transform="translate(24.816875 198.11883) scale(0.1 -0.1)">
+<defs>
+<path d="M 2419 4116 
+L 825 1625 
+L 2419 1625 
+L 2419 4116 
+z
+M 2253 4666 
+L 3047 4666 
+L 3047 1625 
+L 3713 1625 
+L 3713 1100 
+L 3047 1100 
+L 3047 0 
+L 2419 0 
+L 2419 1100 
+L 313 1100 
+L 313 1709 
+L 2253 4666 
+z
+" id="a11yfig1-DejaVuSans-34" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig1-DejaVuSans-30"></use>
+<use transform="translate(63.623047 0)" xlink:href="#a11yfig1-DejaVuSans-2e"></use>
+<use transform="translate(95.410156 0)" xlink:href="#a11yfig1-DejaVuSans-34"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig1-ytick_4">
+<g id="a11yfig1-line2d_17">
+<path clip-path="url(#a11yfig1-p17dd1786e4)" d="M 47.72 136.059417 
+L 630.9 136.059417 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-line2d_18">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig1-md39413732a" y="136.059417"></use>
+</g>
+</g>
+<g id="a11yfig1-text_10">
+<!-- 0.6 -->
+<g transform="translate(24.816875 139.858636) scale(0.1 -0.1)">
+<defs>
+<path d="M 2113 2584 
+Q 1688 2584 1439 2293 
+Q 1191 2003 1191 1497 
+Q 1191 994 1439 701 
+Q 1688 409 2113 409 
+Q 2538 409 2786 701 
+Q 3034 994 3034 1497 
+Q 3034 2003 2786 2293 
+Q 2538 2584 2113 2584 
+z
+M 3366 4563 
+L 3366 3988 
+Q 3128 4100 2886 4159 
+Q 2644 4219 2406 4219 
+Q 1781 4219 1451 3797 
+Q 1122 3375 1075 2522 
+Q 1259 2794 1537 2939 
+Q 1816 3084 2150 3084 
+Q 2853 3084 3261 2657 
+Q 3669 2231 3669 1497 
+Q 3669 778 3244 343 
+Q 2819 -91 2113 -91 
+Q 1303 -91 875 529 
+Q 447 1150 447 2328 
+Q 447 3434 972 4092 
+Q 1497 4750 2381 4750 
+Q 2619 4750 2861 4703 
+Q 3103 4656 3366 4563 
+z
+" id="a11yfig1-DejaVuSans-36" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig1-DejaVuSans-30"></use>
+<use transform="translate(63.623047 0)" xlink:href="#a11yfig1-DejaVuSans-2e"></use>
+<use transform="translate(95.410156 0)" xlink:href="#a11yfig1-DejaVuSans-36"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig1-ytick_5">
+<g id="a11yfig1-line2d_19">
+<path clip-path="url(#a11yfig1-p17dd1786e4)" d="M 47.72 77.799223 
+L 630.9 77.799223 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-line2d_20">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig1-md39413732a" y="77.799223"></use>
+</g>
+</g>
+<g id="a11yfig1-text_11">
+<!-- 0.8 -->
+<g transform="translate(24.816875 81.598442) scale(0.1 -0.1)">
+<defs>
+<path d="M 2034 2216 
+Q 1584 2216 1326 1975 
+Q 1069 1734 1069 1313 
+Q 1069 891 1326 650 
+Q 1584 409 2034 409 
+Q 2484 409 2743 651 
+Q 3003 894 3003 1313 
+Q 3003 1734 2745 1975 
+Q 2488 2216 2034 2216 
+z
+M 1403 2484 
+Q 997 2584 770 2862 
+Q 544 3141 544 3541 
+Q 544 4100 942 4425 
+Q 1341 4750 2034 4750 
+Q 2731 4750 3128 4425 
+Q 3525 4100 3525 3541 
+Q 3525 3141 3298 2862 
+Q 3072 2584 2669 2484 
+Q 3125 2378 3379 2068 
+Q 3634 1759 3634 1313 
+Q 3634 634 3220 271 
+Q 2806 -91 2034 -91 
+Q 1263 -91 848 271 
+Q 434 634 434 1313 
+Q 434 1759 690 2068 
+Q 947 2378 1403 2484 
+z
+M 1172 3481 
+Q 1172 3119 1398 2916 
+Q 1625 2713 2034 2713 
+Q 2441 2713 2670 2916 
+Q 2900 3119 2900 3481 
+Q 2900 3844 2670 4047 
+Q 2441 4250 2034 4250 
+Q 1625 4250 1398 4047 
+Q 1172 3844 1172 3481 
+z
+" id="a11yfig1-DejaVuSans-38" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig1-DejaVuSans-30"></use>
+<use transform="translate(63.623047 0)" xlink:href="#a11yfig1-DejaVuSans-2e"></use>
+<use transform="translate(95.410156 0)" xlink:href="#a11yfig1-DejaVuSans-38"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig1-ytick_6">
+<g id="a11yfig1-line2d_21">
+<path clip-path="url(#a11yfig1-p17dd1786e4)" d="M 47.72 19.539029 
+L 630.9 19.539029 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-line2d_22">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig1-md39413732a" y="19.539029"></use>
+</g>
+</g>
+<g id="a11yfig1-text_12">
+<!-- 1.0 -->
+<g transform="translate(24.816875 23.338248) scale(0.1 -0.1)">
+<use xlink:href="#a11yfig1-DejaVuSans-31"></use>
+<use transform="translate(63.623047 0)" xlink:href="#a11yfig1-DejaVuSans-2e"></use>
+<use transform="translate(95.410156 0)" xlink:href="#a11yfig1-DejaVuSans-30"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig1-text_13">
+<!-- S(t) — probability -->
+<g transform="translate(18.737188 204.709844) rotate(-90) scale(0.1 -0.1)">
+<defs>
+<path d="M 3425 4513 
+L 3425 3897 
+Q 3066 4069 2747 4153 
+Q 2428 4238 2131 4238 
+Q 1616 4238 1336 4038 
+Q 1056 3838 1056 3469 
+Q 1056 3159 1242 3001 
+Q 1428 2844 1947 2747 
+L 2328 2669 
+Q 3034 2534 3370 2195 
+Q 3706 1856 3706 1288 
+Q 3706 609 3251 259 
+Q 2797 -91 1919 -91 
+Q 1588 -91 1214 -16 
+Q 841 59 441 206 
+L 441 856 
+Q 825 641 1194 531 
+Q 1563 422 1919 422 
+Q 2459 422 2753 634 
+Q 3047 847 3047 1241 
+Q 3047 1584 2836 1778 
+Q 2625 1972 2144 2069 
+L 1759 2144 
+Q 1053 2284 737 2584 
+Q 422 2884 422 3419 
+Q 422 4038 858 4394 
+Q 1294 4750 2059 4750 
+Q 2388 4750 2728 4690 
+Q 3069 4631 3425 4513 
+z
+" id="a11yfig1-DejaVuSans-53" transform="scale(0.015625)"></path>
+<path d="M 313 1978 
+L 6088 1978 
+L 6088 1528 
+L 313 1528 
+L 313 1978 
+z
+" id="a11yfig1-DejaVuSans-2014" transform="scale(0.015625)"></path>
+<path d="M 3116 1747 
+Q 3116 2381 2855 2742 
+Q 2594 3103 2138 3103 
+Q 1681 3103 1420 2742 
+Q 1159 2381 1159 1747 
+Q 1159 1113 1420 752 
+Q 1681 391 2138 391 
+Q 2594 391 2855 752 
+Q 3116 1113 3116 1747 
+z
+M 1159 2969 
+Q 1341 3281 1617 3432 
+Q 1894 3584 2278 3584 
+Q 2916 3584 3314 3078 
+Q 3713 2572 3713 1747 
+Q 3713 922 3314 415 
+Q 2916 -91 2278 -91 
+Q 1894 -91 1617 61 
+Q 1341 213 1159 525 
+L 1159 0 
+L 581 0 
+L 581 4863 
+L 1159 4863 
+L 1159 2969 
+z
+" id="a11yfig1-DejaVuSans-62" transform="scale(0.015625)"></path>
+<path d="M 603 4863 
+L 1178 4863 
+L 1178 0 
+L 603 0 
+L 603 4863 
+z
+" id="a11yfig1-DejaVuSans-6c" transform="scale(0.015625)"></path>
+<path d="M 2059 -325 
+Q 1816 -950 1584 -1140 
+Q 1353 -1331 966 -1331 
+L 506 -1331 
+L 506 -850 
+L 844 -850 
+Q 1081 -850 1212 -737 
+Q 1344 -625 1503 -206 
+L 1606 56 
+L 191 3500 
+L 800 3500 
+L 1894 763 
+L 2988 3500 
+L 3597 3500 
+L 2059 -325 
+z
+" id="a11yfig1-DejaVuSans-79" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig1-DejaVuSans-53"></use>
+<use transform="translate(63.476562 0)" xlink:href="#a11yfig1-DejaVuSans-28"></use>
+<use transform="translate(102.490234 0)" xlink:href="#a11yfig1-DejaVuSans-74"></use>
+<use transform="translate(141.699219 0)" xlink:href="#a11yfig1-DejaVuSans-29"></use>
+<use transform="translate(180.712891 0)" xlink:href="#a11yfig1-DejaVuSans-20"></use>
+<use transform="translate(212.5 0)" xlink:href="#a11yfig1-DejaVuSans-2014"></use>
+<use transform="translate(312.5 0)" xlink:href="#a11yfig1-DejaVuSans-20"></use>
+<use transform="translate(344.287109 0)" xlink:href="#a11yfig1-DejaVuSans-70"></use>
+<use transform="translate(407.763672 0)" xlink:href="#a11yfig1-DejaVuSans-72"></use>
+<use transform="translate(446.626953 0)" xlink:href="#a11yfig1-DejaVuSans-6f"></use>
+<use transform="translate(507.808594 0)" xlink:href="#a11yfig1-DejaVuSans-62"></use>
+<use transform="translate(571.285156 0)" xlink:href="#a11yfig1-DejaVuSans-61"></use>
+<use transform="translate(632.564453 0)" xlink:href="#a11yfig1-DejaVuSans-62"></use>
+<use transform="translate(696.041016 0)" xlink:href="#a11yfig1-DejaVuSans-69"></use>
+<use transform="translate(723.824219 0)" xlink:href="#a11yfig1-DejaVuSans-6c"></use>
+<use transform="translate(751.607422 0)" xlink:href="#a11yfig1-DejaVuSans-69"></use>
+<use transform="translate(779.390625 0)" xlink:href="#a11yfig1-DejaVuSans-74"></use>
+<use transform="translate(818.599609 0)" xlink:href="#a11yfig1-DejaVuSans-79"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig1-line2d_23">
+<path clip-path="url(#a11yfig1-p17dd1786e4)" d="M 47.72 19.539029 
+L 86.728696 19.64343 
+L 96.48087 19.912662 
+L 104.282609 20.363186 
+L 110.133913 20.89498 
+L 115.985217 21.631786 
+L 121.836522 22.604504 
+L 127.687826 23.838829 
+L 133.53913 25.354465 
+L 139.390435 27.164838 
+L 145.241739 29.277196 
+L 151.093043 31.692989 
+L 156.944348 34.408442 
+L 162.795652 37.415229 
+L 168.646957 40.701203 
+L 174.498261 44.251114 
+L 180.349565 48.0473 
+L 186.20087 52.070331 
+L 194.002609 57.751472 
+L 201.804348 63.748501 
+L 209.606087 70.010317 
+L 219.358261 78.133672 
+L 231.06087 88.193375 
+L 248.614783 103.617833 
+L 272.02 124.171533 
+L 285.673043 135.880525 
+L 297.375652 145.645259 
+L 309.078261 155.104973 
+L 318.830435 162.727297 
+L 328.582609 170.095169 
+L 338.334783 177.197201 
+L 348.086957 184.026011 
+L 357.83913 190.577635 
+L 367.591304 196.850983 
+L 377.343478 202.847369 
+L 387.095652 208.570083 
+L 396.847826 214.024019 
+L 406.6 219.215354 
+L 416.352174 224.151267 
+L 426.104348 228.839701 
+L 435.856522 233.289155 
+L 445.608696 237.508515 
+L 455.36087 241.506909 
+L 465.113043 245.293584 
+L 474.865217 248.877804 
+L 486.567826 252.92458 
+L 498.270435 256.708718 
+L 509.973043 260.245474 
+L 521.675652 263.549615 
+L 533.378261 266.635352 
+L 545.08087 269.516289 
+L 558.733913 272.635806 
+L 572.386957 275.513679 
+L 586.04 278.168185 
+L 599.693043 280.616412 
+L 615.296522 283.182178 
+L 630.9 285.521278 
+L 630.9 285.521278 
+" style="fill: none; stroke: #1f77b4; stroke-width: 2.6; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-line2d_24">
+<path clip-path="url(#a11yfig1-p17dd1786e4)" d="M 47.72 19.539029 
+L 71.125217 19.641031 
+L 76.976522 19.878684 
+L 80.877391 20.184088 
+L 84.778261 20.65399 
+L 88.67913 21.327876 
+L 92.58 22.24169 
+L 96.48087 23.425957 
+L 100.381739 24.904623 
+L 104.282609 26.694535 
+L 108.183478 28.805436 
+L 112.084348 31.240338 
+L 115.985217 33.996151 
+L 119.886087 37.064459 
+L 123.786957 40.432369 
+L 127.687826 44.083365 
+L 131.588696 47.998121 
+L 135.489565 52.155264 
+L 141.34087 58.795457 
+L 147.192174 65.850087 
+L 153.043478 73.239199 
+L 160.845217 83.478131 
+L 172.547826 99.323779 
+L 192.052174 125.866353 
+L 201.804348 138.75938 
+L 209.606087 148.755229 
+L 217.407826 158.410986 
+L 225.209565 167.689114 
+L 233.011304 176.563994 
+L 240.813043 185.019974 
+L 248.614783 193.0496 
+L 254.466087 198.791324 
+L 260.317391 204.294318 
+L 266.168696 209.561624 
+L 272.02 214.597422 
+L 277.871304 219.40681 
+L 283.722609 223.995613 
+L 289.573913 228.370219 
+L 297.375652 233.881648 
+L 305.177391 239.041349 
+L 312.97913 243.866778 
+L 320.78087 248.37558 
+L 328.582609 252.585331 
+L 336.384348 256.513322 
+L 344.186087 260.176411 
+L 351.987826 263.590901 
+L 359.789565 266.772464 
+L 367.591304 269.736081 
+L 375.393043 272.496012 
+L 385.145217 275.680019 
+L 394.897391 278.591615 
+L 404.649565 281.253797 
+L 414.401739 283.687829 
+L 424.153913 285.913317 
+L 435.856522 288.333912 
+L 447.55913 290.508465 
+L 459.261739 292.462515 
+L 472.914783 294.494027 
+L 486.567826 296.288956 
+L 500.22087 297.875811 
+L 515.824348 299.466568 
+L 533.378261 301.010647 
+L 550.932174 302.332671 
+L 570.436522 303.581622 
+L 591.891304 304.731986 
+L 615.296522 305.767416 
+L 630.9 306.351818 
+L 630.9 306.351818 
+" style="fill: none; stroke: #ff7f0e; stroke-width: 2.6; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-line2d_25">
+<path clip-path="url(#a11yfig1-p17dd1786e4)" d="M 47.72 19.548123 
+L 59.422609 19.729256 
+L 69.174783 20.130732 
+L 76.976522 20.654921 
+L 84.778261 21.382654 
+L 92.58 22.331604 
+L 100.381739 23.516764 
+L 108.183478 24.950818 
+L 115.985217 26.644352 
+L 123.786957 28.605993 
+L 131.588696 30.842481 
+L 139.390435 33.358726 
+L 147.192174 36.157836 
+L 154.993913 39.241148 
+L 162.795652 42.608249 
+L 170.597391 46.256998 
+L 178.39913 50.183558 
+L 186.20087 54.382428 
+L 194.002609 58.846491 
+L 201.804348 63.567059 
+L 209.606087 68.533938 
+L 217.407826 73.735499 
+L 227.16 80.547574 
+L 236.912174 87.677862 
+L 246.664348 95.095492 
+L 256.416522 102.767173 
+L 268.11913 112.25866 
+L 281.772174 123.644323 
+L 299.326087 138.613933 
+L 344.186087 177.067544 
+L 357.83913 188.419202 
+L 369.541739 197.891543 
+L 381.244348 207.072613 
+L 390.996522 214.468523 
+L 400.748696 221.60826 
+L 410.50087 228.472189 
+L 420.253043 235.043813 
+L 430.005217 241.309803 
+L 439.757391 247.259984 
+L 447.55913 251.787882 
+L 455.36087 256.106824 
+L 463.162609 260.215743 
+L 470.964348 264.114699 
+L 478.766087 267.804817 
+L 486.567826 271.288219 
+L 494.369565 274.56795 
+L 502.171304 277.647901 
+L 509.973043 280.532729 
+L 519.725217 283.872559 
+L 529.477391 286.927602 
+L 539.229565 289.710769 
+L 548.981739 292.235918 
+L 558.733913 294.51761 
+L 568.486087 296.570875 
+L 578.238261 298.410998 
+L 587.990435 300.053318 
+L 599.693043 301.784404 
+L 611.395652 303.278269 
+L 623.098261 304.559716 
+L 630.9 305.307718 
+L 630.9 305.307718 
+" style="fill: none; stroke-dasharray: 8.51,3.68; stroke-dashoffset: 0; stroke: #2ca02c; stroke-width: 2.3"></path>
+</g>
+<g id="a11yfig1-line2d_26">
+<path clip-path="url(#a11yfig1-p17dd1786e4)" d="M 47.72 19.56231 
+L 55.521739 19.790506 
+L 61.373043 20.178693 
+L 67.224348 20.79209 
+L 73.075652 21.658199 
+L 78.926957 22.799774 
+L 84.778261 24.235791 
+L 90.629565 25.981944 
+L 96.48087 28.050936 
+L 102.332174 30.452631 
+L 108.183478 33.194162 
+L 114.034783 36.27998 
+L 119.886087 39.711909 
+L 125.737391 43.489173 
+L 131.588696 47.608447 
+L 137.44 52.063898 
+L 143.291304 56.847248 
+L 149.142609 61.947851 
+L 154.993913 67.352787 
+L 160.845217 73.046969 
+L 166.696522 79.013272 
+L 172.547826 85.232684 
+L 180.349565 93.882884 
+L 188.151304 102.892661 
+L 197.903478 114.572789 
+L 207.655652 126.606097 
+L 223.25913 146.284956 
+L 244.713913 173.367438 
+L 256.416522 187.748107 
+L 266.168696 199.347588 
+L 273.970435 208.308131 
+L 281.772174 216.939815 
+L 289.573913 225.206874 
+L 297.375652 233.079475 
+L 303.226957 238.710536 
+L 309.078261 244.098436 
+L 314.929565 249.237287 
+L 320.78087 254.123056 
+L 326.632174 258.753494 
+L 332.483478 263.128064 
+L 338.334783 267.247841 
+L 344.186087 271.115405 
+L 350.037391 274.734724 
+L 355.888696 278.111027 
+L 361.74 281.250667 
+L 367.591304 284.160991 
+L 373.442609 286.850198 
+L 379.293913 289.3272 
+L 385.145217 291.60149 
+L 390.996522 293.683007 
+L 396.847826 295.582013 
+L 404.649565 297.848213 
+L 412.451304 299.833568 
+L 420.253043 301.56295 
+L 428.054783 303.060733 
+L 435.856522 304.350473 
+L 445.608696 305.70423 
+L 455.36087 306.809056 
+L 465.113043 307.702534 
+L 476.815652 308.543092 
+L 490.468696 309.268264 
+L 506.072174 309.842188 
+L 523.626087 310.257405 
+L 547.031304 310.568225 
+L 580.188696 310.755681 
+L 630.9 310.828594 
+L 630.9 310.828594 
+" style="fill: none; stroke-dasharray: 8.51,3.68; stroke-dashoffset: 0; stroke: #d62728; stroke-width: 2.3"></path>
+</g>
+<g id="a11yfig1-patch_3">
+<path d="M 47.72 310.84 
+L 47.72 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-patch_4">
+<path d="M 630.9 310.84 
+L 630.9 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-patch_5">
+<path d="M 47.72 310.84 
+L 630.9 310.84 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-patch_6">
+<path d="M 47.72 10.8 
+L 630.9 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-legend_1">
+<g id="a11yfig1-patch_7">
+<path d="M 488.90125 64.17 
+L 625.3 64.17 
+Q 626.9 64.17 626.9 62.57 
+L 626.9 16.4 
+Q 626.9 14.8 625.3 14.8 
+L 488.90125 14.8 
+Q 487.30125 14.8 487.30125 16.4 
+L 487.30125 62.57 
+Q 487.30125 64.17 488.90125 64.17 
+z
+" style="fill: #ffffff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"></path>
+</g>
+<g id="a11yfig1-line2d_27">
+<path d="M 490.50125 21.27875 
+L 498.50125 21.27875 
+L 506.50125 21.27875 
+" style="fill: none; stroke: #1f77b4; stroke-width: 2.6; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-text_14">
+<!-- Standard — Lognormal AFT -->
+<g transform="translate(512.90125 24.07875) scale(0.08 -0.08)">
+<defs>
+<path d="M 628 4666 
+L 1259 4666 
+L 1259 531 
+L 3531 531 
+L 3531 0 
+L 628 0 
+L 628 4666 
+z
+" id="a11yfig1-DejaVuSans-4c" transform="scale(0.015625)"></path>
+<path d="M 2188 4044 
+L 1331 1722 
+L 3047 1722 
+L 2188 4044 
+z
+M 1831 4666 
+L 2547 4666 
+L 4325 0 
+L 3669 0 
+L 3244 1197 
+L 1141 1197 
+L 716 0 
+L 50 0 
+L 1831 4666 
+z
+" id="a11yfig1-DejaVuSans-41" transform="scale(0.015625)"></path>
+<path d="M 628 4666 
+L 3309 4666 
+L 3309 4134 
+L 1259 4134 
+L 1259 2759 
+L 3109 2759 
+L 3109 2228 
+L 1259 2228 
+L 1259 0 
+L 628 0 
+L 628 4666 
+z
+" id="a11yfig1-DejaVuSans-46" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig1-DejaVuSans-53"></use>
+<use transform="translate(63.476562 0)" xlink:href="#a11yfig1-DejaVuSans-74"></use>
+<use transform="translate(102.685547 0)" xlink:href="#a11yfig1-DejaVuSans-61"></use>
+<use transform="translate(163.964844 0)" xlink:href="#a11yfig1-DejaVuSans-6e"></use>
+<use transform="translate(227.34375 0)" xlink:href="#a11yfig1-DejaVuSans-64"></use>
+<use transform="translate(290.820312 0)" xlink:href="#a11yfig1-DejaVuSans-61"></use>
+<use transform="translate(352.099609 0)" xlink:href="#a11yfig1-DejaVuSans-72"></use>
+<use transform="translate(391.462891 0)" xlink:href="#a11yfig1-DejaVuSans-64"></use>
+<use transform="translate(454.939453 0)" xlink:href="#a11yfig1-DejaVuSans-20"></use>
+<use transform="translate(486.726562 0)" xlink:href="#a11yfig1-DejaVuSans-2014"></use>
+<use transform="translate(586.726562 0)" xlink:href="#a11yfig1-DejaVuSans-20"></use>
+<use transform="translate(618.513672 0)" xlink:href="#a11yfig1-DejaVuSans-4c"></use>
+<use transform="translate(672.476562 0)" xlink:href="#a11yfig1-DejaVuSans-6f"></use>
+<use transform="translate(733.658203 0)" xlink:href="#a11yfig1-DejaVuSans-67"></use>
+<use transform="translate(797.134766 0)" xlink:href="#a11yfig1-DejaVuSans-6e"></use>
+<use transform="translate(860.513672 0)" xlink:href="#a11yfig1-DejaVuSans-6f"></use>
+<use transform="translate(921.695312 0)" xlink:href="#a11yfig1-DejaVuSans-72"></use>
+<use transform="translate(961.058594 0)" xlink:href="#a11yfig1-DejaVuSans-6d"></use>
+<use transform="translate(1058.470703 0)" xlink:href="#a11yfig1-DejaVuSans-61"></use>
+<use transform="translate(1119.75 0)" xlink:href="#a11yfig1-DejaVuSans-6c"></use>
+<use transform="translate(1147.533203 0)" xlink:href="#a11yfig1-DejaVuSans-20"></use>
+<use transform="translate(1179.320312 0)" xlink:href="#a11yfig1-DejaVuSans-41"></use>
+<use transform="translate(1247.728516 0)" xlink:href="#a11yfig1-DejaVuSans-46"></use>
+<use transform="translate(1303.498047 0)" xlink:href="#a11yfig1-DejaVuSans-54"></use>
+</g>
+</g>
+<g id="a11yfig1-line2d_28">
+<path d="M 490.50125 33.02125 
+L 498.50125 33.02125 
+L 506.50125 33.02125 
+" style="fill: none; stroke: #ff7f0e; stroke-width: 2.6; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-text_15">
+<!-- High load — Lognormal AFT -->
+<g transform="translate(512.90125 35.82125) scale(0.08 -0.08)">
+<defs>
+<path d="M 628 4666 
+L 1259 4666 
+L 1259 2753 
+L 3553 2753 
+L 3553 4666 
+L 4184 4666 
+L 4184 0 
+L 3553 0 
+L 3553 2222 
+L 1259 2222 
+L 1259 0 
+L 628 0 
+L 628 4666 
+z
+" id="a11yfig1-DejaVuSans-48" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig1-DejaVuSans-48"></use>
+<use transform="translate(75.195312 0)" xlink:href="#a11yfig1-DejaVuSans-69"></use>
+<use transform="translate(102.978516 0)" xlink:href="#a11yfig1-DejaVuSans-67"></use>
+<use transform="translate(166.455078 0)" xlink:href="#a11yfig1-DejaVuSans-68"></use>
+<use transform="translate(229.833984 0)" xlink:href="#a11yfig1-DejaVuSans-20"></use>
+<use transform="translate(261.621094 0)" xlink:href="#a11yfig1-DejaVuSans-6c"></use>
+<use transform="translate(289.404297 0)" xlink:href="#a11yfig1-DejaVuSans-6f"></use>
+<use transform="translate(350.585938 0)" xlink:href="#a11yfig1-DejaVuSans-61"></use>
+<use transform="translate(411.865234 0)" xlink:href="#a11yfig1-DejaVuSans-64"></use>
+<use transform="translate(475.341797 0)" xlink:href="#a11yfig1-DejaVuSans-20"></use>
+<use transform="translate(507.128906 0)" xlink:href="#a11yfig1-DejaVuSans-2014"></use>
+<use transform="translate(607.128906 0)" xlink:href="#a11yfig1-DejaVuSans-20"></use>
+<use transform="translate(638.916016 0)" xlink:href="#a11yfig1-DejaVuSans-4c"></use>
+<use transform="translate(692.878906 0)" xlink:href="#a11yfig1-DejaVuSans-6f"></use>
+<use transform="translate(754.060547 0)" xlink:href="#a11yfig1-DejaVuSans-67"></use>
+<use transform="translate(817.537109 0)" xlink:href="#a11yfig1-DejaVuSans-6e"></use>
+<use transform="translate(880.916016 0)" xlink:href="#a11yfig1-DejaVuSans-6f"></use>
+<use transform="translate(942.097656 0)" xlink:href="#a11yfig1-DejaVuSans-72"></use>
+<use transform="translate(981.460938 0)" xlink:href="#a11yfig1-DejaVuSans-6d"></use>
+<use transform="translate(1078.873047 0)" xlink:href="#a11yfig1-DejaVuSans-61"></use>
+<use transform="translate(1140.152344 0)" xlink:href="#a11yfig1-DejaVuSans-6c"></use>
+<use transform="translate(1167.935547 0)" xlink:href="#a11yfig1-DejaVuSans-20"></use>
+<use transform="translate(1199.722656 0)" xlink:href="#a11yfig1-DejaVuSans-41"></use>
+<use transform="translate(1268.130859 0)" xlink:href="#a11yfig1-DejaVuSans-46"></use>
+<use transform="translate(1323.900391 0)" xlink:href="#a11yfig1-DejaVuSans-54"></use>
+</g>
+</g>
+<g id="a11yfig1-line2d_29">
+<path d="M 490.50125 44.76375 
+L 498.50125 44.76375 
+L 506.50125 44.76375 
+" style="fill: none; stroke-dasharray: 8.51,3.68; stroke-dashoffset: 0; stroke: #2ca02c; stroke-width: 2.3"></path>
+</g>
+<g id="a11yfig1-text_16">
+<!-- Standard — Weibull AFT -->
+<g transform="translate(512.90125 47.56375) scale(0.08 -0.08)">
+<defs>
+<path d="M 213 4666 
+L 850 4666 
+L 1831 722 
+L 2809 4666 
+L 3519 4666 
+L 4500 722 
+L 5478 4666 
+L 6119 4666 
+L 4947 0 
+L 4153 0 
+L 3169 4050 
+L 2175 0 
+L 1381 0 
+L 213 4666 
+z
+" id="a11yfig1-DejaVuSans-57" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig1-DejaVuSans-53"></use>
+<use transform="translate(63.476562 0)" xlink:href="#a11yfig1-DejaVuSans-74"></use>
+<use transform="translate(102.685547 0)" xlink:href="#a11yfig1-DejaVuSans-61"></use>
+<use transform="translate(163.964844 0)" xlink:href="#a11yfig1-DejaVuSans-6e"></use>
+<use transform="translate(227.34375 0)" xlink:href="#a11yfig1-DejaVuSans-64"></use>
+<use transform="translate(290.820312 0)" xlink:href="#a11yfig1-DejaVuSans-61"></use>
+<use transform="translate(352.099609 0)" xlink:href="#a11yfig1-DejaVuSans-72"></use>
+<use transform="translate(391.462891 0)" xlink:href="#a11yfig1-DejaVuSans-64"></use>
+<use transform="translate(454.939453 0)" xlink:href="#a11yfig1-DejaVuSans-20"></use>
+<use transform="translate(486.726562 0)" xlink:href="#a11yfig1-DejaVuSans-2014"></use>
+<use transform="translate(586.726562 0)" xlink:href="#a11yfig1-DejaVuSans-20"></use>
+<use transform="translate(618.513672 0)" xlink:href="#a11yfig1-DejaVuSans-57"></use>
+<use transform="translate(711.515625 0)" xlink:href="#a11yfig1-DejaVuSans-65"></use>
+<use transform="translate(773.039062 0)" xlink:href="#a11yfig1-DejaVuSans-69"></use>
+<use transform="translate(800.822266 0)" xlink:href="#a11yfig1-DejaVuSans-62"></use>
+<use transform="translate(864.298828 0)" xlink:href="#a11yfig1-DejaVuSans-75"></use>
+<use transform="translate(927.677734 0)" xlink:href="#a11yfig1-DejaVuSans-6c"></use>
+<use transform="translate(955.460938 0)" xlink:href="#a11yfig1-DejaVuSans-6c"></use>
+<use transform="translate(983.244141 0)" xlink:href="#a11yfig1-DejaVuSans-20"></use>
+<use transform="translate(1015.03125 0)" xlink:href="#a11yfig1-DejaVuSans-41"></use>
+<use transform="translate(1083.439453 0)" xlink:href="#a11yfig1-DejaVuSans-46"></use>
+<use transform="translate(1139.208984 0)" xlink:href="#a11yfig1-DejaVuSans-54"></use>
+</g>
+</g>
+<g id="a11yfig1-line2d_30">
+<path d="M 490.50125 56.50625 
+L 498.50125 56.50625 
+L 506.50125 56.50625 
+" style="fill: none; stroke-dasharray: 8.51,3.68; stroke-dashoffset: 0; stroke: #d62728; stroke-width: 2.3"></path>
+</g>
+<g id="a11yfig1-text_17">
+<!-- High load — Weibull AFT -->
+<g transform="translate(512.90125 59.30625) scale(0.08 -0.08)">
+<use xlink:href="#a11yfig1-DejaVuSans-48"></use>
+<use transform="translate(75.195312 0)" xlink:href="#a11yfig1-DejaVuSans-69"></use>
+<use transform="translate(102.978516 0)" xlink:href="#a11yfig1-DejaVuSans-67"></use>
+<use transform="translate(166.455078 0)" xlink:href="#a11yfig1-DejaVuSans-68"></use>
+<use transform="translate(229.833984 0)" xlink:href="#a11yfig1-DejaVuSans-20"></use>
+<use transform="translate(261.621094 0)" xlink:href="#a11yfig1-DejaVuSans-6c"></use>
+<use transform="translate(289.404297 0)" xlink:href="#a11yfig1-DejaVuSans-6f"></use>
+<use transform="translate(350.585938 0)" xlink:href="#a11yfig1-DejaVuSans-61"></use>
+<use transform="translate(411.865234 0)" xlink:href="#a11yfig1-DejaVuSans-64"></use>
+<use transform="translate(475.341797 0)" xlink:href="#a11yfig1-DejaVuSans-20"></use>
+<use transform="translate(507.128906 0)" xlink:href="#a11yfig1-DejaVuSans-2014"></use>
+<use transform="translate(607.128906 0)" xlink:href="#a11yfig1-DejaVuSans-20"></use>
+<use transform="translate(638.916016 0)" xlink:href="#a11yfig1-DejaVuSans-57"></use>
+<use transform="translate(731.917969 0)" xlink:href="#a11yfig1-DejaVuSans-65"></use>
+<use transform="translate(793.441406 0)" xlink:href="#a11yfig1-DejaVuSans-69"></use>
+<use transform="translate(821.224609 0)" xlink:href="#a11yfig1-DejaVuSans-62"></use>
+<use transform="translate(884.701172 0)" xlink:href="#a11yfig1-DejaVuSans-75"></use>
+<use transform="translate(948.080078 0)" xlink:href="#a11yfig1-DejaVuSans-6c"></use>
+<use transform="translate(975.863281 0)" xlink:href="#a11yfig1-DejaVuSans-6c"></use>
+<use transform="translate(1003.646484 0)" xlink:href="#a11yfig1-DejaVuSans-20"></use>
+<use transform="translate(1035.433594 0)" xlink:href="#a11yfig1-DejaVuSans-41"></use>
+<use transform="translate(1103.841797 0)" xlink:href="#a11yfig1-DejaVuSans-46"></use>
+<use transform="translate(1159.611328 0)" xlink:href="#a11yfig1-DejaVuSans-54"></use>
+</g>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="a11yfig1-p17dd1786e4">
+<rect height="300.04" width="583.18" x="47.72" y="10.8"></rect>
+</clippath>
+</defs>
+</svg><figcaption>Survival predicha bajo cada grupo y familia. Compare razones de tiempos horizontales a una probabilidad igual.</figcaption></figure>
+<p>La lectura visual correcta comienza seleccionando una altura de supervivencia y recorriendo horizontalmente hasta ambas curvas. Después se leen los tiempos y se divide el tiempo de carga alta entre el estándar. Bajo AFT esta razón permanece estable entre alturas, conforme a la fórmula. En cambio, medir la <strong>distancia vertical</strong> entre probabilidades a cierta hora responde otra pregunta y no tiene por qué coincidir con el Time Ratio.</p>
+<p>El segundo gráfico muestra el Hazard condicional. Weibull AFT con forma común también implica PH, de modo que la razón entre hazards es constante. Con error Lognormal AFT, la razón de hazards normalmente varía. Por eso el gráfico debe interpretarse como una consecuencia de las fórmulas, no como decoración.</p>
+<figure><svg aria-label="Hazard curves for fitted Lognormal and Weibull AFT models" height="352.8pt" role="img" version="1.1" viewbox="0 0 648 352.8" width="648pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<metadata>
+<rdf:rdf xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<cc:work>
+<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"></dc:type>
+<dc:date>2026-11-03T05:05:52.761977</dc:date>
+<dc:format>image/svg+xml</dc:format>
+<dc:creator>
+<cc:agent>
+<dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+</cc:agent>
+</dc:creator>
+</cc:work>
+</rdf:rdf>
+</metadata>
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="a11yfig2-figure_1">
+<g id="a11yfig2-patch_1">
+<path d="M 0 352.8 
+L 648 352.8 
+L 648 0 
+L 0 0 
+z
+" style="fill: #ffffff"></path>
+</g>
+<g id="a11yfig2-axes_1">
+<g id="a11yfig2-patch_2">
+<path d="M 47.72 310.84 
+L 630.9 310.84 
+L 630.9 10.8 
+L 47.72 10.8 
+z
+" style="fill: #ffffff"></path>
+</g>
+<g id="a11yfig2-matplotlib.axis_1">
+<g id="a11yfig2-xtick_1">
+<g id="a11yfig2-line2d_1">
+<path clip-path="url(#a11yfig2-pde70258a6e)" d="M 160.593548 310.84 
+L 160.593548 10.8 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-line2d_2">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="a11yfig2-m1f4b261d92" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="160.593548" xlink:href="#a11yfig2-m1f4b261d92" y="310.84"></use>
+</g>
+</g>
+<g id="a11yfig2-text_1">
+<!-- 5 -->
+<g transform="translate(157.412298 325.438438) scale(0.1 -0.1)">
+<defs>
+<path d="M 691 4666 
+L 3169 4666 
+L 3169 4134 
+L 1269 4134 
+L 1269 2991 
+Q 1406 3038 1543 3061 
+Q 1681 3084 1819 3084 
+Q 2600 3084 3056 2656 
+Q 3513 2228 3513 1497 
+Q 3513 744 3044 326 
+Q 2575 -91 1722 -91 
+Q 1428 -91 1123 -41 
+Q 819 9 494 109 
+L 494 744 
+Q 775 591 1075 516 
+Q 1375 441 1709 441 
+Q 2250 441 2565 725 
+Q 2881 1009 2881 1497 
+Q 2881 1984 2565 2268 
+Q 2250 2553 1709 2553 
+Q 1456 2553 1204 2497 
+Q 953 2441 691 2322 
+L 691 4666 
+z
+" id="a11yfig2-DejaVuSans-35" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig2-DejaVuSans-35"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig2-xtick_2">
+<g id="a11yfig2-line2d_3">
+<path clip-path="url(#a11yfig2-pde70258a6e)" d="M 278.170161 310.84 
+L 278.170161 10.8 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-line2d_4">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="278.170161" xlink:href="#a11yfig2-m1f4b261d92" y="310.84"></use>
+</g>
+</g>
+<g id="a11yfig2-text_2">
+<!-- 10 -->
+<g transform="translate(271.807661 325.438438) scale(0.1 -0.1)">
+<defs>
+<path d="M 794 531 
+L 1825 531 
+L 1825 4091 
+L 703 3866 
+L 703 4441 
+L 1819 4666 
+L 2450 4666 
+L 2450 531 
+L 3481 531 
+L 3481 0 
+L 794 0 
+L 794 531 
+z
+" id="a11yfig2-DejaVuSans-31" transform="scale(0.015625)"></path>
+<path d="M 2034 4250 
+Q 1547 4250 1301 3770 
+Q 1056 3291 1056 2328 
+Q 1056 1369 1301 889 
+Q 1547 409 2034 409 
+Q 2525 409 2770 889 
+Q 3016 1369 3016 2328 
+Q 3016 3291 2770 3770 
+Q 2525 4250 2034 4250 
+z
+M 2034 4750 
+Q 2819 4750 3233 4129 
+Q 3647 3509 3647 2328 
+Q 3647 1150 3233 529 
+Q 2819 -91 2034 -91 
+Q 1250 -91 836 529 
+Q 422 1150 422 2328 
+Q 422 3509 836 4129 
+Q 1250 4750 2034 4750 
+z
+" id="a11yfig2-DejaVuSans-30" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig2-DejaVuSans-31"></use>
+<use transform="translate(63.623047 0)" xlink:href="#a11yfig2-DejaVuSans-30"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig2-xtick_3">
+<g id="a11yfig2-line2d_5">
+<path clip-path="url(#a11yfig2-pde70258a6e)" d="M 395.746774 310.84 
+L 395.746774 10.8 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-line2d_6">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="395.746774" xlink:href="#a11yfig2-m1f4b261d92" y="310.84"></use>
+</g>
+</g>
+<g id="a11yfig2-text_3">
+<!-- 15 -->
+<g transform="translate(389.384274 325.438438) scale(0.1 -0.1)">
+<use xlink:href="#a11yfig2-DejaVuSans-31"></use>
+<use transform="translate(63.623047 0)" xlink:href="#a11yfig2-DejaVuSans-35"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig2-xtick_4">
+<g id="a11yfig2-line2d_7">
+<path clip-path="url(#a11yfig2-pde70258a6e)" d="M 513.323387 310.84 
+L 513.323387 10.8 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-line2d_8">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="513.323387" xlink:href="#a11yfig2-m1f4b261d92" y="310.84"></use>
+</g>
+</g>
+<g id="a11yfig2-text_4">
+<!-- 20 -->
+<g transform="translate(506.960887 325.438438) scale(0.1 -0.1)">
+<defs>
+<path d="M 1228 531 
+L 3431 531 
+L 3431 0 
+L 469 0 
+L 469 531 
+Q 828 903 1448 1529 
+Q 2069 2156 2228 2338 
+Q 2531 2678 2651 2914 
+Q 2772 3150 2772 3378 
+Q 2772 3750 2511 3984 
+Q 2250 4219 1831 4219 
+Q 1534 4219 1204 4116 
+Q 875 4013 500 3803 
+L 500 4441 
+Q 881 4594 1212 4672 
+Q 1544 4750 1819 4750 
+Q 2544 4750 2975 4387 
+Q 3406 4025 3406 3419 
+Q 3406 3131 3298 2873 
+Q 3191 2616 2906 2266 
+Q 2828 2175 2409 1742 
+Q 1991 1309 1228 531 
+z
+" id="a11yfig2-DejaVuSans-32" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig2-DejaVuSans-32"></use>
+<use transform="translate(63.623047 0)" xlink:href="#a11yfig2-DejaVuSans-30"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig2-xtick_5">
+<g id="a11yfig2-line2d_9">
+<path clip-path="url(#a11yfig2-pde70258a6e)" d="M 630.9 310.84 
+L 630.9 10.8 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-line2d_10">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="630.9" xlink:href="#a11yfig2-m1f4b261d92" y="310.84"></use>
+</g>
+</g>
+<g id="a11yfig2-text_5">
+<!-- 25 -->
+<g transform="translate(624.5375 325.438438) scale(0.1 -0.1)">
+<use xlink:href="#a11yfig2-DejaVuSans-32"></use>
+<use transform="translate(63.623047 0)" xlink:href="#a11yfig2-DejaVuSans-35"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig2-text_6">
+<!-- Time (hundreds of operating hours) -->
+<g transform="translate(250.34125 339.116563) scale(0.1 -0.1)">
+<defs>
+<path d="M -19 4666 
+L 3928 4666 
+L 3928 4134 
+L 2272 4134 
+L 2272 0 
+L 1638 0 
+L 1638 4134 
+L -19 4134 
+L -19 4666 
+z
+" id="a11yfig2-DejaVuSans-54" transform="scale(0.015625)"></path>
+<path d="M 603 3500 
+L 1178 3500 
+L 1178 0 
+L 603 0 
+L 603 3500 
+z
+M 603 4863 
+L 1178 4863 
+L 1178 4134 
+L 603 4134 
+L 603 4863 
+z
+" id="a11yfig2-DejaVuSans-69" transform="scale(0.015625)"></path>
+<path d="M 3328 2828 
+Q 3544 3216 3844 3400 
+Q 4144 3584 4550 3584 
+Q 5097 3584 5394 3201 
+Q 5691 2819 5691 2113 
+L 5691 0 
+L 5113 0 
+L 5113 2094 
+Q 5113 2597 4934 2840 
+Q 4756 3084 4391 3084 
+Q 3944 3084 3684 2787 
+Q 3425 2491 3425 1978 
+L 3425 0 
+L 2847 0 
+L 2847 2094 
+Q 2847 2600 2669 2842 
+Q 2491 3084 2119 3084 
+Q 1678 3084 1418 2786 
+Q 1159 2488 1159 1978 
+L 1159 0 
+L 581 0 
+L 581 3500 
+L 1159 3500 
+L 1159 2956 
+Q 1356 3278 1631 3431 
+Q 1906 3584 2284 3584 
+Q 2666 3584 2933 3390 
+Q 3200 3197 3328 2828 
+z
+" id="a11yfig2-DejaVuSans-6d" transform="scale(0.015625)"></path>
+<path d="M 3597 1894 
+L 3597 1613 
+L 953 1613 
+Q 991 1019 1311 708 
+Q 1631 397 2203 397 
+Q 2534 397 2845 478 
+Q 3156 559 3463 722 
+L 3463 178 
+Q 3153 47 2828 -22 
+Q 2503 -91 2169 -91 
+Q 1331 -91 842 396 
+Q 353 884 353 1716 
+Q 353 2575 817 3079 
+Q 1281 3584 2069 3584 
+Q 2775 3584 3186 3129 
+Q 3597 2675 3597 1894 
+z
+M 3022 2063 
+Q 3016 2534 2758 2815 
+Q 2500 3097 2075 3097 
+Q 1594 3097 1305 2825 
+Q 1016 2553 972 2059 
+L 3022 2063 
+z
+" id="a11yfig2-DejaVuSans-65" transform="scale(0.015625)"></path>
+<path id="a11yfig2-DejaVuSans-20" transform="scale(0.015625)"></path>
+<path d="M 1984 4856 
+Q 1566 4138 1362 3434 
+Q 1159 2731 1159 2009 
+Q 1159 1288 1364 580 
+Q 1569 -128 1984 -844 
+L 1484 -844 
+Q 1016 -109 783 600 
+Q 550 1309 550 2009 
+Q 550 2706 781 3412 
+Q 1013 4119 1484 4856 
+L 1984 4856 
+z
+" id="a11yfig2-DejaVuSans-28" transform="scale(0.015625)"></path>
+<path d="M 3513 2113 
+L 3513 0 
+L 2938 0 
+L 2938 2094 
+Q 2938 2591 2744 2837 
+Q 2550 3084 2163 3084 
+Q 1697 3084 1428 2787 
+Q 1159 2491 1159 1978 
+L 1159 0 
+L 581 0 
+L 581 4863 
+L 1159 4863 
+L 1159 2956 
+Q 1366 3272 1645 3428 
+Q 1925 3584 2291 3584 
+Q 2894 3584 3203 3211 
+Q 3513 2838 3513 2113 
+z
+" id="a11yfig2-DejaVuSans-68" transform="scale(0.015625)"></path>
+<path d="M 544 1381 
+L 544 3500 
+L 1119 3500 
+L 1119 1403 
+Q 1119 906 1312 657 
+Q 1506 409 1894 409 
+Q 2359 409 2629 706 
+Q 2900 1003 2900 1516 
+L 2900 3500 
+L 3475 3500 
+L 3475 0 
+L 2900 0 
+L 2900 538 
+Q 2691 219 2414 64 
+Q 2138 -91 1772 -91 
+Q 1169 -91 856 284 
+Q 544 659 544 1381 
+z
+M 1991 3584 
+L 1991 3584 
+z
+" id="a11yfig2-DejaVuSans-75" transform="scale(0.015625)"></path>
+<path d="M 3513 2113 
+L 3513 0 
+L 2938 0 
+L 2938 2094 
+Q 2938 2591 2744 2837 
+Q 2550 3084 2163 3084 
+Q 1697 3084 1428 2787 
+Q 1159 2491 1159 1978 
+L 1159 0 
+L 581 0 
+L 581 3500 
+L 1159 3500 
+L 1159 2956 
+Q 1366 3272 1645 3428 
+Q 1925 3584 2291 3584 
+Q 2894 3584 3203 3211 
+Q 3513 2838 3513 2113 
+z
+" id="a11yfig2-DejaVuSans-6e" transform="scale(0.015625)"></path>
+<path d="M 2906 2969 
+L 2906 4863 
+L 3481 4863 
+L 3481 0 
+L 2906 0 
+L 2906 525 
+Q 2725 213 2448 61 
+Q 2172 -91 1784 -91 
+Q 1150 -91 751 415 
+Q 353 922 353 1747 
+Q 353 2572 751 3078 
+Q 1150 3584 1784 3584 
+Q 2172 3584 2448 3432 
+Q 2725 3281 2906 2969 
+z
+M 947 1747 
+Q 947 1113 1208 752 
+Q 1469 391 1925 391 
+Q 2381 391 2643 752 
+Q 2906 1113 2906 1747 
+Q 2906 2381 2643 2742 
+Q 2381 3103 1925 3103 
+Q 1469 3103 1208 2742 
+Q 947 2381 947 1747 
+z
+" id="a11yfig2-DejaVuSans-64" transform="scale(0.015625)"></path>
+<path d="M 2631 2963 
+Q 2534 3019 2420 3045 
+Q 2306 3072 2169 3072 
+Q 1681 3072 1420 2755 
+Q 1159 2438 1159 1844 
+L 1159 0 
+L 581 0 
+L 581 3500 
+L 1159 3500 
+L 1159 2956 
+Q 1341 3275 1631 3429 
+Q 1922 3584 2338 3584 
+Q 2397 3584 2469 3576 
+Q 2541 3569 2628 3553 
+L 2631 2963 
+z
+" id="a11yfig2-DejaVuSans-72" transform="scale(0.015625)"></path>
+<path d="M 2834 3397 
+L 2834 2853 
+Q 2591 2978 2328 3040 
+Q 2066 3103 1784 3103 
+Q 1356 3103 1142 2972 
+Q 928 2841 928 2578 
+Q 928 2378 1081 2264 
+Q 1234 2150 1697 2047 
+L 1894 2003 
+Q 2506 1872 2764 1633 
+Q 3022 1394 3022 966 
+Q 3022 478 2636 193 
+Q 2250 -91 1575 -91 
+Q 1294 -91 989 -36 
+Q 684 19 347 128 
+L 347 722 
+Q 666 556 975 473 
+Q 1284 391 1588 391 
+Q 1994 391 2212 530 
+Q 2431 669 2431 922 
+Q 2431 1156 2273 1281 
+Q 2116 1406 1581 1522 
+L 1381 1569 
+Q 847 1681 609 1914 
+Q 372 2147 372 2553 
+Q 372 3047 722 3315 
+Q 1072 3584 1716 3584 
+Q 2034 3584 2315 3537 
+Q 2597 3491 2834 3397 
+z
+" id="a11yfig2-DejaVuSans-73" transform="scale(0.015625)"></path>
+<path d="M 1959 3097 
+Q 1497 3097 1228 2736 
+Q 959 2375 959 1747 
+Q 959 1119 1226 758 
+Q 1494 397 1959 397 
+Q 2419 397 2687 759 
+Q 2956 1122 2956 1747 
+Q 2956 2369 2687 2733 
+Q 2419 3097 1959 3097 
+z
+M 1959 3584 
+Q 2709 3584 3137 3096 
+Q 3566 2609 3566 1747 
+Q 3566 888 3137 398 
+Q 2709 -91 1959 -91 
+Q 1206 -91 779 398 
+Q 353 888 353 1747 
+Q 353 2609 779 3096 
+Q 1206 3584 1959 3584 
+z
+" id="a11yfig2-DejaVuSans-6f" transform="scale(0.015625)"></path>
+<path d="M 2375 4863 
+L 2375 4384 
+L 1825 4384 
+Q 1516 4384 1395 4259 
+Q 1275 4134 1275 3809 
+L 1275 3500 
+L 2222 3500 
+L 2222 3053 
+L 1275 3053 
+L 1275 0 
+L 697 0 
+L 697 3053 
+L 147 3053 
+L 147 3500 
+L 697 3500 
+L 697 3744 
+Q 697 4328 969 4595 
+Q 1241 4863 1831 4863 
+L 2375 4863 
+z
+" id="a11yfig2-DejaVuSans-66" transform="scale(0.015625)"></path>
+<path d="M 1159 525 
+L 1159 -1331 
+L 581 -1331 
+L 581 3500 
+L 1159 3500 
+L 1159 2969 
+Q 1341 3281 1617 3432 
+Q 1894 3584 2278 3584 
+Q 2916 3584 3314 3078 
+Q 3713 2572 3713 1747 
+Q 3713 922 3314 415 
+Q 2916 -91 2278 -91 
+Q 1894 -91 1617 61 
+Q 1341 213 1159 525 
+z
+M 3116 1747 
+Q 3116 2381 2855 2742 
+Q 2594 3103 2138 3103 
+Q 1681 3103 1420 2742 
+Q 1159 2381 1159 1747 
+Q 1159 1113 1420 752 
+Q 1681 391 2138 391 
+Q 2594 391 2855 752 
+Q 3116 1113 3116 1747 
+z
+" id="a11yfig2-DejaVuSans-70" transform="scale(0.015625)"></path>
+<path d="M 2194 1759 
+Q 1497 1759 1228 1600 
+Q 959 1441 959 1056 
+Q 959 750 1161 570 
+Q 1363 391 1709 391 
+Q 2188 391 2477 730 
+Q 2766 1069 2766 1631 
+L 2766 1759 
+L 2194 1759 
+z
+M 3341 1997 
+L 3341 0 
+L 2766 0 
+L 2766 531 
+Q 2569 213 2275 61 
+Q 1981 -91 1556 -91 
+Q 1019 -91 701 211 
+Q 384 513 384 1019 
+Q 384 1609 779 1909 
+Q 1175 2209 1959 2209 
+L 2766 2209 
+L 2766 2266 
+Q 2766 2663 2505 2880 
+Q 2244 3097 1772 3097 
+Q 1472 3097 1187 3025 
+Q 903 2953 641 2809 
+L 641 3341 
+Q 956 3463 1253 3523 
+Q 1550 3584 1831 3584 
+Q 2591 3584 2966 3190 
+Q 3341 2797 3341 1997 
+z
+" id="a11yfig2-DejaVuSans-61" transform="scale(0.015625)"></path>
+<path d="M 1172 4494 
+L 1172 3500 
+L 2356 3500 
+L 2356 3053 
+L 1172 3053 
+L 1172 1153 
+Q 1172 725 1289 603 
+Q 1406 481 1766 481 
+L 2356 481 
+L 2356 0 
+L 1766 0 
+Q 1100 0 847 248 
+Q 594 497 594 1153 
+L 594 3053 
+L 172 3053 
+L 172 3500 
+L 594 3500 
+L 594 4494 
+L 1172 4494 
+z
+" id="a11yfig2-DejaVuSans-74" transform="scale(0.015625)"></path>
+<path d="M 2906 1791 
+Q 2906 2416 2648 2759 
+Q 2391 3103 1925 3103 
+Q 1463 3103 1205 2759 
+Q 947 2416 947 1791 
+Q 947 1169 1205 825 
+Q 1463 481 1925 481 
+Q 2391 481 2648 825 
+Q 2906 1169 2906 1791 
+z
+M 3481 434 
+Q 3481 -459 3084 -895 
+Q 2688 -1331 1869 -1331 
+Q 1566 -1331 1297 -1286 
+Q 1028 -1241 775 -1147 
+L 775 -588 
+Q 1028 -725 1275 -790 
+Q 1522 -856 1778 -856 
+Q 2344 -856 2625 -561 
+Q 2906 -266 2906 331 
+L 2906 616 
+Q 2728 306 2450 153 
+Q 2172 0 1784 0 
+Q 1141 0 747 490 
+Q 353 981 353 1791 
+Q 353 2603 747 3093 
+Q 1141 3584 1784 3584 
+Q 2172 3584 2450 3431 
+Q 2728 3278 2906 2969 
+L 2906 3500 
+L 3481 3500 
+L 3481 434 
+z
+" id="a11yfig2-DejaVuSans-67" transform="scale(0.015625)"></path>
+<path d="M 513 4856 
+L 1013 4856 
+Q 1481 4119 1714 3412 
+Q 1947 2706 1947 2009 
+Q 1947 1309 1714 600 
+Q 1481 -109 1013 -844 
+L 513 -844 
+Q 928 -128 1133 580 
+Q 1338 1288 1338 2009 
+Q 1338 2731 1133 3434 
+Q 928 4138 513 4856 
+z
+" id="a11yfig2-DejaVuSans-29" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig2-DejaVuSans-54"></use>
+<use transform="translate(57.958984 0)" xlink:href="#a11yfig2-DejaVuSans-69"></use>
+<use transform="translate(85.742188 0)" xlink:href="#a11yfig2-DejaVuSans-6d"></use>
+<use transform="translate(183.154297 0)" xlink:href="#a11yfig2-DejaVuSans-65"></use>
+<use transform="translate(244.677734 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(276.464844 0)" xlink:href="#a11yfig2-DejaVuSans-28"></use>
+<use transform="translate(315.478516 0)" xlink:href="#a11yfig2-DejaVuSans-68"></use>
+<use transform="translate(378.857422 0)" xlink:href="#a11yfig2-DejaVuSans-75"></use>
+<use transform="translate(442.236328 0)" xlink:href="#a11yfig2-DejaVuSans-6e"></use>
+<use transform="translate(505.615234 0)" xlink:href="#a11yfig2-DejaVuSans-64"></use>
+<use transform="translate(569.091797 0)" xlink:href="#a11yfig2-DejaVuSans-72"></use>
+<use transform="translate(607.955078 0)" xlink:href="#a11yfig2-DejaVuSans-65"></use>
+<use transform="translate(669.478516 0)" xlink:href="#a11yfig2-DejaVuSans-64"></use>
+<use transform="translate(732.955078 0)" xlink:href="#a11yfig2-DejaVuSans-73"></use>
+<use transform="translate(785.054688 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(816.841797 0)" xlink:href="#a11yfig2-DejaVuSans-6f"></use>
+<use transform="translate(878.023438 0)" xlink:href="#a11yfig2-DejaVuSans-66"></use>
+<use transform="translate(913.228516 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(945.015625 0)" xlink:href="#a11yfig2-DejaVuSans-6f"></use>
+<use transform="translate(1006.197266 0)" xlink:href="#a11yfig2-DejaVuSans-70"></use>
+<use transform="translate(1069.673828 0)" xlink:href="#a11yfig2-DejaVuSans-65"></use>
+<use transform="translate(1131.197266 0)" xlink:href="#a11yfig2-DejaVuSans-72"></use>
+<use transform="translate(1172.310547 0)" xlink:href="#a11yfig2-DejaVuSans-61"></use>
+<use transform="translate(1233.589844 0)" xlink:href="#a11yfig2-DejaVuSans-74"></use>
+<use transform="translate(1272.798828 0)" xlink:href="#a11yfig2-DejaVuSans-69"></use>
+<use transform="translate(1300.582031 0)" xlink:href="#a11yfig2-DejaVuSans-6e"></use>
+<use transform="translate(1363.960938 0)" xlink:href="#a11yfig2-DejaVuSans-67"></use>
+<use transform="translate(1427.4375 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(1459.224609 0)" xlink:href="#a11yfig2-DejaVuSans-68"></use>
+<use transform="translate(1522.603516 0)" xlink:href="#a11yfig2-DejaVuSans-6f"></use>
+<use transform="translate(1583.785156 0)" xlink:href="#a11yfig2-DejaVuSans-75"></use>
+<use transform="translate(1647.164062 0)" xlink:href="#a11yfig2-DejaVuSans-72"></use>
+<use transform="translate(1688.277344 0)" xlink:href="#a11yfig2-DejaVuSans-73"></use>
+<use transform="translate(1740.376953 0)" xlink:href="#a11yfig2-DejaVuSans-29"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig2-matplotlib.axis_2">
+<g id="a11yfig2-ytick_1">
+<g id="a11yfig2-line2d_11">
+<path clip-path="url(#a11yfig2-pde70258a6e)" d="M 47.72 297.201818 
+L 630.9 297.201818 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-line2d_12">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="a11yfig2-mf70711187a" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig2-mf70711187a" y="297.201818"></use>
+</g>
+</g>
+<g id="a11yfig2-text_7">
+<!-- 0.0 -->
+<g transform="translate(24.816875 301.001037) scale(0.1 -0.1)">
+<defs>
+<path d="M 684 794 
+L 1344 794 
+L 1344 0 
+L 684 0 
+L 684 794 
+z
+" id="a11yfig2-DejaVuSans-2e" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig2-DejaVuSans-30"></use>
+<use transform="translate(63.623047 0)" xlink:href="#a11yfig2-DejaVuSans-2e"></use>
+<use transform="translate(95.410156 0)" xlink:href="#a11yfig2-DejaVuSans-30"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig2-ytick_2">
+<g id="a11yfig2-line2d_13">
+<path clip-path="url(#a11yfig2-pde70258a6e)" d="M 47.72 241.985169 
+L 630.9 241.985169 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-line2d_14">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig2-mf70711187a" y="241.985169"></use>
+</g>
+</g>
+<g id="a11yfig2-text_8">
+<!-- 0.2 -->
+<g transform="translate(24.816875 245.784387) scale(0.1 -0.1)">
+<use xlink:href="#a11yfig2-DejaVuSans-30"></use>
+<use transform="translate(63.623047 0)" xlink:href="#a11yfig2-DejaVuSans-2e"></use>
+<use transform="translate(95.410156 0)" xlink:href="#a11yfig2-DejaVuSans-32"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig2-ytick_3">
+<g id="a11yfig2-line2d_15">
+<path clip-path="url(#a11yfig2-pde70258a6e)" d="M 47.72 186.768519 
+L 630.9 186.768519 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-line2d_16">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig2-mf70711187a" y="186.768519"></use>
+</g>
+</g>
+<g id="a11yfig2-text_9">
+<!-- 0.4 -->
+<g transform="translate(24.816875 190.567738) scale(0.1 -0.1)">
+<defs>
+<path d="M 2419 4116 
+L 825 1625 
+L 2419 1625 
+L 2419 4116 
+z
+M 2253 4666 
+L 3047 4666 
+L 3047 1625 
+L 3713 1625 
+L 3713 1100 
+L 3047 1100 
+L 3047 0 
+L 2419 0 
+L 2419 1100 
+L 313 1100 
+L 313 1709 
+L 2253 4666 
+z
+" id="a11yfig2-DejaVuSans-34" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig2-DejaVuSans-30"></use>
+<use transform="translate(63.623047 0)" xlink:href="#a11yfig2-DejaVuSans-2e"></use>
+<use transform="translate(95.410156 0)" xlink:href="#a11yfig2-DejaVuSans-34"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig2-ytick_4">
+<g id="a11yfig2-line2d_17">
+<path clip-path="url(#a11yfig2-pde70258a6e)" d="M 47.72 131.551869 
+L 630.9 131.551869 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-line2d_18">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig2-mf70711187a" y="131.551869"></use>
+</g>
+</g>
+<g id="a11yfig2-text_10">
+<!-- 0.6 -->
+<g transform="translate(24.816875 135.351088) scale(0.1 -0.1)">
+<defs>
+<path d="M 2113 2584 
+Q 1688 2584 1439 2293 
+Q 1191 2003 1191 1497 
+Q 1191 994 1439 701 
+Q 1688 409 2113 409 
+Q 2538 409 2786 701 
+Q 3034 994 3034 1497 
+Q 3034 2003 2786 2293 
+Q 2538 2584 2113 2584 
+z
+M 3366 4563 
+L 3366 3988 
+Q 3128 4100 2886 4159 
+Q 2644 4219 2406 4219 
+Q 1781 4219 1451 3797 
+Q 1122 3375 1075 2522 
+Q 1259 2794 1537 2939 
+Q 1816 3084 2150 3084 
+Q 2853 3084 3261 2657 
+Q 3669 2231 3669 1497 
+Q 3669 778 3244 343 
+Q 2819 -91 2113 -91 
+Q 1303 -91 875 529 
+Q 447 1150 447 2328 
+Q 447 3434 972 4092 
+Q 1497 4750 2381 4750 
+Q 2619 4750 2861 4703 
+Q 3103 4656 3366 4563 
+z
+" id="a11yfig2-DejaVuSans-36" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig2-DejaVuSans-30"></use>
+<use transform="translate(63.623047 0)" xlink:href="#a11yfig2-DejaVuSans-2e"></use>
+<use transform="translate(95.410156 0)" xlink:href="#a11yfig2-DejaVuSans-36"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig2-ytick_5">
+<g id="a11yfig2-line2d_19">
+<path clip-path="url(#a11yfig2-pde70258a6e)" d="M 47.72 76.33522 
+L 630.9 76.33522 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-line2d_20">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig2-mf70711187a" y="76.33522"></use>
+</g>
+</g>
+<g id="a11yfig2-text_11">
+<!-- 0.8 -->
+<g transform="translate(24.816875 80.134438) scale(0.1 -0.1)">
+<defs>
+<path d="M 2034 2216 
+Q 1584 2216 1326 1975 
+Q 1069 1734 1069 1313 
+Q 1069 891 1326 650 
+Q 1584 409 2034 409 
+Q 2484 409 2743 651 
+Q 3003 894 3003 1313 
+Q 3003 1734 2745 1975 
+Q 2488 2216 2034 2216 
+z
+M 1403 2484 
+Q 997 2584 770 2862 
+Q 544 3141 544 3541 
+Q 544 4100 942 4425 
+Q 1341 4750 2034 4750 
+Q 2731 4750 3128 4425 
+Q 3525 4100 3525 3541 
+Q 3525 3141 3298 2862 
+Q 3072 2584 2669 2484 
+Q 3125 2378 3379 2068 
+Q 3634 1759 3634 1313 
+Q 3634 634 3220 271 
+Q 2806 -91 2034 -91 
+Q 1263 -91 848 271 
+Q 434 634 434 1313 
+Q 434 1759 690 2068 
+Q 947 2378 1403 2484 
+z
+M 1172 3481 
+Q 1172 3119 1398 2916 
+Q 1625 2713 2034 2713 
+Q 2441 2713 2670 2916 
+Q 2900 3119 2900 3481 
+Q 2900 3844 2670 4047 
+Q 2441 4250 2034 4250 
+Q 1625 4250 1398 4047 
+Q 1172 3844 1172 3481 
+z
+" id="a11yfig2-DejaVuSans-38" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig2-DejaVuSans-30"></use>
+<use transform="translate(63.623047 0)" xlink:href="#a11yfig2-DejaVuSans-2e"></use>
+<use transform="translate(95.410156 0)" xlink:href="#a11yfig2-DejaVuSans-38"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig2-ytick_6">
+<g id="a11yfig2-line2d_21">
+<path clip-path="url(#a11yfig2-pde70258a6e)" d="M 47.72 21.11857 
+L 630.9 21.11857 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-line2d_22">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig2-mf70711187a" y="21.11857"></use>
+</g>
+</g>
+<g id="a11yfig2-text_12">
+<!-- 1.0 -->
+<g transform="translate(24.816875 24.917789) scale(0.1 -0.1)">
+<use xlink:href="#a11yfig2-DejaVuSans-31"></use>
+<use transform="translate(63.623047 0)" xlink:href="#a11yfig2-DejaVuSans-2e"></use>
+<use transform="translate(95.410156 0)" xlink:href="#a11yfig2-DejaVuSans-30"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig2-text_13">
+<!-- h(t) — per hundred hours -->
+<g transform="translate(18.737188 224.444219) rotate(-90) scale(0.1 -0.1)">
+<defs>
+<path d="M 313 1978 
+L 6088 1978 
+L 6088 1528 
+L 313 1528 
+L 313 1978 
+z
+" id="a11yfig2-DejaVuSans-2014" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig2-DejaVuSans-68"></use>
+<use transform="translate(63.378906 0)" xlink:href="#a11yfig2-DejaVuSans-28"></use>
+<use transform="translate(102.392578 0)" xlink:href="#a11yfig2-DejaVuSans-74"></use>
+<use transform="translate(141.601562 0)" xlink:href="#a11yfig2-DejaVuSans-29"></use>
+<use transform="translate(180.615234 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(212.402344 0)" xlink:href="#a11yfig2-DejaVuSans-2014"></use>
+<use transform="translate(312.402344 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(344.189453 0)" xlink:href="#a11yfig2-DejaVuSans-70"></use>
+<use transform="translate(407.666016 0)" xlink:href="#a11yfig2-DejaVuSans-65"></use>
+<use transform="translate(469.189453 0)" xlink:href="#a11yfig2-DejaVuSans-72"></use>
+<use transform="translate(510.302734 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(542.089844 0)" xlink:href="#a11yfig2-DejaVuSans-68"></use>
+<use transform="translate(605.46875 0)" xlink:href="#a11yfig2-DejaVuSans-75"></use>
+<use transform="translate(668.847656 0)" xlink:href="#a11yfig2-DejaVuSans-6e"></use>
+<use transform="translate(732.226562 0)" xlink:href="#a11yfig2-DejaVuSans-64"></use>
+<use transform="translate(795.703125 0)" xlink:href="#a11yfig2-DejaVuSans-72"></use>
+<use transform="translate(834.566406 0)" xlink:href="#a11yfig2-DejaVuSans-65"></use>
+<use transform="translate(896.089844 0)" xlink:href="#a11yfig2-DejaVuSans-64"></use>
+<use transform="translate(959.566406 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(991.353516 0)" xlink:href="#a11yfig2-DejaVuSans-68"></use>
+<use transform="translate(1054.732422 0)" xlink:href="#a11yfig2-DejaVuSans-6f"></use>
+<use transform="translate(1115.914062 0)" xlink:href="#a11yfig2-DejaVuSans-75"></use>
+<use transform="translate(1179.292969 0)" xlink:href="#a11yfig2-DejaVuSans-72"></use>
+<use transform="translate(1220.40625 0)" xlink:href="#a11yfig2-DejaVuSans-73"></use>
+</g>
+</g>
+</g>
+<g id="a11yfig2-line2d_23">
+<path clip-path="url(#a11yfig2-pde70258a6e)" d="M 47.72 297.201818 
+L 76.976522 297.115652 
+L 86.728696 296.847957 
+L 94.530435 296.40995 
+L 102.332174 295.728681 
+L 110.133913 294.795699 
+L 117.935652 293.628935 
+L 127.687826 291.896915 
+L 139.390435 289.533171 
+L 158.894783 285.281403 
+L 178.39913 281.084324 
+L 192.052174 278.348173 
+L 205.705217 275.838326 
+L 219.358261 273.573633 
+L 233.011304 271.554298 
+L 246.664348 269.769564 
+L 260.317391 268.202864 
+L 275.92087 266.654799 
+L 291.524348 265.337337 
+L 309.078261 264.09605 
+L 326.632174 263.074835 
+L 346.136522 262.159336 
+L 367.591304 261.37538 
+L 390.996522 260.7391 
+L 418.302609 260.228452 
+L 449.509565 259.88317 
+L 484.617391 259.723964 
+L 525.576522 259.760949 
+L 576.287826 260.034907 
+L 630.9 260.511903 
+L 630.9 260.511903 
+" style="fill: none; stroke: #1f77b4; stroke-width: 2.6; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-line2d_24">
+<path clip-path="url(#a11yfig2-pde70258a6e)" d="M 47.72 297.201818 
+L 63.323478 297.118182 
+L 69.174783 296.834158 
+L 73.075652 296.444751 
+L 76.976522 295.847867 
+L 80.877391 295.020814 
+L 84.778261 293.958336 
+L 88.67913 292.670415 
+L 92.58 291.178533 
+L 98.431304 288.622627 
+L 104.282609 285.784052 
+L 114.034783 280.717078 
+L 127.687826 273.579181 
+L 135.489565 269.724671 
+L 143.291304 266.126559 
+L 151.093043 262.818206 
+L 158.894783 259.810224 
+L 166.696522 257.098442 
+L 174.498261 254.669685 
+L 182.3 252.505767 
+L 190.101739 250.586154 
+L 197.903478 248.889676 
+L 205.705217 247.395586 
+L 215.457391 245.782677 
+L 225.209565 244.419836 
+L 234.961739 243.275284 
+L 246.664348 242.150635 
+L 258.366957 241.257981 
+L 272.02 240.462493 
+L 285.673043 239.887199 
+L 301.276522 239.44998 
+L 318.830435 239.18376 
+L 338.334783 239.107368 
+L 361.74 239.246304 
+L 389.046087 239.638391 
+L 422.203478 240.339686 
+L 467.063478 241.525226 
+L 539.229565 243.689384 
+L 630.9 246.510115 
+L 630.9 246.510115 
+" style="fill: none; stroke: #ff7f0e; stroke-width: 2.6; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-line2d_25">
+<path clip-path="url(#a11yfig2-pde70258a6e)" d="M 47.72 297.096934 
+L 57.472174 296.677066 
+L 71.125217 295.840112 
+L 86.728696 294.636993 
+L 104.282609 293.039861 
+L 123.786957 291.015741 
+L 143.291304 288.766188 
+L 164.746087 286.062456 
+L 186.20087 283.14292 
+L 209.606087 279.734145 
+L 233.011304 276.110519 
+L 258.366957 271.960349 
+L 283.722609 267.59223 
+L 311.028696 262.659626 
+L 338.334783 257.503751 
+L 367.591304 251.745393 
+L 396.847826 245.757098 
+L 426.104348 239.54985 
+L 457.311304 232.698296 
+L 488.518261 225.618925 
+L 519.725217 218.320926 
+L 552.882609 210.336441 
+L 586.04 202.123308 
+L 619.197391 193.689546 
+L 630.9 190.661633 
+L 630.9 190.661633 
+" style="fill: none; stroke-dasharray: 8.51,3.68; stroke-dashoffset: 0; stroke: #2ca02c; stroke-width: 2.3"></path>
+</g>
+<g id="a11yfig2-line2d_26">
+<path clip-path="url(#a11yfig2-pde70258a6e)" d="M 47.72 296.933294 
+L 53.571304 296.346035 
+L 61.373043 295.309457 
+L 69.174783 294.057173 
+L 78.926957 292.248471 
+L 88.67913 290.211198 
+L 100.381739 287.50563 
+L 112.084348 284.548199 
+L 123.786957 281.364254 
+L 135.489565 277.97312 
+L 149.142609 273.775246 
+L 162.795652 269.335829 
+L 176.448696 264.670921 
+L 190.101739 259.793929 
+L 205.705217 253.975088 
+L 221.308696 247.908667 
+L 236.912174 241.607202 
+L 252.515652 235.081615 
+L 270.069565 227.484372 
+L 287.623478 219.627733 
+L 305.177391 211.522421 
+L 322.731304 203.178014 
+L 340.285217 194.603135 
+L 359.789565 184.814664 
+L 379.293913 174.761012 
+L 398.798261 164.451008 
+L 418.302609 153.89271 
+L 437.806957 143.093512 
+L 459.261739 130.944276 
+L 480.716522 118.520154 
+L 502.171304 105.828861 
+L 523.626087 92.877542 
+L 545.08087 79.672837 
+L 566.535652 66.220935 
+L 589.94087 51.271001 
+L 613.346087 36.040795 
+L 630.9 24.438182 
+L 630.9 24.438182 
+" style="fill: none; stroke-dasharray: 8.51,3.68; stroke-dashoffset: 0; stroke: #d62728; stroke-width: 2.3"></path>
+</g>
+<g id="a11yfig2-patch_3">
+<path d="M 47.72 310.84 
+L 47.72 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-patch_4">
+<path d="M 630.9 310.84 
+L 630.9 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-patch_5">
+<path d="M 47.72 310.84 
+L 630.9 310.84 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-patch_6">
+<path d="M 47.72 10.8 
+L 630.9 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-legend_1">
+<g id="a11yfig2-patch_7">
+<path d="M 53.32 64.17 
+L 189.71875 64.17 
+Q 191.31875 64.17 191.31875 62.57 
+L 191.31875 16.4 
+Q 191.31875 14.8 189.71875 14.8 
+L 53.32 14.8 
+Q 51.72 14.8 51.72 16.4 
+L 51.72 62.57 
+Q 51.72 64.17 53.32 64.17 
+z
+" style="fill: #ffffff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"></path>
+</g>
+<g id="a11yfig2-line2d_27">
+<path d="M 54.92 21.27875 
+L 62.92 21.27875 
+L 70.92 21.27875 
+" style="fill: none; stroke: #1f77b4; stroke-width: 2.6; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-text_14">
+<!-- Standard — Lognormal AFT -->
+<g transform="translate(77.32 24.07875) scale(0.08 -0.08)">
+<defs>
+<path d="M 3425 4513 
+L 3425 3897 
+Q 3066 4069 2747 4153 
+Q 2428 4238 2131 4238 
+Q 1616 4238 1336 4038 
+Q 1056 3838 1056 3469 
+Q 1056 3159 1242 3001 
+Q 1428 2844 1947 2747 
+L 2328 2669 
+Q 3034 2534 3370 2195 
+Q 3706 1856 3706 1288 
+Q 3706 609 3251 259 
+Q 2797 -91 1919 -91 
+Q 1588 -91 1214 -16 
+Q 841 59 441 206 
+L 441 856 
+Q 825 641 1194 531 
+Q 1563 422 1919 422 
+Q 2459 422 2753 634 
+Q 3047 847 3047 1241 
+Q 3047 1584 2836 1778 
+Q 2625 1972 2144 2069 
+L 1759 2144 
+Q 1053 2284 737 2584 
+Q 422 2884 422 3419 
+Q 422 4038 858 4394 
+Q 1294 4750 2059 4750 
+Q 2388 4750 2728 4690 
+Q 3069 4631 3425 4513 
+z
+" id="a11yfig2-DejaVuSans-53" transform="scale(0.015625)"></path>
+<path d="M 628 4666 
+L 1259 4666 
+L 1259 531 
+L 3531 531 
+L 3531 0 
+L 628 0 
+L 628 4666 
+z
+" id="a11yfig2-DejaVuSans-4c" transform="scale(0.015625)"></path>
+<path d="M 603 4863 
+L 1178 4863 
+L 1178 0 
+L 603 0 
+L 603 4863 
+z
+" id="a11yfig2-DejaVuSans-6c" transform="scale(0.015625)"></path>
+<path d="M 2188 4044 
+L 1331 1722 
+L 3047 1722 
+L 2188 4044 
+z
+M 1831 4666 
+L 2547 4666 
+L 4325 0 
+L 3669 0 
+L 3244 1197 
+L 1141 1197 
+L 716 0 
+L 50 0 
+L 1831 4666 
+z
+" id="a11yfig2-DejaVuSans-41" transform="scale(0.015625)"></path>
+<path d="M 628 4666 
+L 3309 4666 
+L 3309 4134 
+L 1259 4134 
+L 1259 2759 
+L 3109 2759 
+L 3109 2228 
+L 1259 2228 
+L 1259 0 
+L 628 0 
+L 628 4666 
+z
+" id="a11yfig2-DejaVuSans-46" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig2-DejaVuSans-53"></use>
+<use transform="translate(63.476562 0)" xlink:href="#a11yfig2-DejaVuSans-74"></use>
+<use transform="translate(102.685547 0)" xlink:href="#a11yfig2-DejaVuSans-61"></use>
+<use transform="translate(163.964844 0)" xlink:href="#a11yfig2-DejaVuSans-6e"></use>
+<use transform="translate(227.34375 0)" xlink:href="#a11yfig2-DejaVuSans-64"></use>
+<use transform="translate(290.820312 0)" xlink:href="#a11yfig2-DejaVuSans-61"></use>
+<use transform="translate(352.099609 0)" xlink:href="#a11yfig2-DejaVuSans-72"></use>
+<use transform="translate(391.462891 0)" xlink:href="#a11yfig2-DejaVuSans-64"></use>
+<use transform="translate(454.939453 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(486.726562 0)" xlink:href="#a11yfig2-DejaVuSans-2014"></use>
+<use transform="translate(586.726562 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(618.513672 0)" xlink:href="#a11yfig2-DejaVuSans-4c"></use>
+<use transform="translate(672.476562 0)" xlink:href="#a11yfig2-DejaVuSans-6f"></use>
+<use transform="translate(733.658203 0)" xlink:href="#a11yfig2-DejaVuSans-67"></use>
+<use transform="translate(797.134766 0)" xlink:href="#a11yfig2-DejaVuSans-6e"></use>
+<use transform="translate(860.513672 0)" xlink:href="#a11yfig2-DejaVuSans-6f"></use>
+<use transform="translate(921.695312 0)" xlink:href="#a11yfig2-DejaVuSans-72"></use>
+<use transform="translate(961.058594 0)" xlink:href="#a11yfig2-DejaVuSans-6d"></use>
+<use transform="translate(1058.470703 0)" xlink:href="#a11yfig2-DejaVuSans-61"></use>
+<use transform="translate(1119.75 0)" xlink:href="#a11yfig2-DejaVuSans-6c"></use>
+<use transform="translate(1147.533203 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(1179.320312 0)" xlink:href="#a11yfig2-DejaVuSans-41"></use>
+<use transform="translate(1247.728516 0)" xlink:href="#a11yfig2-DejaVuSans-46"></use>
+<use transform="translate(1303.498047 0)" xlink:href="#a11yfig2-DejaVuSans-54"></use>
+</g>
+</g>
+<g id="a11yfig2-line2d_28">
+<path d="M 54.92 33.02125 
+L 62.92 33.02125 
+L 70.92 33.02125 
+" style="fill: none; stroke: #ff7f0e; stroke-width: 2.6; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-text_15">
+<!-- High load — Lognormal AFT -->
+<g transform="translate(77.32 35.82125) scale(0.08 -0.08)">
+<defs>
+<path d="M 628 4666 
+L 1259 4666 
+L 1259 2753 
+L 3553 2753 
+L 3553 4666 
+L 4184 4666 
+L 4184 0 
+L 3553 0 
+L 3553 2222 
+L 1259 2222 
+L 1259 0 
+L 628 0 
+L 628 4666 
+z
+" id="a11yfig2-DejaVuSans-48" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig2-DejaVuSans-48"></use>
+<use transform="translate(75.195312 0)" xlink:href="#a11yfig2-DejaVuSans-69"></use>
+<use transform="translate(102.978516 0)" xlink:href="#a11yfig2-DejaVuSans-67"></use>
+<use transform="translate(166.455078 0)" xlink:href="#a11yfig2-DejaVuSans-68"></use>
+<use transform="translate(229.833984 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(261.621094 0)" xlink:href="#a11yfig2-DejaVuSans-6c"></use>
+<use transform="translate(289.404297 0)" xlink:href="#a11yfig2-DejaVuSans-6f"></use>
+<use transform="translate(350.585938 0)" xlink:href="#a11yfig2-DejaVuSans-61"></use>
+<use transform="translate(411.865234 0)" xlink:href="#a11yfig2-DejaVuSans-64"></use>
+<use transform="translate(475.341797 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(507.128906 0)" xlink:href="#a11yfig2-DejaVuSans-2014"></use>
+<use transform="translate(607.128906 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(638.916016 0)" xlink:href="#a11yfig2-DejaVuSans-4c"></use>
+<use transform="translate(692.878906 0)" xlink:href="#a11yfig2-DejaVuSans-6f"></use>
+<use transform="translate(754.060547 0)" xlink:href="#a11yfig2-DejaVuSans-67"></use>
+<use transform="translate(817.537109 0)" xlink:href="#a11yfig2-DejaVuSans-6e"></use>
+<use transform="translate(880.916016 0)" xlink:href="#a11yfig2-DejaVuSans-6f"></use>
+<use transform="translate(942.097656 0)" xlink:href="#a11yfig2-DejaVuSans-72"></use>
+<use transform="translate(981.460938 0)" xlink:href="#a11yfig2-DejaVuSans-6d"></use>
+<use transform="translate(1078.873047 0)" xlink:href="#a11yfig2-DejaVuSans-61"></use>
+<use transform="translate(1140.152344 0)" xlink:href="#a11yfig2-DejaVuSans-6c"></use>
+<use transform="translate(1167.935547 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(1199.722656 0)" xlink:href="#a11yfig2-DejaVuSans-41"></use>
+<use transform="translate(1268.130859 0)" xlink:href="#a11yfig2-DejaVuSans-46"></use>
+<use transform="translate(1323.900391 0)" xlink:href="#a11yfig2-DejaVuSans-54"></use>
+</g>
+</g>
+<g id="a11yfig2-line2d_29">
+<path d="M 54.92 44.76375 
+L 62.92 44.76375 
+L 70.92 44.76375 
+" style="fill: none; stroke-dasharray: 8.51,3.68; stroke-dashoffset: 0; stroke: #2ca02c; stroke-width: 2.3"></path>
+</g>
+<g id="a11yfig2-text_16">
+<!-- Standard — Weibull AFT -->
+<g transform="translate(77.32 47.56375) scale(0.08 -0.08)">
+<defs>
+<path d="M 213 4666 
+L 850 4666 
+L 1831 722 
+L 2809 4666 
+L 3519 4666 
+L 4500 722 
+L 5478 4666 
+L 6119 4666 
+L 4947 0 
+L 4153 0 
+L 3169 4050 
+L 2175 0 
+L 1381 0 
+L 213 4666 
+z
+" id="a11yfig2-DejaVuSans-57" transform="scale(0.015625)"></path>
+<path d="M 3116 1747 
+Q 3116 2381 2855 2742 
+Q 2594 3103 2138 3103 
+Q 1681 3103 1420 2742 
+Q 1159 2381 1159 1747 
+Q 1159 1113 1420 752 
+Q 1681 391 2138 391 
+Q 2594 391 2855 752 
+Q 3116 1113 3116 1747 
+z
+M 1159 2969 
+Q 1341 3281 1617 3432 
+Q 1894 3584 2278 3584 
+Q 2916 3584 3314 3078 
+Q 3713 2572 3713 1747 
+Q 3713 922 3314 415 
+Q 2916 -91 2278 -91 
+Q 1894 -91 1617 61 
+Q 1341 213 1159 525 
+L 1159 0 
+L 581 0 
+L 581 4863 
+L 1159 4863 
+L 1159 2969 
+z
+" id="a11yfig2-DejaVuSans-62" transform="scale(0.015625)"></path>
+</defs>
+<use xlink:href="#a11yfig2-DejaVuSans-53"></use>
+<use transform="translate(63.476562 0)" xlink:href="#a11yfig2-DejaVuSans-74"></use>
+<use transform="translate(102.685547 0)" xlink:href="#a11yfig2-DejaVuSans-61"></use>
+<use transform="translate(163.964844 0)" xlink:href="#a11yfig2-DejaVuSans-6e"></use>
+<use transform="translate(227.34375 0)" xlink:href="#a11yfig2-DejaVuSans-64"></use>
+<use transform="translate(290.820312 0)" xlink:href="#a11yfig2-DejaVuSans-61"></use>
+<use transform="translate(352.099609 0)" xlink:href="#a11yfig2-DejaVuSans-72"></use>
+<use transform="translate(391.462891 0)" xlink:href="#a11yfig2-DejaVuSans-64"></use>
+<use transform="translate(454.939453 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(486.726562 0)" xlink:href="#a11yfig2-DejaVuSans-2014"></use>
+<use transform="translate(586.726562 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(618.513672 0)" xlink:href="#a11yfig2-DejaVuSans-57"></use>
+<use transform="translate(711.515625 0)" xlink:href="#a11yfig2-DejaVuSans-65"></use>
+<use transform="translate(773.039062 0)" xlink:href="#a11yfig2-DejaVuSans-69"></use>
+<use transform="translate(800.822266 0)" xlink:href="#a11yfig2-DejaVuSans-62"></use>
+<use transform="translate(864.298828 0)" xlink:href="#a11yfig2-DejaVuSans-75"></use>
+<use transform="translate(927.677734 0)" xlink:href="#a11yfig2-DejaVuSans-6c"></use>
+<use transform="translate(955.460938 0)" xlink:href="#a11yfig2-DejaVuSans-6c"></use>
+<use transform="translate(983.244141 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(1015.03125 0)" xlink:href="#a11yfig2-DejaVuSans-41"></use>
+<use transform="translate(1083.439453 0)" xlink:href="#a11yfig2-DejaVuSans-46"></use>
+<use transform="translate(1139.208984 0)" xlink:href="#a11yfig2-DejaVuSans-54"></use>
+</g>
+</g>
+<g id="a11yfig2-line2d_30">
+<path d="M 54.92 56.50625 
+L 62.92 56.50625 
+L 70.92 56.50625 
+" style="fill: none; stroke-dasharray: 8.51,3.68; stroke-dashoffset: 0; stroke: #d62728; stroke-width: 2.3"></path>
+</g>
+<g id="a11yfig2-text_17">
+<!-- High load — Weibull AFT -->
+<g transform="translate(77.32 59.30625) scale(0.08 -0.08)">
+<use xlink:href="#a11yfig2-DejaVuSans-48"></use>
+<use transform="translate(75.195312 0)" xlink:href="#a11yfig2-DejaVuSans-69"></use>
+<use transform="translate(102.978516 0)" xlink:href="#a11yfig2-DejaVuSans-67"></use>
+<use transform="translate(166.455078 0)" xlink:href="#a11yfig2-DejaVuSans-68"></use>
+<use transform="translate(229.833984 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(261.621094 0)" xlink:href="#a11yfig2-DejaVuSans-6c"></use>
+<use transform="translate(289.404297 0)" xlink:href="#a11yfig2-DejaVuSans-6f"></use>
+<use transform="translate(350.585938 0)" xlink:href="#a11yfig2-DejaVuSans-61"></use>
+<use transform="translate(411.865234 0)" xlink:href="#a11yfig2-DejaVuSans-64"></use>
+<use transform="translate(475.341797 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(507.128906 0)" xlink:href="#a11yfig2-DejaVuSans-2014"></use>
+<use transform="translate(607.128906 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(638.916016 0)" xlink:href="#a11yfig2-DejaVuSans-57"></use>
+<use transform="translate(731.917969 0)" xlink:href="#a11yfig2-DejaVuSans-65"></use>
+<use transform="translate(793.441406 0)" xlink:href="#a11yfig2-DejaVuSans-69"></use>
+<use transform="translate(821.224609 0)" xlink:href="#a11yfig2-DejaVuSans-62"></use>
+<use transform="translate(884.701172 0)" xlink:href="#a11yfig2-DejaVuSans-75"></use>
+<use transform="translate(948.080078 0)" xlink:href="#a11yfig2-DejaVuSans-6c"></use>
+<use transform="translate(975.863281 0)" xlink:href="#a11yfig2-DejaVuSans-6c"></use>
+<use transform="translate(1003.646484 0)" xlink:href="#a11yfig2-DejaVuSans-20"></use>
+<use transform="translate(1035.433594 0)" xlink:href="#a11yfig2-DejaVuSans-41"></use>
+<use transform="translate(1103.841797 0)" xlink:href="#a11yfig2-DejaVuSans-46"></use>
+<use transform="translate(1159.611328 0)" xlink:href="#a11yfig2-DejaVuSans-54"></use>
+</g>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="a11yfig2-pde70258a6e">
+<rect height="300.04" width="583.18" x="47.72" y="10.8"></rect>
+</clippath>
+</defs>
+</svg><figcaption>Hazards condicionales predichos: Weibull conserva proporcionalidad; las razones Lognormal no tienen por qué ser constantes.</figcaption></figure>
+<p>Las curvas suaves provienen de parámetros modelados, no de estimaciones no paramétricas observadas. En investigación real se comparan con Kaplan–Meier por grupos, considerando tamaño muestral, incertidumbre y censura. Una curva paramétrica es lisa porque se definió matemáticamente como función lisa; esto no prueba que las fallas reales sigan exactamente esa forma.</p>
+</section><section id="section-19"><div class="chapter-label">MÓDULO 19 / 32</div><h2>19. Evaluar modelos sin confundir ajuste y verdad</h2><p>La validación de AFT tiene varios niveles. Primero verificamos definición del evento, origen temporal, valores positivos, empates y codificación de covariables. Segundo examinamos la adecuación de la familia: ¿las curvas ajustadas se parecen razonablemente a los patrones observados dentro del intervalo temporal sustentado por datos? Tercero estudiamos si un Time Ratio común entre cuantiles es una hipótesis plausible. Cuarto evaluamos calibración y error predictivo con métodos que respeten censura, preferentemente en una muestra separada cuando sea posible.</p>
+<p>Los ajustes sintéticos Lognormal y Weibull presentan Log-Likelihood aproximadas \(-25.4823\) y \(-25.4492\). Ambos estiman tres parámetros. Por ello sus Akaike Information Criteria, \(AIC=2p-2\ell\), son aproximadamente 56.9647 y 56.8985. La diferencia es solo 0.066; no constituye evidencia seria para declarar una familia verdadera, menos aún con doce observaciones inventadas.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th scope="col">Modelo</th>
+<th style="text-align:right" scope="col">Parámetros \(p\)</th>
+<th style="text-align:right" scope="col">Log-Likelihood máxima</th>
+<th style="text-align:right" scope="col">AIC \(=2p-2\ell\)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AFT Lognormal</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">-25.482348</td>
+<td style="text-align:right">56.964697</td>
+</tr>
+<tr>
+<td>AFT Weibull</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">-25.449226</td>
+<td style="text-align:right">56.898453</td>
+</tr>
+</tbody>
+</table></div>
+<p>AIC compara verosimilitudes penalizadas <strong>entre modelos candidatos efectivamente ajustados</strong>. No mide verdad causal, no verifica censura independiente, no garantiza la forma correcta de la cola ni mide directamente error fuera de muestra. Con datos reducidos hay que explicar sus límites. Si el mecanismo de falla cambia durante el seguimiento, ambas familias pueden ser inadecuadas. Una recomendación industrial exigiría diagnóstico, alternativas y sensibilidad de predicciones antes de fijar intervalos de reemplazo.</p>
+</section><section id="section-20"><div class="chapter-label">MÓDULO 20 / 32</div><h2>20. Censura e importancia de conocer por qué se retiró una unidad</h2><p>Right Censoring no es un valor faltante que podamos reemplazar con una media. Retirar un equipo funcionando a las 700 horas aporta la información \(T&gt;700\). Si la censura es no informativa condicional en covariables, la contribución Survival representa adecuadamente esa información. Pero si se retiran máquinas <strong>porque muestran señales de deterioro</strong>, el tiempo de censura puede depender del proceso de falla y la Likelihood simple puede producir estimaciones sesgadas.</p>
+<p>La censura administrativa suele ser más defendible que el retiro basado en condición, aunque también se deben investigar los calendarios. Si distintos grupos entraron en épocas diferentes o la carga alta recibió sistemáticamente menos seguimiento, deben revisarse las hipótesis de comparabilidad. El dato importante no es solo que \(\delta=0\), sino <strong>por qué</strong> finalizó la observación. Diseño, seguimiento y mecanismo de censura son parte del modelo científico.</p>
+<p>También existe el problema de entrada tardía y Left Truncation. Si un dispositivo entra al estudio únicamente después de superar cierta prueba inicial, la Likelihood debe condicionar en haber sobrevivido hasta ese momento. Ignorar esa selección podría sobrestimar la duración. Nuestro caso presupone que todos comienzan en un tiempo cero conceptual uniforme; no trata truncación izquierda, riesgos competitivos ni eventos de falla recurrentes. Reconocer esos límites evita transferencias impropias.</p>
+<p>Una covariable conocida solo después del tiempo cero tampoco debe incluirse automáticamente como si fuera información basal. Clasificar equipos según si “alguna vez recibieron mantenimiento” usando información futura puede crear Immortal Time Bias. Las intervenciones dependientes del tiempo necesitan diseños y modelos adicionales; esta guía analiza AFT paramétrico con covariables definidas al inicio.</p>
+</section><section id="section-21"><div class="chapter-label">MÓDULO 21 / 32</div><h2>21. Cambios de variables: unidades, grupos e interacciones</h2><p>Si carga alta está codificada 1 y estándar 0, \(e^{\beta_1}\) compara carga alta frente a estándar. Si invertimos la codificación, el nuevo coeficiente sería \(-\beta_1\), y el Time Ratio se convertiría en su recíproco. Las predicciones para condiciones físicas idénticas no cambiarían si modificamos correctamente el intercepto. Verificar los nombres de grupos es indispensable para evitar interpretar el signo en dirección contraria.</p>
+<p>Con una covariable continua cuyo coeficiente es \(\beta_T\) por grado, el cambio de cinco grados corresponde a \(e^{5\beta_T}\). Si expresamos temperatura en decenas de grados, el nuevo coeficiente por unidad será diez veces el anterior, pero la comparación física de cinco grados no cambia. Centrar temperatura transforma el significado del intercepto sin cambiar las predicciones cuando el modelo se reparametriza coherentemente.</p>
+<p>Las interacciones permiten que el Time Ratio de una covariable dependa de otra. Por ejemplo, con \(\log T=\beta_0+\beta_1 x+\beta_2 z+\beta_3 xz+\sigma\varepsilon\), el Time Ratio de \(x=1\) frente a \(x=0\) cuando \(z\) está fijo es \(e^{\beta_1+\beta_3z}\), no solamente \(e^{\beta_1}\). Estas estructuras demandan suficientes observaciones para separar los efectos y deben tener una interpretación sustantiva.</p>
+<p>AFT tampoco exige una relación lineal entre tiempo observado y covariables. La linealidad se refiere a la <strong>localización de log-tiempo</strong> en los predictores especificados. Podríamos agregar términos no lineales de temperatura o splines, pero su forma debe justificarse, estimarse con datos suficientes y explicarse con claridad. Una ecuación log-lineal es una hipótesis, no una ley física descubierta automáticamente.</p>
+</section><section id="section-22"><div class="chapter-label">MÓDULO 22 / 32</div><h2>22. Algoritmo reproducible de estimación y controles</h2><p>El objetivo computacional es maximizar una Likelihood con doce observaciones y censura. Comenzamos por cuatro elementos: duraciones \(y_i&gt;0\), indicadores \(\delta_i\), una columna de unos para intercepto y el indicador de carga. Antes de optimizar comprobamos que \(\delta_i\in\{0,1\}\), que ningún tiempo sea cero y que la codificación de grupos coincida con la tabla original. El software puede funcionar perfectamente y, sin estos controles, analizar datos mal construidos.</p>
+<p>En Lognormal utilizamos \(\beta_0,\beta_1,\rho\) y \(\sigma=e^\rho\). Por cada registro calculamos \(\mu_i=\beta_0+\beta_1x_i\), el valor \(z_i=(\log y_i-\mu_i)/\sigma\) y una contribución log-density si hubo falla o log-survival si hubo censura. Sumamos y minimizamos su negativo. Cuando \(\Phi(z)\) está cerca de uno, calcular directamente \(\log[1-\Phi(z)]\) puede perder precisión; una función estable de log-Survival Normal reduce ese problema.</p>
+<p>Para Weibull AFT aplicamos la fórmula de la sección 13 con \(\sigma=e^\rho\), \(k=e^{-\rho}\). Repetir la optimización desde diferentes valores iniciales permite comprobar estabilidad. Tras estimar parámetros calculamos nuevamente el Time Ratio y las medianas por grupo; también comprobamos que el cociente de medianas coincida con \(e^{\beta_1}\). Obtener un mensaje de convergencia de un optimizador <strong>no</strong> certifica por sí mismo el ajuste estadístico.</p>
+<blockquote>
+<p><strong>Comprobación reproducible.</strong> La tabla completa y las ecuaciones permiten recuperar los coeficientes redondeados mediante un optimizador adecuado. Reproducir requiere conocer la Likelihood exacta, los parámetros optimizados y qué significa \(\delta\), además del resultado final. Ejecutar código no sustituye explicar cada término.</p>
+</blockquote>
+</section><section id="section-23"><div class="chapter-label">MÓDULO 23 / 32</div><h2>23. Comprobaciones numéricas independientes de la Likelihood ajustada</h2><p>Una Likelihood resulta más comprensible cuando podemos reconstruir varias contribuciones sin depender del optimizador. Consideremos los parámetros Lognormal redondeados \(\beta_0=2.473683\), \(\beta_1=-0.438057\), \(\sigma=0.547939\). Para operación estándar, censurada a \(y=7\), calculamos \(z=(\log7-2.473683)/0.547939\). Como \(\log7\approx1.945910\), el numerador es \(-0.527773\) y \(z\approx-0.9632\). La CDF Normal proporciona \(\Phi(-0.9632)\approx0.1677\), de modo que Survival vale aproximadamente 0.8323 y su logaritmo alrededor de \(-0.1835\). Es una contribución de probabilidad de supervivencia, no una Density de falla.</p>
+<p>Para carga alta con falla a \(y=3\), primero obtenemos \(\mu_1=2.473683-0.438057=2.035626\). Después \(z=(\log3-2.035626)/0.547939\approx-1.710\). La log-density de evento es \(-\log3-\log0.547939-\frac12\log(2\pi)-\frac12z^2\). Sustituimos cada término y podemos comprobar el resultado evaluando directamente la PDF Lognormal. A diferencia de la censura, aquí aparecen el Jacobiano \(-\log y\) y el término cuadrático de la Normal.</p>
+<p>Una Density puede superar uno si elegimos una unidad temporal suficientemente pequeña, porque no es una probabilidad, sino una función con unidades inversas de tiempo. Por ello la log-density individual no debe interpretarse como logaritmo de probabilidad de un punto exacto. En cambio, toda contribución censurada \(\log S\) es no positiva. Esta distinción ayuda a detectar implementaciones que utilizan erróneamente PDF en lugar de Survival. Comprobar dos registros de tipos distintos resulta más ilustrativo que aceptar únicamente el valor final de la Log-Likelihood.</p>
+</section><section id="section-24"><div class="chapter-label">MÓDULO 24 / 32</div><h2>24. ¿Qué evidencia cuestionaría un Time Ratio común?</h2><p>AFT supone proporcionalidad entre tiempos de percentiles correspondientes. Imaginemos un estudio real que estimó los percentiles 25, 50 y 75 del grupo estándar en 500, 900 y 1,500 horas, mientras los correspondientes del grupo con carga alta fueron 400, 630 y 750 horas. Las razones serían \(400/500=0.80\), \(630/900=0.70\) y \(750/1500=0.50\). Su disminución con el percentil sugiere que un multiplicador temporal único podría describir deficientemente el patrón.</p>
+<p>La comparación es un <strong>experimento conceptual diagnóstico</strong>, no otro dataset empírico, y no reemplaza estimaciones de cuantiles que consideren censura. Algunos percentiles pueden ni siquiera estar identificados si el seguimiento termina antes de que Kaplan–Meier llegue al nivel requerido. Por ejemplo, si la curva no cruza 0.50, su mediana no paramétrica puede ser inestimable sin supuestos adicionales. Un modelo paramétrico podría igualmente ofrecer una mediana por extrapolación, pero entonces el número depende fuertemente de la familia adoptada.</p>
+<p>Gráficos de cuantiles condicionales comparados, análisis de residuales y diagnósticos de escala pueden revelar falta de proporcionalidad temporal. También importa la familia: Weibull de forma compartida y Lognormal de escala compartida producen colas y hazards distintos aunque ambos obedezcan AFT. Las diferencias aparentes deben interpretarse considerando intervalos de incertidumbre y el número de unidades aún bajo riesgo, especialmente al final del seguimiento.</p>
+<p>Un reporte responsable indica el intervalo temporal efectivamente evaluado, los tamaños del conjunto en riesgo y la censura acumulada. No declara violado un supuesto únicamente porque un percentil tardío ruidoso difiera. Tampoco un test no significativo demuestra que el Time Ratio sea exactamente común. Los diagnósticos proporcionan evidencia relativa a las observaciones disponibles, no verdades absolutas.</p>
+</section><section id="section-25"><div class="chapter-label">MÓDULO 25 / 32</div><h2>25. Por qué cambiar la unidad temporal no cambia el Time Ratio</h2><p>Un mismo tiempo puede registrarse en horas \(T_h\) o centenas de horas \(T_c=T_h/100\). Aplicamos logaritmos: \(\log T_h=\log T_c+\log100\). Por lo tanto, una regresión Lognormal AFT expresada en horas conserva las pendientes de covariables y la escala de error del ajuste en centenas, pero su intercepto cambia en \(\log100\approx4.60517\). Esto ocurre porque multiplicar todos los tiempos por una constante positiva equivale a sumar una constante en la escala logarítmica.</p>
+<p>Por ejemplo, la mediana estándar Lognormal estimada es 11.8661 centenas, equivalente a 1,186.61 horas. El intercepto \(2.473683\) pasa a \(2.473683+4.605170\approx7.078853\). Al exponenciar obtenemos aproximadamente 1,186.61 horas. La pendiente de carga permanece \(-0.438057\), con Time Ratio \(e^{-0.438057}\approx0.645289\). Si cambiara el Time Ratio al convertir unidades, existiría un error de implementación, codificación o interpretación.</p>
+<p>La propiedad se mantiene para Weibull AFT: multiplicar tiempos por 100 multiplica la escala \(\eta\) por 100, aumenta el intercepto en \(\log100\), y deja invariantes la forma \(k\) y las razones temporales. En cambio, los hazards poseen unidades inversas del tiempo y deben convertirse: una tasa por centena de horas es cien veces una tasa por hora del mismo proceso. Las probabilidades Survival en el mismo instante físico no cambian.</p>
+<p>Este control de invariancia es sencillo y valioso. Si una pendiente ajustada cambia al expresar las mismas duraciones en horas, algo es inconsistente. Los valores numéricos de Density pueden cambiar por su unidad de medida sin que cambien las probabilidades acumuladas. No confundamos reescalamiento de densidades y tasas con cambios científicos reales en el proceso de falla.</p>
+</section><section id="section-26"><div class="chapter-label">MÓDULO 26 / 32</div><h2>26. Predicción condicional frente a marginal: ¿qué población se compara?</h2><p>Con varias covariables, un Time Ratio se interpreta condicionando en las demás variables del modelo AFT. Supongamos que el grupo con carga alta utiliza equipos más antiguos. Una diferencia bruta de duración mezclaría la asociación con carga y la asociación con antigüedad. Ajustar una regresión puede separar estadísticamente ambas variables si existen datos suficientes y apoyo en sus combinaciones, pero no elimina automáticamente confusión no medida ni establece causalidad.</p>
+<p>Para comparar una población de manera estandarizada, podemos predecir la supervivencia de cada individuo bajo dos perfiles y promediar las probabilidades predichas sobre una distribución objetivo de covariables. Ese es un estimando marginal, que no necesariamente conserva la interpretación simple de un único Time Ratio condicional después de promediar de forma no lineal. Además, el promedio de medianas predichas no equivale en general a la mediana de una distribución de supervivencia promedio: calcular cuantiles y promediar son operaciones que no conmutan.</p>
+<p>Una recomendación de mantenimiento debe explicar si pretende comparar una máquina representativa, resumir una flota o establecer un umbral preventivo para un subgrupo. También debe especificar el costo de decisiones incorrectas: reemplazar al percentil 10 puede reducir riesgo pero elevar costos; utilizar la mediana permite que muchas unidades fallen antes del cambio. La regresión AFT cuantifica escenarios, pero no determina por sí sola qué riesgo resulta aceptable.</p>
+<p>Los intervalos de predicción para el tiempo de <strong>una unidad futura</strong> son diferentes de los intervalos de confianza para la mediana poblacional o para un coeficiente. Los primeros incorporan variabilidad entre unidades además de incertidumbre paramétrica, y suelen ser conceptualmente más amplios. Confundirlos lleva a promesas injustificadas de duración garantizada.</p>
+</section><section id="section-27"><div class="chapter-label">MÓDULO 27 / 32</div><h2>27. Lista final de diagnóstico antes de aplicar AFT</h2><p>La evaluación sustantiva pregunta primero si un ingeniero, clínico o analista podría reproducir la definición del evento y el origen temporal. Después revisa si existen tiempos imposibles, unidades mezcladas, entradas tardías o duplicados. En tercer lugar, verifica que se conserven censuras y que la independencia entre censura y falla sea defendible condicional en los predictores incluidos. Finalmente, examina si la distribución elegida tiene sentido científico durante el intervalo realmente observado.</p>
+<p>Luego debemos comprobar que cada predictor estaba disponible antes del tiempo cero o en ese instante. Si una variable se define con información futura del seguimiento, tratarla como basal puede introducir Data Leakage e Immortal Time Bias. Revisamos el rango de covariables y el apoyo de sus combinaciones: predecir a niveles de carga jamás observados es extrapolación. Verificamos codificación del grupo de referencia, porque invertir 0 y 1 cambia el signo del coeficiente y produce el Time Ratio recíproco. También auditamos estabilidad numérica, Likelihood e incertidumbre.</p>
+<p>Por último, interpretamos en lugar de copiar resultados de software. Presentamos Time Ratio con dirección de comparación, familia, unidades y Confidence Interval cuando se estimó. Mostramos una curva Survival y un cuantil temporal interpretable. Al comparar AFT con PH, aclaramos que HR y TR responden preguntas distintas; usamos la identidad Weibull solo bajo forma compartida y una parametrización explícita y coherente.</p>
+<p>Esta lista no reemplaza la recopilación de datos ni la validación científica. Busca evitar la situación común en que una regresión ejecutada correctamente se divulga como predicción física exacta. Un conjunto de datos construido didácticamente demuestra operaciones; las decisiones de mantenimiento reales exigen observaciones representativas, motivos de censura registrados, diagnósticos y evaluación independiente de desempeño.</p>
+</section><section id="section-28"><div class="chapter-label">MÓDULO 28 / 32</div><h2>28. Siete ejercicios independientes</h2><p>Resuelve cada problema antes de mirar las soluciones. Usa logaritmos naturales, tiempos positivos y la convención explícita de Time Ratio. Todos los valores siguientes son ilustrativos. Presenta operaciones intermedias y unidades, e interpreta el resultado en palabras.</p>
+<p><strong>Ejercicio 1 — interpretar Time Ratio.</strong> Una pendiente AFT para variable binaria es \(\beta=-0.25\). Calcula Time Ratio, variación porcentual de los cuantiles y mediana del grupo expuesto si la mediana de referencia es 900 horas. Explica por qué no se trata de una comparación de probabilidades.</p>
+<p><strong>Ejercicio 2 — invertir una comparación.</strong> El Time Ratio A/B es 0.80. ¿Cuál es el Time Ratio B/A? ¿“A es 20% más corto” significa “B es 20% más largo”? Calcula el porcentaje correcto utilizando la nueva referencia.</p>
+<p><strong>Ejercicio 3 — cuantiles Lognormal.</strong> Sean \(\mu(0)=\log10\), \(\sigma=0.4\) y \(\beta_1=-0.3\). Encuentra las medianas estándar y expuesta, y el percentil 90 estándar con \(z_{0.90}=1.28155\). Convierte 10 centenas de horas a horas.</p>
+<p><strong>Ejercicio 4 — construir una Likelihood censurada.</strong> Cuatro registros Exponential independientes, repartidos en dos grupos, son \((y,\delta,x)=(2,1,0),(5,0,0),(3,1,1),(6,0,1)\). Escribe cada contribución usando tasas \(\lambda_0,\lambda_1\), combínalas y justifica por qué los censurados no aportan un factor inicial de tasa.</p>
+<p><strong>Ejercicio 5 — equivalencia Weibull y PH.</strong> En un modelo Weibull AFT, Time Ratio vale 0.75 y la forma \(k=2\). Obtén el Hazard Ratio compatible. Explica por qué invertir simplemente el Time Ratio sería incorrecto.</p>
+<p><strong>Ejercicio 6 — transformar un intervalo.</strong> Una pendiente estimada es \(-0.30\) con error estándar \(0.10\). Calcula el intervalo Wald aproximado de 95% en log-tiempo, transforma los extremos al Time Ratio y comenta si contiene el valor de ausencia de diferencia, igual a 1.</p>
+<p><strong>Ejercicio 7 — crítica aplicada.</strong> Una analista afirma: “Ajustamos OLS al logaritmo de doce tiempos observados, incluyendo cuatro censurados como si fueran fallas. El coeficiente demuestra que carga alta causó una reducción de vida útil del 35%. Nuestro modelo garantiza confiabilidad a las 20,000 horas”. Identifica al menos cinco problemas y propone una estrategia defendible.</p>
+</section><section id="section-29"><div class="chapter-label">MÓDULO 29 / 32</div><h2>29. Soluciones desarrolladas I: Time Ratios y predicciones Lognormal</h2><p><strong>Solución 1.</strong> Exponenciamos la pendiente: \(e^{-0.25}\approx0.778801\). Los cuantiles comparables del grupo expuesto equivalen aproximadamente al 77.88% de los de referencia, es decir, son \(100(0.778801-1)\approx-22.12\%\) más cortos. Multiplicamos la mediana: \(900(0.778801)\approx700.92\) horas. Comprobación: \(700.92/900\approx0.7788\). El resultado compara tiempos al mismo percentil; no dice la probabilidad de fallar antes de 900 horas, que requiere conocer la distribución de supervivencia.</p>
+<p><strong>Solución 2.</strong> Si A/B = 0.80, entonces B/A = \(1/0.80=1.25\). A es \((0.80-1)100=-20\%\) más corto respecto de B. B es \((1.25-1)100=+25\%\) más largo respecto de A. Los porcentajes no son idénticos porque las referencias de división cambian. La identificación del denominador es obligatoria cuando se comunica un Time Ratio.</p>
+<p><strong>Solución 3, medianas.</strong> La mediana Lognormal es \(e^\mu\), de modo que \(e^{\log10}=10\) centenas = 1,000 horas para el grupo estándar. Para exposición obtenemos \(e^{\log10-0.3}=10e^{-0.3}\approx7.40818\) centenas = 740.818 horas. Verificación: \(7.40818/10=e^{-0.3}\approx0.740818\). Interpretamos una disminución modelada de aproximadamente 25.9% de la duración mediana, bajo la familia AFT especificada.</p>
+<p><strong>Solución 3, percentil superior.</strong> El percentil 90 estándar es \(10\exp(0.4\times1.28155)=10e^{0.51262}\approx16.697\) centenas, unas 1,669.7 horas. Comprobación: \([\log(16.697)-\log10]/0.4\approx1.28155\), cuya CDF Normal es aproximadamente 0.90. Así, según el modelo, 90% de fallas ocurre antes del tiempo calculado; solo aproximadamente 10% de unidades continuaría operando después. El resultado depende del supuesto sobre la dispersión Lognormal.</p>
+<p>Estas soluciones contienen dos controles independientes: operar primero en log-tiempo cuando lo exige el modelo y volver mediante exponenciación a tiempos positivos; después, comprobar el Time Ratio dividiendo cuantiles estimados. Saltarse uno de esos pasos aumenta el riesgo de errores en signo, unidades o interpretación.</p>
+</section><section id="section-30"><div class="chapter-label">MÓDULO 30 / 32</div><h2>30. Soluciones desarrolladas II: censura, Weibull e incertidumbre</h2><p><strong>Solución 4.</strong> En Exponential por grupos, una falla a \(y\) aporta \(\lambda_xe^{-\lambda_xy}\) y un censurado aporta \(e^{-\lambda_xy}\). Los cuatro términos son \(\lambda_0e^{-2\lambda_0}\), \(e^{-5\lambda_0}\), \(\lambda_1e^{-3\lambda_1}\) y \(e^{-6\lambda_1}\). Su producto es \(L(\lambda_0,\lambda_1)=\lambda_0\lambda_1 e^{-7\lambda_0-9\lambda_1}\). La exposición estándar suma 2+5=7 y la de carga alta suma 3+6=9; existe una falla por grupo. Los factores iniciales \(\lambda\) cuentan eventos, no todos los registros. La censura contribuye supervivencia y exposición, pero no una falla ficticia.</p>
+<p><strong>Solución 5.</strong> Con \(k=2\) y Time Ratio 0.75, usamos \(\mathrm{HR}=\mathrm{TR}^{-k}=0.75^{-2}=1/0.5625=1.777778\). Si calculáramos \(1/0.75=1.3333\), estaríamos imponiendo silenciosamente \(k=1\), propio del caso Exponential. El HR cercano a 1.78 es constante solo bajo la equivalencia AFT–PH Weibull de forma común. No extiendas esa conclusión a Lognormal.</p>
+<p><strong>Solución 6.</strong> El margen Wald del 95% es \(1.96(0.10)=0.196\) en escala log-tiempo. El intervalo de pendiente es \([-0.30-0.196,-0.30+0.196]=[-0.496,-0.104]\). Al exponenciar: \([e^{-0.496},e^{-0.104}]\approx[0.609,0.901]\). No incluye 1 porque ambos extremos son menores. Se trata de un intervalo aproximado para un parámetro condicional, no de una probabilidad de falla individual.</p>
+<p><strong>Solución 6, verificación.</strong> La estimación puntual es \(e^{-0.30}\approx0.7408\), dentro del intervalo. Los extremos no están equidistantes de 0.7408 porque la transformación exponencial es no lineal. Si el dataset fuera pequeño o hubiera censura extensa, deberíamos explorar métodos de incertidumbre más sólidos antes de confiar en la aproximación Normal.</p>
+</section><section id="section-31"><div class="chapter-label">MÓDULO 31 / 32</div><h2>31. Solución desarrollada III: crítica aplicada y transferencia</h2><p><strong>Error uno: tiempo censurado no equivale a tiempo de falla.</strong> OLS sobre \(\log Y\) considera las censuras como tiempos completos aunque el verdadero \(T\) siga siendo desconocido. Esto altera la variable respuesta y puede sesgar el ajuste. <strong>Corrección:</strong> utilizar una Likelihood con Density para fallas y Survival para censurados, siempre que la hipótesis de censura sea defendible.</p>
+<p><strong>Error dos: analizar solo fallas tampoco corrige el problema.</strong> Excluir módulos censurados elimina información y selecciona equipos que fallaron antes del retiro. <strong>Corrección:</strong> conservar las observaciones elegibles y documentar motivos de censura. <strong>Error tres: asociación no equivale a causalidad.</strong> Puede haber diferencias de antigüedad, temperatura, operadores, mantenimiento o selección entre grupos. <strong>Corrección:</strong> reportar asociaciones condicionales y utilizar un diseño adecuado si se pretende atribuir causalidad.</p>
+<p><strong>Error cuatro: el porcentaje puede interpretarse erróneamente.</strong> Un Time Ratio cercano a 0.65 indica cuantiles temporales modelados aproximadamente 35% menores, no una reducción de 35 puntos en Survival ni un HR instantáneo. <strong>Corrección:</strong> declarar perfil de referencia, distribución, unidades y significado del percentil. <strong>Error cinco: no se evaluó la familia de distribución.</strong> Lognormal o Weibull necesitan comprobaciones de ajuste y sensibilidad a otras familias. <strong>Corrección:</strong> contrastar curvas con los eventos/censuras observados y cuantificar incertidumbre de parámetros y predicciones.</p>
+<p><strong>Error seis: extrapolar no garantiza resultados.</strong> Nuestro ejemplo alcanza eventos solo hasta 1,800 horas; garantizar rendimiento a 20,000 exige extrapolación masiva. Distintas familias podrían predecir colas muy distintas aunque ajusten parecido el seguimiento disponible. <strong>Corrección:</strong> reconocer extrapolación, presentar alternativas y buscar mayor seguimiento. <strong>Error siete: origen temporal o selección pueden invalidar la comparación.</strong> Los grupos necesitan definiciones coherentes de entrada, evento y observación; también deben examinarse retiro informativo y entrada tardía.</p>
+<p>Una ruta rigurosa comienza con datos completos y un estimando explícito: asociación del Time Ratio entre condiciones predefinidas. Después documenta el mecanismo de observación, ajusta una familia AFT razonable con censura incorporada, verifica medianas, compara modelos sin conclusiones excesivas e informa incertidumbre y límites. Este razonamiento puede transferirse a retención de clientes, duración clínica o mantenimiento solo si se redefinen cuidadosamente el evento, el reloj y el proceso de censura.</p>
+</section><section id="section-32"><div class="chapter-label">MÓDULO 32 / 32</div><h2>32. Síntesis: lo que debes poder explicar por tus propios medios</h2><p>La regresión AFT modela el <strong>escalamiento del tiempo hasta un evento</strong>. Utiliza una ecuación en log-tiempo y una distribución explícita del error para transformar diferencias lineales de predictores en Time Ratios sin unidades. Bajo escala común, cada cuantil temporal de un perfil se multiplica por el mismo factor respecto de otro perfil. Esta propiedad pertenece al modelo; no garantiza que las observaciones respalden el supuesto en cualquier población o condición.</p>
+<p>La versión Lognormal usa error Normal para log-tiempo y define \(S(t\mid x)=1-\Phi((\log t-\mu(x))/\sigma)\). La versión Weibull usa el error declarado de mínimos extremos y produce \(S(t\mid x)=\exp[-(t/e^{\mu(x)})^k]\), con \(k=1/\sigma\). Ambas estiman sus parámetros a partir de fallas y censuras. Ninguna debe ajustarse mediante OLS ignorando qué observaciones quedaron incompletas.</p>
+<p>Conserva la frontera conceptual: <strong>Time Ratio y Hazard Ratio comparan magnitudes diferentes</strong>. Solo bajo nuestra parametrización especial Weibull de forma compartida podemos escribir \(\mathrm{HR}=\mathrm{TR}^{-k}\). Para Lognormal AFT generalmente no existe un Hazard Ratio constante; no aplicamos recíprocos ni potencias sin derivación válida. Comunicar resultados exige unidades, perfiles de referencia, supuestos, incertidumbre y límites.</p>
+<p>Antes de considerar aprendido el tema, intenta derivar \(S(t\mid x)=S_0(t/a)\) desde \(T_x=aT_0\); reconstruir una contribución censurada sin inventar un evento; hallar la razón de medianas desde \(\beta\); y explicar por qué 1,800 horas de seguimiento no verifican predicciones a 20,000 horas. Si un paso falla, vuelve a su ejemplo y recalcúlalo sin mirar la respuesta. Este autoexamen sirve para estudiar, <strong>no</strong> constituye una prueba realizada con estudiantes ni una certificación de confiabilidad industrial.</p>
+</section></article><aside class="toc"><h2>Índice</h2><a href="#section-1">01 · La pregunta cambia: de una distribución a una regresión</a><a href="#section-2">02 · El reloj, el evento y la covariable deben definirse primero</a><a href="#section-3">03 · AFT como una transformación de la escala temporal</a><a href="#section-4">04 · Ecuación log-lineal, símbolos y dominios</a><a href="#section-5">05 · Interpretar un coeficiente sin confundir porcentajes</a><a href="#section-6">06 · Transformación de Survival, Density y Hazard</a><a href="#section-7">07 · Por qué OLS sobre tiempos observados no es una solución válida</a><a href="#section-8">08 · AFT Lognormal: derivación, no memorización</a><a href="#section-9">09 · Cuantiles Lognormal y significado temporal completo</a><a href="#section-10">10 · Construir la Likelihood Lognormal registro por registro</a><a href="#section-11">11 · Ajustar los doce registros: AFT Lognormal</a><a href="#section-12">12 · AFT Weibull: declarar la parametrización de valores extremos</a><a href="#section-13">13 · Likelihood censurada Weibull y ajuste al ejemplo</a><a href="#section-14">14 · AFT frente a Cox PH: dos preguntas y dos razones distintas</a><a href="#section-15">15 · Equivalencia especial Weibull AFT–PH: derivación completa</a><a href="#section-16">16 · Confidence Intervals: transformar también la incertidumbre</a><a href="#section-17">17 · Predicciones por perfil: percentiles, Survival y unidades</a><a href="#section-18">18 · Leer curvas Survival como desplazamiento horizontal</a><a href="#section-19">19 · Evaluar modelos sin confundir ajuste y verdad</a><a href="#section-20">20 · Censura e importancia de conocer por qué se retiró una unidad</a><a href="#section-21">21 · Cambios de variables: unidades, grupos e interacciones</a><a href="#section-22">22 · Algoritmo reproducible de estimación y controles</a><a href="#section-23">23 · Comprobaciones numéricas independientes de la Likelihood ajustada</a><a href="#section-24">24 · ¿Qué evidencia cuestionaría un Time Ratio común?</a><a href="#section-25">25 · Por qué cambiar la unidad temporal no cambia el Time Ratio</a><a href="#section-26">26 · Predicción condicional frente a marginal: ¿qué población se compara?</a><a href="#section-27">27 · Lista final de diagnóstico antes de aplicar AFT</a><a href="#section-28">28 · Siete ejercicios independientes</a><a href="#section-29">29 · Soluciones desarrolladas I: Time Ratios y predicciones Lognormal</a><a href="#section-30">30 · Soluciones desarrolladas II: censura, Weibull e incertidumbre</a><a href="#section-31">31 · Solución desarrollada III: crítica aplicada y transferencia</a><a href="#section-32">32 · Síntesis: lo que debes poder explicar por tus propios medios</a></aside></div></main><footer class="foot"><div class="container"><p>© Alfredo Saldana · Statistics &amp; Probability · Guide 79. Pending author review.</p></div></footer><script>const btn=document.getElementById('menu-btn'),nav=document.getElementById('global-nav');btn.addEventListener('click',()=>{const open=nav.classList.toggle('open');btn.setAttribute('aria-expanded',String(open));btn.setAttribute('aria-label',open?'Cerrar menú':'Abrir menú');});</script></body></html>

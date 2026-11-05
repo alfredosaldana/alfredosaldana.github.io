@@ -1,0 +1,3787 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Bilingual worked guide to heteroscedasticity, OLS covariance, HC3, WLS and sensitivity analysis."><title>Heteroscedasticity, Robust Standard Errors y Sensitivity Analysis | Alfredo Saldana</title><link rel="stylesheet" href="/assets/css/style.css"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet"><style>
+:root{--guide-blue:#2563eb;--guide-ink:#162b40;--guide-mute:#51657a;--guide-line:#dbe5ed}
+html{scroll-behavior:smooth}body.study55{margin:0;background:#f6f9fd;color:#24374b;font-family:Inter,system-ui,Arial,sans-serif;font-size:16px;line-height:1.77;overflow-x:hidden}
+.study55 *,.study55 *:before,.study55 *:after{box-sizing:border-box}
+.study55 a{color:#245fc5}.study55 a:focus-visible,.study55 button:focus-visible,.study55 [tabindex]:focus-visible{outline:3px solid #e29c11;outline-offset:3px}
+.study55 .container{max-width:1180px;width:calc(100% - 34px);margin:0 auto}
+.study55 .site-header{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--guide-line);box-shadow:0 2px 9px #152e4410}
+.study55 .nav-wrap{min-height:74px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.study55 .identity{display:flex;align-items:center;gap:15px;flex-wrap:wrap}
+.study55 .brand{font-size:1.06rem;font-weight:800;color:#102033;text-decoration:none;white-space:nowrap}
+.study55 .lang-switch{display:flex;align-items:center;gap:9px;white-space:nowrap}
+.study55 .site-header .lang-switch a[lang]{color:#111827;text-decoration:none;font-weight:750}
+.study55 .site-header .lang-switch a[lang][aria-current=page]{color:#2563eb!important;font-weight:850}
+.study55 .nav{display:flex;align-items:center;gap:17px}
+.study55 .nav a{font-size:.86rem;text-decoration:none;color:#415269}
+.study55 .nav a:hover,.study55 .toc a:hover{color:var(--guide-blue)}
+.study55 .menu-btn{display:none;background:#eaf2fb;border:1px solid #dae6f4;border-radius:8px;color:#203e58;font-size:1.25rem;cursor:pointer;padding:5px 12px}
+.study55 .hero{background:#fff;border-bottom:1px solid #e2eaf2;padding:51px 0 47px;color:#19334e}
+.study55 .hero .eyebrow{color:#2563eb;text-transform:uppercase;font-size:.78rem;font-weight:850;letter-spacing:.12em}
+.study55 .hero h1{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(2.1rem,4.4vw,3.65rem);line-height:1.14;color:#172e45;margin:13px 0 15px;max-width:980px}
+.study55 .hero p{max-width:930px;font-size:1.075rem;line-height:1.75;color:#51647a;margin:0}
+.study55 .hero-tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:21px}
+.study55 .hero-tags span{font-size:.78rem;color:#375e89;background:#eef5fd;border:1px solid #d8e5f5;border-radius:99px;padding:4px 11px}
+.study55 .shell{display:grid;grid-template-columns:235px minmax(0,1fr);gap:24px;align-items:start;padding:31px 0 60px}
+.study55 .toc{position:sticky;top:95px;max-height:calc(100vh - 110px);overflow-y:auto;background:#fff;border:1px solid var(--guide-line);border-radius:16px;padding:17px}
+.study55 .toc strong{display:block;margin:0 0 10px;color:#163652}
+.study55 .toc a{display:block;padding:4px 0;line-height:1.45;font-size:.78rem;color:#52677b;text-decoration:none}
+.study55 .article{min-width:0}
+.study55 .chapter{background:#fff;border:1px solid var(--guide-line);border-radius:18px;box-shadow:0 4px 17px #0d24410a;padding:clamp(18px,3vw,39px);margin-bottom:21px;scroll-margin-top:95px}
+.study55 .chapter h2{font-family:'Source Serif 4',Georgia,serif;color:#1b3b56;font-size:clamp(1.5rem,2.5vw,2.0rem);line-height:1.26;margin:0 0 20px}
+.study55 .chapter p{margin:12px 0 19px;overflow-wrap:anywhere}.study55 .math-inline{display:inline-block;max-width:100%;overflow-x:auto;vertical-align:middle;white-space:nowrap}
+.study55 .chapter p:last-child{margin-bottom:0}
+.study55 .chapter strong{color:#183e61}
+.study55 .math-panel{border-left:4px solid #2563eb;background:#edf5fe;border-radius:0 13px 13px 0;margin:24px 0;padding:18px 18px 17px;max-width:100%;min-width:0;}
+.study55 .math-panel .formula-title{font-size:.76rem;color:#466687;font-weight:850;text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px}
+.study55 .math-inner{overflow-x:auto;max-width:100%;min-width:0;text-align:center;overscroll-behavior-x:contain;padding:3px 0 8px;}
+.study55 .math-inner .math-source{font-family:'Source Serif 4',Georgia,serif;color:#204b80}
+.study55 mjx-container[display=true]{margin:0.48em 0!important;max-width:100%}
+.study55 .table-scroll{overflow-x:auto;max-width:100%;border:1px solid #d7e4ef;border-radius:12px;margin:18px 0}
+.study55 table{width:100%;min-width:495px;border-collapse:collapse;font-size:.91rem}
+.study55 thead{background:#eaf2fb}.study55 th,.study55 td{border-bottom:1px solid #e6edf4;padding:9px 12px;text-align:left;vertical-align:top}
+.study55 tr:last-child td{border-bottom:0}.study55 tbody tr:nth-child(2n){background:#f9fbfd}
+.study55 .chapter blockquote{background:#f1f6fd;border-left:3px solid #8aaedf;margin:14px 0;padding:14px 20px;color:#34516c}
+.study55 .chart{border:1px solid #d8e5ef;border-radius:14px;padding:15px;margin:22px 0;background:#fbfdff;overflow-x:auto}
+.study55 .chart svg{max-width:100%;height:auto;display:block;margin:auto}
+.study55 .chart figcaption{font-size:.85rem;color:#576e84;margin-top:9px;line-height:1.55}
+.study55 .chapter ul,.study55 .chapter ol{padding-left:26px}
+.study55 footer{border-top:1px solid #dce5ee;background:#fff;padding:20px 0 30px;color:#586b7e;font-size:.88rem}
+.study55 .skip-link{position:absolute;left:-10000px;top:6px;background:#fff;padding:8px;z-index:200}.study55 .skip-link:focus{left:12px}
+@media(max-width:940px){.study55 .shell{grid-template-columns:1fr}.study55 .toc{position:static;max-height:none}.study55 .toc a{display:inline-block;margin-right:13px}.study55 .nav{display:none;position:absolute;right:16px;top:70px;background:white;border:1px solid #dbe5ed;border-radius:12px;box-shadow:0 15px 35px #0e284533;padding:16px;flex-direction:column;align-items:flex-start;min-width:180px}.study55 .nav.open{display:flex}.study55 .menu-btn{display:inline-flex}.study55 .hero{padding:39px 0}}
+@media(max-width:390px){.study55 .container{width:calc(100% - 24px)}.study55 .brand{font-size:.98rem}.study55 .identity{gap:8px}.study55 .lang-switch{gap:6px}.study55 .nav-wrap{gap:5px}.study55 .chapter{padding:18px 15px}.study55 .math-panel{padding:13px 10px}}
+
+.study55 .math-panel{color:#193c64}
+.study55 .math-panel .math-inner{overflow-x:auto;max-width:100%;padding-bottom:8px}
+.study55 .chapter .math-panel .math-inner{overflow-wrap:normal}
+.study55 .chapter h3{font-family:"Source Serif 4",Georgia,serif;font-size:1.3rem;color:#23496b;margin-top:2rem}
+.study55 .chapter h4{font-size:1.05rem;color:#294b6d}
+.study55 .chapter td,.study55 .chapter th{font-variant-numeric:tabular-nums}
+.study55 .chart svg{max-width:100%;height:auto;min-width:0}
+.study55 .hero{background:#fff!important;background-image:none!important;color:#19334e!important}
+.study55 .chapter p{overflow-wrap:break-word}
+.study55 .chapter .math-inline{max-width:100%;overflow-x:auto}
+.study55 .chapter img{max-width:100%;height:auto}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']],processEscapes:true,packages:{'[+]':['ams','noerrors','noundefined']}},options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']},chtml:{scale:1.04,matchFontHeight:false}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script></head>
+<body class="study55"><a class="skip-link" href="#main-content">Ir a la guía</a><header class="site-header"><div class="container nav-wrap"><div class="identity"><a class="brand" href="https://alfredosaldana.github.io/es/index.html">Alfredo Saldana</a><div class="lang-switch" aria-label="Language / Idioma"><a href="/learn/statistics-probability/heteroscedasticity-robust-standard-errors-and-sensitivity-analysis.html" lang="en">EN</a><span aria-hidden="true">|</span><a href="/es/learn/statistics-probability/heteroscedasticity-robust-standard-errors-and-sensitivity-analysis-es.html" lang="es" aria-current="page">ES</a></div></div><button class="menu-btn" type="button" aria-label="Abrir menú" aria-controls="site-navigation" aria-expanded="false">☰</button><nav class="nav" id="site-navigation" aria-label="Site navigation"><a href="https://alfredosaldana.github.io/es/index.html">Inicio</a><a href="https://alfredosaldana.github.io/es/projects.html">Proyectos</a><a href="/es/tutorials.html">Aprende</a><a href="https://alfredosaldana.github.io/es/open-box.html">Open Box</a><a href="https://alfredosaldana.github.io/es/about.html">Acerca de</a><a href="https://alfredosaldana.github.io/es/contact.html">Contacto</a></nav></div></header>
+<div class="hero"><div class="container"><div class="eyebrow">Statistics & Probability · Guía 55</div><h1>Heteroscedasticity, Robust Standard Errors y Sensitivity Analysis</h1><p>Guía 55 · Statistics &amp; Probability · De la matriz de covarianza OLS a HC3 y a comprobaciones de sensibilidad justificadas</p><div class="hero-tags"><span>OLS</span><span>HC3</span><span>Sandwich Covariance</span><span>WLS</span><span>Sensitivity Analysis</span></div></div></div>
+<main class="container shell" id="main-content"><aside class="toc" aria-label="Contenido"><strong>Contenido</strong><a href="#section-01">1. El problema que puede ocultar una regresión aparentemente precisa</a><a href="#section-02">2. Datos completos, unidades, diseño y objetivo de estimación</a><a href="#section-03">3. Calcular OLS sin convertir el software en una caja negra</a><a href="#section-04">4. Qué significa heteroscedasticidad y qué no significa</a><a href="#section-05">5. Aprender el lenguaje matricial mediante dimensiones</a><a href="#section-06">6. Derivar la covarianza de coeficientes antes de cambiar los supuestos</a><a href="#section-07">7. Calcular los errores estándar clásicos e interpretar el punto de partida</a><a href="#section-08">8. Diagnosticar antes de elegir una corrección</a><a href="#section-09">9. Por qué la Sandwich Covariance tiene tres componentes</a><a href="#section-10">10. Derivar leverage y HC3 observación por observación</a><a href="#section-11">11. Armar la matriz HC3 sin saltarse el componente central</a><a href="#section-12">12. Comparar intervalos y aclarar qué distribución utilizamos</a><a href="#section-13">13. HC0, HC1, HC2 y HC3: identificar qué cambia</a><a href="#section-14">14. Weighted Least Squares es una operación diferente</a><a href="#section-15">15. Distinguir varianza desigual de una media incorrecta</a><a href="#section-16">16. Dependencia, clusters, autocorrelación y límites de HC3</a><a href="#section-17">17. Sensitivity Analysis: comparación planificada y no búsqueda de significancia</a><a href="#section-18">18. Comunicar resultados sin afirmar más de lo que sabemos</a><a href="#section-19">18A. Seguir el cálculo ponderado en vez de confiar en un nuevo coeficiente</a><a href="#section-20">18B. Cambiar unidades no hace desaparecer la incertidumbre</a><a href="#section-21">18C. Qué promete la consistencia y qué no promete</a><a href="#section-22">18D. Un esquema de decisión antes de comunicar resultados robustos</a><a href="#section-23">18E. Un contraejemplo: cuando la varianza común parece tranquilizadora</a><a href="#section-24">19. Ejercicios de transferencia con soluciones completas</a><a href="#section-25">20. Síntesis final: identificar la vulnerabilidad antes del método</a><a href="#section-26">Referencias y alcance de los resultados citados</a></aside><article class="article"><section class="chapter" id="section-01"><h2>1. El problema que puede ocultar una regresión aparentemente precisa</h2>
+<p>Una regresión puede dibujar una recta convincente y, a pesar de ello, comunicar una incertidumbre engañosa. Imagina que comparamos ocho empresas de distinto tamaño operativo. El gasto mensual de una empresa pequeña puede fluctuar relativamente poco, mientras que una empresa grande puede registrar desviaciones mayores respecto de su gasto esperado: un contrato grande o un envío demorado puede cambiar considerablemente el total. La recta ajustada describe una media condicional, pero la distancia vertical de las observaciones a esa recta puede aumentar con el tamaño. La pregunta importante no es únicamente si la recta se ajusta, sino si estamos autorizados a suponer una sola varianza de los errores para calcular la incertidumbre de la pendiente.</p>
+<p>Conviene distinguir tres preguntas. <strong>Estimation</strong> pregunta qué coeficientes minimizan la suma de residuos verticales elevados al cuadrado. <strong>Statistical Inference</strong> pregunta cuánto podrían variar esos coeficientes entre muestras hipotéticas extraídas de la misma población. <strong>Model Adequacy</strong> pregunta si son defendibles la forma de la media, la independencia, el diseño de muestreo y los supuestos necesarios para interpretar los resultados. Un error estándar consistente frente a heteroscedasticidad aborda principalmente la segunda pregunta cuando cierta parte de la fórmula tradicional de covarianza es incorrecta. No repara automáticamente ni la primera ni la tercera.</p>
+<p>Los conocimientos previos proceden de varianza de variables aleatorias (Guía 13), incertidumbre de muestreo (Guía 27), Multiple Linear Regression (Guía 52) y diagnósticos de regresión (Guía 54). No supondremos que el lector ha estudiado álgebra lineal avanzada: introduciremos las filas, columnas, transpuestas, inversas y dimensiones antes de multiplicar matrices. El ejemplo contiene ocho observaciones para que todos los resultados puedan reconstruirse con aritmética y una calculadora. Los datos son <strong>sintéticos, inventados exclusivamente para enseñar</strong>; no son evidencia empírica sobre empresas reales.</p>
+<p>Al terminar deberías poder reconocer una posible dispersión desigual sin declararla demostrada, derivar las matrices de covarianza clásica y HC3, reproducir un error estándar robusto, comparar intervalos, identificar cuándo Weighted Least Squares está justificado y explicar qué problemas siguen sin resolverse. Cada resultado avanzado se presentará como identidad algebraica demostrada aquí o como conclusión teórica que depende de supuestos expresos.</p>
+</section><section class="chapter" id="section-02"><h2>2. Datos completos, unidades, diseño y objetivo de estimación</h2>
+<p>Nuestras unidades observacionales son ocho empresas independientes, una por fila. Definimos <strong>x</strong> como un índice de tamaño operativo, con valores entre 1 y 8, e <strong>y</strong> como gasto operativo mensual expresado en miles de dólares estadounidenses. El índice no representa dólares. Suponemos que cada empresa aparece una sola vez y que ninguna comparte matriz corporativa ni una serie temporal de mediciones repetidas. Los datos fueron construidos intencionalmente para ilustrar desviaciones importantes al final de la escala; no constituyen una muestra aleatoria que confirme de manera independiente una hipótesis estadística.</p>
+<div class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">Empresa</th>
+<th style="text-align:right" scope="col">Índice de tamaño x</th>
+<th style="text-align:right" scope="col">Gasto mensual y (miles de USD)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">10</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">12</td>
+</tr>
+<tr>
+<td>C</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">14</td>
+</tr>
+<tr>
+<td>D</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">15</td>
+</tr>
+<tr>
+<td>E</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">19</td>
+</tr>
+<tr>
+<td>F</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">18</td>
+</tr>
+<tr>
+<td>G</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">24</td>
+</tr>
+<tr>
+<td>H</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">30</td>
+</tr>
+</tbody>
+</table></div>
+<p>Estimaremos <span class="math-inline">\(E(Y\mid X=x)=\beta_0+\beta_1x\)</span>, es decir, una función de <strong>media condicional</strong>, no una promesa de gasto exacto para cada empresa. La pendiente <span class="math-inline">\(\beta_1\)</span> representa el aumento esperado, en miles de dólares, cuando el índice aumenta una unidad, condicionado a la especificación lineal utilizada. Es una asociación, no un efecto causal de hacer crecer artificialmente una empresa. El intercepto <span class="math-inline">\(\beta_0\)</span> se refiere al valor x=0, fuera del rango observado; por ello, su interpretación operativa es limitada aunque sea indispensable para calcular la recta.</p>
+<p>El error poblacional <span class="math-inline">\(u_i=Y_i-E(Y_i\mid X_i)\)</span> es la desviación respecto de la media condicional verdadera y no se observa directamente. El residuo muestral <span class="math-inline">\(e_i=y_i-\widehat y_i\)</span>, en cambio, puede calcularse tras estimar el modelo. Los residuos no son idénticos a los errores poblacionales. Esta diferencia evita una equivocación frecuente: creer que conocemos la varianza verdadera de los errores simplemente porque podemos sumar residuos calculados. Precisamente los residuos cuadrados serán sustitutos de cantidades desconocidas en las fórmulas robustas.</p>
+</section><section class="chapter" id="section-03"><h2>3. Calcular OLS sin convertir el software en una caja negra</h2>
+<p>Ordinary Least Squares (OLS) elige intercepto <span class="math-inline">\(b_0\)</span> y pendiente <span class="math-inline">\(b_1\)</span> para minimizar <span class="math-inline">\(SSE=\sum_i(y_i-b_0-b_1x_i)^2\)</span>. En una regresión con intercepto y una variable explicativa, las ecuaciones normales producen <span class="math-inline">\(b_1=S_{xy}/S_{xx}\)</span> y <span class="math-inline">\(b_0=\bar y-b_1\bar x\)</span>. Estos resultados provienen algebraicamente de minimizar los residuos cuadrados, siempre que la variable explicativa tenga variación.</p>
+<p>Aquí <span class="math-inline">\(n=8\)</span>, <span class="math-inline">\(\sum x_i=36\)</span>, <span class="math-inline">\(\sum y_i=142\)</span>, <span class="math-inline">\(\bar x=4.5\)</span>, <span class="math-inline">\(\bar y=17.75\)</span>, <span class="math-inline">\(\sum x_i^2=204\)</span> y <span class="math-inline">\(\sum x_iy_i=747\)</span>. Por lo tanto, <span class="math-inline">\(S_{xx}=204-36^2/8=42\)</span>, mientras que <span class="math-inline">\(S_{xy}=747-(36)(142)/8=108\)</span>. Dividimos: <span class="math-inline">\(b_1=108/42=18/7=2.57142857\)</span>, miles de dólares por unidad del índice. Finalmente, <span class="math-inline">\(b_0=17.75-(18/7)(4.5)=173/28\approx6.17857143\)</span>, miles de dólares.</p>
+<p><div class="math-panel"><div class="formula-title">Media ajustada mediante OLS</div><div class="math-inner" tabindex="0">\[\widehat y_i=6.17857143+2.57142857x_i\]</div></div></p>
+<p>Para la empresa A, <span class="math-inline">\(\widehat y_1=6.17857143+2.57142857=8.75\)</span>, por lo que el residuo es <span class="math-inline">\(10-8.75=1.25\)</span> miles de dólares. Para H, <span class="math-inline">\(\widehat y_8=6.17857143+8(2.57142857)=26.75\)</span>, y su residuo es <span class="math-inline">\(30-26.75=3.25\)</span>. El segundo residuo es mayor, pese a que utilizamos la misma recta. Esto motiva estudiar la dispersión de los errores, pero dos residuos aislados no demuestran la forma de la varianza poblacional.</p>
+<div class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th style="text-align:right" scope="col">x</th>
+<th style="text-align:right" scope="col">y</th>
+<th style="text-align:right" scope="col">Predicción ajustada</th>
+<th style="text-align:right" scope="col">Residuo e</th>
+<th style="text-align:right" scope="col">Residuo al cuadrado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">1</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">8.7500</td>
+<td style="text-align:right">1.2500</td>
+<td style="text-align:right">1.5625</td>
+</tr>
+<tr>
+<td style="text-align:right">2</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">11.3214</td>
+<td style="text-align:right">0.6786</td>
+<td style="text-align:right">0.4605</td>
+</tr>
+<tr>
+<td style="text-align:right">3</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">13.8929</td>
+<td style="text-align:right">0.1071</td>
+<td style="text-align:right">0.0115</td>
+</tr>
+<tr>
+<td style="text-align:right">4</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">16.4643</td>
+<td style="text-align:right">-1.4643</td>
+<td style="text-align:right">2.1441</td>
+</tr>
+<tr>
+<td style="text-align:right">5</td>
+<td style="text-align:right">19</td>
+<td style="text-align:right">19.0357</td>
+<td style="text-align:right">-0.0357</td>
+<td style="text-align:right">0.0013</td>
+</tr>
+<tr>
+<td style="text-align:right">6</td>
+<td style="text-align:right">18</td>
+<td style="text-align:right">21.6071</td>
+<td style="text-align:right">-3.6071</td>
+<td style="text-align:right">13.0115</td>
+</tr>
+<tr>
+<td style="text-align:right">7</td>
+<td style="text-align:right">24</td>
+<td style="text-align:right">24.1786</td>
+<td style="text-align:right">-0.1786</td>
+<td style="text-align:right">0.0319</td>
+</tr>
+<tr>
+<td style="text-align:right">8</td>
+<td style="text-align:right">30</td>
+<td style="text-align:right">26.7500</td>
+<td style="text-align:right">3.2500</td>
+<td style="text-align:right">10.5625</td>
+</tr>
+</tbody>
+</table></div>
+<p>Los residuos suman cero por incluirse un intercepto y también se cumple <span class="math-inline">\(\sum x_ie_i=0\)</span>, según las ecuaciones normales. Sin embargo, <span class="math-inline">\(SSE=27.78571429\)</span>, no cero: al cuadrar desaparecen los signos. Esta es nuestra primera comprobación indispensable. Que se compensen los residuos positivos y negativos no significa ajuste perfecto, homoscedasticidad o inferencia válida. Tampoco permite inferir que el residuo de cada empresa siga necesariamente una distribución normal.</p>
+</section><section class="chapter" id="section-04"><h2>4. Qué significa heteroscedasticidad y qué no significa</h2>
+<p>La hipótesis clásica de varianza constante establece <span class="math-inline">\(\operatorname{Var}(u_i\mid X)=\sigma^2\)</span> para todas las observaciones. La <strong>heteroscedasticidad</strong> permite <span class="math-inline">\(\operatorname{Var}(u_i\mid X)=\sigma_i^2\)</span>, de modo que las varianzas condicionales cambien entre unidades. El subíndice indica que la incertidumbre puede depender del tamaño empresarial o de otros factores. La varianza tiene unidades de miles de dólares al cuadrado, mientras que su raíz cuadrada, la desviación estándar, vuelve a expresarse en miles de dólares. Una media mayor no implica necesariamente mayor varianza, y un residuo aislado grande no determina la varianza poblacional en ese valor de x.</p>
+<p>La heteroscedasticidad puede aparecer por cuestiones de escala: los presupuestos más elevados suelen permitir fluctuaciones absolutas mayores. También puede reflejar grupos omitidos, mezclas de procesos, precisión de medición diferente o una función de media mal especificada. Estas causas no se corrigen de la misma manera. Una justificación externa podría respaldar un modelo de varianza; una tendencia curvada exigiría revisar <span class="math-inline">\(E(Y\mid X)\)</span>; una mezcla de industrias sugeriría incorporar predictores; una serie temporal demandaría tratar la dependencia.</p>
+<p>Si la media condicional está especificada correctamente y <span class="math-inline">\(E(u_i\mid X)=0\)</span>, los coeficientes OLS pueden seguir siendo insesgados condicionalmente al diseño incluso cuando las varianzas difieren. Bajo condiciones adicionales de regularidad también pueden ser consistentes. Lo que se vuelve problemático es la fórmula convencional de error estándar: sustituye una colección de varianzas diferentes por una única varianza común. Esta advertencia se refiere a la <strong>distribución muestral de los coeficientes</strong>, no afirma que la pendiente deba cambiar. Manteniendo datos y modelo, seleccionar HC3 cambia la covarianza estimada y la inferencia, pero no <span class="math-inline">\(b_0\)</span>, <span class="math-inline">\(b_1\)</span>, las predicciones, los residuos ni <span class="math-inline">\(R^2\)</span>.</p>
+<p>La heteroscedasticidad tampoco equivale a correlación entre errores de observaciones distintas. Las varianzas distintas aparecen en la diagonal de la matriz de covarianza de errores; la dependencia entre unidades aparece fuera de esa diagonal. Un método que ajusta solamente contribuciones diagonales no puede presumirse válido para autocorrelación temporal o empresas pertenecientes a un mismo grupo corporativo. Esa diferencia será esencial cuando examinemos Cluster-Robust y HAC.</p>
+</section><section class="chapter" id="section-05"><h2>5. Aprender el lenguaje matricial mediante dimensiones</h2>
+<p>Representamos los ocho gastos observados como un vector columna <span class="math-inline">\(y\)</span>, de dimensiones <span class="math-inline">\(8\times1\)</span>. La Design Matrix <span class="math-inline">\(X\)</span> tiene ocho filas y dos columnas: la primera contiene unos para el intercepto y la segunda los índices de tamaño del 1 al 8. Por tanto, <span class="math-inline">\(X\)</span> es <span class="math-inline">\(8\times2\)</span>. El vector de coeficientes <span class="math-inline">\(\beta=(\beta_0,\beta_1)^\mathsf T\)</span> mide <span class="math-inline">\(2\times1\)</span>; al multiplicar <span class="math-inline">\(X\beta\)</span> obtenemos <span class="math-inline">\(8\times1\)</span>, igual que el vector observado. La transpuesta <span class="math-inline">\(X^\mathsf T\)</span> intercambia filas y columnas, por lo que mide <span class="math-inline">\(2\times8\)</span>.</p>
+<p><div class="math-panel"><div class="formula-title">Regresión en forma matricial</div><div class="math-inner" tabindex="0">\[y=X\beta+u,\qquad \widehat\beta=(X^\mathsf TX)^{-1}X^\mathsf Ty\]</div></div></p>
+<p>Una matriz inversa es un análogo de la división: existe en este caso porque la columna del intercepto y la columna variable no son linealmente dependientes. Las ecuaciones normales son <span class="math-inline">\(X^\mathsf TX\widehat\beta=X^\mathsf Ty\)</span>. Aquí, <span class="math-inline">\(X^\mathsf TX=\begin{pmatrix}8&amp;36\\36&amp;204\end{pmatrix}\)</span>. Su determinante es <span class="math-inline">\(8(204)-36^2=336\neq0\)</span>. Por ello, <span class="math-inline">\((X^\mathsf TX)^{-1}=\frac1{336}\begin{pmatrix}204&amp;-36\\-36&amp;8\end{pmatrix}\)</span>, con entradas aproximadas 0.607143, -0.107143, -0.107143 y 0.0238095.</p>
+<p>Comprobar dimensiones no es un adorno. <span class="math-inline">\(X^\mathsf TX\)</span> es <span class="math-inline">\(2\times2\)</span>, su inversa también, y <span class="math-inline">\(X^\mathsf Ty\)</span> es <span class="math-inline">\(2\times1\)</span>. El producto final produce exactamente dos coeficientes. La existencia de la inversa no demuestra causalidad ni que el modelo sea correcto: solamente permite resolver el problema algebraico de mínimos cuadrados. Más adelante colocaremos una matriz de covarianza de errores en el centro de un producto. Mantener claras las dimensiones nos permitirá derivar, en lugar de memorizar, esa fórmula.</p>
+</section><section class="chapter" id="section-06"><h2>6. Derivar la covarianza de coeficientes antes de cambiar los supuestos</h2>
+<p>Partimos de <span class="math-inline">\(\widehat\beta=(X^\mathsf TX)^{-1}X^\mathsf Ty\)</span>. Sustituimos el modelo poblacional <span class="math-inline">\(y=X\beta+u\)</span>, y obtenemos <span class="math-inline">\(\widehat\beta=\beta+(X^\mathsf TX)^{-1}X^\mathsf Tu\)</span>. Esta identidad señala el origen de la incertidumbre: en repeticiones hipotéticas del proceso de muestreo, manteniendo fijo el diseño X, los errores aleatorios cambian y producen estimaciones diferentes aunque los coeficientes poblacionales sean los mismos.</p>
+<p>Sea <span class="math-inline">\(\Omega=\operatorname{Var}(u\mid X)\)</span>, una matriz de covarianza <span class="math-inline">\(8\times8\)</span>. Para una matriz no aleatoria A, la propiedad general <span class="math-inline">\(\operatorname{Var}(Au\mid X)=A\operatorname{Var}(u\mid X)A^\mathsf T\)</span> transforma la covarianza. Sustituimos <span class="math-inline">\(A=(X^\mathsf TX)^{-1}X^\mathsf T\)</span>. La simetría de <span class="math-inline">\(X^\mathsf TX\)</span> hace simétrica su inversa, así que obtenemos la fórmula <strong>general</strong>:</p>
+<p><div class="math-panel"><div class="formula-title">Covarianza general de coeficientes OLS</div><div class="math-inner" tabindex="0">\[\operatorname{Var}(\widehat\beta\mid X)=(X^\mathsf TX)^{-1}X^\mathsf T\Omega X(X^\mathsf TX)^{-1}\]</div></div></p>
+<p>Las dimensiones son <span class="math-inline">\((2\times2)(2\times8)(8\times8)(8\times2)(2\times2)\)</span>, cuyo resultado es <span class="math-inline">\(2\times2\)</span>. El primer elemento diagonal representa varianza del intercepto y el segundo varianza de la pendiente. Las entradas fuera de la diagonal indican cómo covarían ambos estimadores entre muestras. Un <strong>standard error (SE)</strong> es la raíz cuadrada no negativa de una entrada diagonal. No es la desviación estándar de todos los valores observados de y ni la dispersión residual sin más transformaciones.</p>
+<p>Si los errores son condicionalmente incorrelacionados y poseen una varianza común, entonces <span class="math-inline">\(\Omega=\sigma^2I_8\)</span>, donde la matriz identidad tiene unos en la diagonal y ceros fuera. Al sustituir <span class="math-inline">\(X^\mathsf TI_8X=X^\mathsf TX\)</span>, un factor se cancela y obtenemos <span class="math-inline">\(\sigma^2(X^\mathsf TX)^{-1}\)</span>. Esa es la fórmula abreviada habitual. Cuando las varianzas difieren, dicha cancelación deja de ser válida. Esta es la razón matemática para necesitar otra estimación de covarianza, no simplemente una preferencia por una etiqueta moderna de "robustez".</p>
+</section><section class="chapter" id="section-07"><h2>7. Calcular los errores estándar clásicos e interpretar el punto de partida</h2>
+<p>Tenemos <span class="math-inline">\(n=8\)</span> observaciones y <span class="math-inline">\(p=2\)</span> coeficientes estimados. El estimador de varianza residual convencional es <span class="math-inline">\(s^2=SSE/(n-p)=27.78571429/6=4.63095238\)</span> en unidades de miles de dólares al cuadrado. Dividimos entre seis y no entre ocho porque el intercepto y la pendiente imponen dos restricciones sobre los residuos. Los seis grados de libertad residuales reflejan esa pérdida de libertad. La desviación residual estimada es <span class="math-inline">\(s=\sqrt{4.63095238}\approx2.1520\)</span> miles de dólares.</p>
+<p>Multiplicamos la inversa matricial por <span class="math-inline">\(s^2\)</span>. La matriz estimada de covarianza clásica es <span class="math-inline">\(s^2(X^\mathsf TX)^{-1}=\begin{pmatrix}2.811650&amp;-0.496173\\-0.496173&amp;0.110261\end{pmatrix}\)</span>. Los elementos diagonales son varianzas de coeficientes. Así, <span class="math-inline">\(SE_{classic}(b_0)=\sqrt{2.811650}=1.676797\)</span> miles de dólares, y <span class="math-inline">\(SE_{classic}(b_1)=\sqrt{0.110261}=0.332055\)</span> miles de dólares por unidad del índice.</p>
+<p><div class="math-panel"><div class="formula-title">Atajo de covarianza clásica</div><div class="math-inner" tabindex="0">\[\widehat{\operatorname{Var}}_{classic}(\widehat\beta)=s^2(X^\mathsf TX)^{-1},\qquad s^2=\frac{\sum_i e_i^2}{n-p}\]</div></div></p>
+<p>Con seis grados de libertad, el percentil 97.5 de Student t es aproximadamente <span class="math-inline">\(t_{0.975,6}=2.446912\)</span>. El intervalo bilateral convencional del 95% para la pendiente es <span class="math-inline">\(2.571429\pm2.446912(0.332055)\)</span>, equivalente a <span class="math-inline">\([1.758918,3.383939]\)</span>. Bajo los supuestos clásicos completos, este es un intervalo t convencional. Sin igualdad de varianzas, introducir este mismo error estándar en la fórmula t deja de tener justificación automática, aunque la aritmética siga siendo correcta.</p>
+<p>El estadístico t convencional para una pendiente poblacional nula es <span class="math-inline">\(2.571429/0.332055\approx7.74398\)</span>, con p-value de aproximadamente 0.000244 bajo una distribución t con seis grados de libertad. Ese valor no es la probabilidad de que la hipótesis nula sea verdadera; depende de un modelo y una distribución de referencia. Un p-value pequeño tampoco demuestra que los supuestos sobre varianza de los errores sean apropiados.</p>
+</section><section class="chapter" id="section-08"><h2>8. Diagnosticar antes de elegir una corrección</h2>
+<p>Un primer gráfico útil coloca los valores ajustados de gasto en el eje horizontal y los residuos en el vertical, con una línea horizontal en cero. Si la variabilidad crece con el gasto esperado, puede aparecer una dispersión con forma de abanico. No obstante, ocho observaciones son muy pocas: en nuestro ejemplo hay un residuo negativo grande cuando x=6 y otro positivo grande cuando x=8, pero no suficientes datos para identificar una función de varianza poblacional. Describiremos el patrón como <strong>sugestivo</strong>, no como una demostración.</p>
+<p>El gráfico de residuos al cuadrado frente a predicciones resalta magnitudes, aunque oculta los signos. Un gráfico Scale-Location emplea la raíz cuadrada de los residuos estandarizados absolutos y puede ayudar a estudiar cambios de dispersión. También conviene separar grupos relevantes: dos industrias con diferentes medias pueden generar una forma engañosa que desaparezca tras mejorar el modelo de media. Es importante repetir los diagnósticos después de especificaciones alternativas plausibles. El propósito es descubrir vulnerabilidades de la inferencia, no justificar la eliminación arbitraria de observaciones inconvenientes.</p>
+<p>Una prueba formal como Breusch–Pagan puede complementar los gráficos, pero su hipótesis nula se refiere a determinada estructura de varianza constante y su calibración depende de supuestos y versiones. Con ocho observaciones, la potencia estadística puede ser muy baja; una prueba no significativa no demostraría homoscedasticidad. Tampoco es imprescindible esperar una prueba significativa para utilizar HC3 cuando la decisión fue planificada y resulta defendible. Probar distintas opciones hasta obtener el p-value deseado constituye selección dependiente de datos y debería declararse.</p>
+<p><strong>Decisión práctica:</strong> comunicar conjuntamente los cálculos clásicos y HC3, describir los patrones residuales sin exagerarlos, indicar el tamaño muestral y justificar por qué se eligió HC3. Si se desea modelar la varianza propiamente dicha, debe existir una razón de medición o sustantiva para hacerlo, no solamente la impresión visual de un gráfico.</p>
+<figure class="chart"><svg role="img" aria-label="resid" xmlns:xlink="http://www.w3.org/1999/xlink" width="547.2pt" height="266.4pt" viewBox="0 0 547.2 266.4" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="g55-es-resid-figure_1">
+  <g id="g55-es-resid-patch_1">
+   <path d="M 0 266.4 
+L 547.2 266.4 
+L 547.2 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="g55-es-resid-axes_1">
+   <g id="g55-es-resid-patch_2">
+    <path d="M 46.64 224.44 
+L 528.587727 224.44 
+L 528.587727 12.236 
+L 46.64 12.236 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="g55-es-resid-PathCollection_1">
+    <defs>
+     <path id="g55-es-resid-mac9eb3e413" d="M 0 3.427827 
+C 0.90907 3.427827 1.78103 3.06665 2.42384 2.42384 
+C 3.06665 1.78103 3.427827 0.90907 3.427827 0 
+C 3.427827 -0.90907 3.06665 -1.78103 2.42384 -2.42384 
+C 1.78103 -3.06665 0.90907 -3.427827 0 -3.427827 
+C -0.90907 -3.427827 -1.78103 -3.06665 -2.42384 -2.42384 
+C -3.06665 -1.78103 -3.427827 -0.90907 -3.427827 0 
+C -3.427827 0.90907 -3.06665 1.78103 -2.42384 2.42384 
+C -1.78103 3.06665 -0.90907 3.427827 0 3.427827 
+z
+" style="stroke: #2563eb"/>
+    </defs>
+    <g clip-path="url(#g55-es-resid-pb3eba78511)">
+     <use xlink:href="#g55-es-resid-mac9eb3e413" x="68.546715" y="78.147848" style="fill: #2563eb; stroke: #2563eb"/>
+     <use xlink:href="#g55-es-resid-mac9eb3e413" x="131.137329" y="94.223909" style="fill: #2563eb; stroke: #2563eb"/>
+     <use xlink:href="#g55-es-resid-mac9eb3e413" x="193.727943" y="110.29997" style="fill: #2563eb; stroke: #2563eb"/>
+     <use xlink:href="#g55-es-resid-mac9eb3e413" x="256.318557" y="154.509136" style="fill: #2563eb; stroke: #2563eb"/>
+     <use xlink:href="#g55-es-resid-mac9eb3e413" x="318.909171" y="114.318985" style="fill: #2563eb; stroke: #2563eb"/>
+     <use xlink:href="#g55-es-resid-mac9eb3e413" x="381.499785" y="214.794364" style="fill: #2563eb; stroke: #2563eb"/>
+     <use xlink:href="#g55-es-resid-mac9eb3e413" x="444.090398" y="118.338" style="fill: #2563eb; stroke: #2563eb"/>
+     <use xlink:href="#g55-es-resid-mac9eb3e413" x="506.681012" y="21.881636" style="fill: #2563eb; stroke: #2563eb"/>
+    </g>
+   </g>
+   <g id="g55-es-resid-matplotlib.axis_1">
+    <g id="g55-es-resid-xtick_1">
+     <g id="g55-es-resid-line2d_1">
+      <path d="M 98.972708 224.44 
+L 98.972708 12.236 
+" clip-path="url(#g55-es-resid-pb3eba78511)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-resid-line2d_2">
+      <defs>
+       <path id="g55-es-resid-m2f72593e87" d="M 0 0 
+L 0 3.5 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#g55-es-resid-m2f72593e87" x="98.972708" y="224.44" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-resid-text_1">
+      <!-- 10.0 -->
+      <g transform="translate(87.839895 239.038438) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-resid-DejaVuSans-31" d="M 794 531 
+L 1825 531 
+L 1825 4091 
+L 703 3866 
+L 703 4441 
+L 1819 4666 
+L 2450 4666 
+L 2450 531 
+L 3481 531 
+L 3481 0 
+L 794 0 
+L 794 531 
+z
+" transform="scale(0.015625)"/>
+        <path id="g55-es-resid-DejaVuSans-30" d="M 2034 4250 
+Q 1547 4250 1301 3770 
+Q 1056 3291 1056 2328 
+Q 1056 1369 1301 889 
+Q 1547 409 2034 409 
+Q 2525 409 2770 889 
+Q 3016 1369 3016 2328 
+Q 3016 3291 2770 3770 
+Q 2525 4250 2034 4250 
+z
+M 2034 4750 
+Q 2819 4750 3233 4129 
+Q 3647 3509 3647 2328 
+Q 3647 1150 3233 529 
+Q 2819 -91 2034 -91 
+Q 1250 -91 836 529 
+Q 422 1150 422 2328 
+Q 422 3509 836 4129 
+Q 1250 4750 2034 4750 
+z
+" transform="scale(0.015625)"/>
+        <path id="g55-es-resid-DejaVuSans-2e" d="M 684 794 
+L 1344 794 
+L 1344 0 
+L 684 0 
+L 684 794 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-resid-DejaVuSans-31"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-30" transform="translate(63.623047 0)"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-2e" transform="translate(127.246094 0)"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-30" transform="translate(159.033203 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-resid-xtick_2">
+     <g id="g55-es-resid-line2d_3">
+      <path d="M 159.824694 224.44 
+L 159.824694 12.236 
+" clip-path="url(#g55-es-resid-pb3eba78511)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-resid-line2d_4">
+      <g>
+       <use xlink:href="#g55-es-resid-m2f72593e87" x="159.824694" y="224.44" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-resid-text_2">
+      <!-- 12.5 -->
+      <g transform="translate(148.691881 239.038438) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-resid-DejaVuSans-32" d="M 1228 531 
+L 3431 531 
+L 3431 0 
+L 469 0 
+L 469 531 
+Q 828 903 1448 1529 
+Q 2069 2156 2228 2338 
+Q 2531 2678 2651 2914 
+Q 2772 3150 2772 3378 
+Q 2772 3750 2511 3984 
+Q 2250 4219 1831 4219 
+Q 1534 4219 1204 4116 
+Q 875 4013 500 3803 
+L 500 4441 
+Q 881 4594 1212 4672 
+Q 1544 4750 1819 4750 
+Q 2544 4750 2975 4387 
+Q 3406 4025 3406 3419 
+Q 3406 3131 3298 2873 
+Q 3191 2616 2906 2266 
+Q 2828 2175 2409 1742 
+Q 1991 1309 1228 531 
+z
+" transform="scale(0.015625)"/>
+        <path id="g55-es-resid-DejaVuSans-35" d="M 691 4666 
+L 3169 4666 
+L 3169 4134 
+L 1269 4134 
+L 1269 2991 
+Q 1406 3038 1543 3061 
+Q 1681 3084 1819 3084 
+Q 2600 3084 3056 2656 
+Q 3513 2228 3513 1497 
+Q 3513 744 3044 326 
+Q 2575 -91 1722 -91 
+Q 1428 -91 1123 -41 
+Q 819 9 494 109 
+L 494 744 
+Q 775 591 1075 516 
+Q 1375 441 1709 441 
+Q 2250 441 2565 725 
+Q 2881 1009 2881 1497 
+Q 2881 1984 2565 2268 
+Q 2250 2553 1709 2553 
+Q 1456 2553 1204 2497 
+Q 953 2441 691 2322 
+L 691 4666 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-resid-DejaVuSans-31"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-32" transform="translate(63.623047 0)"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-2e" transform="translate(127.246094 0)"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-35" transform="translate(159.033203 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-resid-xtick_3">
+     <g id="g55-es-resid-line2d_5">
+      <path d="M 220.676679 224.44 
+L 220.676679 12.236 
+" clip-path="url(#g55-es-resid-pb3eba78511)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-resid-line2d_6">
+      <g>
+       <use xlink:href="#g55-es-resid-m2f72593e87" x="220.676679" y="224.44" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-resid-text_3">
+      <!-- 15.0 -->
+      <g transform="translate(209.543867 239.038438) scale(0.1 -0.1)">
+       <use xlink:href="#g55-es-resid-DejaVuSans-31"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-35" transform="translate(63.623047 0)"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-2e" transform="translate(127.246094 0)"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-30" transform="translate(159.033203 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-resid-xtick_4">
+     <g id="g55-es-resid-line2d_7">
+      <path d="M 281.528665 224.44 
+L 281.528665 12.236 
+" clip-path="url(#g55-es-resid-pb3eba78511)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-resid-line2d_8">
+      <g>
+       <use xlink:href="#g55-es-resid-m2f72593e87" x="281.528665" y="224.44" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-resid-text_4">
+      <!-- 17.5 -->
+      <g transform="translate(270.395853 239.038438) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-resid-DejaVuSans-37" d="M 525 4666 
+L 3525 4666 
+L 3525 4397 
+L 1831 0 
+L 1172 0 
+L 2766 4134 
+L 525 4134 
+L 525 4666 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-resid-DejaVuSans-31"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-37" transform="translate(63.623047 0)"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-2e" transform="translate(127.246094 0)"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-35" transform="translate(159.033203 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-resid-xtick_5">
+     <g id="g55-es-resid-line2d_9">
+      <path d="M 342.380651 224.44 
+L 342.380651 12.236 
+" clip-path="url(#g55-es-resid-pb3eba78511)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-resid-line2d_10">
+      <g>
+       <use xlink:href="#g55-es-resid-m2f72593e87" x="342.380651" y="224.44" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-resid-text_5">
+      <!-- 20.0 -->
+      <g transform="translate(331.247838 239.038438) scale(0.1 -0.1)">
+       <use xlink:href="#g55-es-resid-DejaVuSans-32"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-30" transform="translate(63.623047 0)"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-2e" transform="translate(127.246094 0)"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-30" transform="translate(159.033203 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-resid-xtick_6">
+     <g id="g55-es-resid-line2d_11">
+      <path d="M 403.232637 224.44 
+L 403.232637 12.236 
+" clip-path="url(#g55-es-resid-pb3eba78511)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-resid-line2d_12">
+      <g>
+       <use xlink:href="#g55-es-resid-m2f72593e87" x="403.232637" y="224.44" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-resid-text_6">
+      <!-- 22.5 -->
+      <g transform="translate(392.099824 239.038438) scale(0.1 -0.1)">
+       <use xlink:href="#g55-es-resid-DejaVuSans-32"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-32" transform="translate(63.623047 0)"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-2e" transform="translate(127.246094 0)"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-35" transform="translate(159.033203 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-resid-xtick_7">
+     <g id="g55-es-resid-line2d_13">
+      <path d="M 464.084622 224.44 
+L 464.084622 12.236 
+" clip-path="url(#g55-es-resid-pb3eba78511)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-resid-line2d_14">
+      <g>
+       <use xlink:href="#g55-es-resid-m2f72593e87" x="464.084622" y="224.44" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-resid-text_7">
+      <!-- 25.0 -->
+      <g transform="translate(452.95181 239.038438) scale(0.1 -0.1)">
+       <use xlink:href="#g55-es-resid-DejaVuSans-32"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-35" transform="translate(63.623047 0)"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-2e" transform="translate(127.246094 0)"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-30" transform="translate(159.033203 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-resid-xtick_8">
+     <g id="g55-es-resid-line2d_15">
+      <path d="M 524.936608 224.44 
+L 524.936608 12.236 
+" clip-path="url(#g55-es-resid-pb3eba78511)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-resid-line2d_16">
+      <g>
+       <use xlink:href="#g55-es-resid-m2f72593e87" x="524.936608" y="224.44" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-resid-text_8">
+      <!-- 27.5 -->
+      <g transform="translate(513.803796 239.038438) scale(0.1 -0.1)">
+       <use xlink:href="#g55-es-resid-DejaVuSans-32"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-37" transform="translate(63.623047 0)"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-2e" transform="translate(127.246094 0)"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-35" transform="translate(159.033203 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-resid-text_9">
+     <!-- Gasto ajustado (miles de USD) -->
+     <g transform="translate(211.045114 252.716563) scale(0.1 -0.1)">
+      <defs>
+       <path id="g55-es-resid-DejaVuSans-47" d="M 3809 666 
+L 3809 1919 
+L 2778 1919 
+L 2778 2438 
+L 4434 2438 
+L 4434 434 
+Q 4069 175 3628 42 
+Q 3188 -91 2688 -91 
+Q 1594 -91 976 548 
+Q 359 1188 359 2328 
+Q 359 3472 976 4111 
+Q 1594 4750 2688 4750 
+Q 3144 4750 3555 4637 
+Q 3966 4525 4313 4306 
+L 4313 3634 
+Q 3963 3931 3569 4081 
+Q 3175 4231 2741 4231 
+Q 1884 4231 1454 3753 
+Q 1025 3275 1025 2328 
+Q 1025 1384 1454 906 
+Q 1884 428 2741 428 
+Q 3075 428 3337 486 
+Q 3600 544 3809 666 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-resid-DejaVuSans-61" d="M 2194 1759 
+Q 1497 1759 1228 1600 
+Q 959 1441 959 1056 
+Q 959 750 1161 570 
+Q 1363 391 1709 391 
+Q 2188 391 2477 730 
+Q 2766 1069 2766 1631 
+L 2766 1759 
+L 2194 1759 
+z
+M 3341 1997 
+L 3341 0 
+L 2766 0 
+L 2766 531 
+Q 2569 213 2275 61 
+Q 1981 -91 1556 -91 
+Q 1019 -91 701 211 
+Q 384 513 384 1019 
+Q 384 1609 779 1909 
+Q 1175 2209 1959 2209 
+L 2766 2209 
+L 2766 2266 
+Q 2766 2663 2505 2880 
+Q 2244 3097 1772 3097 
+Q 1472 3097 1187 3025 
+Q 903 2953 641 2809 
+L 641 3341 
+Q 956 3463 1253 3523 
+Q 1550 3584 1831 3584 
+Q 2591 3584 2966 3190 
+Q 3341 2797 3341 1997 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-resid-DejaVuSans-73" d="M 2834 3397 
+L 2834 2853 
+Q 2591 2978 2328 3040 
+Q 2066 3103 1784 3103 
+Q 1356 3103 1142 2972 
+Q 928 2841 928 2578 
+Q 928 2378 1081 2264 
+Q 1234 2150 1697 2047 
+L 1894 2003 
+Q 2506 1872 2764 1633 
+Q 3022 1394 3022 966 
+Q 3022 478 2636 193 
+Q 2250 -91 1575 -91 
+Q 1294 -91 989 -36 
+Q 684 19 347 128 
+L 347 722 
+Q 666 556 975 473 
+Q 1284 391 1588 391 
+Q 1994 391 2212 530 
+Q 2431 669 2431 922 
+Q 2431 1156 2273 1281 
+Q 2116 1406 1581 1522 
+L 1381 1569 
+Q 847 1681 609 1914 
+Q 372 2147 372 2553 
+Q 372 3047 722 3315 
+Q 1072 3584 1716 3584 
+Q 2034 3584 2315 3537 
+Q 2597 3491 2834 3397 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-resid-DejaVuSans-74" d="M 1172 4494 
+L 1172 3500 
+L 2356 3500 
+L 2356 3053 
+L 1172 3053 
+L 1172 1153 
+Q 1172 725 1289 603 
+Q 1406 481 1766 481 
+L 2356 481 
+L 2356 0 
+L 1766 0 
+Q 1100 0 847 248 
+Q 594 497 594 1153 
+L 594 3053 
+L 172 3053 
+L 172 3500 
+L 594 3500 
+L 594 4494 
+L 1172 4494 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-resid-DejaVuSans-6f" d="M 1959 3097 
+Q 1497 3097 1228 2736 
+Q 959 2375 959 1747 
+Q 959 1119 1226 758 
+Q 1494 397 1959 397 
+Q 2419 397 2687 759 
+Q 2956 1122 2956 1747 
+Q 2956 2369 2687 2733 
+Q 2419 3097 1959 3097 
+z
+M 1959 3584 
+Q 2709 3584 3137 3096 
+Q 3566 2609 3566 1747 
+Q 3566 888 3137 398 
+Q 2709 -91 1959 -91 
+Q 1206 -91 779 398 
+Q 353 888 353 1747 
+Q 353 2609 779 3096 
+Q 1206 3584 1959 3584 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-resid-DejaVuSans-20" transform="scale(0.015625)"/>
+       <path id="g55-es-resid-DejaVuSans-6a" d="M 603 3500 
+L 1178 3500 
+L 1178 -63 
+Q 1178 -731 923 -1031 
+Q 669 -1331 103 -1331 
+L -116 -1331 
+L -116 -844 
+L 38 -844 
+Q 366 -844 484 -692 
+Q 603 -541 603 -63 
+L 603 3500 
+z
+M 603 4863 
+L 1178 4863 
+L 1178 4134 
+L 603 4134 
+L 603 4863 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-resid-DejaVuSans-75" d="M 544 1381 
+L 544 3500 
+L 1119 3500 
+L 1119 1403 
+Q 1119 906 1312 657 
+Q 1506 409 1894 409 
+Q 2359 409 2629 706 
+Q 2900 1003 2900 1516 
+L 2900 3500 
+L 3475 3500 
+L 3475 0 
+L 2900 0 
+L 2900 538 
+Q 2691 219 2414 64 
+Q 2138 -91 1772 -91 
+Q 1169 -91 856 284 
+Q 544 659 544 1381 
+z
+M 1991 3584 
+L 1991 3584 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-resid-DejaVuSans-64" d="M 2906 2969 
+L 2906 4863 
+L 3481 4863 
+L 3481 0 
+L 2906 0 
+L 2906 525 
+Q 2725 213 2448 61 
+Q 2172 -91 1784 -91 
+Q 1150 -91 751 415 
+Q 353 922 353 1747 
+Q 353 2572 751 3078 
+Q 1150 3584 1784 3584 
+Q 2172 3584 2448 3432 
+Q 2725 3281 2906 2969 
+z
+M 947 1747 
+Q 947 1113 1208 752 
+Q 1469 391 1925 391 
+Q 2381 391 2643 752 
+Q 2906 1113 2906 1747 
+Q 2906 2381 2643 2742 
+Q 2381 3103 1925 3103 
+Q 1469 3103 1208 2742 
+Q 947 2381 947 1747 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-resid-DejaVuSans-28" d="M 1984 4856 
+Q 1566 4138 1362 3434 
+Q 1159 2731 1159 2009 
+Q 1159 1288 1364 580 
+Q 1569 -128 1984 -844 
+L 1484 -844 
+Q 1016 -109 783 600 
+Q 550 1309 550 2009 
+Q 550 2706 781 3412 
+Q 1013 4119 1484 4856 
+L 1984 4856 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-resid-DejaVuSans-6d" d="M 3328 2828 
+Q 3544 3216 3844 3400 
+Q 4144 3584 4550 3584 
+Q 5097 3584 5394 3201 
+Q 5691 2819 5691 2113 
+L 5691 0 
+L 5113 0 
+L 5113 2094 
+Q 5113 2597 4934 2840 
+Q 4756 3084 4391 3084 
+Q 3944 3084 3684 2787 
+Q 3425 2491 3425 1978 
+L 3425 0 
+L 2847 0 
+L 2847 2094 
+Q 2847 2600 2669 2842 
+Q 2491 3084 2119 3084 
+Q 1678 3084 1418 2786 
+Q 1159 2488 1159 1978 
+L 1159 0 
+L 581 0 
+L 581 3500 
+L 1159 3500 
+L 1159 2956 
+Q 1356 3278 1631 3431 
+Q 1906 3584 2284 3584 
+Q 2666 3584 2933 3390 
+Q 3200 3197 3328 2828 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-resid-DejaVuSans-69" d="M 603 3500 
+L 1178 3500 
+L 1178 0 
+L 603 0 
+L 603 3500 
+z
+M 603 4863 
+L 1178 4863 
+L 1178 4134 
+L 603 4134 
+L 603 4863 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-resid-DejaVuSans-6c" d="M 603 4863 
+L 1178 4863 
+L 1178 0 
+L 603 0 
+L 603 4863 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-resid-DejaVuSans-65" d="M 3597 1894 
+L 3597 1613 
+L 953 1613 
+Q 991 1019 1311 708 
+Q 1631 397 2203 397 
+Q 2534 397 2845 478 
+Q 3156 559 3463 722 
+L 3463 178 
+Q 3153 47 2828 -22 
+Q 2503 -91 2169 -91 
+Q 1331 -91 842 396 
+Q 353 884 353 1716 
+Q 353 2575 817 3079 
+Q 1281 3584 2069 3584 
+Q 2775 3584 3186 3129 
+Q 3597 2675 3597 1894 
+z
+M 3022 2063 
+Q 3016 2534 2758 2815 
+Q 2500 3097 2075 3097 
+Q 1594 3097 1305 2825 
+Q 1016 2553 972 2059 
+L 3022 2063 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-resid-DejaVuSans-55" d="M 556 4666 
+L 1191 4666 
+L 1191 1831 
+Q 1191 1081 1462 751 
+Q 1734 422 2344 422 
+Q 2950 422 3222 751 
+Q 3494 1081 3494 1831 
+L 3494 4666 
+L 4128 4666 
+L 4128 1753 
+Q 4128 841 3676 375 
+Q 3225 -91 2344 -91 
+Q 1459 -91 1007 375 
+Q 556 841 556 1753 
+L 556 4666 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-resid-DejaVuSans-53" d="M 3425 4513 
+L 3425 3897 
+Q 3066 4069 2747 4153 
+Q 2428 4238 2131 4238 
+Q 1616 4238 1336 4038 
+Q 1056 3838 1056 3469 
+Q 1056 3159 1242 3001 
+Q 1428 2844 1947 2747 
+L 2328 2669 
+Q 3034 2534 3370 2195 
+Q 3706 1856 3706 1288 
+Q 3706 609 3251 259 
+Q 2797 -91 1919 -91 
+Q 1588 -91 1214 -16 
+Q 841 59 441 206 
+L 441 856 
+Q 825 641 1194 531 
+Q 1563 422 1919 422 
+Q 2459 422 2753 634 
+Q 3047 847 3047 1241 
+Q 3047 1584 2836 1778 
+Q 2625 1972 2144 2069 
+L 1759 2144 
+Q 1053 2284 737 2584 
+Q 422 2884 422 3419 
+Q 422 4038 858 4394 
+Q 1294 4750 2059 4750 
+Q 2388 4750 2728 4690 
+Q 3069 4631 3425 4513 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-resid-DejaVuSans-44" d="M 1259 4147 
+L 1259 519 
+L 2022 519 
+Q 2988 519 3436 956 
+Q 3884 1394 3884 2338 
+Q 3884 3275 3436 3711 
+Q 2988 4147 2022 4147 
+L 1259 4147 
+z
+M 628 4666 
+L 1925 4666 
+Q 3281 4666 3915 4102 
+Q 4550 3538 4550 2338 
+Q 4550 1131 3912 565 
+Q 3275 0 1925 0 
+L 628 0 
+L 628 4666 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-resid-DejaVuSans-29" d="M 513 4856 
+L 1013 4856 
+Q 1481 4119 1714 3412 
+Q 1947 2706 1947 2009 
+Q 1947 1309 1714 600 
+Q 1481 -109 1013 -844 
+L 513 -844 
+Q 928 -128 1133 580 
+Q 1338 1288 1338 2009 
+Q 1338 2731 1133 3434 
+Q 928 4138 513 4856 
+z
+" transform="scale(0.015625)"/>
+      </defs>
+      <use xlink:href="#g55-es-resid-DejaVuSans-47"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-61" transform="translate(77.490234 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-73" transform="translate(138.769531 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-74" transform="translate(190.869141 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-6f" transform="translate(230.078125 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-20" transform="translate(291.259766 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-61" transform="translate(323.046875 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-6a" transform="translate(384.326172 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-75" transform="translate(412.109375 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-73" transform="translate(475.488281 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-74" transform="translate(527.587891 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-61" transform="translate(566.796875 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-64" transform="translate(628.076172 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-6f" transform="translate(691.552734 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-20" transform="translate(752.734375 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-28" transform="translate(784.521484 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-6d" transform="translate(823.535156 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-69" transform="translate(920.947266 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-6c" transform="translate(948.730469 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-65" transform="translate(976.513672 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-73" transform="translate(1038.037109 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-20" transform="translate(1090.136719 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-64" transform="translate(1121.923828 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-65" transform="translate(1185.400391 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-20" transform="translate(1246.923828 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-55" transform="translate(1278.710938 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-53" transform="translate(1351.904297 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-44" transform="translate(1415.380859 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-29" transform="translate(1492.382812 0)"/>
+     </g>
+    </g>
+   </g>
+   <g id="g55-es-resid-matplotlib.axis_2">
+    <g id="g55-es-resid-ytick_1">
+     <g id="g55-es-resid-line2d_17">
+      <path d="M 46.64 197.713549 
+L 528.587727 197.713549 
+" clip-path="url(#g55-es-resid-pb3eba78511)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-resid-line2d_18">
+      <defs>
+       <path id="g55-es-resid-med6ecef4d7" d="M 0 0 
+L -3.5 0 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#g55-es-resid-med6ecef4d7" x="46.64" y="197.713549" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-resid-text_10">
+      <!-- −3 -->
+      <g transform="translate(24.897813 201.512768) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-resid-DejaVuSans-2212" d="M 678 2272 
+L 4684 2272 
+L 4684 1741 
+L 678 1741 
+L 678 2272 
+z
+" transform="scale(0.015625)"/>
+        <path id="g55-es-resid-DejaVuSans-33" d="M 2597 2516 
+Q 3050 2419 3304 2112 
+Q 3559 1806 3559 1356 
+Q 3559 666 3084 287 
+Q 2609 -91 1734 -91 
+Q 1441 -91 1130 -33 
+Q 819 25 488 141 
+L 488 750 
+Q 750 597 1062 519 
+Q 1375 441 1716 441 
+Q 2309 441 2620 675 
+Q 2931 909 2931 1356 
+Q 2931 1769 2642 2001 
+Q 2353 2234 1838 2234 
+L 1294 2234 
+L 1294 2753 
+L 1863 2753 
+Q 2328 2753 2575 2939 
+Q 2822 3125 2822 3475 
+Q 2822 3834 2567 4026 
+Q 2313 4219 1838 4219 
+Q 1578 4219 1281 4162 
+Q 984 4106 628 3988 
+L 628 4550 
+Q 988 4650 1302 4700 
+Q 1616 4750 1894 4750 
+Q 2613 4750 3031 4423 
+Q 3450 4097 3450 3541 
+Q 3450 3153 3228 2886 
+Q 3006 2619 2597 2516 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-resid-DejaVuSans-2212"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-33" transform="translate(83.789062 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-resid-ytick_2">
+     <g id="g55-es-resid-line2d_19">
+      <path d="M 46.64 169.580443 
+L 528.587727 169.580443 
+" clip-path="url(#g55-es-resid-pb3eba78511)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-resid-line2d_20">
+      <g>
+       <use xlink:href="#g55-es-resid-med6ecef4d7" x="46.64" y="169.580443" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-resid-text_11">
+      <!-- −2 -->
+      <g transform="translate(24.897813 173.379662) scale(0.1 -0.1)">
+       <use xlink:href="#g55-es-resid-DejaVuSans-2212"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-32" transform="translate(83.789062 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-resid-ytick_3">
+     <g id="g55-es-resid-line2d_21">
+      <path d="M 46.64 141.447337 
+L 528.587727 141.447337 
+" clip-path="url(#g55-es-resid-pb3eba78511)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-resid-line2d_22">
+      <g>
+       <use xlink:href="#g55-es-resid-med6ecef4d7" x="46.64" y="141.447337" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-resid-text_12">
+      <!-- −1 -->
+      <g transform="translate(24.897813 145.246556) scale(0.1 -0.1)">
+       <use xlink:href="#g55-es-resid-DejaVuSans-2212"/>
+       <use xlink:href="#g55-es-resid-DejaVuSans-31" transform="translate(83.789062 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-resid-ytick_4">
+     <g id="g55-es-resid-line2d_23">
+      <path d="M 46.64 113.314231 
+L 528.587727 113.314231 
+" clip-path="url(#g55-es-resid-pb3eba78511)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-resid-line2d_24">
+      <g>
+       <use xlink:href="#g55-es-resid-med6ecef4d7" x="46.64" y="113.314231" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-resid-text_13">
+      <!-- 0 -->
+      <g transform="translate(33.2775 117.11345) scale(0.1 -0.1)">
+       <use xlink:href="#g55-es-resid-DejaVuSans-30"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-resid-ytick_5">
+     <g id="g55-es-resid-line2d_25">
+      <path d="M 46.64 85.181125 
+L 528.587727 85.181125 
+" clip-path="url(#g55-es-resid-pb3eba78511)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-resid-line2d_26">
+      <g>
+       <use xlink:href="#g55-es-resid-med6ecef4d7" x="46.64" y="85.181125" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-resid-text_14">
+      <!-- 1 -->
+      <g transform="translate(33.2775 88.980344) scale(0.1 -0.1)">
+       <use xlink:href="#g55-es-resid-DejaVuSans-31"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-resid-ytick_6">
+     <g id="g55-es-resid-line2d_27">
+      <path d="M 46.64 57.048019 
+L 528.587727 57.048019 
+" clip-path="url(#g55-es-resid-pb3eba78511)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-resid-line2d_28">
+      <g>
+       <use xlink:href="#g55-es-resid-med6ecef4d7" x="46.64" y="57.048019" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-resid-text_15">
+      <!-- 2 -->
+      <g transform="translate(33.2775 60.847238) scale(0.1 -0.1)">
+       <use xlink:href="#g55-es-resid-DejaVuSans-32"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-resid-ytick_7">
+     <g id="g55-es-resid-line2d_29">
+      <path d="M 46.64 28.914913 
+L 528.587727 28.914913 
+" clip-path="url(#g55-es-resid-pb3eba78511)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-resid-line2d_30">
+      <g>
+       <use xlink:href="#g55-es-resid-med6ecef4d7" x="46.64" y="28.914913" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-resid-text_16">
+      <!-- 3 -->
+      <g transform="translate(33.2775 32.714132) scale(0.1 -0.1)">
+       <use xlink:href="#g55-es-resid-DejaVuSans-33"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-resid-text_17">
+     <!-- Residuo (miles de USD) -->
+     <g transform="translate(18.818125 176.992688) rotate(-90) scale(0.1 -0.1)">
+      <defs>
+       <path id="g55-es-resid-DejaVuSans-52" d="M 2841 2188 
+Q 3044 2119 3236 1894 
+Q 3428 1669 3622 1275 
+L 4263 0 
+L 3584 0 
+L 2988 1197 
+Q 2756 1666 2539 1819 
+Q 2322 1972 1947 1972 
+L 1259 1972 
+L 1259 0 
+L 628 0 
+L 628 4666 
+L 2053 4666 
+Q 2853 4666 3247 4331 
+Q 3641 3997 3641 3322 
+Q 3641 2881 3436 2590 
+Q 3231 2300 2841 2188 
+z
+M 1259 4147 
+L 1259 2491 
+L 2053 2491 
+Q 2509 2491 2742 2702 
+Q 2975 2913 2975 3322 
+Q 2975 3731 2742 3939 
+Q 2509 4147 2053 4147 
+L 1259 4147 
+z
+" transform="scale(0.015625)"/>
+      </defs>
+      <use xlink:href="#g55-es-resid-DejaVuSans-52"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-65" transform="translate(64.982422 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-73" transform="translate(126.505859 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-69" transform="translate(178.605469 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-64" transform="translate(206.388672 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-75" transform="translate(269.865234 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-6f" transform="translate(333.244141 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-20" transform="translate(394.425781 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-28" transform="translate(426.212891 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-6d" transform="translate(465.226562 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-69" transform="translate(562.638672 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-6c" transform="translate(590.421875 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-65" transform="translate(618.205078 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-73" transform="translate(679.728516 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-20" transform="translate(731.828125 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-64" transform="translate(763.615234 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-65" transform="translate(827.091797 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-20" transform="translate(888.615234 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-55" transform="translate(920.402344 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-53" transform="translate(993.595703 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-44" transform="translate(1057.072266 0)"/>
+      <use xlink:href="#g55-es-resid-DejaVuSans-29" transform="translate(1134.074219 0)"/>
+     </g>
+    </g>
+   </g>
+   <g id="g55-es-resid-line2d_31">
+    <path d="M 46.64 113.314231 
+L 528.587727 113.314231 
+" clip-path="url(#g55-es-resid-pb3eba78511)" style="fill: none; stroke: #94a3b8; stroke-width: 1.2; stroke-linecap: square"/>
+   </g>
+   <g id="g55-es-resid-patch_3">
+    <path d="M 46.64 224.44 
+L 46.64 12.236 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g55-es-resid-patch_4">
+    <path d="M 528.587727 224.44 
+L 528.587727 12.236 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g55-es-resid-patch_5">
+    <path d="M 46.64 224.44 
+L 528.587727 224.44 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g55-es-resid-patch_6">
+    <path d="M 46.64 12.236 
+L 528.587727 12.236 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g55-es-resid-text_18">
+    <!-- A -->
+    <g transform="translate(72.546715 73.147848) scale(0.08 -0.08)">
+     <defs>
+      <path id="g55-es-resid-DejaVuSans-41" d="M 2188 4044 
+L 1331 1722 
+L 3047 1722 
+L 2188 4044 
+z
+M 1831 4666 
+L 2547 4666 
+L 4325 0 
+L 3669 0 
+L 3244 1197 
+L 1141 1197 
+L 716 0 
+L 50 0 
+L 1831 4666 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#g55-es-resid-DejaVuSans-41"/>
+    </g>
+   </g>
+   <g id="g55-es-resid-text_19">
+    <!-- B -->
+    <g transform="translate(135.137329 89.223909) scale(0.08 -0.08)">
+     <defs>
+      <path id="g55-es-resid-DejaVuSans-42" d="M 1259 2228 
+L 1259 519 
+L 2272 519 
+Q 2781 519 3026 730 
+Q 3272 941 3272 1375 
+Q 3272 1813 3026 2020 
+Q 2781 2228 2272 2228 
+L 1259 2228 
+z
+M 1259 4147 
+L 1259 2741 
+L 2194 2741 
+Q 2656 2741 2882 2914 
+Q 3109 3088 3109 3444 
+Q 3109 3797 2882 3972 
+Q 2656 4147 2194 4147 
+L 1259 4147 
+z
+M 628 4666 
+L 2241 4666 
+Q 2963 4666 3353 4366 
+Q 3744 4066 3744 3513 
+Q 3744 3084 3544 2831 
+Q 3344 2578 2956 2516 
+Q 3422 2416 3680 2098 
+Q 3938 1781 3938 1306 
+Q 3938 681 3513 340 
+Q 3088 0 2303 0 
+L 628 0 
+L 628 4666 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#g55-es-resid-DejaVuSans-42"/>
+    </g>
+   </g>
+   <g id="g55-es-resid-text_20">
+    <!-- C -->
+    <g transform="translate(197.727943 105.29997) scale(0.08 -0.08)">
+     <defs>
+      <path id="g55-es-resid-DejaVuSans-43" d="M 4122 4306 
+L 4122 3641 
+Q 3803 3938 3442 4084 
+Q 3081 4231 2675 4231 
+Q 1875 4231 1450 3742 
+Q 1025 3253 1025 2328 
+Q 1025 1406 1450 917 
+Q 1875 428 2675 428 
+Q 3081 428 3442 575 
+Q 3803 722 4122 1019 
+L 4122 359 
+Q 3791 134 3420 21 
+Q 3050 -91 2638 -91 
+Q 1578 -91 968 557 
+Q 359 1206 359 2328 
+Q 359 3453 968 4101 
+Q 1578 4750 2638 4750 
+Q 3056 4750 3426 4639 
+Q 3797 4528 4122 4306 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#g55-es-resid-DejaVuSans-43"/>
+    </g>
+   </g>
+   <g id="g55-es-resid-text_21">
+    <!-- D -->
+    <g transform="translate(260.318557 149.509136) scale(0.08 -0.08)">
+     <use xlink:href="#g55-es-resid-DejaVuSans-44"/>
+    </g>
+   </g>
+   <g id="g55-es-resid-text_22">
+    <!-- E -->
+    <g transform="translate(322.909171 109.318985) scale(0.08 -0.08)">
+     <defs>
+      <path id="g55-es-resid-DejaVuSans-45" d="M 628 4666 
+L 3578 4666 
+L 3578 4134 
+L 1259 4134 
+L 1259 2753 
+L 3481 2753 
+L 3481 2222 
+L 1259 2222 
+L 1259 531 
+L 3634 531 
+L 3634 0 
+L 628 0 
+L 628 4666 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#g55-es-resid-DejaVuSans-45"/>
+    </g>
+   </g>
+   <g id="g55-es-resid-text_23">
+    <!-- F -->
+    <g transform="translate(385.499785 209.794364) scale(0.08 -0.08)">
+     <defs>
+      <path id="g55-es-resid-DejaVuSans-46" d="M 628 4666 
+L 3309 4666 
+L 3309 4134 
+L 1259 4134 
+L 1259 2759 
+L 3109 2759 
+L 3109 2228 
+L 1259 2228 
+L 1259 0 
+L 628 0 
+L 628 4666 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#g55-es-resid-DejaVuSans-46"/>
+    </g>
+   </g>
+   <g id="g55-es-resid-text_24">
+    <!-- G -->
+    <g transform="translate(448.090398 113.338) scale(0.08 -0.08)">
+     <use xlink:href="#g55-es-resid-DejaVuSans-47"/>
+    </g>
+   </g>
+   <g id="g55-es-resid-text_25">
+    <!-- H -->
+    <g transform="translate(510.681012 16.881636) scale(0.08 -0.08)">
+     <defs>
+      <path id="g55-es-resid-DejaVuSans-48" d="M 628 4666 
+L 1259 4666 
+L 1259 2753 
+L 3553 2753 
+L 3553 4666 
+L 4184 4666 
+L 4184 0 
+L 3553 0 
+L 3553 2222 
+L 1259 2222 
+L 1259 0 
+L 628 0 
+L 628 4666 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#g55-es-resid-DejaVuSans-48"/>
+    </g>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="g55-es-resid-pb3eba78511">
+   <rect x="46.64" y="12.236" width="481.947727" height="212.204"/>
+  </clipPath>
+ </defs>
+</svg>
+<figcaption>Ocho residuos OLS frente al gasto ajustado. El gráfico plantea una pregunta de dispersión; ocho registros no demuestran una función de varianza.</figcaption></figure></section><section class="chapter" id="section-09"><h2>9. Por qué la Sandwich Covariance tiene tres componentes</h2>
+<p>Suponemos que los errores de empresas diferentes son condicionalmente independientes o al menos incorrelacionados, aunque sus varianzas puedan diferir. Entonces <span class="math-inline">\(\Omega\)</span> es diagonal, con entradas <span class="math-inline">\(\sigma_1^2,\ldots,\sigma_8^2\)</span>. No observamos directamente dichas varianzas poblacionales. Un estimador Heteroscedasticity-Consistent (HC) las sustituye por cantidades calculadas a partir de los residuos, con una convención adicional cuando se corrigen grados de libertad o leverage.</p>
+<p>La multiplicación parece un sándwich: <span class="math-inline">\((X^\mathsf TX)^{-1}\)</span> aparece a izquierda y derecha y recibe el nombre de <strong>bread</strong>; el bloque central <span class="math-inline">\(X^\mathsf T\widehat\Omega X\)</span> se denomina <strong>meat</strong>. Esta terminología no asegura protección frente a todos los errores estadísticos. Los factores exteriores traducen variación de las observaciones a variación de coeficientes mediante el diseño de regresión. El bloque central recoge dónde se concentran los errores estimados; una observación con residuo grande y predictor extremo puede contribuir considerablemente a la incertidumbre de la pendiente.</p>
+<p><div class="math-panel"><div class="formula-title">Estimador de covarianza Sandwich</div><div class="math-inner" tabindex="0">\[\widehat V_{HC}=(X^\mathsf TX)^{-1}\left(\sum_{i=1}^n q_i\,x_i^\ast x_i^{\ast\mathsf T}\right)(X^\mathsf TX)^{-1}\]</div></div></p>
+<p>Aquí <span class="math-inline">\(x_i^\ast=(1,x_i)^\mathsf T\)</span> es una columna <span class="math-inline">\(2\times1\)</span>, mientras que <span class="math-inline">\(q_i\)</span> representa la contribución estimada de varianza según la variante HC. El producto exterior <span class="math-inline">\(x_i^\ast x_i^{\ast\mathsf T}\)</span> genera una matriz <span class="math-inline">\(2\times2\)</span>. La suma y los factores exteriores conservan esas dimensiones. Importante: <span class="math-inline">\(q_i\)</span> no debe confundirse con los pesos inversos de varianza que más adelante se usarán en WLS. Son objetos con funciones matemáticas diferentes.</p>
+<p>HC0 emplea <span class="math-inline">\(q_i=e_i^2\)</span>. HC1 multiplica toda la matriz HC0 por <span class="math-inline">\(n/(n-p)\)</span>. HC2 introduce <span class="math-inline">\(q_i=e_i^2/(1-h_{ii})\)</span>, y HC3 usa <span class="math-inline">\(q_i=e_i^2/(1-h_{ii})^2\)</span>. Son estimadores diferentes, no nombres intercambiables. HC3 puede resultar atractivo en muestras pequeñas porque refuerza la contribución de observaciones con mayor leverage. Eso no significa que sus intervalos alcancen exactamente la cobertura nominal en cualquier muestra finita.</p>
+</section><section class="chapter" id="section-10"><h2>10. Derivar leverage y HC3 observación por observación</h2>
+<p>La Hat Matrix es <span class="math-inline">\(H=X(X^\mathsf TX)^{-1}X^\mathsf T\)</span>. Multiplica el vector observado y produce el ajustado: <span class="math-inline">\(\widehat y=Hy\)</span>. Su diagonal <span class="math-inline">\(h_{ii}\)</span> describe cuánto influye el resultado de la observación i en su propia predicción, manteniendo fijo el diseño. En regresión simple con intercepto podemos calcularla sin construir las 64 entradas de H: <span class="math-inline">\(h_{ii}=1/n+(x_i-\bar x)^2/S_{xx}\)</span>.</p>
+<p><div class="math-panel"><div class="formula-title">Ajuste HC3 por leverage</div><div class="math-inner" tabindex="0">\[h_{ii}=\frac1n+\frac{(x_i-\bar x)^2}{S_{xx}},\qquad q_i=\frac{e_i^2}{(1-h_{ii})^2}\]</div></div></p>
+<p>En x=1 obtenemos <span class="math-inline">\(h_{11}=1/8+(-3.5)^2/42=0.125+12.25/42=0.4166667\)</span>. Su residuo vale 1.25, por lo que <span class="math-inline">\(q_1=1.25^2/(1-0.4166667)^2=1.5625/(0.5833333)^2\approx4.591837\)</span>. En x=8 el leverage también es 0.4166667, puesto que se encuentra a la misma distancia de la media. No obstante, el residuo es 3.25 y <span class="math-inline">\(q_8=10.5625/(0.5833333)^2\approx31.040816\)</span>. Tener el mismo leverage no significa aportar la misma incertidumbre: también interviene el tamaño del residuo.</p>
+<div class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">Empresa</th>
+<th style="text-align:right" scope="col">x</th>
+<th style="text-align:right" scope="col">Residuo e</th>
+<th style="text-align:right" scope="col">Leverage h</th>
+<th style="text-align:right" scope="col">Contribución HC3 q</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1.250000</td>
+<td style="text-align:right">0.416667</td>
+<td style="text-align:right">4.591837</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">0.678571</td>
+<td style="text-align:right">0.273810</td>
+<td style="text-align:right">0.873152</td>
+</tr>
+<tr>
+<td>C</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0.107143</td>
+<td style="text-align:right">0.178571</td>
+<td style="text-align:right">0.017013</td>
+</tr>
+<tr>
+<td>D</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">-1.464286</td>
+<td style="text-align:right">0.130952</td>
+<td style="text-align:right">2.838994</td>
+</tr>
+<tr>
+<td>E</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">-0.035714</td>
+<td style="text-align:right">0.130952</td>
+<td style="text-align:right">0.001689</td>
+</tr>
+<tr>
+<td>F</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">-3.607143</td>
+<td style="text-align:right">0.178571</td>
+<td style="text-align:right">19.283554</td>
+</tr>
+<tr>
+<td>G</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">-0.178571</td>
+<td style="text-align:right">0.273810</td>
+<td style="text-align:right">0.060468</td>
+</tr>
+<tr>
+<td>H</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">3.250000</td>
+<td style="text-align:right">0.416667</td>
+<td style="text-align:right">31.040816</td>
+</tr>
+</tbody>
+</table></div>
+<p>La suma de leverages debe ser <span class="math-inline">\(p=2\)</span>, el número de columnas de la matriz X. Esa identidad es una excelente comprobación independiente. Si un leverage calculado fuese negativo, superior a uno o su suma no se acercara a dos, habría que revisar la operación. Las contribuciones mayores corresponden a F y H; advierten que la incertidumbre de la pendiente puede depender fuertemente de ellas. Sin embargo, no justifican por sí solas eliminar ninguna empresa de la muestra.</p>
+<figure class="chart"><svg role="img" aria-label="q" xmlns:xlink="http://www.w3.org/1999/xlink" width="547.2pt" height="266.4pt" viewBox="0 0 547.2 266.4" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="g55-es-q-figure_1">
+  <g id="g55-es-q-patch_1">
+   <path d="M 0 266.4 
+L 547.2 266.4 
+L 547.2 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="g55-es-q-axes_1">
+   <g id="g55-es-q-patch_2">
+    <path d="M 44.93 224.44 
+L 536.4 224.44 
+L 536.4 10.8 
+L 44.93 10.8 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="g55-es-q-patch_3">
+    <path d="M 67.269545 224.44 
+L 113.094254 224.44 
+L 113.094254 194.341379 
+L 67.269545 194.341379 
+z
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: #4079ba"/>
+   </g>
+   <g id="g55-es-q-patch_4">
+    <path d="M 124.550431 224.44 
+L 170.37514 224.44 
+L 170.37514 218.716654 
+L 124.550431 218.716654 
+z
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: #4079ba"/>
+   </g>
+   <g id="g55-es-q-patch_5">
+    <path d="M 181.831317 224.44 
+L 227.656026 224.44 
+L 227.656026 224.328483 
+L 181.831317 224.328483 
+z
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: #4079ba"/>
+   </g>
+   <g id="g55-es-q-patch_6">
+    <path d="M 239.112203 224.44 
+L 284.936911 224.44 
+L 284.936911 205.830932 
+L 239.112203 205.830932 
+z
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: #4079ba"/>
+   </g>
+   <g id="g55-es-q-patch_7">
+    <path d="M 296.393089 224.44 
+L 342.217797 224.44 
+L 342.217797 224.428929 
+L 296.393089 224.428929 
+z
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: #4079ba"/>
+   </g>
+   <g id="g55-es-q-patch_8">
+    <path d="M 353.673974 224.44 
+L 399.498683 224.44 
+L 399.498683 98.039958 
+L 353.673974 98.039958 
+z
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: #4079ba"/>
+   </g>
+   <g id="g55-es-q-patch_9">
+    <path d="M 410.95486 224.44 
+L 456.779569 224.44 
+L 456.779569 224.043644 
+L 410.95486 224.043644 
+z
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: #4079ba"/>
+   </g>
+   <g id="g55-es-q-patch_10">
+    <path d="M 468.235746 224.44 
+L 514.060455 224.44 
+L 514.060455 20.973333 
+L 468.235746 20.973333 
+z
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: #4079ba"/>
+   </g>
+   <g id="g55-es-q-matplotlib.axis_1">
+    <g id="g55-es-q-xtick_1">
+     <g id="g55-es-q-line2d_1">
+      <path d="M 90.1819 224.44 
+L 90.1819 10.8 
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-q-line2d_2">
+      <defs>
+       <path id="g55-es-q-m90819ab811" d="M 0 0 
+L 0 3.5 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#g55-es-q-m90819ab811" x="90.1819" y="224.44" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-q-text_1">
+      <!-- A -->
+      <g transform="translate(86.761587 239.038438) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-q-DejaVuSans-41" d="M 2188 4044 
+L 1331 1722 
+L 3047 1722 
+L 2188 4044 
+z
+M 1831 4666 
+L 2547 4666 
+L 4325 0 
+L 3669 0 
+L 3244 1197 
+L 1141 1197 
+L 716 0 
+L 50 0 
+L 1831 4666 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-q-DejaVuSans-41"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-q-xtick_2">
+     <g id="g55-es-q-line2d_3">
+      <path d="M 147.462786 224.44 
+L 147.462786 10.8 
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-q-line2d_4">
+      <g>
+       <use xlink:href="#g55-es-q-m90819ab811" x="147.462786" y="224.44" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-q-text_2">
+      <!-- B -->
+      <g transform="translate(144.032317 239.038438) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-q-DejaVuSans-42" d="M 1259 2228 
+L 1259 519 
+L 2272 519 
+Q 2781 519 3026 730 
+Q 3272 941 3272 1375 
+Q 3272 1813 3026 2020 
+Q 2781 2228 2272 2228 
+L 1259 2228 
+z
+M 1259 4147 
+L 1259 2741 
+L 2194 2741 
+Q 2656 2741 2882 2914 
+Q 3109 3088 3109 3444 
+Q 3109 3797 2882 3972 
+Q 2656 4147 2194 4147 
+L 1259 4147 
+z
+M 628 4666 
+L 2241 4666 
+Q 2963 4666 3353 4366 
+Q 3744 4066 3744 3513 
+Q 3744 3084 3544 2831 
+Q 3344 2578 2956 2516 
+Q 3422 2416 3680 2098 
+Q 3938 1781 3938 1306 
+Q 3938 681 3513 340 
+Q 3088 0 2303 0 
+L 628 0 
+L 628 4666 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-q-DejaVuSans-42"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-q-xtick_3">
+     <g id="g55-es-q-line2d_5">
+      <path d="M 204.743671 224.44 
+L 204.743671 10.8 
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-q-line2d_6">
+      <g>
+       <use xlink:href="#g55-es-q-m90819ab811" x="204.743671" y="224.44" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-q-text_3">
+      <!-- C -->
+      <g transform="translate(201.252265 239.038438) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-q-DejaVuSans-43" d="M 4122 4306 
+L 4122 3641 
+Q 3803 3938 3442 4084 
+Q 3081 4231 2675 4231 
+Q 1875 4231 1450 3742 
+Q 1025 3253 1025 2328 
+Q 1025 1406 1450 917 
+Q 1875 428 2675 428 
+Q 3081 428 3442 575 
+Q 3803 722 4122 1019 
+L 4122 359 
+Q 3791 134 3420 21 
+Q 3050 -91 2638 -91 
+Q 1578 -91 968 557 
+Q 359 1206 359 2328 
+Q 359 3453 968 4101 
+Q 1578 4750 2638 4750 
+Q 3056 4750 3426 4639 
+Q 3797 4528 4122 4306 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-q-DejaVuSans-43"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-q-xtick_4">
+     <g id="g55-es-q-line2d_7">
+      <path d="M 262.024557 224.44 
+L 262.024557 10.8 
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-q-line2d_8">
+      <g>
+       <use xlink:href="#g55-es-q-m90819ab811" x="262.024557" y="224.44" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-q-text_4">
+      <!-- D -->
+      <g transform="translate(258.174557 239.038438) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-q-DejaVuSans-44" d="M 1259 4147 
+L 1259 519 
+L 2022 519 
+Q 2988 519 3436 956 
+Q 3884 1394 3884 2338 
+Q 3884 3275 3436 3711 
+Q 2988 4147 2022 4147 
+L 1259 4147 
+z
+M 628 4666 
+L 1925 4666 
+Q 3281 4666 3915 4102 
+Q 4550 3538 4550 2338 
+Q 4550 1131 3912 565 
+Q 3275 0 1925 0 
+L 628 0 
+L 628 4666 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-q-DejaVuSans-44"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-q-xtick_5">
+     <g id="g55-es-q-line2d_9">
+      <path d="M 319.305443 224.44 
+L 319.305443 10.8 
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-q-line2d_10">
+      <g>
+       <use xlink:href="#g55-es-q-m90819ab811" x="319.305443" y="224.44" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-q-text_5">
+      <!-- E -->
+      <g transform="translate(316.146068 239.038438) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-q-DejaVuSans-45" d="M 628 4666 
+L 3578 4666 
+L 3578 4134 
+L 1259 4134 
+L 1259 2753 
+L 3481 2753 
+L 3481 2222 
+L 1259 2222 
+L 1259 531 
+L 3634 531 
+L 3634 0 
+L 628 0 
+L 628 4666 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-q-DejaVuSans-45"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-q-xtick_6">
+     <g id="g55-es-q-line2d_11">
+      <path d="M 376.586329 224.44 
+L 376.586329 10.8 
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-q-line2d_12">
+      <g>
+       <use xlink:href="#g55-es-q-m90819ab811" x="376.586329" y="224.44" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-q-text_6">
+      <!-- F -->
+      <g transform="translate(373.710547 239.038438) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-q-DejaVuSans-46" d="M 628 4666 
+L 3309 4666 
+L 3309 4134 
+L 1259 4134 
+L 1259 2759 
+L 3109 2759 
+L 3109 2228 
+L 1259 2228 
+L 1259 0 
+L 628 0 
+L 628 4666 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-q-DejaVuSans-46"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-q-xtick_7">
+     <g id="g55-es-q-line2d_13">
+      <path d="M 433.867214 224.44 
+L 433.867214 10.8 
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-q-line2d_14">
+      <g>
+       <use xlink:href="#g55-es-q-m90819ab811" x="433.867214" y="224.44" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-q-text_7">
+      <!-- G -->
+      <g transform="translate(429.992996 239.038438) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-q-DejaVuSans-47" d="M 3809 666 
+L 3809 1919 
+L 2778 1919 
+L 2778 2438 
+L 4434 2438 
+L 4434 434 
+Q 4069 175 3628 42 
+Q 3188 -91 2688 -91 
+Q 1594 -91 976 548 
+Q 359 1188 359 2328 
+Q 359 3472 976 4111 
+Q 1594 4750 2688 4750 
+Q 3144 4750 3555 4637 
+Q 3966 4525 4313 4306 
+L 4313 3634 
+Q 3963 3931 3569 4081 
+Q 3175 4231 2741 4231 
+Q 1884 4231 1454 3753 
+Q 1025 3275 1025 2328 
+Q 1025 1384 1454 906 
+Q 1884 428 2741 428 
+Q 3075 428 3337 486 
+Q 3600 544 3809 666 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-q-DejaVuSans-47"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-q-xtick_8">
+     <g id="g55-es-q-line2d_15">
+      <path d="M 491.1481 224.44 
+L 491.1481 10.8 
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-q-line2d_16">
+      <g>
+       <use xlink:href="#g55-es-q-m90819ab811" x="491.1481" y="224.44" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-q-text_8">
+      <!-- H -->
+      <g transform="translate(487.387944 239.038438) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-q-DejaVuSans-48" d="M 628 4666 
+L 1259 4666 
+L 1259 2753 
+L 3553 2753 
+L 3553 4666 
+L 4184 4666 
+L 4184 0 
+L 3553 0 
+L 3553 2222 
+L 1259 2222 
+L 1259 0 
+L 628 0 
+L 628 4666 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-q-DejaVuSans-48"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-q-text_9">
+     <!-- Empresa -->
+     <g transform="translate(268.772812 252.716563) scale(0.1 -0.1)">
+      <defs>
+       <path id="g55-es-q-DejaVuSans-6d" d="M 3328 2828 
+Q 3544 3216 3844 3400 
+Q 4144 3584 4550 3584 
+Q 5097 3584 5394 3201 
+Q 5691 2819 5691 2113 
+L 5691 0 
+L 5113 0 
+L 5113 2094 
+Q 5113 2597 4934 2840 
+Q 4756 3084 4391 3084 
+Q 3944 3084 3684 2787 
+Q 3425 2491 3425 1978 
+L 3425 0 
+L 2847 0 
+L 2847 2094 
+Q 2847 2600 2669 2842 
+Q 2491 3084 2119 3084 
+Q 1678 3084 1418 2786 
+Q 1159 2488 1159 1978 
+L 1159 0 
+L 581 0 
+L 581 3500 
+L 1159 3500 
+L 1159 2956 
+Q 1356 3278 1631 3431 
+Q 1906 3584 2284 3584 
+Q 2666 3584 2933 3390 
+Q 3200 3197 3328 2828 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-q-DejaVuSans-70" d="M 1159 525 
+L 1159 -1331 
+L 581 -1331 
+L 581 3500 
+L 1159 3500 
+L 1159 2969 
+Q 1341 3281 1617 3432 
+Q 1894 3584 2278 3584 
+Q 2916 3584 3314 3078 
+Q 3713 2572 3713 1747 
+Q 3713 922 3314 415 
+Q 2916 -91 2278 -91 
+Q 1894 -91 1617 61 
+Q 1341 213 1159 525 
+z
+M 3116 1747 
+Q 3116 2381 2855 2742 
+Q 2594 3103 2138 3103 
+Q 1681 3103 1420 2742 
+Q 1159 2381 1159 1747 
+Q 1159 1113 1420 752 
+Q 1681 391 2138 391 
+Q 2594 391 2855 752 
+Q 3116 1113 3116 1747 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-q-DejaVuSans-72" d="M 2631 2963 
+Q 2534 3019 2420 3045 
+Q 2306 3072 2169 3072 
+Q 1681 3072 1420 2755 
+Q 1159 2438 1159 1844 
+L 1159 0 
+L 581 0 
+L 581 3500 
+L 1159 3500 
+L 1159 2956 
+Q 1341 3275 1631 3429 
+Q 1922 3584 2338 3584 
+Q 2397 3584 2469 3576 
+Q 2541 3569 2628 3553 
+L 2631 2963 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-q-DejaVuSans-65" d="M 3597 1894 
+L 3597 1613 
+L 953 1613 
+Q 991 1019 1311 708 
+Q 1631 397 2203 397 
+Q 2534 397 2845 478 
+Q 3156 559 3463 722 
+L 3463 178 
+Q 3153 47 2828 -22 
+Q 2503 -91 2169 -91 
+Q 1331 -91 842 396 
+Q 353 884 353 1716 
+Q 353 2575 817 3079 
+Q 1281 3584 2069 3584 
+Q 2775 3584 3186 3129 
+Q 3597 2675 3597 1894 
+z
+M 3022 2063 
+Q 3016 2534 2758 2815 
+Q 2500 3097 2075 3097 
+Q 1594 3097 1305 2825 
+Q 1016 2553 972 2059 
+L 3022 2063 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-q-DejaVuSans-73" d="M 2834 3397 
+L 2834 2853 
+Q 2591 2978 2328 3040 
+Q 2066 3103 1784 3103 
+Q 1356 3103 1142 2972 
+Q 928 2841 928 2578 
+Q 928 2378 1081 2264 
+Q 1234 2150 1697 2047 
+L 1894 2003 
+Q 2506 1872 2764 1633 
+Q 3022 1394 3022 966 
+Q 3022 478 2636 193 
+Q 2250 -91 1575 -91 
+Q 1294 -91 989 -36 
+Q 684 19 347 128 
+L 347 722 
+Q 666 556 975 473 
+Q 1284 391 1588 391 
+Q 1994 391 2212 530 
+Q 2431 669 2431 922 
+Q 2431 1156 2273 1281 
+Q 2116 1406 1581 1522 
+L 1381 1569 
+Q 847 1681 609 1914 
+Q 372 2147 372 2553 
+Q 372 3047 722 3315 
+Q 1072 3584 1716 3584 
+Q 2034 3584 2315 3537 
+Q 2597 3491 2834 3397 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-q-DejaVuSans-61" d="M 2194 1759 
+Q 1497 1759 1228 1600 
+Q 959 1441 959 1056 
+Q 959 750 1161 570 
+Q 1363 391 1709 391 
+Q 2188 391 2477 730 
+Q 2766 1069 2766 1631 
+L 2766 1759 
+L 2194 1759 
+z
+M 3341 1997 
+L 3341 0 
+L 2766 0 
+L 2766 531 
+Q 2569 213 2275 61 
+Q 1981 -91 1556 -91 
+Q 1019 -91 701 211 
+Q 384 513 384 1019 
+Q 384 1609 779 1909 
+Q 1175 2209 1959 2209 
+L 2766 2209 
+L 2766 2266 
+Q 2766 2663 2505 2880 
+Q 2244 3097 1772 3097 
+Q 1472 3097 1187 3025 
+Q 903 2953 641 2809 
+L 641 3341 
+Q 956 3463 1253 3523 
+Q 1550 3584 1831 3584 
+Q 2591 3584 2966 3190 
+Q 3341 2797 3341 1997 
+z
+" transform="scale(0.015625)"/>
+      </defs>
+      <use xlink:href="#g55-es-q-DejaVuSans-45"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-6d" transform="translate(63.183594 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-70" transform="translate(160.595703 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-72" transform="translate(224.072266 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-65" transform="translate(262.935547 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-73" transform="translate(324.458984 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-61" transform="translate(376.558594 0)"/>
+     </g>
+    </g>
+   </g>
+   <g id="g55-es-q-matplotlib.axis_2">
+    <g id="g55-es-q-ytick_1">
+     <g id="g55-es-q-line2d_17">
+      <path d="M 44.93 224.44 
+L 536.4 224.44 
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-q-line2d_18">
+      <defs>
+       <path id="g55-es-q-mfa039585c2" d="M 0 0 
+L -3.5 0 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#g55-es-q-mfa039585c2" x="44.93" y="224.44" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-q-text_10">
+      <!-- 0 -->
+      <g transform="translate(31.5675 228.239219) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-q-DejaVuSans-30" d="M 2034 4250 
+Q 1547 4250 1301 3770 
+Q 1056 3291 1056 2328 
+Q 1056 1369 1301 889 
+Q 1547 409 2034 409 
+Q 2525 409 2770 889 
+Q 3016 1369 3016 2328 
+Q 3016 3291 2770 3770 
+Q 2525 4250 2034 4250 
+z
+M 2034 4750 
+Q 2819 4750 3233 4129 
+Q 3647 3509 3647 2328 
+Q 3647 1150 3233 529 
+Q 2819 -91 2034 -91 
+Q 1250 -91 836 529 
+Q 422 1150 422 2328 
+Q 422 3509 836 4129 
+Q 1250 4750 2034 4750 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-q-DejaVuSans-30"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-q-ytick_2">
+     <g id="g55-es-q-line2d_19">
+      <path d="M 44.93 191.665947 
+L 536.4 191.665947 
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-q-line2d_20">
+      <g>
+       <use xlink:href="#g55-es-q-mfa039585c2" x="44.93" y="191.665947" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-q-text_11">
+      <!-- 5 -->
+      <g transform="translate(31.5675 195.465166) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-q-DejaVuSans-35" d="M 691 4666 
+L 3169 4666 
+L 3169 4134 
+L 1269 4134 
+L 1269 2991 
+Q 1406 3038 1543 3061 
+Q 1681 3084 1819 3084 
+Q 2600 3084 3056 2656 
+Q 3513 2228 3513 1497 
+Q 3513 744 3044 326 
+Q 2575 -91 1722 -91 
+Q 1428 -91 1123 -41 
+Q 819 9 494 109 
+L 494 744 
+Q 775 591 1075 516 
+Q 1375 441 1709 441 
+Q 2250 441 2565 725 
+Q 2881 1009 2881 1497 
+Q 2881 1984 2565 2268 
+Q 2250 2553 1709 2553 
+Q 1456 2553 1204 2497 
+Q 953 2441 691 2322 
+L 691 4666 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-q-DejaVuSans-35"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-q-ytick_3">
+     <g id="g55-es-q-line2d_21">
+      <path d="M 44.93 158.891895 
+L 536.4 158.891895 
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-q-line2d_22">
+      <g>
+       <use xlink:href="#g55-es-q-mfa039585c2" x="44.93" y="158.891895" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-q-text_12">
+      <!-- 10 -->
+      <g transform="translate(25.205 162.691114) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-q-DejaVuSans-31" d="M 794 531 
+L 1825 531 
+L 1825 4091 
+L 703 3866 
+L 703 4441 
+L 1819 4666 
+L 2450 4666 
+L 2450 531 
+L 3481 531 
+L 3481 0 
+L 794 0 
+L 794 531 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-q-DejaVuSans-31"/>
+       <use xlink:href="#g55-es-q-DejaVuSans-30" transform="translate(63.623047 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-q-ytick_4">
+     <g id="g55-es-q-line2d_23">
+      <path d="M 44.93 126.117842 
+L 536.4 126.117842 
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-q-line2d_24">
+      <g>
+       <use xlink:href="#g55-es-q-mfa039585c2" x="44.93" y="126.117842" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-q-text_13">
+      <!-- 15 -->
+      <g transform="translate(25.205 129.917061) scale(0.1 -0.1)">
+       <use xlink:href="#g55-es-q-DejaVuSans-31"/>
+       <use xlink:href="#g55-es-q-DejaVuSans-35" transform="translate(63.623047 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-q-ytick_5">
+     <g id="g55-es-q-line2d_25">
+      <path d="M 44.93 93.34379 
+L 536.4 93.34379 
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-q-line2d_26">
+      <g>
+       <use xlink:href="#g55-es-q-mfa039585c2" x="44.93" y="93.34379" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-q-text_14">
+      <!-- 20 -->
+      <g transform="translate(25.205 97.143009) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-q-DejaVuSans-32" d="M 1228 531 
+L 3431 531 
+L 3431 0 
+L 469 0 
+L 469 531 
+Q 828 903 1448 1529 
+Q 2069 2156 2228 2338 
+Q 2531 2678 2651 2914 
+Q 2772 3150 2772 3378 
+Q 2772 3750 2511 3984 
+Q 2250 4219 1831 4219 
+Q 1534 4219 1204 4116 
+Q 875 4013 500 3803 
+L 500 4441 
+Q 881 4594 1212 4672 
+Q 1544 4750 1819 4750 
+Q 2544 4750 2975 4387 
+Q 3406 4025 3406 3419 
+Q 3406 3131 3298 2873 
+Q 3191 2616 2906 2266 
+Q 2828 2175 2409 1742 
+Q 1991 1309 1228 531 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-q-DejaVuSans-32"/>
+       <use xlink:href="#g55-es-q-DejaVuSans-30" transform="translate(63.623047 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-q-ytick_6">
+     <g id="g55-es-q-line2d_27">
+      <path d="M 44.93 60.569737 
+L 536.4 60.569737 
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-q-line2d_28">
+      <g>
+       <use xlink:href="#g55-es-q-mfa039585c2" x="44.93" y="60.569737" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-q-text_15">
+      <!-- 25 -->
+      <g transform="translate(25.205 64.368956) scale(0.1 -0.1)">
+       <use xlink:href="#g55-es-q-DejaVuSans-32"/>
+       <use xlink:href="#g55-es-q-DejaVuSans-35" transform="translate(63.623047 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-q-ytick_7">
+     <g id="g55-es-q-line2d_29">
+      <path d="M 44.93 27.795685 
+L 536.4 27.795685 
+" clip-path="url(#g55-es-q-p2d01e1a8fe)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-q-line2d_30">
+      <g>
+       <use xlink:href="#g55-es-q-mfa039585c2" x="44.93" y="27.795685" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-q-text_16">
+      <!-- 30 -->
+      <g transform="translate(25.205 31.594904) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-q-DejaVuSans-33" d="M 2597 2516 
+Q 3050 2419 3304 2112 
+Q 3559 1806 3559 1356 
+Q 3559 666 3084 287 
+Q 2609 -91 1734 -91 
+Q 1441 -91 1130 -33 
+Q 819 25 488 141 
+L 488 750 
+Q 750 597 1062 519 
+Q 1375 441 1716 441 
+Q 2309 441 2620 675 
+Q 2931 909 2931 1356 
+Q 2931 1769 2642 2001 
+Q 2353 2234 1838 2234 
+L 1294 2234 
+L 1294 2753 
+L 1863 2753 
+Q 2328 2753 2575 2939 
+Q 2822 3125 2822 3475 
+Q 2822 3834 2567 4026 
+Q 2313 4219 1838 4219 
+Q 1578 4219 1281 4162 
+Q 984 4106 628 3988 
+L 628 4550 
+Q 988 4650 1302 4700 
+Q 1616 4750 1894 4750 
+Q 2613 4750 3031 4423 
+Q 3450 4097 3450 3541 
+Q 3450 3153 3228 2886 
+Q 3006 2619 2597 2516 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-q-DejaVuSans-33"/>
+       <use xlink:href="#g55-es-q-DejaVuSans-30" transform="translate(63.623047 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-q-text_17">
+     <!-- Contribución HC3, q -->
+     <g transform="translate(19.125312 167.827813) rotate(-90) scale(0.1 -0.1)">
+      <defs>
+       <path id="g55-es-q-DejaVuSans-6f" d="M 1959 3097 
+Q 1497 3097 1228 2736 
+Q 959 2375 959 1747 
+Q 959 1119 1226 758 
+Q 1494 397 1959 397 
+Q 2419 397 2687 759 
+Q 2956 1122 2956 1747 
+Q 2956 2369 2687 2733 
+Q 2419 3097 1959 3097 
+z
+M 1959 3584 
+Q 2709 3584 3137 3096 
+Q 3566 2609 3566 1747 
+Q 3566 888 3137 398 
+Q 2709 -91 1959 -91 
+Q 1206 -91 779 398 
+Q 353 888 353 1747 
+Q 353 2609 779 3096 
+Q 1206 3584 1959 3584 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-q-DejaVuSans-6e" d="M 3513 2113 
+L 3513 0 
+L 2938 0 
+L 2938 2094 
+Q 2938 2591 2744 2837 
+Q 2550 3084 2163 3084 
+Q 1697 3084 1428 2787 
+Q 1159 2491 1159 1978 
+L 1159 0 
+L 581 0 
+L 581 3500 
+L 1159 3500 
+L 1159 2956 
+Q 1366 3272 1645 3428 
+Q 1925 3584 2291 3584 
+Q 2894 3584 3203 3211 
+Q 3513 2838 3513 2113 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-q-DejaVuSans-74" d="M 1172 4494 
+L 1172 3500 
+L 2356 3500 
+L 2356 3053 
+L 1172 3053 
+L 1172 1153 
+Q 1172 725 1289 603 
+Q 1406 481 1766 481 
+L 2356 481 
+L 2356 0 
+L 1766 0 
+Q 1100 0 847 248 
+Q 594 497 594 1153 
+L 594 3053 
+L 172 3053 
+L 172 3500 
+L 594 3500 
+L 594 4494 
+L 1172 4494 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-q-DejaVuSans-69" d="M 603 3500 
+L 1178 3500 
+L 1178 0 
+L 603 0 
+L 603 3500 
+z
+M 603 4863 
+L 1178 4863 
+L 1178 4134 
+L 603 4134 
+L 603 4863 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-q-DejaVuSans-62" d="M 3116 1747 
+Q 3116 2381 2855 2742 
+Q 2594 3103 2138 3103 
+Q 1681 3103 1420 2742 
+Q 1159 2381 1159 1747 
+Q 1159 1113 1420 752 
+Q 1681 391 2138 391 
+Q 2594 391 2855 752 
+Q 3116 1113 3116 1747 
+z
+M 1159 2969 
+Q 1341 3281 1617 3432 
+Q 1894 3584 2278 3584 
+Q 2916 3584 3314 3078 
+Q 3713 2572 3713 1747 
+Q 3713 922 3314 415 
+Q 2916 -91 2278 -91 
+Q 1894 -91 1617 61 
+Q 1341 213 1159 525 
+L 1159 0 
+L 581 0 
+L 581 4863 
+L 1159 4863 
+L 1159 2969 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-q-DejaVuSans-75" d="M 544 1381 
+L 544 3500 
+L 1119 3500 
+L 1119 1403 
+Q 1119 906 1312 657 
+Q 1506 409 1894 409 
+Q 2359 409 2629 706 
+Q 2900 1003 2900 1516 
+L 2900 3500 
+L 3475 3500 
+L 3475 0 
+L 2900 0 
+L 2900 538 
+Q 2691 219 2414 64 
+Q 2138 -91 1772 -91 
+Q 1169 -91 856 284 
+Q 544 659 544 1381 
+z
+M 1991 3584 
+L 1991 3584 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-q-DejaVuSans-63" d="M 3122 3366 
+L 3122 2828 
+Q 2878 2963 2633 3030 
+Q 2388 3097 2138 3097 
+Q 1578 3097 1268 2742 
+Q 959 2388 959 1747 
+Q 959 1106 1268 751 
+Q 1578 397 2138 397 
+Q 2388 397 2633 464 
+Q 2878 531 3122 666 
+L 3122 134 
+Q 2881 22 2623 -34 
+Q 2366 -91 2075 -91 
+Q 1284 -91 818 406 
+Q 353 903 353 1747 
+Q 353 2603 823 3093 
+Q 1294 3584 2113 3584 
+Q 2378 3584 2631 3529 
+Q 2884 3475 3122 3366 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-q-DejaVuSans-f3" d="M 1959 3097 
+Q 1497 3097 1228 2736 
+Q 959 2375 959 1747 
+Q 959 1119 1226 758 
+Q 1494 397 1959 397 
+Q 2419 397 2687 759 
+Q 2956 1122 2956 1747 
+Q 2956 2369 2687 2733 
+Q 2419 3097 1959 3097 
+z
+M 1959 3584 
+Q 2709 3584 3137 3096 
+Q 3566 2609 3566 1747 
+Q 3566 888 3137 398 
+Q 2709 -91 1959 -91 
+Q 1206 -91 779 398 
+Q 353 888 353 1747 
+Q 353 2609 779 3096 
+Q 1206 3584 1959 3584 
+z
+M 2394 5119 
+L 3016 5119 
+L 1998 3944 
+L 1519 3944 
+L 2394 5119 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-q-DejaVuSans-20" transform="scale(0.015625)"/>
+       <path id="g55-es-q-DejaVuSans-2c" d="M 750 794 
+L 1409 794 
+L 1409 256 
+L 897 -744 
+L 494 -744 
+L 750 256 
+L 750 794 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-q-DejaVuSans-71" d="M 947 1747 
+Q 947 1113 1208 752 
+Q 1469 391 1925 391 
+Q 2381 391 2643 752 
+Q 2906 1113 2906 1747 
+Q 2906 2381 2643 2742 
+Q 2381 3103 1925 3103 
+Q 1469 3103 1208 2742 
+Q 947 2381 947 1747 
+z
+M 2906 525 
+Q 2725 213 2448 61 
+Q 2172 -91 1784 -91 
+Q 1150 -91 751 415 
+Q 353 922 353 1747 
+Q 353 2572 751 3078 
+Q 1150 3584 1784 3584 
+Q 2172 3584 2448 3432 
+Q 2725 3281 2906 2969 
+L 2906 3500 
+L 3481 3500 
+L 3481 -1331 
+L 2906 -1331 
+L 2906 525 
+z
+" transform="scale(0.015625)"/>
+      </defs>
+      <use xlink:href="#g55-es-q-DejaVuSans-43"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-6f" transform="translate(69.824219 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-6e" transform="translate(131.005859 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-74" transform="translate(194.384766 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-72" transform="translate(233.59375 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-69" transform="translate(274.707031 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-62" transform="translate(302.490234 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-75" transform="translate(365.966797 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-63" transform="translate(429.345703 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-69" transform="translate(484.326172 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-f3" transform="translate(512.109375 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-6e" transform="translate(573.291016 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-20" transform="translate(636.669922 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-48" transform="translate(668.457031 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-43" transform="translate(743.652344 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-33" transform="translate(813.476562 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-2c" transform="translate(877.099609 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-20" transform="translate(908.886719 0)"/>
+      <use xlink:href="#g55-es-q-DejaVuSans-71" transform="translate(940.673828 0)"/>
+     </g>
+    </g>
+   </g>
+   <g id="g55-es-q-patch_11">
+    <path d="M 44.93 224.44 
+L 44.93 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g55-es-q-patch_12">
+    <path d="M 536.4 224.44 
+L 536.4 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g55-es-q-patch_13">
+    <path d="M 44.93 224.44 
+L 536.4 224.44 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g55-es-q-patch_14">
+    <path d="M 44.93 10.8 
+L 536.4 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="g55-es-q-p2d01e1a8fe">
+   <rect x="44.93" y="10.8" width="491.47" height="213.64"/>
+  </clipPath>
+ </defs>
+</svg>
+<figcaption>Las contribuciones HC3 combinan residuos cuadrados y leverage; F y H destacan especialmente.</figcaption></figure></section><section class="chapter" id="section-11"><h2>11. Armar la matriz HC3 sin saltarse el componente central</h2>
+<p>Cada empresa aporta <span class="math-inline">\(q_i\begin{pmatrix}1&amp;x_i\\x_i&amp;x_i^2\end{pmatrix}\)</span>. Por ejemplo, A aporta <span class="math-inline">\(4.591837\begin{pmatrix}1&amp;1\\1&amp;1\end{pmatrix}\)</span>, mientras que H aporta <span class="math-inline">\(31.040816\begin{pmatrix}1&amp;8\\8&amp;64\end{pmatrix}\)</span>. Al sumar las ocho contribuciones se obtiene el bloque central HC3, aproximadamente <span class="math-inline">\(M=\begin{pmatrix}58.707523&amp;382.204729\\382.204729&amp;2737.486792\end{pmatrix}\)</span>. El número elevado de la posición inferior derecha se debe a que multiplicamos por <span class="math-inline">\(x_i^2\)</span>, no significa que la pendiente estimada sea 2,737.</p>
+<p>Multiplicamos ahora <span class="math-inline">\(BMB\)</span>, siendo <span class="math-inline">\(B=(X^\mathsf TX)^{-1}=\begin{pmatrix}0.607142857&amp;-0.107142857\\-0.107142857&amp;0.023809524\end{pmatrix}\)</span>. La matriz de covarianza HC3 resulta aproximadamente <span class="math-inline">\(\begin{pmatrix}3.340527&amp;-0.889746\\-0.889746&amp;0.275778\end{pmatrix}\)</span>. La varianza de la pendiente es 0.275778; su raíz cuadrada da <span class="math-inline">\(SE_{HC3}(b_1)\approx0.525145\)</span>. Para el intercepto calculamos <span class="math-inline">\(\sqrt{3.340527}\approx1.827711\)</span>.</p>
+<p><div class="math-panel"><div class="formula-title">Matriz de covarianza HC3 calculada</div><div class="math-inner" tabindex="0">\[\widehat V_{HC3}=\begin{pmatrix}3.340527&amp;-0.889746\\-0.889746&amp;0.275778\end{pmatrix}\]</div></div></p>
+<p>La pendiente continúa siendo <strong>2.571429</strong>. No cambiaron las predicciones ni los residuos OLS. Únicamente cambiamos la estimación de variabilidad muestral de los coeficientes. Esa es la operación esencial de los Standard Errors robustos tipo Sandwich: la recta no se vuelve a estimar, pero ya no obligamos a que todas las observaciones compartan una única varianza para calcular incertidumbre. Una matriz de covarianza de coeficientes no describe directamente la variabilidad de gasto de una nueva empresa individual, que requiere otras condiciones y otra pregunta.</p>
+<p>Disponemos de una comprobación algebraica independiente. En una regresión simple, la pendiente es una suma ponderada de resultados observados, con ponderaciones <span class="math-inline">\(a_i=(x_i-\bar x)/S_{xx}\)</span>. Bajo una covarianza diagonal de errores, su estimador de varianza HC3 también puede calcularse como <span class="math-inline">\(\sum_i a_i^2q_i\)</span>. Al sustituir los ocho valores se obtiene 0.275778, igual que con la multiplicación matricial. Esta vía es útil si se cometió un error al transcribir un elemento de la matriz o una transpuesta; además muestra por qué los puntos alejados de la media de x pueden ser importantes para la incertidumbre de la pendiente.</p>
+</section><section class="chapter" id="section-12"><h2>12. Comparar intervalos y aclarar qué distribución utilizamos</h2>
+<p>Para una comparación pedagógica transparente, utilizamos el mismo valor crítico <span class="math-inline">\(t_{0.975,6}=2.446912\)</span> con ambos errores estándar. El intervalo clásico es <span class="math-inline">\([1.758918,3.383939]\)</span>; al sustituir HC3 obtenemos <span class="math-inline">\(2.571429\pm2.446912(0.525145)=[1.286444,3.856413]\)</span>. El segundo intervalo es más ancho porque el error estándar aumentó. Sin embargo, sería incorrecto afirmar que los errores robustos <strong>siempre</strong> agrandan los intervalos. Según el patrón de residuos y el diseño, un estimador HC puede ser menor que el convencional.</p>
+<div class="table-scroll" tabindex="0"><table>
+<thead>
+<tr>
+<th scope="col">Cantidad</th>
+<th style="text-align:right" scope="col">OLS clásico</th>
+<th style="text-align:right" scope="col">HC3 (mismos coeficientes OLS)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pendiente estimada</td>
+<td style="text-align:right">2.571429</td>
+<td style="text-align:right">2.571429</td>
+</tr>
+<tr>
+<td>SE de la pendiente</td>
+<td style="text-align:right">0.332055</td>
+<td style="text-align:right">0.525145</td>
+</tr>
+<tr>
+<td>Cociente tipo t, pendiente nula</td>
+<td style="text-align:right">7.743975</td>
+<td style="text-align:right">4.896604</td>
+</tr>
+<tr>
+<td>Intervalo 95% usando t, df=6</td>
+<td style="text-align:right">[1.758918, 3.383939]</td>
+<td style="text-align:right">[1.286444, 3.856413]</td>
+</tr>
+</tbody>
+</table></div>
+<p>La justificación general de HC3 se relaciona con consistencia asintótica bajo exogeneidad, independencia adecuada, momentos y regularidad del diseño. El uso de una distribución t con seis grados de libertad no es un teorema exacto de muestra finita simplemente porque un programa imprime ese estadístico. Aquí adoptamos el mismo valor crítico como <strong>convención ilustrativa</strong> para aislar el cambio de covarianza. Una investigación con muestra pequeña debe justificar sus grados de libertad, posibles ajustes o procedimientos bootstrap adecuados al diseño. Siempre se debe distinguir el estimador de covarianza de la distribución de referencia utilizada para los intervalos.</p>
+<p>Ambos intervalos del ejemplo excluyen el cero. La coincidencia es una característica de estos datos, no prueba que la heteroscedasticidad no exista ni importe. Otra muestra podría generar decisiones diferentes al cambiar la incertidumbre. En vez de resumir el análisis con "significativo" o "no significativo", informa el tamaño de la asociación en unidades comprensibles, los intervalos, sus supuestos y la sensibilidad de las conclusiones.</p>
+<figure class="chart"><svg role="img" aria-label="interval" xmlns:xlink="http://www.w3.org/1999/xlink" width="547.2pt" height="266.4pt" viewBox="0 0 547.2 266.4" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="g55-es-interval-figure_1">
+  <g id="g55-es-interval-patch_1">
+   <path d="M 0 266.4 
+L 547.2 266.4 
+L 547.2 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="g55-es-interval-axes_1">
+   <g id="g55-es-interval-patch_2">
+    <path d="M 53.35 224.08 
+L 536.4 224.08 
+L 536.4 10.8 
+L 53.35 10.8 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="g55-es-interval-matplotlib.axis_1">
+    <g id="g55-es-interval-xtick_1">
+     <g id="g55-es-interval-line2d_1">
+      <path d="M 53.35 224.08 
+L 53.35 10.8 
+" clip-path="url(#g55-es-interval-p2d689c72c2)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-interval-line2d_2">
+      <defs>
+       <path id="g55-es-interval-m0263e71890" d="M 0 0 
+L 0 3.5 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#g55-es-interval-m0263e71890" x="53.35" y="224.08" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-interval-text_1">
+      <!-- 0.0 -->
+      <g transform="translate(45.398438 238.678438) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-interval-DejaVuSans-30" d="M 2034 4250 
+Q 1547 4250 1301 3770 
+Q 1056 3291 1056 2328 
+Q 1056 1369 1301 889 
+Q 1547 409 2034 409 
+Q 2525 409 2770 889 
+Q 3016 1369 3016 2328 
+Q 3016 3291 2770 3770 
+Q 2525 4250 2034 4250 
+z
+M 2034 4750 
+Q 2819 4750 3233 4129 
+Q 3647 3509 3647 2328 
+Q 3647 1150 3233 529 
+Q 2819 -91 2034 -91 
+Q 1250 -91 836 529 
+Q 422 1150 422 2328 
+Q 422 3509 836 4129 
+Q 1250 4750 2034 4750 
+z
+" transform="scale(0.015625)"/>
+        <path id="g55-es-interval-DejaVuSans-2e" d="M 684 794 
+L 1344 794 
+L 1344 0 
+L 684 0 
+L 684 794 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-interval-DejaVuSans-30"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-2e" transform="translate(63.623047 0)"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-30" transform="translate(95.410156 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-interval-xtick_2">
+     <g id="g55-es-interval-line2d_3">
+      <path d="M 109.518605 224.08 
+L 109.518605 10.8 
+" clip-path="url(#g55-es-interval-p2d689c72c2)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-interval-line2d_4">
+      <g>
+       <use xlink:href="#g55-es-interval-m0263e71890" x="109.518605" y="224.08" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-interval-text_2">
+      <!-- 0.5 -->
+      <g transform="translate(101.567042 238.678438) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-interval-DejaVuSans-35" d="M 691 4666 
+L 3169 4666 
+L 3169 4134 
+L 1269 4134 
+L 1269 2991 
+Q 1406 3038 1543 3061 
+Q 1681 3084 1819 3084 
+Q 2600 3084 3056 2656 
+Q 3513 2228 3513 1497 
+Q 3513 744 3044 326 
+Q 2575 -91 1722 -91 
+Q 1428 -91 1123 -41 
+Q 819 9 494 109 
+L 494 744 
+Q 775 591 1075 516 
+Q 1375 441 1709 441 
+Q 2250 441 2565 725 
+Q 2881 1009 2881 1497 
+Q 2881 1984 2565 2268 
+Q 2250 2553 1709 2553 
+Q 1456 2553 1204 2497 
+Q 953 2441 691 2322 
+L 691 4666 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-interval-DejaVuSans-30"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-2e" transform="translate(63.623047 0)"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-35" transform="translate(95.410156 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-interval-xtick_3">
+     <g id="g55-es-interval-line2d_5">
+      <path d="M 165.687209 224.08 
+L 165.687209 10.8 
+" clip-path="url(#g55-es-interval-p2d689c72c2)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-interval-line2d_6">
+      <g>
+       <use xlink:href="#g55-es-interval-m0263e71890" x="165.687209" y="224.08" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-interval-text_3">
+      <!-- 1.0 -->
+      <g transform="translate(157.735647 238.678438) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-interval-DejaVuSans-31" d="M 794 531 
+L 1825 531 
+L 1825 4091 
+L 703 3866 
+L 703 4441 
+L 1819 4666 
+L 2450 4666 
+L 2450 531 
+L 3481 531 
+L 3481 0 
+L 794 0 
+L 794 531 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-interval-DejaVuSans-31"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-2e" transform="translate(63.623047 0)"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-30" transform="translate(95.410156 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-interval-xtick_4">
+     <g id="g55-es-interval-line2d_7">
+      <path d="M 221.855814 224.08 
+L 221.855814 10.8 
+" clip-path="url(#g55-es-interval-p2d689c72c2)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-interval-line2d_8">
+      <g>
+       <use xlink:href="#g55-es-interval-m0263e71890" x="221.855814" y="224.08" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-interval-text_4">
+      <!-- 1.5 -->
+      <g transform="translate(213.904251 238.678438) scale(0.1 -0.1)">
+       <use xlink:href="#g55-es-interval-DejaVuSans-31"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-2e" transform="translate(63.623047 0)"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-35" transform="translate(95.410156 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-interval-xtick_5">
+     <g id="g55-es-interval-line2d_9">
+      <path d="M 278.024419 224.08 
+L 278.024419 10.8 
+" clip-path="url(#g55-es-interval-p2d689c72c2)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-interval-line2d_10">
+      <g>
+       <use xlink:href="#g55-es-interval-m0263e71890" x="278.024419" y="224.08" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-interval-text_5">
+      <!-- 2.0 -->
+      <g transform="translate(270.072856 238.678438) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-interval-DejaVuSans-32" d="M 1228 531 
+L 3431 531 
+L 3431 0 
+L 469 0 
+L 469 531 
+Q 828 903 1448 1529 
+Q 2069 2156 2228 2338 
+Q 2531 2678 2651 2914 
+Q 2772 3150 2772 3378 
+Q 2772 3750 2511 3984 
+Q 2250 4219 1831 4219 
+Q 1534 4219 1204 4116 
+Q 875 4013 500 3803 
+L 500 4441 
+Q 881 4594 1212 4672 
+Q 1544 4750 1819 4750 
+Q 2544 4750 2975 4387 
+Q 3406 4025 3406 3419 
+Q 3406 3131 3298 2873 
+Q 3191 2616 2906 2266 
+Q 2828 2175 2409 1742 
+Q 1991 1309 1228 531 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-interval-DejaVuSans-32"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-2e" transform="translate(63.623047 0)"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-30" transform="translate(95.410156 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-interval-xtick_6">
+     <g id="g55-es-interval-line2d_11">
+      <path d="M 334.193023 224.08 
+L 334.193023 10.8 
+" clip-path="url(#g55-es-interval-p2d689c72c2)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-interval-line2d_12">
+      <g>
+       <use xlink:href="#g55-es-interval-m0263e71890" x="334.193023" y="224.08" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-interval-text_6">
+      <!-- 2.5 -->
+      <g transform="translate(326.241461 238.678438) scale(0.1 -0.1)">
+       <use xlink:href="#g55-es-interval-DejaVuSans-32"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-2e" transform="translate(63.623047 0)"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-35" transform="translate(95.410156 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-interval-xtick_7">
+     <g id="g55-es-interval-line2d_13">
+      <path d="M 390.361628 224.08 
+L 390.361628 10.8 
+" clip-path="url(#g55-es-interval-p2d689c72c2)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-interval-line2d_14">
+      <g>
+       <use xlink:href="#g55-es-interval-m0263e71890" x="390.361628" y="224.08" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-interval-text_7">
+      <!-- 3.0 -->
+      <g transform="translate(382.410065 238.678438) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-interval-DejaVuSans-33" d="M 2597 2516 
+Q 3050 2419 3304 2112 
+Q 3559 1806 3559 1356 
+Q 3559 666 3084 287 
+Q 2609 -91 1734 -91 
+Q 1441 -91 1130 -33 
+Q 819 25 488 141 
+L 488 750 
+Q 750 597 1062 519 
+Q 1375 441 1716 441 
+Q 2309 441 2620 675 
+Q 2931 909 2931 1356 
+Q 2931 1769 2642 2001 
+Q 2353 2234 1838 2234 
+L 1294 2234 
+L 1294 2753 
+L 1863 2753 
+Q 2328 2753 2575 2939 
+Q 2822 3125 2822 3475 
+Q 2822 3834 2567 4026 
+Q 2313 4219 1838 4219 
+Q 1578 4219 1281 4162 
+Q 984 4106 628 3988 
+L 628 4550 
+Q 988 4650 1302 4700 
+Q 1616 4750 1894 4750 
+Q 2613 4750 3031 4423 
+Q 3450 4097 3450 3541 
+Q 3450 3153 3228 2886 
+Q 3006 2619 2597 2516 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-interval-DejaVuSans-33"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-2e" transform="translate(63.623047 0)"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-30" transform="translate(95.410156 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-interval-xtick_8">
+     <g id="g55-es-interval-line2d_15">
+      <path d="M 446.530233 224.08 
+L 446.530233 10.8 
+" clip-path="url(#g55-es-interval-p2d689c72c2)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-interval-line2d_16">
+      <g>
+       <use xlink:href="#g55-es-interval-m0263e71890" x="446.530233" y="224.08" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-interval-text_8">
+      <!-- 3.5 -->
+      <g transform="translate(438.57867 238.678438) scale(0.1 -0.1)">
+       <use xlink:href="#g55-es-interval-DejaVuSans-33"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-2e" transform="translate(63.623047 0)"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-35" transform="translate(95.410156 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-interval-xtick_9">
+     <g id="g55-es-interval-line2d_17">
+      <path d="M 502.698837 224.08 
+L 502.698837 10.8 
+" clip-path="url(#g55-es-interval-p2d689c72c2)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-interval-line2d_18">
+      <g>
+       <use xlink:href="#g55-es-interval-m0263e71890" x="502.698837" y="224.08" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-interval-text_9">
+      <!-- 4.0 -->
+      <g transform="translate(494.747275 238.678438) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-interval-DejaVuSans-34" d="M 2419 4116 
+L 825 1625 
+L 2419 1625 
+L 2419 4116 
+z
+M 2253 4666 
+L 3047 4666 
+L 3047 1625 
+L 3713 1625 
+L 3713 1100 
+L 3047 1100 
+L 3047 0 
+L 2419 0 
+L 2419 1100 
+L 313 1100 
+L 313 1709 
+L 2253 4666 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-interval-DejaVuSans-34"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-2e" transform="translate(63.623047 0)"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-30" transform="translate(95.410156 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-interval-text_10">
+     <!-- Pendiente: miles de USD por unidad de índice -->
+     <g transform="translate(180.253125 252.756563) scale(0.1 -0.1)">
+      <defs>
+       <path id="g55-es-interval-DejaVuSans-50" d="M 1259 4147 
+L 1259 2394 
+L 2053 2394 
+Q 2494 2394 2734 2622 
+Q 2975 2850 2975 3272 
+Q 2975 3691 2734 3919 
+Q 2494 4147 2053 4147 
+L 1259 4147 
+z
+M 628 4666 
+L 2053 4666 
+Q 2838 4666 3239 4311 
+Q 3641 3956 3641 3272 
+Q 3641 2581 3239 2228 
+Q 2838 1875 2053 1875 
+L 1259 1875 
+L 1259 0 
+L 628 0 
+L 628 4666 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-interval-DejaVuSans-65" d="M 3597 1894 
+L 3597 1613 
+L 953 1613 
+Q 991 1019 1311 708 
+Q 1631 397 2203 397 
+Q 2534 397 2845 478 
+Q 3156 559 3463 722 
+L 3463 178 
+Q 3153 47 2828 -22 
+Q 2503 -91 2169 -91 
+Q 1331 -91 842 396 
+Q 353 884 353 1716 
+Q 353 2575 817 3079 
+Q 1281 3584 2069 3584 
+Q 2775 3584 3186 3129 
+Q 3597 2675 3597 1894 
+z
+M 3022 2063 
+Q 3016 2534 2758 2815 
+Q 2500 3097 2075 3097 
+Q 1594 3097 1305 2825 
+Q 1016 2553 972 2059 
+L 3022 2063 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-interval-DejaVuSans-6e" d="M 3513 2113 
+L 3513 0 
+L 2938 0 
+L 2938 2094 
+Q 2938 2591 2744 2837 
+Q 2550 3084 2163 3084 
+Q 1697 3084 1428 2787 
+Q 1159 2491 1159 1978 
+L 1159 0 
+L 581 0 
+L 581 3500 
+L 1159 3500 
+L 1159 2956 
+Q 1366 3272 1645 3428 
+Q 1925 3584 2291 3584 
+Q 2894 3584 3203 3211 
+Q 3513 2838 3513 2113 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-interval-DejaVuSans-64" d="M 2906 2969 
+L 2906 4863 
+L 3481 4863 
+L 3481 0 
+L 2906 0 
+L 2906 525 
+Q 2725 213 2448 61 
+Q 2172 -91 1784 -91 
+Q 1150 -91 751 415 
+Q 353 922 353 1747 
+Q 353 2572 751 3078 
+Q 1150 3584 1784 3584 
+Q 2172 3584 2448 3432 
+Q 2725 3281 2906 2969 
+z
+M 947 1747 
+Q 947 1113 1208 752 
+Q 1469 391 1925 391 
+Q 2381 391 2643 752 
+Q 2906 1113 2906 1747 
+Q 2906 2381 2643 2742 
+Q 2381 3103 1925 3103 
+Q 1469 3103 1208 2742 
+Q 947 2381 947 1747 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-interval-DejaVuSans-69" d="M 603 3500 
+L 1178 3500 
+L 1178 0 
+L 603 0 
+L 603 3500 
+z
+M 603 4863 
+L 1178 4863 
+L 1178 4134 
+L 603 4134 
+L 603 4863 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-interval-DejaVuSans-74" d="M 1172 4494 
+L 1172 3500 
+L 2356 3500 
+L 2356 3053 
+L 1172 3053 
+L 1172 1153 
+Q 1172 725 1289 603 
+Q 1406 481 1766 481 
+L 2356 481 
+L 2356 0 
+L 1766 0 
+Q 1100 0 847 248 
+Q 594 497 594 1153 
+L 594 3053 
+L 172 3053 
+L 172 3500 
+L 594 3500 
+L 594 4494 
+L 1172 4494 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-interval-DejaVuSans-3a" d="M 750 794 
+L 1409 794 
+L 1409 0 
+L 750 0 
+L 750 794 
+z
+M 750 3309 
+L 1409 3309 
+L 1409 2516 
+L 750 2516 
+L 750 3309 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-interval-DejaVuSans-20" transform="scale(0.015625)"/>
+       <path id="g55-es-interval-DejaVuSans-6d" d="M 3328 2828 
+Q 3544 3216 3844 3400 
+Q 4144 3584 4550 3584 
+Q 5097 3584 5394 3201 
+Q 5691 2819 5691 2113 
+L 5691 0 
+L 5113 0 
+L 5113 2094 
+Q 5113 2597 4934 2840 
+Q 4756 3084 4391 3084 
+Q 3944 3084 3684 2787 
+Q 3425 2491 3425 1978 
+L 3425 0 
+L 2847 0 
+L 2847 2094 
+Q 2847 2600 2669 2842 
+Q 2491 3084 2119 3084 
+Q 1678 3084 1418 2786 
+Q 1159 2488 1159 1978 
+L 1159 0 
+L 581 0 
+L 581 3500 
+L 1159 3500 
+L 1159 2956 
+Q 1356 3278 1631 3431 
+Q 1906 3584 2284 3584 
+Q 2666 3584 2933 3390 
+Q 3200 3197 3328 2828 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-interval-DejaVuSans-6c" d="M 603 4863 
+L 1178 4863 
+L 1178 0 
+L 603 0 
+L 603 4863 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-interval-DejaVuSans-73" d="M 2834 3397 
+L 2834 2853 
+Q 2591 2978 2328 3040 
+Q 2066 3103 1784 3103 
+Q 1356 3103 1142 2972 
+Q 928 2841 928 2578 
+Q 928 2378 1081 2264 
+Q 1234 2150 1697 2047 
+L 1894 2003 
+Q 2506 1872 2764 1633 
+Q 3022 1394 3022 966 
+Q 3022 478 2636 193 
+Q 2250 -91 1575 -91 
+Q 1294 -91 989 -36 
+Q 684 19 347 128 
+L 347 722 
+Q 666 556 975 473 
+Q 1284 391 1588 391 
+Q 1994 391 2212 530 
+Q 2431 669 2431 922 
+Q 2431 1156 2273 1281 
+Q 2116 1406 1581 1522 
+L 1381 1569 
+Q 847 1681 609 1914 
+Q 372 2147 372 2553 
+Q 372 3047 722 3315 
+Q 1072 3584 1716 3584 
+Q 2034 3584 2315 3537 
+Q 2597 3491 2834 3397 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-interval-DejaVuSans-55" d="M 556 4666 
+L 1191 4666 
+L 1191 1831 
+Q 1191 1081 1462 751 
+Q 1734 422 2344 422 
+Q 2950 422 3222 751 
+Q 3494 1081 3494 1831 
+L 3494 4666 
+L 4128 4666 
+L 4128 1753 
+Q 4128 841 3676 375 
+Q 3225 -91 2344 -91 
+Q 1459 -91 1007 375 
+Q 556 841 556 1753 
+L 556 4666 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-interval-DejaVuSans-53" d="M 3425 4513 
+L 3425 3897 
+Q 3066 4069 2747 4153 
+Q 2428 4238 2131 4238 
+Q 1616 4238 1336 4038 
+Q 1056 3838 1056 3469 
+Q 1056 3159 1242 3001 
+Q 1428 2844 1947 2747 
+L 2328 2669 
+Q 3034 2534 3370 2195 
+Q 3706 1856 3706 1288 
+Q 3706 609 3251 259 
+Q 2797 -91 1919 -91 
+Q 1588 -91 1214 -16 
+Q 841 59 441 206 
+L 441 856 
+Q 825 641 1194 531 
+Q 1563 422 1919 422 
+Q 2459 422 2753 634 
+Q 3047 847 3047 1241 
+Q 3047 1584 2836 1778 
+Q 2625 1972 2144 2069 
+L 1759 2144 
+Q 1053 2284 737 2584 
+Q 422 2884 422 3419 
+Q 422 4038 858 4394 
+Q 1294 4750 2059 4750 
+Q 2388 4750 2728 4690 
+Q 3069 4631 3425 4513 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-interval-DejaVuSans-44" d="M 1259 4147 
+L 1259 519 
+L 2022 519 
+Q 2988 519 3436 956 
+Q 3884 1394 3884 2338 
+Q 3884 3275 3436 3711 
+Q 2988 4147 2022 4147 
+L 1259 4147 
+z
+M 628 4666 
+L 1925 4666 
+Q 3281 4666 3915 4102 
+Q 4550 3538 4550 2338 
+Q 4550 1131 3912 565 
+Q 3275 0 1925 0 
+L 628 0 
+L 628 4666 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-interval-DejaVuSans-70" d="M 1159 525 
+L 1159 -1331 
+L 581 -1331 
+L 581 3500 
+L 1159 3500 
+L 1159 2969 
+Q 1341 3281 1617 3432 
+Q 1894 3584 2278 3584 
+Q 2916 3584 3314 3078 
+Q 3713 2572 3713 1747 
+Q 3713 922 3314 415 
+Q 2916 -91 2278 -91 
+Q 1894 -91 1617 61 
+Q 1341 213 1159 525 
+z
+M 3116 1747 
+Q 3116 2381 2855 2742 
+Q 2594 3103 2138 3103 
+Q 1681 3103 1420 2742 
+Q 1159 2381 1159 1747 
+Q 1159 1113 1420 752 
+Q 1681 391 2138 391 
+Q 2594 391 2855 752 
+Q 3116 1113 3116 1747 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-interval-DejaVuSans-6f" d="M 1959 3097 
+Q 1497 3097 1228 2736 
+Q 959 2375 959 1747 
+Q 959 1119 1226 758 
+Q 1494 397 1959 397 
+Q 2419 397 2687 759 
+Q 2956 1122 2956 1747 
+Q 2956 2369 2687 2733 
+Q 2419 3097 1959 3097 
+z
+M 1959 3584 
+Q 2709 3584 3137 3096 
+Q 3566 2609 3566 1747 
+Q 3566 888 3137 398 
+Q 2709 -91 1959 -91 
+Q 1206 -91 779 398 
+Q 353 888 353 1747 
+Q 353 2609 779 3096 
+Q 1206 3584 1959 3584 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-interval-DejaVuSans-72" d="M 2631 2963 
+Q 2534 3019 2420 3045 
+Q 2306 3072 2169 3072 
+Q 1681 3072 1420 2755 
+Q 1159 2438 1159 1844 
+L 1159 0 
+L 581 0 
+L 581 3500 
+L 1159 3500 
+L 1159 2956 
+Q 1341 3275 1631 3429 
+Q 1922 3584 2338 3584 
+Q 2397 3584 2469 3576 
+Q 2541 3569 2628 3553 
+L 2631 2963 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-interval-DejaVuSans-75" d="M 544 1381 
+L 544 3500 
+L 1119 3500 
+L 1119 1403 
+Q 1119 906 1312 657 
+Q 1506 409 1894 409 
+Q 2359 409 2629 706 
+Q 2900 1003 2900 1516 
+L 2900 3500 
+L 3475 3500 
+L 3475 0 
+L 2900 0 
+L 2900 538 
+Q 2691 219 2414 64 
+Q 2138 -91 1772 -91 
+Q 1169 -91 856 284 
+Q 544 659 544 1381 
+z
+M 1991 3584 
+L 1991 3584 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-interval-DejaVuSans-61" d="M 2194 1759 
+Q 1497 1759 1228 1600 
+Q 959 1441 959 1056 
+Q 959 750 1161 570 
+Q 1363 391 1709 391 
+Q 2188 391 2477 730 
+Q 2766 1069 2766 1631 
+L 2766 1759 
+L 2194 1759 
+z
+M 3341 1997 
+L 3341 0 
+L 2766 0 
+L 2766 531 
+Q 2569 213 2275 61 
+Q 1981 -91 1556 -91 
+Q 1019 -91 701 211 
+Q 384 513 384 1019 
+Q 384 1609 779 1909 
+Q 1175 2209 1959 2209 
+L 2766 2209 
+L 2766 2266 
+Q 2766 2663 2505 2880 
+Q 2244 3097 1772 3097 
+Q 1472 3097 1187 3025 
+Q 903 2953 641 2809 
+L 641 3341 
+Q 956 3463 1253 3523 
+Q 1550 3584 1831 3584 
+Q 2591 3584 2966 3190 
+Q 3341 2797 3341 1997 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-interval-DejaVuSans-ed" d="M 1322 5119 
+L 1944 5119 
+L 926 3944 
+L 447 3944 
+L 1322 5119 
+z
+M 603 3500 
+L 1178 3500 
+L 1178 0 
+L 603 0 
+L 603 3500 
+z
+M 891 3584 
+L 891 3584 
+z
+" transform="scale(0.015625)"/>
+       <path id="g55-es-interval-DejaVuSans-63" d="M 3122 3366 
+L 3122 2828 
+Q 2878 2963 2633 3030 
+Q 2388 3097 2138 3097 
+Q 1578 3097 1268 2742 
+Q 959 2388 959 1747 
+Q 959 1106 1268 751 
+Q 1578 397 2138 397 
+Q 2388 397 2633 464 
+Q 2878 531 3122 666 
+L 3122 134 
+Q 2881 22 2623 -34 
+Q 2366 -91 2075 -91 
+Q 1284 -91 818 406 
+Q 353 903 353 1747 
+Q 353 2603 823 3093 
+Q 1294 3584 2113 3584 
+Q 2378 3584 2631 3529 
+Q 2884 3475 3122 3366 
+z
+" transform="scale(0.015625)"/>
+      </defs>
+      <use xlink:href="#g55-es-interval-DejaVuSans-50"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-65" transform="translate(56.677734 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-6e" transform="translate(118.201172 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-64" transform="translate(181.580078 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-69" transform="translate(245.056641 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-65" transform="translate(272.839844 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-6e" transform="translate(334.363281 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-74" transform="translate(397.742188 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-65" transform="translate(436.951172 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-3a" transform="translate(498.474609 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-20" transform="translate(532.166016 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-6d" transform="translate(563.953125 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-69" transform="translate(661.365234 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-6c" transform="translate(689.148438 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-65" transform="translate(716.931641 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-73" transform="translate(778.455078 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-20" transform="translate(830.554688 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-64" transform="translate(862.341797 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-65" transform="translate(925.818359 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-20" transform="translate(987.341797 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-55" transform="translate(1019.128906 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-53" transform="translate(1092.322266 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-44" transform="translate(1155.798828 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-20" transform="translate(1232.800781 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-70" transform="translate(1264.587891 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-6f" transform="translate(1328.064453 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-72" transform="translate(1389.246094 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-20" transform="translate(1430.359375 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-75" transform="translate(1462.146484 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-6e" transform="translate(1525.525391 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-69" transform="translate(1588.904297 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-64" transform="translate(1616.6875 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-61" transform="translate(1680.164062 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-64" transform="translate(1741.443359 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-20" transform="translate(1804.919922 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-64" transform="translate(1836.707031 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-65" transform="translate(1900.183594 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-20" transform="translate(1961.707031 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-ed" transform="translate(1993.494141 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-6e" transform="translate(2021.277344 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-64" transform="translate(2084.65625 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-69" transform="translate(2148.132812 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-63" transform="translate(2175.916016 0)"/>
+      <use xlink:href="#g55-es-interval-DejaVuSans-65" transform="translate(2230.896484 0)"/>
+     </g>
+    </g>
+   </g>
+   <g id="g55-es-interval-matplotlib.axis_2">
+    <g id="g55-es-interval-ytick_1">
+     <g id="g55-es-interval-line2d_19">
+      <path d="M 53.35 214.385455 
+L 536.4 214.385455 
+" clip-path="url(#g55-es-interval-p2d689c72c2)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-interval-line2d_20">
+      <defs>
+       <path id="g55-es-interval-m116ef8df4b" d="M 0 0 
+L -3.5 0 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#g55-es-interval-m116ef8df4b" x="53.35" y="214.385455" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-interval-text_11">
+      <!-- HC3 -->
+      <g transform="translate(25.484375 218.184673) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-interval-DejaVuSans-48" d="M 628 4666 
+L 1259 4666 
+L 1259 2753 
+L 3553 2753 
+L 3553 4666 
+L 4184 4666 
+L 4184 0 
+L 3553 0 
+L 3553 2222 
+L 1259 2222 
+L 1259 0 
+L 628 0 
+L 628 4666 
+z
+" transform="scale(0.015625)"/>
+        <path id="g55-es-interval-DejaVuSans-43" d="M 4122 4306 
+L 4122 3641 
+Q 3803 3938 3442 4084 
+Q 3081 4231 2675 4231 
+Q 1875 4231 1450 3742 
+Q 1025 3253 1025 2328 
+Q 1025 1406 1450 917 
+Q 1875 428 2675 428 
+Q 3081 428 3442 575 
+Q 3803 722 4122 1019 
+L 4122 359 
+Q 3791 134 3420 21 
+Q 3050 -91 2638 -91 
+Q 1578 -91 968 557 
+Q 359 1206 359 2328 
+Q 359 3453 968 4101 
+Q 1578 4750 2638 4750 
+Q 3056 4750 3426 4639 
+Q 3797 4528 4122 4306 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-interval-DejaVuSans-48"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-43" transform="translate(75.195312 0)"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-33" transform="translate(145.019531 0)"/>
+      </g>
+     </g>
+    </g>
+    <g id="g55-es-interval-ytick_2">
+     <g id="g55-es-interval-line2d_21">
+      <path d="M 53.35 20.494545 
+L 536.4 20.494545 
+" clip-path="url(#g55-es-interval-p2d689c72c2)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="g55-es-interval-line2d_22">
+      <g>
+       <use xlink:href="#g55-es-interval-m116ef8df4b" x="53.35" y="20.494545" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="g55-es-interval-text_12">
+      <!-- Clásico -->
+      <g transform="translate(10.85625 24.293764) scale(0.1 -0.1)">
+       <defs>
+        <path id="g55-es-interval-DejaVuSans-e1" d="M 2194 1759 
+Q 1497 1759 1228 1600 
+Q 959 1441 959 1056 
+Q 959 750 1161 570 
+Q 1363 391 1709 391 
+Q 2188 391 2477 730 
+Q 2766 1069 2766 1631 
+L 2766 1759 
+L 2194 1759 
+z
+M 3341 1997 
+L 3341 0 
+L 2766 0 
+L 2766 531 
+Q 2569 213 2275 61 
+Q 1981 -91 1556 -91 
+Q 1019 -91 701 211 
+Q 384 513 384 1019 
+Q 384 1609 779 1909 
+Q 1175 2209 1959 2209 
+L 2766 2209 
+L 2766 2266 
+Q 2766 2663 2505 2880 
+Q 2244 3097 1772 3097 
+Q 1472 3097 1187 3025 
+Q 903 2953 641 2809 
+L 641 3341 
+Q 956 3463 1253 3523 
+Q 1550 3584 1831 3584 
+Q 2591 3584 2966 3190 
+Q 3341 2797 3341 1997 
+z
+M 2290 5119 
+L 2912 5119 
+L 1894 3944 
+L 1415 3944 
+L 2290 5119 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#g55-es-interval-DejaVuSans-43"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-6c" transform="translate(69.824219 0)"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-e1" transform="translate(97.607422 0)"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-73" transform="translate(158.886719 0)"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-69" transform="translate(210.986328 0)"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-63" transform="translate(238.769531 0)"/>
+       <use xlink:href="#g55-es-interval-DejaVuSans-6f" transform="translate(293.75 0)"/>
+      </g>
+     </g>
+    </g>
+   </g>
+   <g id="g55-es-interval-line2d_23">
+    <path d="M 250.94194 20.494545 
+L 433.492264 20.494545 
+" clip-path="url(#g55-es-interval-p2d689c72c2)" style="fill: none; stroke: #7193bf; stroke-width: 4; stroke-linecap: square"/>
+   </g>
+   <g id="g55-es-interval-line2d_24">
+    <path d="M 342.217158 20.494545 
+" clip-path="url(#g55-es-interval-p2d689c72c2)" style="fill: none; stroke: #102b4b; stroke-width: 1.5; stroke-linecap: square"/>
+    <defs>
+     <path id="g55-es-interval-m40002be0bd" d="M 0 3.5 
+C 0.928211 3.5 1.81853 3.131218 2.474874 2.474874 
+C 3.131218 1.81853 3.5 0.928211 3.5 0 
+C 3.5 -0.928211 3.131218 -1.81853 2.474874 -2.474874 
+C 1.81853 -3.131218 0.928211 -3.5 0 -3.5 
+C -0.928211 -3.5 -1.81853 -3.131218 -2.474874 -2.474874 
+C -3.131218 -1.81853 -3.5 -0.928211 -3.5 0 
+C -3.5 0.928211 -3.131218 1.81853 -2.474874 2.474874 
+C -1.81853 3.131218 -0.928211 3.5 0 3.5 
+z
+" style="stroke: #102b4b"/>
+    </defs>
+    <g clip-path="url(#g55-es-interval-p2d689c72c2)">
+     <use xlink:href="#g55-es-interval-m40002be0bd" x="342.217158" y="20.494545" style="fill: #102b4b; stroke: #102b4b"/>
+    </g>
+   </g>
+   <g id="g55-es-interval-line2d_25">
+    <path d="M 197.865529 214.385455 
+L 486.568674 214.385455 
+" clip-path="url(#g55-es-interval-p2d689c72c2)" style="fill: none; stroke: #2563eb; stroke-width: 4; stroke-linecap: square"/>
+   </g>
+   <g id="g55-es-interval-line2d_26">
+    <path d="M 342.217158 214.385455 
+" clip-path="url(#g55-es-interval-p2d689c72c2)" style="fill: none; stroke: #102b4b; stroke-width: 1.5; stroke-linecap: square"/>
+    <g clip-path="url(#g55-es-interval-p2d689c72c2)">
+     <use xlink:href="#g55-es-interval-m40002be0bd" x="342.217158" y="214.385455" style="fill: #102b4b; stroke: #102b4b"/>
+    </g>
+   </g>
+   <g id="g55-es-interval-line2d_27">
+    <path d="M 53.35 224.08 
+L 53.35 10.8 
+" clip-path="url(#g55-es-interval-p2d689c72c2)" style="fill: none; stroke-dasharray: 1.5,2.475; stroke-dashoffset: 0; stroke: #64748b; stroke-width: 1.5"/>
+   </g>
+   <g id="g55-es-interval-patch_3">
+    <path d="M 53.35 224.08 
+L 53.35 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g55-es-interval-patch_4">
+    <path d="M 536.4 224.08 
+L 536.4 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g55-es-interval-patch_5">
+    <path d="M 53.35 224.08 
+L 536.4 224.08 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="g55-es-interval-patch_6">
+    <path d="M 53.35 10.8 
+L 536.4 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="g55-es-interval-p2d689c72c2">
+   <rect x="53.35" y="10.8" width="483.05" height="213.28"/>
+  </clipPath>
+ </defs>
+</svg>
+<figcaption>La pendiente permanece fija; el intervalo HC3 se amplía porque aumenta el error estándar estimado.</figcaption></figure></section><section class="chapter" id="section-13"><h2>13. HC0, HC1, HC2 y HC3: identificar qué cambia</h2>
+<p>Todos los estimadores de la familia HC comparten los factores exteriores OLS, pero difieren en cómo sustituyen las varianzas desconocidas de cada observación. HC0 utiliza directamente los residuos cuadrados. Sin embargo, los residuos observados en puntos de alto leverage suelen estar reducidos porque la propia observación influye en su predicción. HC2 y HC3 responden dividiendo por potencias de <span class="math-inline">\(1-h_{ii}\)</span>. HC1, en cambio, multiplica la matriz HC0 completa por el factor de grados de libertad <span class="math-inline">\(n/(n-p)=8/6\)</span>. Estas diferencias resultan especialmente visibles en una muestra tan pequeña.</p>
+<p>Para nuestra pendiente, los SE aproximados son HC0 <strong>0.320719</strong>, HC1 <strong>0.370335</strong>, HC2 <strong>0.409047</strong> y HC3 <strong>0.525145</strong>. Ese orden no constituye una regla matemática general; depende de residuos y leverages específicos. También difieren los SE del intercepto. Si un software aplica HC1 por defecto y otro HC3, escribir únicamente "robust SE" impide reproducir los resultados. Un informe debe identificar la variante exacta, modelo, versión del programa y convención inferencial.</p>
+<p>La comparación no sirve para escoger el SE que arroje el p-value más conveniente. Permite mostrar hasta qué punto la inferencia sustantiva depende de opciones defendibles. Una conclusión científica no debería necesitar una secuencia oculta de cambios metodológicos para parecer contundente. Si los resultados son sensibles a dichas decisiones, debe comunicarse esa incertidumbre. La enseñanza de fondo es que toda robustez protege frente a <strong>una vulnerabilidad especificada</strong>, no frente a todos los posibles errores de análisis.</p>
+</section><section class="chapter" id="section-14"><h2>14. Weighted Least Squares es una operación diferente</h2>
+<p>HC3 conserva los coeficientes OLS y cambia la matriz de covarianza estimada. <strong>Weighted Least Squares (WLS)</strong> modifica el objetivo de ajuste: minimiza <span class="math-inline">\(\sum_i w_i(y_i-b_0-b_1x_i)^2\)</span>. Si los errores son independientes y conocemos varianzas proporcionales a <span class="math-inline">\(\sigma_i^2\)</span>, una elección teóricamente eficiente bajo una media lineal correctamente especificada es <span class="math-inline">\(w_i\propto1/\sigma_i^2\)</span>. Las observaciones de varianza menor reciben más peso porque aportan información más precisa sobre la misma relación de media.</p>
+<p><div class="math-panel"><div class="formula-title">Estimador Weighted Least Squares</div><div class="math-inner" tabindex="0">\[\widehat\beta_{WLS}=(X^\mathsf TWX)^{-1}X^\mathsf TWy,\qquad W=\operatorname{diag}(w_1,\ldots,w_n)\]</div></div></p>
+<p><strong>Solo para ilustrar</strong>, supongamos que un protocolo de medición externo justificara varianzas proporcionales a <span class="math-inline">\((1+x_i/4)^2\)</span>, manteniendo errores independientes. Entonces los pesos hipotéticos serían <span class="math-inline">\(w_i=1/(1+x_i/4)^2\)</span>: aproximadamente 0.6400, 0.4444, 0.3265, 0.2500, 0.1975, 0.1600, 0.1322 y 0.1111. Al reestimar las ocho observaciones, el intercepto WLS sería aproximadamente 7.165566 y la pendiente 2.336425. Ambos coeficientes difieren de OLS porque cambiamos la contribución relativa de cada observación al objetivo de optimización.</p>
+<p>La función de varianza es <strong>una hipótesis externa inventada</strong>, no estimada ni comprobada con estas ocho empresas. Sin justificación sustantiva, construir pesos con inversos de residuos cuadrados de una muestra pequeña puede producir estimaciones inestables y falsa precisión. Si los pesos se estiman, su incertidumbre y posibles errores de especificación también importan. Puede combinarse WLS con covarianza robusta, pero entonces hay que utilizar la fórmula apropiada para el problema ponderado, no trasladar mecánicamente la matriz de OLS.</p>
+<p>Una comprobación conceptual decisiva: comparar WLS con HC3 sobre OLS no significa comparar dos versiones del mismo modelo que difieren solo en SE. WLS cambia los coeficientes y el objetivo ponderado; HC3 no. Por tanto, es engañoso afirmar que "corrigimos heteroscedasticidad y la pendiente cambió" si el cambio ocurrió porque reestimamos con nuevos pesos.</p>
+</section><section class="chapter" id="section-15"><h2>15. Distinguir varianza desigual de una media incorrecta</h2>
+<p>Supongamos que el gasto verdadero aumenta de manera curvada con el tamaño, pero ajustamos una recta. El gráfico de residuos puede abrirse en abanico porque la función de media está mal especificada, no necesariamente porque la varianza condicional cambie. Ninguna matriz HC3 convierte una relación curvada en una recta que describa exactamente la media para todos los valores de x. Una sola pendiente constante podría no representar adecuadamente los cambios esperados en el rango observado.</p>
+<p>Una variable omitida también puede producir dispersión aparente y coeficientes sesgados. Si dos industrias presentan gastos medios, tamaños y dispersiones diferentes, omitir el sector puede crear un patrón heteroscedástico. Agregar un indicador de industria razonable quizá cambie medias ajustadas, residuos e interpretación de coeficientes. HC3 no recupera un factor omitido relevante ni corrige una interpretación causal confundida. Este punto conecta con la Guía 50, dedicada a Correlation y Causality, y con la Guía 53, sobre interacciones y términos no lineales.</p>
+<p>Una secuencia de diagnóstico responsable pregunta: ¿son independientes las unidades? ¿Es plausible una media lineal? ¿Está bien medido el tamaño? ¿Existen grupos o periodos comunes? ¿Los valores extremos son errores de registro o empresas válidas? Recién entonces podemos decidir si hace falta ajustar la incertidumbre, revisar el modelo, ponderar o recopilar más datos. Una fórmula sofisticada de covarianza no reemplaza la comprensión del mecanismo de generación de los datos.</p>
+</section><section class="chapter" id="section-16"><h2>16. Dependencia, clusters, autocorrelación y límites de HC3</h2>
+<p>Nuestro Sandwich diagonal suponía errores incorrelacionados entre empresas diferentes. Imaginemos ahora cuatro grupos corporativos que poseen dos empresas cada uno. Un shock de demanda podría afectar simultáneamente a ambas compañías de un grupo. Aunque estimásemos correctamente las varianzas individuales, existirían covarianzas fuera de la diagonal de <span class="math-inline">\(\Omega\)</span>. Ignorarlas suele subestimar la incertidumbre si los registros aportan menos información independiente de la que aparentan ocho empresas separadas.</p>
+<p>Los estimadores Cluster-Robust suman contribuciones dentro de cada cluster, en vez de tratar como independientes todas las observaciones. Su validez depende del número y la independencia de clusters, del diseño y de las correcciones finitas. Con solo cuatro grupos, la justificación asintótica habitual basada en muchos clusters sería difícil de defender. Activar una opción de programa llamada "cluster robust" no crea automáticamente suficientes unidades independientes. Tal vez sea necesario otro diseño, más clusters o procedimientos explícitamente justificados para pocas agrupaciones.</p>
+<p>Si observáramos cada mes a la misma empresa, tendríamos una dimensión temporal. Los errores podrían presentar Serial Correlation: meses próximos comparten shocks, aun si sus varianzas marginales difieren. Los estimadores Heteroscedasticity and Autocorrelation Consistent (HAC) amplían la idea al considerar más estructura de covarianza, pero exigen supuestos y decisiones sobre orden temporal, lags y regularidad. Se reconocen aquí como extensiones, no como comandos universales. Debemos comenzar siempre por la estructura de dependencia que plantea la pregunta estadística.</p>
+<p><strong>Regla de alcance:</strong> HC3 aborda heteroscedasticidad bajo condiciones adecuadas de independencia entre unidades. No corrige automáticamente clusters, paneles, series temporales, confounding causal, medición defectuosa o una media mal especificada. Identificar la unidad de muestreo y la estructura de covarianza es más importante que escoger una opción cuyo nombre suene avanzado.</p>
+</section><section class="chapter" id="section-17"><h2>17. Sensitivity Analysis: comparación planificada y no búsqueda de significancia</h2>
+<p>Un Sensitivity Analysis pregunta si una interpretación resiste cambios analíticos razonables. En nuestro caso podemos comparar intervalos clásicos y HC3, estudiar qué ocurre con una observación influyente, comprobar curvatura y evaluar las implicaciones de una agrupación realista. Cada contraste examina una fragilidad diferente. Un Leave-One-Out Analysis estudia sensibilidad a una observación; no demuestra que esa observación deba excluirse del análisis principal.</p>
+<p>Retiremos la empresa H <strong>temporalmente como diagnóstico</strong> y reajustemos las siete filas restantes. La pendiente OLS resulta aproximadamente 2.107143 y el intercepto 7.571429. El nuevo SE HC3 de la pendiente es aproximadamente 0.409701; con cinco grados de libertad y un valor crítico t cercano a 2.57058, el intervalo ilustrativo del 95% es [1.053972, 3.160314]. El movimiento desde 2.571429 hasta 2.107143 muestra sensibilidad a H, pero no establece que sus datos sean erróneos ni que el resultado sin H sea más verdadero.</p>
+<p>Retiremos ahora F, también temporalmente. Las siete filas restantes producen pendiente aproximada 2.728261, intercepto 6.021739 y SE HC3 de pendiente 0.455129. La pendiente cambia en dirección contraria. Por tanto, presentar solamente una eliminación sería insuficiente: la conclusión depende de qué observación se excluye y del motivo. En un informe debe destacarse el estimador de la muestra completa y etiquetar las exclusiones como diagnósticos, salvo que un error documental justifique una corrección de datos.</p>
+<p>Una tabla de sensibilidad bien presentada distingue qué magnitudes permanecen constantes (las definiciones de x e y) y cuáles cambian (muestra, coeficientes, grados de libertad, leverage y matriz de covarianza). Explicar por qué se mueve cada resultado aporta más que imprimir p-values alternativos. Antes de recalcular conviene predecir qué dirección tendría el cambio y después contrastar esa hipótesis con el signo del residuo y la posición de la observación en el diseño.</p>
+</section><section class="chapter" id="section-18"><h2>18. Comunicar resultados sin afirmar más de lo que sabemos</h2>
+<p>Una conclusión aplicada razonable sería: "En esta muestra ilustrativa de ocho empresas, el aumento estimado del gasto operativo mensual es 2.57 miles de dólares por unidad del índice de tamaño. El error estándar OLS convencional de la pendiente es 0.332 y el HC3 es 0.525. Usando un mismo valor crítico t ilustrativo, los intervalos del 95% son [1.76, 3.38] y [1.29, 3.86], expresados en miles de dólares por unidad del índice. La mayor incertidumbre HC3 refleja la configuración observada de residuos y leverage; esta muestra sintética pequeña no permite establecer una función de varianza poblacional".</p>
+<p>Además, el informe debería declarar especificación, unidad observacional, tamaño de muestra, variante HC, distribución de referencia, significado de la incertidumbre y limitaciones de diagnóstico. No corresponde denominar "efecto causal" a una asociación sin un diseño de identificación creíble. Tampoco debe afirmarse que el intervalo HC3 posee cobertura exactamente del 95% en una muestra de ocho registros. El intervalo clásico no es "aritméticamente falso": su cálculo es válido bajo sus supuestos; precisamente estamos investigando si dichos supuestos son defendibles.</p>
+<p>Cuando un lector exige un solo número preferido, suele resultar más informativo comunicar la magnitud estimada junto a su incertidumbre y una frase sobre las condiciones bajo las cuales se interpreta. Un reporte profesional no es una colección de estrellas de significancia ni la afirmación de que nada puede saberse. Identifica el objetivo de estimación, calcula de forma transparente y muestra cuáles conclusiones dependen de supuestos importantes.</p>
+</section><section class="chapter" id="section-19"><h2>18A. Seguir el cálculo ponderado en vez de confiar en un nuevo coeficiente</h2>
+<p>Conviene mostrar por qué la pendiente WLS de la sección 14 no es simplemente un número producido por un programa. Bajo la función de precisión <strong>hipotética</strong> <span class="math-inline">\(w_i=(1+x_i/4)^{-2}\)</span>, definamos los totales ponderados <span class="math-inline">\(S_w=\sum_iw_i\)</span>, <span class="math-inline">\(S_{wx}=\sum_iw_ix_i\)</span>, <span class="math-inline">\(S_{wy}=\sum_iw_iy_i\)</span>, <span class="math-inline">\(S_{wxx}=\sum_iw_ix_i^2\)</span> y <span class="math-inline">\(S_{wxy}=\sum_iw_ix_iy_i\)</span>. Las ecuaciones normales ponderadas exigen <span class="math-inline">\(\begin{pmatrix}S_w&amp;S_{wx}\\S_{wx}&amp;S_{wxx}\end{pmatrix}\begin{pmatrix}b_0\\b_1\end{pmatrix}=\begin{pmatrix}S_{wy}\\S_{wxy}\end{pmatrix}\)</span>. Esta estructura es semejante a la no ponderada, pero ahora cada observación participa según su precisión relativa supuesta.</p>
+<p>La fórmula de pendiente es <span class="math-inline">\(b_{1,WLS}=(S_{wxy}-S_{wx}S_{wy}/S_w)/(S_{wxx}-S_{wx}^2/S_w)\)</span>. El intercepto se recupera como <span class="math-inline">\(b_{0,WLS}=(S_{wy}-b_{1,WLS}S_{wx})/S_w\)</span>. El denominador es una medida ponderada de variación de x; debe ser positivo para distinguir los dos parámetros. El numerador mide la relación ponderada y centrada entre predictor y resultado. Esta expresión deja ver por qué influyen tanto la ubicación del predictor como la varianza supuesta: una empresa con x elevada puede tener influencia sobre la pendiente aun cuando su peso inversamente proporcional a varianza resulte relativamente bajo.</p>
+<p>Los pesos no son probabilidades y no necesitan sumar uno. Si multiplicamos todos los pesos por la misma constante positiva, los coeficientes WLS no cambian: los dos lados del sistema normal se escalan proporcionalmente. Son las <strong>razones entre pesos</strong> las que determinan la recta. La incertidumbre requiere, además, especificar o estimar correctamente la escala de varianza. Al aplicar la fórmula, la pendiente WLS 2.336425 es inferior a la OLS 2.571429. Esa diferencia responde a la menor importancia relativa de empresas con x grande, especialmente H, cuyo gasto observado alto eleva el extremo derecho de la recta no ponderada.</p>
+<p>Este cálculo aclara por qué la instrucción "corrige la heteroscedasticidad" es ambigua. Si buscamos estimar eficientemente una media bien especificada y conocemos varianzas de medición, WLS podría resultar apropiado. Si desconocemos una función de varianza defendible y lo que necesitamos es inferencia sobre coeficientes OLS bajo errores independientes con dispersión desigual, una covarianza HC puede ser más transparente. Si la media misma está equivocada, ninguna opción alcanza. La justificación científica debe preceder a la comodidad numérica.</p>
+</section><section class="chapter" id="section-20"><h2>18B. Cambiar unidades no hace desaparecer la incertidumbre</h2>
+<p>Supongamos que expresamos el gasto en <strong>dólares</strong> y ya no en miles de dólares. Cada y se multiplica por 1,000, mientras que x permanece intacta. Como la solución OLS es lineal en y, el nuevo intercepto sería 6,178.571 dólares y la pendiente 2,571.429 dólares por unidad del índice. Predicciones y residuos también se multiplicarían por 1,000. Entonces SSE se multiplica por <span class="math-inline">\(1{,}000^2\)</span> y lo mismo ocurre con todas las varianzas de coeficientes, incluidas las de pendiente clásica y HC3. Al tomar raíces, ambos errores estándar se multiplican por 1,000.</p>
+<p>El <strong>estadístico t</strong> no cambia con ese cambio positivo de unidades: coeficiente y SE se multiplican por un factor que se cancela en el cociente. Los extremos de los intervalos sí se multiplican por 1,000. La evidencia no debería cambiar solamente porque una tabla diga "USD" en vez de "miles de USD". Esta comprobación dimensional es útil: omitir un factor de 1,000 puede crear cambios espectaculares falsos aunque el procedimiento de inferencia parezca formalmente correcto.</p>
+<p>Ahora transformemos el índice de tamaño en <span class="math-inline">\(z=x/2\)</span>, de modo que una unidad z represente dos unidades del índice original. Como x=2z, podemos escribir <span class="math-inline">\(E(Y\mid z)=\beta_0+(2\beta_1)z\)</span>. La nueva pendiente y su SE duplican sus valores numéricos, aunque las predicciones, residuos y estadísticos t de pendiente permanezcan iguales. Este ejemplo demuestra que un coeficiente solamente tiene sentido con sus unidades: puede cambiar numéricamente sin que cambien el ajuste ni la evidencia científica.</p>
+<p>En HC3, una reparametrización consistente también transforma las columnas de la matriz de diseño y la covarianza de coeficientes. El leverage queda intacto porque el espacio generado por las columnas es el mismo. Por ello, las contribuciones corregidas siguen correspondiendo a las mismas observaciones, aunque los coeficientes individuales tengan otros valores y unidades. Es una razón profunda para verificar dimensiones, en lugar de memorizar cifras aisladas de una salida informática.</p>
+</section><section class="chapter" id="section-21"><h2>18C. Qué promete la consistencia y qué no promete</h2>
+<p>Heteroscedasticity-Consistent significa que, bajo un marco adecuado de tamaño muestral creciente, un estimador de covarianza de coeficientes se aproxima al objetivo poblacional correspondiente en un sentido estadístico especificado. Es una propiedad <strong>asintótica</strong>: imaginamos muchas más observaciones recolectadas de manera que ningún registro domine toda la geometría del diseño y los momentos de los errores estén controlados. No implica que HC3 sea exactamente igual a la covarianza verdadera con ocho filas, ni que un intervalo nominal del 95% cubra de forma exacta 95 de cada 100 muestras pequeñas posibles.</p>
+<p>¿Por qué importa leverage? Los residuos ajustados están restringidos por los coeficientes estimados y, en general, no coinciden con los errores poblacionales. Una observación de leverage alto puede arrastrar la recta hacia su valor y presentar un residuo artificialmente comprimido frente a su perturbación subyacente. HC2 y HC3 intentan compensar esa reducción dividiendo residuos cuadrados entre factores de leverage. HC3 emplea el denominador al cuadrado, proporcionando un ajuste mayor que puede mejorar el comportamiento en determinadas muestras pequeñas, pero también volverse inestable cuando leverage es casi uno. Sigue siendo una aproximación basada en lo observable.</p>
+<p>La consistencia tampoco garantiza protección frente a datos defectuosos o una media condicional sesgada. Si la forma de la media es incorrecta, el estimador puede aproximarse a una proyección lineal óptima, en lugar del parámetro causal o no lineal deseado. Si existen errores dependientes, una covarianza que solo utiliza entradas diagonales puede aproximarse al objetivo de varianza incorrecto. Si seleccionamos empresas porque tenían gastos extremos, debemos estudiar el mecanismo de selección. Por ello, una sección de métodos sólida identifica el <strong>estimando</strong> y los supuestos que relacionan ese estimando con los coeficientes calculados.</p>
+<p>Una prueba mental útil separa tres fuentes de incertidumbre: <strong>muestreo aleatorio</strong>, <strong>especificación del modelo</strong> y <strong>calidad de medición</strong>. HC3 aborda un aspecto de la primera bajo determinada estructura de errores. La incertidumbre de especificación demanda comparar modelos creíbles y quizá datos de validación; los problemas de medición requieren auditoría o mejor recopilación de datos. En ocasiones un intervalo más amplio comunica honestamente un riesgo, no un defecto que deba eliminarse cambiando de procedimiento hasta obtener una respuesta agradable.</p>
+</section><section class="chapter" id="section-22"><h2>18D. Un esquema de decisión antes de comunicar resultados robustos</h2>
+<p>Comenzamos identificando qué representa cada fila. Ocho empresas independientes permiten una justificación de covarianza distinta de ocho meses de la misma empresa o de ocho divisiones de una corporación. Después escribimos la media condicional que queremos interpretar y el dominio observado de x. Comprobamos si una recta resulta plausible y si una pendiente constante contesta la pregunta empresarial o científica. Este paso precede al SE porque un estimador de varianza correcto alrededor de un modelo irrelevante no aporta buena inferencia.</p>
+<p>A continuación reconstruimos las predicciones y residuos. Buscamos patrones de signo, magnitud y observaciones válidas de leverage alto. Describimos qué puede y qué no puede demostrar el gráfico con el tamaño disponible. Bajo perturbaciones independientes pero potencialmente heteroscedásticas, elegimos una variante HC explícita antes de interpretar la incertidumbre. Comparamos el resultado con la covarianza clásica para saber cuánto de la precisión reportada dependía del supuesto de varianza común, no para encontrar un p-value preferido.</p>
+<p>Si existen pesos de precisión respaldados por información externa, explicamos por qué WLS modifica el objetivo y los coeficientes. Si hay clusters o observaciones repetidas en el tiempo, revisamos la estructura fuera de diagonal de la covarianza en vez de utilizar HC3 silenciosamente. Si una variable omitida o una recta simple resultan poco creíbles, revisamos el modelo de media. Registramos análisis de sensibilidad que respondan preguntas identificables: ¿cuánto influye H?, ¿cambia una forma funcional justificada el resultado?, ¿se mantiene la conclusión bajo estimaciones razonables de incertidumbre?</p>
+<p>Finalmente comunicamos la asociación estimada y los <strong>límites de su respaldo científico</strong>. Especificamos estimador, unidad muestral, n, procedencia de los datos, unidades de x e y, variante HC, convención de intervalo y asuntos sin resolver. Añadimos qué evidencia fortalecería la conclusión: más empresas en la zona alta del índice, información independiente sobre varianzas o un número suficiente de clusters genuinamente independientes. Esta secuencia transforma operaciones técnicas en práctica estadística responsable, que es el propósito de la guía.</p>
+</section><section class="chapter" id="section-23"><h2>18E. Un contraejemplo: cuando la varianza común parece tranquilizadora</h2>
+<p>Podríamos creer que un error estándar excepcionalmente pequeño indica una estimación especialmente confiable. Sin embargo, examinemos la contribución de la empresa H. Presenta residuo positivo de 3.25 miles de dólares y un x extremo. El estimador convencional agrupa los residuos cuadrados en una sola magnitud y distribuye esa varianza común sobre la geometría del diseño. En la práctica, el mismo estimador de varianza resume desviaciones cercanas al centro y en los extremos. Con HC3, H contribuye mediante su residuo elevado al cuadrado y el ajuste por leverage. Los procedimientos producen incertidumbres distintas porque estiman de manera diferente la matriz desconocida de covarianza de los errores.</p>
+<p>Podemos construir un experimento mental manteniendo los mismos valores de x y repitiendo la recopilación de datos para empresas de esos tamaños. Supongamos que la desviación estándar condicional de los errores de empresas pequeñas fuese un millar de dólares, y la de empresas grandes alcanzara cinco millares. Esperaríamos entonces que los resultados de las empresas grandes fluctuaran más entre muestras que los resultados de las pequeñas. Como la pendiente otorga influencia considerable a desviaciones alejadas del promedio de x, su incertidumbre podría verse muy afectada. El atajo de varianza constante borra dónde se concentra esa heterogeneidad, mientras que una matriz heteroscedasticity-consistent intenta conservarla mediante información específica por observación.</p>
+<p>La historia anterior <strong>no constituye un modelo de varianza ajustado a la tabla</strong>. No hemos demostrado un crecimiento de SD desde uno hasta cinco; es un mecanismo hipotético que explica por qué importan conjuntamente ubicación y dispersión. Separar un contraejemplo didáctico de un hallazgo empírico es indispensable. Incluso con homoscedasticidad podría aparecer por azar un residuo extremo; con heteroscedasticidad real, una muestra pequeña puede exhibir residuos aparentemente parecidos. Los gráficos diagnósticos ofrecen evidencia imperfecta y el desempeño de HC3 depende del diseño y las condiciones de regularidad.</p>
+<p>Una segunda comparación conceptual pregunta qué ocurriría si cambiaran las observaciones pero no la pendiente OLS. Dos datasets diferentes podrían producir la misma pendiente 2.571429, aunque distribuyeran sus residuos de distinta forma a lo largo del predictor. Incluso sus covarianzas clásicas podrían coincidir si ambas tuvieran idéntico SSE. Aun así, HC3 podría diferir notablemente porque serían diferentes los productos entre residuos cuadrados ajustados y pesos del predictor centrado. Por eso informar solamente un coeficiente y R-squared resulta insuficiente para comprender incertidumbre: esas cifras no determinan de manera única la covarianza robusta.</p>
+<p><strong>Comprueba tu comprensión:</strong> ¿qué observación afectaría más la incertidumbre HC3 de la pendiente: una empresa con x=4 y residuo 3, o una con x=8 y el mismo residuo 3? El punto extremo tiene mayor peso de predictor centrado y normalmente también mayor leverage. Para determinar el resultado exacto debemos calcular cada contribución utilizando su verdadero h y el peso del predictor centrado al cuadrado; no basta una impresión visual. Esta comparación final vincula otra vez álgebra e intuición y enseña a cuestionar estimaciones de incertidumbre sin tratar una fórmula robusta como infalible.</p>
+</section><section class="chapter" id="section-24"><h2>19. Ejercicios de transferencia con soluciones completas</h2>
+<p>Estos ejercicios no buscan únicamente recordar definiciones. Cada uno cambia una condición o pide reproducir independientemente una operación esencial. Antes de consultar la solución, identifica qué permanece fijo, qué cambia y qué supuestos permiten interpretar el cálculo. Salvo indicación expresa, todas las preguntas se refieren al conjunto sintético de ocho empresas.</p>
+<h3>Ejercicio 1 — Reproducir pendiente OLS y unidades</h3>
+<p><strong>Problema.</strong> Con <span class="math-inline">\(\sum x=36\)</span>, <span class="math-inline">\(\sum y=142\)</span>, <span class="math-inline">\(\sum x^2=204\)</span>, <span class="math-inline">\(\sum xy=747\)</span> y n=8, calcula pendiente, intercepto y predicción para x=5. Explica por qué 2.57 no representa un aumento porcentual e identifica el límite de cualquier afirmación causal.</p>
+<p><strong>Solución.</strong> Primero <span class="math-inline">\(S_{xx}=204-36^2/8=42\)</span>, y <span class="math-inline">\(S_{xy}=747-(36)(142)/8=108\)</span>. Por ello, <span class="math-inline">\(b_1=108/42=2.57142857\)</span>, mientras que <span class="math-inline">\(b_0=17.75-2.57142857(4.5)=6.17857143\)</span>. En x=5, <span class="math-inline">\(\widehat y=6.17857143+5(2.57142857)=19.0357143\)</span> miles de dólares. Como y está expresada en moneda y no en logaritmos, la pendiente mide un cambio monetario absoluto, no un porcentaje. Una asociación observacional no equivale a efecto de intervenir sobre el tamaño empresarial; podrían existir causas comunes. La predicción está cerca de y=19, generando un residuo negativo pequeño, lo que comprueba la sustitución.</p>
+<h3>Ejercicio 2 — Calcular residuo y grados de libertad</h3>
+<p><strong>Problema.</strong> Encuentra el residuo de x=6 y la varianza residual estimada. ¿Por qué dividir entre n-p? ¿Varianza residual y SE del coeficiente son la misma cantidad?</p>
+<p><strong>Solución.</strong> La predicción en x=6 es 6.17857143+6(2.57142857)=21.6071429, frente al gasto observado 18. El residuo es -3.6071429 miles de dólares y su cuadrado aproximadamente 13.01148 en miles de dólares al cuadrado. Sumando los ocho residuos cuadrados obtenemos SSE=27.7857143. Los dos parámetros estimados, intercepto y pendiente, consumen dos grados de libertad, así que n-p=8-2=6. Entonces <span class="math-inline">\(s^2=27.7857143/6=4.63095238\)</span>. Esa cantidad estima una varianza residual común bajo el modelo clásico. Para obtener un SE de coeficiente todavía se necesita la geometría del diseño X. No deben intercambiarse las dos cantidades.</p>
+<h3>Ejercicio 3 — Reconstruir la inversa matricial</h3>
+<p><strong>Problema.</strong> Forma <span class="math-inline">\(X^\mathsf TX\)</span>, calcula determinante e inversa y explica la importancia del determinante y las dimensiones del resultado.</p>
+<p><strong>Solución.</strong> Al combinar la columna de unos con x de 1 a 8 obtenemos <span class="math-inline">\(X^\mathsf TX=\begin{pmatrix}8&amp;36\\36&amp;204\end{pmatrix}\)</span>. El determinante es <span class="math-inline">\(8(204)-36^2=1632-1296=336\)</span>. Para una matriz <span class="math-inline">\(\begin{pmatrix}a&amp;b\\c&amp;d\end{pmatrix}\)</span>, la inversa, si el determinante no es cero, es <span class="math-inline">\((ad-bc)^{-1}\begin{pmatrix}d&amp;-b\\-c&amp;a\end{pmatrix}\)</span>. Así, <span class="math-inline">\(B=(1/336)\begin{pmatrix}204&amp;-36\\-36&amp;8\end{pmatrix}\)</span>. Las dimensiones <span class="math-inline">\(2\times2\)</span> permiten multiplicarla por el vector <span class="math-inline">\(X^\mathsf Ty\)</span> de <span class="math-inline">\(2\times1\)</span> y obtener dos coeficientes. Con determinante cero no existirían dos direcciones independientes para identificar intercepto y pendiente mediante esa inversión.</p>
+<h3>Ejercicio 4 — Derivar la covarianza general</h3>
+<p><strong>Problema.</strong> A partir de <span class="math-inline">\(y=X\beta+u\)</span>, demuestra una fórmula de covarianza que permita varianzas distintas y explica cuándo se simplifica a la expresión clásica.</p>
+<p><strong>Solución.</strong> Sustituimos y en OLS: <span class="math-inline">\(\widehat\beta=\beta+BX^\mathsf Tu\)</span>, donde <span class="math-inline">\(B=(X^\mathsf TX)^{-1}\)</span>. Condicionado a X, la constante <span class="math-inline">\(\beta\)</span> no aporta varianza. Aplicando la regla para transformaciones lineales, <span class="math-inline">\(\operatorname{Var}(\widehat\beta\mid X)=BX^\mathsf T\Omega XB\)</span>. La matriz <span class="math-inline">\(\Omega=\operatorname{Var}(u\mid X)\)</span> admite varianzas diagonales diferentes y, en general, covarianzas fuera de diagonal. Si el modelo autoriza <span class="math-inline">\(\Omega=\sigma^2I\)</span>, entonces <span class="math-inline">\(BX^\mathsf T(\sigma^2I)XB=\sigma^2B(X^\mathsf TX)B=\sigma^2B\)</span>. La simplificación requiere la estructura particular de errores, no solamente una matriz invertible. Es una derivación algebraica; no demuestra que la muestra cumpla el supuesto.</p>
+<h3>Ejercicio 5 — Calcular HC3 en una observación extrema</h3>
+<p><strong>Problema.</strong> En H, x=8 y e=3.25, calcula h y q para HC3. Compara H con A, que tiene igual leverage pero residuo menor. ¿Qué ocurre cuando h se acerca a uno?</p>
+<p><strong>Solución.</strong> La distancia centrada es 8-4.5=3.5, de modo que <span class="math-inline">\(h=1/8+3.5^2/42=0.4166667\)</span>. El denominador de ajuste es <span class="math-inline">\((1-h)^2=(7/12)^2=49/144\approx0.340278\)</span>. Así, <span class="math-inline">\(q_H=3.25^2/(49/144)=10.5625(144/49)=31.040816\)</span>. En A también h=0.4166667, pero <span class="math-inline">\(q_A=1.25^2(144/49)=4.591837\)</span>. El residuo mayor determina una contribución mayor a igual leverage. Si h se acerca a uno, el denominador se aproxima a cero y la contribución puede volverse enorme. Eso advierte fragilidad geométrica de la estimación, no implica necesariamente error en los datos.</p>
+<h3>Ejercicio 6 — Reproducir el SE clásico de la pendiente</h3>
+<p><strong>Problema.</strong> Usa SSE=27.7857143, n=8, p=2 y <span class="math-inline">\(B_{22}=1/42\)</span> para calcular el SE convencional de la pendiente. Justifica divisiones y raíces cuadradas.</p>
+<p><strong>Solución.</strong> La varianza residual común estimada es <span class="math-inline">\(s^2=27.7857143/6=4.63095238\)</span>. La varianza de muestreo estimada de la pendiente, bajo la hipótesis clásica, es <span class="math-inline">\(s^2B_{22}=4.63095238/42=0.11026077\)</span>. Su raíz cuadrada positiva es <span class="math-inline">\(SE=0.33205537\)</span>, medido en miles de dólares por unidad del índice. La raíz devuelve la varianza a unidades del coeficiente; no cambia la pendiente estimada. Dividir SSE entre n en lugar de n-p utilizaría una convención diferente y, en este caso, subestimaría la dispersión residual convencional.</p>
+<h3>Ejercicio 7 — Obtener la varianza HC3 de dos maneras</h3>
+<p><strong>Problema.</strong> Dada la matriz central <span class="math-inline">\(M=\begin{pmatrix}58.707523&amp;382.204729\\382.204729&amp;2737.486792\end{pmatrix}\)</span> y <span class="math-inline">\(B=(X^\mathsf TX)^{-1}\)</span>, calcula varianza de la pendiente. Plantea una segunda verificación escalar usando x centrada.</p>
+<p><strong>Solución.</strong> Multiplicamos <span class="math-inline">\(BMB\)</span> con los elementos del Ejercicio 3. La entrada inferior derecha es aproximadamente 0.27577753, por lo que <span class="math-inline">\(SE_{HC3}=\sqrt{0.27577753}=0.52514525\)</span>. Como comprobación independiente usamos <span class="math-inline">\(a_i=(x_i-4.5)/42\)</span> y los ocho valores q de la sección 10. La suma <span class="math-inline">\(\sum_i a_i^2q_i=0.27577753\)</span>. Ambas rutas miden la misma varianza porque la pendiente es una combinación lineal de y condicionada al diseño. Una discrepancia indicaría errores al centrar x, copiar q o multiplicar las matrices.</p>
+<h3>Ejercicio 8 — Comparar intervalos de pendiente</h3>
+<p><strong>Problema.</strong> Construye intervalos clásico y HC3 usando el valor crítico ilustrativo común 2.446912. Compara sus amplitudes e indica qué parte de la inferencia sigue siendo una aproximación.</p>
+<p><strong>Solución.</strong> La pendiente es 2.571429. El margen clásico es <span class="math-inline">\(2.446912(0.332055)=0.812510\)</span> según el redondeo mostrado, y el intervalo es [1.758918, 3.383939]. El margen HC3 es <span class="math-inline">\(2.446912(0.525145)=1.284984\)</span>, con intervalo [1.286444, 3.856413]. El intervalo HC3 mide aproximadamente 2.57 de ancho frente a 1.63 del clásico, pero ambos se centran en el mismo OLS. La consistencia de HC3 necesita condiciones asintóticas; adoptar aquí el valor crítico t con seis grados de libertad es una convención pedagógica, no una garantía exacta de cobertura en muestras pequeñas.</p>
+<h3>Ejercicio 9 — Distinguir las variantes HC</h3>
+<p><strong>Problema.</strong> Los SE de pendiente HC0, HC1, HC2 y HC3 son 0.320719, 0.370335, 0.409047 y 0.525145. Explica denominadores y por qué no es correcto elegir una variante solo porque su p-value queda debajo de 0.05.</p>
+<p><strong>Solución.</strong> HC0 emplea residuos cuadrados. HC1 multiplica la matriz HC0 por n/(n-p)=8/6 y, por tanto, multiplica el SE por <span class="math-inline">\(\sqrt{8/6}\)</span>: <span class="math-inline">\(0.320719\sqrt{8/6}=0.370335\)</span>. HC2 divide cada residuo cuadrado por 1-h; HC3 utiliza <span class="math-inline">\((1-h)^2\)</span>. Estos últimos elevan el ajuste en observaciones de mayor leverage. Ninguna variante es universalmente infalible. Seleccionarlas solo buscando significancia aprovecha variación accidental y oculta una decisión relevante. Un análisis reproducible especifica anticipadamente HC3 u otra opción fundamentada y presenta alternativas como sensibilidad, no como sustitución oportunista.</p>
+<h3>Ejercicio 10 — Separar WLS de HC3</h3>
+<p><strong>Problema.</strong> Bajo una varianza <strong>hipotética con respaldo externo</strong> proporcional a <span class="math-inline">\((1+x/4)^2\)</span>, calcula primer y último peso. Interpreta WLS=2.336425 frente a OLS=2.571429. ¿Qué evidencia exigirías antes de preferir WLS?</p>
+<p><strong>Solución.</strong> En x=1, el peso inversamente proporcional a varianza es <span class="math-inline">\(1/(1.25)^2=0.64\)</span>. En x=8 es <span class="math-inline">\(1/(3)^2=1/9\approx0.111111\)</span>. WLS da mayor influencia relativa a observaciones de menor x porque supuestamente se miden con menor varianza. Al minimizar la suma ponderada obtenemos pendiente 2.336425 e intercepto 7.165566. Son distintos de OLS porque cambió el objetivo de ajuste. HC3 habría conservado la pendiente 2.571429. Antes de priorizar WLS necesitamos una razón de medición o calibración externa para los pesos, independencia creíble y análisis de sensibilidad a una función de varianza posiblemente incorrecta. Los pesos no fueron estimados con los ocho registros.</p>
+<h3>Ejercicio 11 — Reconocer una dependencia que HC3 no corrige</h3>
+<p><strong>Problema.</strong> Ahora las ocho empresas pertenecen a cuatro grupos corporativos con dos empresas cada uno. Los shocks de demanda provocan correlación positiva dentro de los grupos. Explica mediante la fórmula general por qué HC3 no basta y por qué cuatro clusters plantean problemas.</p>
+<p><strong>Solución.</strong> La covarianza general contiene <span class="math-inline">\(X^\mathsf T\Omega X\)</span>. Cuando dos compañías comparten grupo, <span class="math-inline">\(\Omega_{ij}\)</span> puede ser distinto de cero aun para i≠j. El HC3 ordinario coloca contribuciones residuales individuales en una diagonal y omite tales productos cruzados. Una matriz Cluster-Robust intenta sumar contribuciones dentro de cada grupo independiente, pero muchas justificaciones asintóticas requieren numerosos clusters independientes y condiciones adicionales. Cuatro grupos son insuficientes para confiar ciegamente en esa aproximación. La respuesta defendible es reconocer la estructura, estudiar métodos adecuados para pocos clusters o mejorar el diseño y evitar afirmar que existen ocho piezas totalmente independientes de información.</p>
+<h3>Ejercicio 12 — Sensibilidad a una observación válida de tamaño alto</h3>
+<p><strong>Problema.</strong> Retira H temporalmente y reestima OLS. Interpreta que la pendiente cambia de 2.571429 a 2.107143. ¿Se justifica eliminar H del informe principal? Propón una conclusión de sensibilidad responsable.</p>
+<p><strong>Solución.</strong> Con A–G obtenemos intercepto 7.571429 y pendiente 2.107143. Recalculando residuos y leverages obtenemos SE HC3 de la pendiente aproximadamente 0.409701 y, bajo una convención t con cinco grados de libertad, intervalo [1.053972, 3.160314]. La pendiente disminuye 0.464286 miles de dólares por unidad del índice, lo que revela influencia de H. Eso no demuestra que H esté equivocada. Si la empresa pertenece válidamente a la población objetivo, el resultado principal debe mantenerla. Conviene informar ambos ajustes, verificar la calidad del dato y señalar que hacen falta más observaciones en el extremo superior de x.</p>
+<h3>Ejercicio 13 — Diferenciar una media incorrecta de un problema de varianza</h3>
+<p><strong>Problema.</strong> Una especialista espera que <span class="math-inline">\(E(Y\mid X=x)=\beta_0+\beta_1x+\beta_2x^2\)</span>, no una recta. El gráfico de residuos lineales parece un abanico. ¿HC3 resuelve automáticamente el problema fundamental? Explica una secuencia adecuada.</p>
+<p><strong>Solución.</strong> No. HC3 cambia la matriz de covarianza de los coeficientes de la regresión especificada, pero no convierte la recta en una media condicional curvada. Primero revisaríamos procedencia, gráfico de datos y justificación sustantiva. Después podríamos ajustar una función cuadrática con x y <span class="math-inline">\(x^2\)</span>, examinar residuos y limitar la extrapolación por tratarse de una muestra pequeña. Los SE robustos podrían seguir siendo útiles si la varianza desigual persiste. Pero el significado de la pendiente cambia: en la función cuadrática, la derivada <span class="math-inline">\(\beta_1+2\beta_2x\)</span> depende de x. Ni una media mejor ajustada ni su covarianza prueban causalidad observacional.</p>
+<h3>Ejercicio 14 — Transferencia final: redactar una conclusión defendible</h3>
+<p><strong>Problema.</strong> Un estudiante escribe: "Robust Regression demuestra que el índice causa exactamente 2.57 de aumento y corrige todos los problemas. Su intervalo robusto tiene cobertura exactamente del 95%". Reescribe el párrafo e incorpora resultados, unidades y al menos tres limitaciones.</p>
+<p><strong>Solución.</strong> Una versión defendible sería: "En ocho observaciones sintéticas de empresas independientes, OLS estima una asociación de 2.571 miles de dólares adicionales de gasto mensual esperado por unidad del índice de tamaño, suponiendo una media condicional lineal. El SE convencional es 0.332 y el HC3 es 0.525. Al utilizar un valor crítico t ilustrativo común obtenemos intervalos [1.759, 3.384] y [1.286, 3.856]. HC3 modifica la incertidumbre estimada, pero no reestima los coeficientes, no establece causalidad, no repara una media incorrecta y no corrige automáticamente clusters. Debido al reducido tamaño muestral, la aproximación inferencial y la cobertura real deben tratarse con prudencia". Esta reformulación identifica estimando, unidades, método, resultado, convención y límites, mostrando comprensión y no simple memorización.</p>
+</section><section class="chapter" id="section-25"><h2>20. Síntesis final: identificar la vulnerabilidad antes del método</h2>
+<p>Ahora podemos reconstruir el argumento sin memorizar una lista de opciones robustas. Primero definimos la media condicional y la unidad de observación. Ajustamos el modelo y reproducimos residuos. Preguntamos si el atajo <span class="math-inline">\(s^2(X^\mathsf TX)^{-1}\)</span> está justificado por varianza condicional común y ausencia de covarianzas entre unidades. Si no, regresamos a la fórmula general con <span class="math-inline">\(\Omega\)</span> y decidimos qué elementos desconocidos pueden estimarse razonablemente a partir del diseño y los datos.</p>
+<p>HC3 sustituye contribuciones de varianza diagonal mediante residuos cuadrados ajustados por leverage, conservando los coeficientes OLS. Nuestra pendiente permaneció en 2.571429, pero el SE estimado aumentó de 0.332055 a 0.525145. WLS, en cambio, reestimó el modelo con ponderaciones inversas hipotéticas y produjo pendiente 2.336425 bajo una ley de varianza supuesta. Ninguno resolvió omisiones causales, curvatura de la media o errores correlacionados entre observaciones. Los análisis de sensibilidad aportaron conocimiento porque identificaron <em>qué</em> supuesto o punto influía en los resultados, y no porque fabricaran un p-value preferido.</p>
+<p>La última prueba de comprensión es explicativa: si tuvieras que enseñar a un estudiante nuevo por qué la matriz de covarianza tiene bread, meat y bread; por qué HC3 usa <span class="math-inline">\((1-h_{ii})^2\)</span>; por qué puede ampliarse el intervalo sin cambiar la recta; y por qué las empresas agrupadas requieren otro análisis, ¿podrías reproducir las operaciones utilizando las ocho filas? Si la respuesta es sí, has aprendido más que una fórmula: has construido una manera responsable de conectar estimación, incertidumbre, supuestos científicos y comunicación de resultados.</p>
+</section><section class="chapter" id="section-26"><h2>Referencias y alcance de los resultados citados</h2>
+<ul>
+<li>White, H. (1980), <a href="https://doi.org/10.2307/1912934">“A Heteroskedasticity-Consistent Covariance Matrix Estimator and a Direct Test for Heteroskedasticity”</a>, <em>Econometrica</em>, 48(4), 817–838. Teoría asintótica fundamental de la covarianza HC, citada aquí sin reproducir una demostración general completa.</li>
+<li>MacKinnon, J. G., &amp; White, H. (1985), <a href="https://doi.org/10.1016/0304-4076(85">“Some Heteroskedasticity-Consistent Covariance Matrix Estimators with Improved Finite Sample Properties”</a>90158-7), <em>Journal of Econometrics</em>, 29, 305–325. Fuente de variantes HC y correcciones de leverage.</li>
+<li>Long, J. S., &amp; Ervin, L. H. (2000), “Using Heteroscedasticity Consistent Standard Errors in the Linear Regression Model,” <em>The American Statistician</em>, 54(3), 217–224. Discusión de comportamiento en muestras finitas.</li>
+<li><a href="https://www.statsmodels.org/stable/generated/statsmodels.regression.linear_model.RegressionResults.get_robustcov_results.html">Documentación de <code>statsmodels</code></a> sobre covariance robusta en OLS y APIs de WLS, utilizada para contrastar aritmética; el software no reemplaza los supuestos explicados.</li>
+</ul>
+<p>Las fuentes documentan el contexto metodológico. Las cifras de los ejemplos corresponden exclusivamente a datos inventados con fines pedagógicos; la guía no afirma que una muestra finita demuestre un teorema asintótico ni que se hayan reproducido los experimentos de los artículos citados.</p>
+</section></article></main><footer><div class="container">© Alfredo Saldana · Statistics & Probability · Guía 55 · <a href="/es/tutorials.html">Volver a Aprende</a></div></footer><script>(function(){var b=document.querySelector('.menu-btn');var n=document.querySelector('.nav');if(!b||!n)return;b.addEventListener('click',function(){var o=n.classList.toggle('open');b.setAttribute('aria-expanded',o?'true':'false');});document.addEventListener('keydown',function(e){if(e.key==='Escape'){n.classList.remove('open');b.setAttribute('aria-expanded','false');}});})();</script></body></html>

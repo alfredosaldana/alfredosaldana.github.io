@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Comparing Survival Curves: The Log-Rank Test | Alfredo Saldana</title><meta content="Complete bilingual study guide to the log-rank test, survival risk sets, expected events, hypergeometric variance, chi-square inference and crossing curves." name="description"/><link href="/assets/css/style.css" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Source+Serif+4:wght@400;600;700&amp;display=swap" rel="stylesheet"/><style>
+:root{--guide-blue:#2563eb;--guide-ink:#162b40;--guide-mute:#51657a;--guide-line:#dbe5ed}
+html{scroll-behavior:smooth}body.study75{margin:0;background:#f6f9fd;color:#24374b;font-family:Inter,system-ui,Arial,sans-serif;font-size:16px;line-height:1.77;overflow-x:hidden}
+ .study75 *, .study75 *:before, .study75 *:after{box-sizing:border-box}
+ .study75 a{color:#245fc5} .study75 a:focus-visible, .study75 button:focus-visible, .study75 [tabindex]:focus-visible{outline:3px solid #e29c11;outline-offset:3px}
+ .study75 .container{max-width:1180px;width:calc(100% - 34px);margin:0 auto}
+ .study75 .site-header{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--guide-line);box-shadow:0 2px 9px #152e4410}
+ .study75 .nav-wrap{min-height:74px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+ .study75 .identity{display:flex;align-items:center;gap:15px;flex-wrap:wrap}
+ .study75 .brand{font-size:1.06rem;font-weight:800;color:#102033;text-decoration:none;white-space:nowrap}
+ .study75 .lang-switch{display:flex;align-items:center;gap:9px;white-space:nowrap}
+ .study75 .site-header .lang-switch a[lang]{color:#111827;text-decoration:none;font-weight:750}
+ .study75 .site-header .lang-switch a[lang][aria-current=page]{color:#2563eb!important;font-weight:850}
+ .study75 .nav{display:flex;align-items:center;gap:17px}
+ .study75 .nav a{font-size:.86rem;text-decoration:none;color:#415269}
+ .study75 .nav a:hover, .study75 .toc a:hover{color:var(--guide-blue)}
+ .study75 .menu-btn{display:none;background:#eaf2fb;border:1px solid #dae6f4;border-radius:8px;color:#203e58;font-size:1.25rem;cursor:pointer;padding:5px 12px}
+ .study75 .hero{background:#fff;border-bottom:1px solid #e2eaf2;padding:51px 0 47px;color:#19334e}
+ .study75 .hero .eyebrow{color:#2563eb;text-transform:uppercase;font-size:.78rem;font-weight:850;letter-spacing:.12em}
+ .study75 .hero h1{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(2.1rem,4.4vw,3.65rem);line-height:1.14;color:#172e45;margin:13px 0 15px;max-width:980px}
+ .study75 .hero p{max-width:930px;font-size:1.075rem;line-height:1.75;color:#51647a;margin:0}
+ .study75 .hero-tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:21px}
+ .study75 .hero-tags span{font-size:.78rem;color:#375e89;background:#eef5fd;border:1px solid #d8e5f5;border-radius:99px;padding:4px 11px}
+ .study75 .shell{display:grid;grid-template-columns:235px minmax(0,1fr);gap:24px;align-items:start;padding:31px 0 60px}
+ .study75 .toc{position:sticky;top:95px;max-height:calc(100vh - 110px);overflow-y:auto;background:#fff;border:1px solid var(--guide-line);border-radius:16px;padding:17px}
+ .study75 .toc strong{display:block;margin:0 0 10px;color:#163652}
+ .study75 .toc a{display:block;padding:4px 0;line-height:1.45;font-size:.78rem;color:#52677b;text-decoration:none}
+ .study75 .article{min-width:0}
+ .study75 .chapter{background:#fff;border:1px solid var(--guide-line);border-radius:18px;box-shadow:0 4px 17px #0d24410a;padding:clamp(18px,3vw,39px);margin-bottom:21px;scroll-margin-top:95px}
+ .study75 .chapter h2{font-family:'Source Serif 4',Georgia,serif;color:#1b3b56;font-size:clamp(1.5rem,2.5vw,2.0rem);line-height:1.26;margin:0 0 20px}
+ .study75 .chapter p{margin:12px 0 19px;overflow-wrap:anywhere} .study75 .math-inline{display:inline-block;max-width:100%;overflow-x:auto;vertical-align:middle;white-space:nowrap}
+ .study75 .chapter p:last-child{margin-bottom:0}
+ .study75 .chapter strong{color:#183e61}
+ .study75 .math-panel{border-left:4px solid #2563eb;background:#edf5fe;border-radius:0 13px 13px 0;margin:24px 0;padding:18px 18px 17px;max-width:100%;min-width:0;}
+ .study75 .math-panel .formula-title{font-size:.76rem;color:#466687;font-weight:850;text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px}
+ .study75 .math-inner{overflow-x:auto;max-width:100%;min-width:0;text-align:center;overscroll-behavior-x:contain;padding:3px 0 8px;}
+ .study75 .math-inner .math-source{font-family:'Source Serif 4',Georgia,serif;color:#204b80}
+ .study75 mjx-container[display=true]{margin:0.48em 0!important;max-width:100%}
+ .study75 .table-scroll{overflow-x:auto;max-width:100%;border:1px solid #d7e4ef;border-radius:12px;margin:18px 0}
+ .study75 table{width:100%;min-width:495px;border-collapse:collapse;font-size:.91rem}
+ .study75 thead{background:#eaf2fb} .study75 th, .study75 td{border-bottom:1px solid #e6edf4;padding:9px 12px;text-align:left;vertical-align:top}
+ .study75 tr:last-child td{border-bottom:0} .study75 tbody tr:nth-child(2n){background:#f9fbfd}
+ .study75 .chapter blockquote{background:#f1f6fd;border-left:3px solid #8aaedf;margin:14px 0;padding:14px 20px;color:#34516c}
+ .study75 .chart{border:1px solid #d8e5ef;border-radius:14px;padding:15px;margin:22px 0;background:#fbfdff;overflow-x:auto}
+ .study75 .chart svg{max-width:100%;height:auto;display:block;margin:auto}
+ .study75 .chart figcaption{font-size:.85rem;color:#576e84;margin-top:9px;line-height:1.55}
+ .study75 .chapter ul, .study75 .chapter ol{padding-left:26px}
+ .study75 footer{border-top:1px solid #dce5ee;background:#fff;padding:20px 0 30px;color:#586b7e;font-size:.88rem}
+ .study75 .skip-link{position:absolute;left:-10000px;top:6px;background:#fff;padding:8px;z-index:200} .study75 .skip-link:focus{left:12px}
+@media(max-width:940px){ .study75 .shell{grid-template-columns:1fr} .study75 .toc{position:static;max-height:none} .study75 .toc a{display:inline-block;margin-right:13px} .study75 .nav{display:none;position:absolute;right:16px;top:70px;background:white;border:1px solid #dbe5ed;border-radius:12px;box-shadow:0 15px 35px #0e284533;padding:16px;flex-direction:column;align-items:flex-start;min-width:180px} .study75 .nav.open{display:flex} .study75 .menu-btn{display:inline-flex} .study75 .hero{padding:39px 0}}
+@media(max-width:390px){ .study75 .container{width:calc(100% - 24px)} .study75 .brand{font-size:.98rem} .study75 .identity{gap:8px} .study75 .lang-switch{gap:6px} .study75 .nav-wrap{gap:5px} .study75 .chapter{padding:18px 15px} .study75 .math-panel{padding:13px 10px}}
+
+ .study75 .math-panel{color:#193c64}
+ .study75 .math-panel .math-inner{overflow-x:auto;max-width:100%;padding-bottom:8px}
+ .study75 .chapter .math-panel .math-inner{overflow-wrap:normal}
+ .study75 .chapter h3{font-family:"Source Serif 4",Georgia,serif;font-size:1.3rem;color:#23496b;margin-top:2rem}
+ .study75 .chapter h4{font-size:1.05rem;color:#294b6d}
+ .study75 .chapter td, .study75 .chapter th{font-variant-numeric:tabular-nums}
+ .study75 .chart svg{max-width:100%;height:auto;min-width:0}
+ .study75 .hero{background:#fff!important;background-image:none!important;color:#19334e!important}
+ .study75 .chapter p{overflow-wrap:break-word}
+ .study75 .chapter .math-inline{max-width:100%;overflow-x:auto}
+ .study75 .chapter img{max-width:100%;height:auto}
+
+ .study75 .lesson-note{background:#f4f8fd;border-left:4px solid #7fa5d5;padding:12px 16px;border-radius:0 12px 12px 0} .study75 .chapter .exercise{border-top:1px solid #dbe6f2;padding-top:16px} .study75 .chart{overflow-x:auto} .study75 .chart svg{width:100%;max-width:780px;min-width:0} .study75 .equation-caption{font-size:.84rem;color:#526b82;text-align:center;margin:0 0 4px} .study75 .math-panel .formula-title{font-size:.77rem} .study75 .chapter p, .study75 .chapter li{overflow-wrap:break-word} .study75 .chart svg text{font-family:Inter,Arial,sans-serif} .study75 .article .chapter table{min-width:470px}
+
+ .study75 .hero{background:linear-gradient(180deg,#f8fbfe 0%,#edf5fc 100%)!important;color:#1d3753!important;border-bottom:1px solid #dbe7f1}
+ .study75 .hero h1, .study75 .hero p, .study75 .hero .eyebrow{color:#1d3753!important}
+ .study75 .hero-tags span{background:#fff!important;color:#27527a!important;border:1px solid #d7e6f3!important}
+ .study75 .math-panel{background:#eef5fc!important;border-left:4px solid #2563eb!important;border-radius:0 12px 12px 0!important;max-width:100%}
+ .study75 .math-inner{max-width:100%;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;padding:4px 8px}
+ .study75 .chapter p, .study75 .chapter li{overflow-wrap:break-word}
+ .study75 .math-panel .formula-title{font-size:.77rem;letter-spacing:.04em}
+ .study75 .chart{overflow-x:auto;max-width:100%}
+ .study75 .chart svg{display:block;width:100%;height:auto;max-width:800px}
+ .study75 .lesson-note{background:#f4f8fd;border-left:4px solid #7fa5d5;padding:12px 16px;border-radius:0 12px 12px 0}
+ .study75 .table-scroll{max-width:100%;overflow-x:auto;border:1px solid #dbe7f2;border-radius:10px}
+ .study75 .chapter table{min-width:480px;width:100%;margin:0}
+ .study75 .chapter table th, .study75 .chapter table td{padding:9px 12px}
+ .study75 .chart figcaption{font-size:.89rem;line-height:1.55;color:#51677b;margin:10px 0 0}
+ .study75 .source-links a{display:inline-block;margin-right:16px}
+@media(max-width:600px){ .study75 .chapter{min-width:0} .study75 .article{min-width:0} .study75 .math-panel{min-width:0} .study75 .hero h1{overflow-wrap:anywhere}}
+
+ .study75 .chapter h2{scroll-margin-top:25px}
+ .study75 .toc a{display:block}
+ .study75 .math-panel .math-inner{padding:8px 12px}
+ .study75 .table-scroll{max-width:100%;overflow-x:auto}
+ .study75 .table-scroll table{min-width:520px}
+ .study75 .chart{margin:24px 0}
+ .study75 .chart svg{display:block;width:100%;height:auto}
+ .study75 .chapter{max-width:100%;min-width:0}
+ .study75 .article{min-width:0}
+ .study75 .lesson-note p{margin-bottom:0}
+ .study75 .math-inner mjx-container{max-width:none}
+
+ .study75 .hero{background:linear-gradient(180deg,#fbfdff 0%,#eff6fc 100%)!important;color:#173b5a!important;border-bottom:1px solid #dbe9f2}
+ .study75 .hero h1, .study75 .hero p, .study75 .hero .eyebrow{color:#173b5a!important}
+ .study75 .hero-tags span{background:#fff!important;color:#23517b!important;border:1px solid #d6e4ef!important}
+ .study75 .chapter, .study75 .article{min-width:0;max-width:100%}
+ .study75 .table-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;border:1px solid #dce8f2;border-radius:9px}
+ .study75 .table-scroll table{min-width:525px;width:100%;margin:0}
+ .study75 .math-panel{background:#edf5fc!important;border-left:4px solid #2563eb!important;border-radius:0 12px 12px 0!important}
+ .study75 .math-inner{max-width:100%;min-width:0;overflow-x:auto;overflow-y:hidden;padding:12px}
+ .study75 .chart{max-width:100%;overflow:hidden;margin:22px 0}
+ .study75 .chart svg{width:100%;height:auto;max-width:820px;display:block}
+ .study75 .chapter p{overflow-wrap:break-word}
+ .study75 .chapter h2{scroll-margin-top:25px}
+ .study75 .source-links a{margin-right:18px;display:inline-block}
+@media(max-width:600px){ .study75 .hero h1{overflow-wrap:anywhere} .study75 .table-scroll table{min-width:525px}}
+
+ .study75 .hero{background:#fff!important;background-image:none!important;color:#19334e!important;border-bottom:1px solid #dbe7f1!important} .study75 .hero h1{color:#172e45!important} .study75 .hero .eyebrow{color:#2563eb!important} .study75 .hero p{color:#51647a!important} .study75 .hero-tags span{background:#eef5fd!important} .study75 .table-scroll{overflow-x:auto!important;max-width:100%} .study75 .math-panel .math-inner{overflow-x:auto;max-width:100%} .study75 .chapter p{overflow-wrap:break-word} .study75 .decision-chart{background:#fafdff;border:1px solid #dce5ee;border-radius:14px;margin:20px 0;padding:15px} .study75 .decision-chart svg{width:100%;height:auto;max-width:780px;display:block;margin:0 auto} .study75 .decision-chart figcaption{font-size:.86rem;color:#526579;margin-top:10px} .study75 .chapter h3{font-family:'Source Serif 4',Georgia,serif;color:#234969;margin:25px 0 8px} .study75 .chapter strong{color:#214467}
+
+ .study75 .hero{background:#ffffff!important;background-image:none!important;color:#19334e!important;border-bottom:1px solid #dbe7f1!important} .study75 .hero h1{color:#172e45!important} .study75 .hero .eyebrow{color:#2563eb!important} .study75 .hero p{color:#51647a!important} .study75 .table-scroll{max-width:100%;overflow-x:auto} .study75 .case-table, .study75  .study75-figure{margin:1.5rem 0} .study75 .case-table figcaption, .study75  .study75-figure figcaption{font-size:.87rem;color:#536477;line-height:1.55;margin-top:.5rem} .study75  .study75-figure svg{max-width:100%;height:auto;display:block} .study75 .case-table table{min-width:490px;width:100%;border-collapse:collapse} .study75 .case-table th, .study75 .case-table td{padding:.4rem .65rem;border-bottom:1px solid #d8e1eb;text-align:right} .study75 .case-table th:first-child{text-align:left} .study75 .math-inner{max-width:100%;overflow-x:auto} .study75 .chapter{overflow-wrap:anywhere} .study75 .chapter a{overflow-wrap:break-word} .study75 .toc a{overflow-wrap:break-word} .study75 .hero .hero-tags span{background:#eef5fd!important} .study75 .chapter h3{font-family:'Source Serif 4',Georgia,serif;color:#234969}
+ .study75 .hero{background:#ffffff!important;background-image:none!important;color:#19334e!important;border-bottom:1px solid #dbe7f1!important} .study75 .hero h1{color:#172e45!important} .study75 .hero .eyebrow{color:#2563eb!important} .study75 .hero p{color:#51647a!important} .study75 .table-scroll{max-width:100%;overflow-x:auto} .study75 .teach-figure{margin:1.5rem 0;max-width:100%} .study75 .teach-figure figcaption{font-size:.87rem;color:#52687c;line-height:1.58;margin-top:.55rem} .study75 .teach-figure svg{max-width:100%;height:auto;display:block} .study75 .teach-figure table{min-width:660px;width:100%;border-collapse:collapse} .study75 .teach-figure th, .study75 .teach-figure td{padding:.48rem .65rem;border-bottom:1px solid #dce6ef;text-align:right;white-space:nowrap} .study75 .teach-figure th:nth-child(2), .study75 .teach-figure td:nth-child(2){text-align:left} .study75 .teach-figure tfoot{font-weight:750;background:#edf5fb} .study75 .math-inner{max-width:100%;overflow-x:auto} .study75 .chapter{overflow-wrap:break-word} .study75 .chapter a{overflow-wrap:anywhere} .study75 .toc a{overflow-wrap:break-word} .study75 .article p{line-height:1.78} .study75 .chapter h2{scroll-margin-top:6rem} .study75 .teach-figure .table-scroll:focus-visible, .study75 .math-inner:focus-visible{outline:3px solid #2868bc;outline-offset:2px}@media(max-width:390px){ .study75 .teach-figure figcaption{font-size:.82rem}}
+ .study75 .hero{background:#fff!important;background-image:none!important;color:#19334e!important;border-bottom:1px solid #dbe7f1!important} .study75 .hero h1{color:#172e45!important} .study75 .hero .eyebrow{color:#2563eb!important} .study75 .hero p{color:#51647a!important} .study75 .table-scroll{max-width:100%;overflow-x:auto} .study75 .teach-figure{margin:1.5rem 0;max-width:100%} .study75 .teach-figure figcaption{font-size:.87rem;color:#52687c;line-height:1.58;margin-top:.55rem} .study75 .teach-figure svg{max-width:100%;height:auto;display:block} .study75 .teach-figure table{min-width:850px;width:100%;border-collapse:collapse} .study75 .teach-figure th, .study75 .teach-figure td{padding:.48rem .65rem;border-bottom:1px solid #dce6ef;text-align:right;white-space:nowrap} .study75 .teach-figure th:nth-child(2), .study75 .teach-figure td:nth-child(2){text-align:left} .study75 .math-inner{max-width:100%;overflow-x:auto} .study75 .chapter{overflow-wrap:break-word} .study75 .chapter a{overflow-wrap:anywhere} .study75 .article p{line-height:1.78} .study75 .chapter h2{scroll-margin-top:6rem} .study75 .teach-figure .table-scroll:focus-visible, .study75 .math-inner:focus-visible{outline:3px solid #2868bc;outline-offset:2px}@media(max-width:390px){ .study75 .teach-figure figcaption{font-size:.82rem}}
+ .study75 .hero{background:#fff!important;background-image:none!important;color:#19334e!important;border-bottom:1px solid #dbe7f1!important} .study75 .hero h1{color:#172e45!important} .study75 .hero .eyebrow{color:#2563eb!important} .study75 .hero p{color:#51647a!important} .study75 .table-scroll{max-width:100%;overflow-x:auto} .study75 .teach-figure{margin:1.5rem 0;max-width:100%} .study75 .teach-figure figcaption{font-size:.87rem;color:#52687c;line-height:1.58;margin-top:.55rem} .study75 .teach-figure svg{max-width:100%;height:auto;display:block} .study75 .teach-figure table{min-width:780px;width:100%;border-collapse:collapse} .study75 .teach-figure th, .study75 .teach-figure td{padding:.48rem .65rem;border-bottom:1px solid #dce6ef;text-align:right;white-space:nowrap} .study75 .teach-figure th:first-child, .study75 .teach-figure td:first-child{text-align:left} .study75 .teach-figure tr.total{font-weight:700;background:#edf5ff} .study75 .math-inner{max-width:100%;overflow-x:auto} .study75 .chapter{overflow-wrap:break-word} .study75 .chapter a{overflow-wrap:anywhere} .study75 .article p{line-height:1.78} .study75 .chapter h2{scroll-margin-top:6rem} .study75 .teach-figure .table-scroll:focus-visible, .study75 .math-inner:focus-visible{outline:3px solid #2868bc;outline-offset:2px}@media(max-width:390px){ .study75 .teach-figure figcaption{font-size:.82rem}}
+
+.study75 .hero{background:#fff!important;background-image:none!important;color:#19334e!important;border-bottom:1px solid #dbe7f1!important}.study75 .hero h1{color:#172e45!important}.study75 .hero .eyebrow{color:#2563eb!important}.study75 .hero p{color:#51647a!important}.study75 .table-scroll{max-width:100%;overflow-x:auto}.study75 .teach-figure{margin:1.5rem 0;max-width:100%}.study75 .teach-figure figcaption{font-size:.87rem;color:#52687c;line-height:1.58;margin-top:.55rem}.study75 .teach-figure svg{max-width:100%;height:auto;display:block}.study75 .teach-figure table{min-width:780px;width:100%;border-collapse:collapse}.study75 .teach-figure th,.study75 .teach-figure td{padding:.48rem .65rem;border-bottom:1px solid #dce6ef;text-align:right;white-space:nowrap}.study75 .teach-figure th:first-child,.study75 .teach-figure td:first-child{text-align:left}.study75 .math-inner{max-width:100%;overflow-x:auto}.study75 .chapter{overflow-wrap:break-word}.study75 .chapter a{overflow-wrap:anywhere}.study75 .article p{line-height:1.78}.study75 .chapter h2{scroll-margin-top:6rem}.study75 .table-scroll:focus-visible,.study75 .math-inner:focus-visible{outline:3px solid #2868bc;outline-offset:2px}@media(max-width:390px){.study75 .teach-figure figcaption{font-size:.82rem}}
+
+.study75 .chapter .caption{font-size:.84rem;color:#617487;margin:8px 0 14px}.study75 .teach-figure{margin:23px 0 29px}.study75 .teach-figure figcaption{font-size:.86rem;color:#536779;line-height:1.6}.study75 .table-scroll{max-width:100%;overflow-x:auto;outline-offset:3px}.study75 .chapter .table-scroll table{min-width:570px}.study75 .chapter h2{scroll-margin-top:95px}.study75 .math-inline{display:inline;white-space:normal}.study75 .math-panel .math-inner{overflow-x:auto} .study75 .chapter .math-panel .formula-title{white-space:normal}
+.study75 .hero{background:#fff!important;background-image:none!important}.study75 .chapter{overflow-wrap:break-word}.study75 .math-panel .math-inner{overflow-x:auto;max-width:100%}.study75 .table-scroll{max-width:100%;overflow-x:auto}.study75 .site-header .lang-switch a[lang][aria-current="page"]{color:#2563eb!important}.study75 .site-header .lang-switch a[lang]:not([aria-current]){color:#111827!important}
+.study75 .hero,.study75 .hero h1,.study75 .hero p,.study75 .hero .eyebrow{background:#fff!important;background-image:none!important;color:#183a56!important}
+.study75 .hero .eyebrow{color:#2563eb!important}
+.study75 .chapter .math-inner {overflow-x:auto;white-space:normal}
+.study75 .data-source {font-size:.84rem;color:#4f647b}
+.study75 .chapter .math-panel .math-inner{overflow-x:auto;min-width:0}
+@media(max-width:540px){.study75 .article .chapter table{min-width:450px}.study75 .hero h1{font-size:2.05rem}.study75 .formula-title{font-size:.7rem}}
+
+.study75 .article{overflow-wrap:anywhere}.study75 .chapter .math-inner{overflow-x:auto}.study75 .data-grid{width:100%;min-width:550px}.study75 .table-scroll{overflow-x:auto}.study75 .hero{background:#fff!important;background-image:none!important}.study75 .math-inner{white-space:nowrap} .study75 .meta{font-size:.86rem;color:#58738e} .study75 .formula-source{color:#183e61;font-family:Georgia,serif}
+.study75 .hero{background:#fff!important;background-image:none!important;color:#19334e!important}
+.study75 .hero h1,.study75 .hero p{color:#19334e!important}
+.study75 .site-header .lang-switch a[aria-current=page]{color:#2563eb!important}
+.study75 .chapter .table-scroll{max-width:100%;overflow-x:auto}
+.study75 .chapter .table-scroll table{min-width:515px}
+.study75 .math-inner .math-source{overflow-x:auto;display:block}
+.study75 a:focus-visible,.study75 button:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
+.study75 .chart svg{width:100%;height:auto;max-width:800px}
+
+.study75 .exercise-label{font-weight:800;color:#2563eb;margin:8px 0}.study75 .toc{scrollbar-width:thin}.study75 .chapter h3{font-family:Inter,sans-serif;font-size:1.05rem;color:#244b6a;margin:26px 0 10px}.study75 .math-inline{display:inline;overflow-wrap:anywhere}.study75 .chapter p{overflow-wrap:anywhere}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']}};</script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script><style>body.study75 .table-wrap{width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;margin:20px 0}body.study75 .table-wrap table{min-width:630px;width:100%;font-variant-numeric:tabular-nums}body.study75 .chapter{min-width:0}body.study75 .article{min-width:0}body.study75 .chapter p{overflow-wrap:break-word}body.study75 .chart{max-width:100%;overflow-x:auto}body.study75 .chart svg{display:block;max-width:100%;height:auto}body.study75 .chart figcaption{font-size:.83rem;color:#596e81}body.study75 .hero{background:#fff!important;background-image:none!important}body.study75 .chapter .MathJax{max-width:100%;overflow-x:auto}</style><style>body.study75 .formula-box{border-left:4px solid #2563eb;background:#edf5fd;color:#153451;border-radius:0 10px 10px 0;padding:15px 15px;margin:18px 0;overflow-x:auto;max-width:100%}body.study75 .article{min-width:0}body.study75 .chapter{min-width:0}body.study75 .table-wrap{max-width:100%;width:100%;overflow-x:auto}body.study75 .table-wrap table{min-width:580px;width:100%}body.study75 .chart{max-width:100%;overflow-x:auto}body.study75 .chart svg{display:block;max-width:100%;height:auto}body.study75 .chart figcaption{font-size:.85rem;color:#51657a}body.study75 .site-header .lang-switch a[aria-current="page"]{color:#2563eb!important}body.study75 .hero{background:#fff!important;background-image:none!important}</style><style>body.study75 .chart-figure{margin:22px 0;max-width:100%;background:#fff;padding:12px;border:1px solid #dae6ef;border-radius:14px}body.study75 .chart-figure svg{max-width:100%;height:auto}body.study75 .chart-figure figcaption{font-size:.84rem;color:#50657a;margin-top:8px}body.study75 .math-segment{overflow-wrap:anywhere}body.study75 .math-display{overflow-x:auto;max-width:100%}body.study75 .chapter table{font-variant-numeric:tabular-nums}body.study75 .chapter table td,body.study75 .chapter table th{white-space:nowrap}body.study75 .chapter p{overflow-wrap:break-word}body.study75 .formula-box .math-display{margin:12px 0}</style><style id="stats80-responsive-correction-v1-2">
+
+/* Statistics & Probability responsive equation/table correction v1.2.
+   Localized to previously flagged guides; preserves font size and academic content. */
+html,body{max-width:100%;}
+main,main article,main section,main .container,main .content,main .prose,
+main .layout,main .study-layout,main .study-content,main .article-body,
+main .chapter,main .card,main .grid,main .equation-card,
+main .math-scroll,main .table-wrap,main .table-scroll,main .datawrap,
+main .table-responsive{min-width:0;max-width:100%;}
+main .table-wrap,main .table-scroll,main .datawrap,main .table-responsive,
+main .table-container,main .table-wrapper{overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;}
+/* Tables without an existing scroll wrapper retain native semantic table elements. */
+main table.stats80-responsive-table{display:block;max-width:100%;overflow-x:auto;
+ overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;}
+main table.stats80-responsive-table tbody,main table.stats80-responsive-table thead,
+main table.stats80-responsive-table tfoot{width:max-content;min-width:100%;}
+/* MathJax display math scrolls within its own box; never scale symbols to illegibility. */
+main mjx-container[jax="CHTML"][display="true"],main mjx-container[jax="SVG"][display="true"],
+main .math-display,main .math-block,main .math-scroll,main .equation-card,
+main .equation,main .formula,main .eq,main .display-math{
+ max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;
+ overscroll-behavior-x:contain;}
+main mjx-container[jax="CHTML"]:not([display="true"]),
+main mjx-container[jax="SVG"]:not([display="true"]){max-width:100%;vertical-align:middle;overflow-x:auto;overflow-y:hidden;}
+main p,main li,main figcaption,main td,main th{overflow-wrap:anywhere;}
+main img,main svg,main canvas{max-width:100%;height:auto;}
+@media(max-width:768px){main figure{max-width:100%;min-width:0;}}
+
+
+
+/* Additional containment after browser diagnostics: paragraphs with long inline
+   formulae, worked examples, and long display derivations can scroll locally. */
+main p,main li,main blockquote,main .chapter,main .equation-card,
+main .mathbox,main .formula-box,main .worked-example,main .example,
+main .solution,main .math-panel,main .equation-block{
+ min-width:0;max-width:100%;overflow-x:auto;
+ overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;}
+main table.stats80-responsive-table{min-width:0!important;width:100%!important;}
+
+</style></head><body class="study75"><a class="skip-link" href="#main-content">Skip to main content</a><header class="site-header"><div class="container nav-wrap"><div class="identity"><a class="brand" href="/index.html">Alfredo Saldana</a><div aria-label="Language selector" class="lang-switch"><a aria-current="page" href="/learn/statistics-probability/comparing-survival-curves-the-log-rank-test.html" lang="en">EN</a><span aria-hidden="true">|</span><a href="/es/learn/statistics-probability/comparing-survival-curves-the-log-rank-test-es.html" lang="es">ES</a></div></div><nav aria-label="Main navigation" class="nav" id="menu75"><a href="/index.html">Home</a><a href="/projects.html">Projects</a><a href="/tutorials.html">Learn</a><a href="/open-box.html">Open Box</a><a href="/about.html">About</a><a href="/contact.html">Contact</a></nav><button aria-controls="menu75" aria-expanded="false" aria-label="Open menu" class="menu-btn" type="button">☰</button></div></header><section class="hero"><div class="container"><div class="eyebrow">Statistics &amp; Probability · Guide 75 / 80</div><h1>Comparing Survival Curves: The Log-Rank Test</h1><p>Observed and expected failures, hypergeometric variance, chi-square inference, curve crossings and responsible comparison of survival distributions.</p><div class="hero-tags"><span>20 complete synthetic records</span><span>Log-Rank · χ²</span><span>MathJax 3</span><span>15 worked exercises</span></div></div></section><main class="container shell" id="main-content"><aside class="toc"><strong>On this page</strong><a href="#section-1">1. The question that a comparison of survival curves answers</a><a href="#section-2">2. Prerequisites, learning goals and the logical map</a><a href="#section-3">3. Define the observational unit, event and censoring rules</a><a href="#section-4">4. Full synthetic dataset: all twenty machines</a><a href="#section-5">5. Construct the Kaplan–Meier context before testing</a><a href="#section-6">6. Formulate the null and alternative hypotheses correctly</a><a href="#section-7">7. Why risk sets must be counted immediately before events</a><a href="#section-8">8. Observed events and expected events: the essential comparison</a><a href="#section-9">9. Why the hypergeometric variance is the correct denominator</a><a href="#section-10">10. Reproduce every contribution from the full risk table</a><a href="#section-11">11. Obtain the chi-square statistic without skipping arithmetic</a><a href="#section-12">12. What a p-value measures—and what it cannot measure</a><a href="#section-13">13. Tied failures and the finite-population correction</a><a href="#section-14">14. Censoring and delayed entry: different accounting rules</a><a href="#section-15">15. Why proportional hazards matters differently for validity and power</a><a href="#section-16">16. Crossing curves: calculate how evidence cancels</a><a href="#section-17">17. Weighted log-rank tests answer deliberately different questions</a><a href="#section-18">18. Comparing three or more groups</a><a href="#section-19">19. Sample size, number of events and power</a><a href="#section-20">20. Graphs, at-risk tables and communication</a><a href="#section-21">21. Association, causal claims and alternative explanations</a><a href="#section-22">22. Competing risks and events that prevent the target event</a><a href="#section-23">23. A complete decision workflow, from design to conclusion</a><a href="#section-24">24. Worked exercise 1 — Encode the event and censoring status</a><a href="#section-25">25. Worked exercise 2 — Rebuild a risk set at time six</a><a href="#section-26">26. Worked exercise 3 — Expected failures and a signed contribution</a><a href="#section-27">27. Worked exercise 4 — Calculate hypergeometric variance</a><a href="#section-28">28. Worked exercise 5 — From cumulative score to p-value</a><a href="#section-29">29. Worked exercise 6 — Interpret the Kaplan–Meier values at month eight</a><a href="#section-30">30. Worked exercise 7 — Two tied failures</a><a href="#section-31">31. Worked exercise 8 — Recognize cancellation when curves cross</a><a href="#section-32">32. Worked exercise 9 — Add a machine at delayed entry</a><a href="#section-33">33. Worked exercise 10 — Interpret a multi-group test</a><a href="#section-34">34. Worked exercise 11 — Multiplicity after a global result</a><a href="#section-35">35. Worked exercise 12 — Distinguish a hazard ratio from a log-rank result</a><a href="#section-36">36. Worked exercise 13 — Change the significance threshold</a><a href="#section-37">37. Worked exercise 14 — Compare an event count and a survival test</a><a href="#section-38">38. Worked exercise 15 — Design an honest scientific conclusion</a><a href="#section-39">39. Final conceptual integration and transfer beyond the example</a><a href="#section-40">40. References, provenance and boundaries</a></aside><article class="article"><section class="chapter" id="section-1"><h2>1. The question that a comparison of survival curves answers</h2><p>A Kaplan–Meier curve describes the estimated probability that an event has not yet happened by a particular time. When two clinical protocols are compared, however, reporting two curves is not the same as formally asking whether the entire underlying survival experience differs. One group might fail earlier, both groups might fail at similar times, or the curves might cross. The log-rank test converts the sequence of observed and expected events into one standardized measure of evidence. It is a <em>global</em> comparison over the observed follow-up, not a claim about just one month and not an estimate of how many months one protocol adds.</p>
+<p>Imagine a reliability trial in which Protocol A and Protocol B specify two maintenance schedules for twenty identical machines. A machine's event is its first confirmed major failure; its time origin is the start of its assigned schedule; time is measured in months. Failure ends observation of the first-failure outcome. A machine may instead reach the study cutoff without failing. Its recorded exit is then a right-censoring time, not a failure. The illustration is entirely synthetic: no hospital, manufacturer or clinical trial supplied these records. We deliberately include both failures and censoring because the real methodological question is how to compare groups when their follow-up information is incomplete.</p>
+<p>The scientific estimand is a contrast between population survival functions, denoted <span class="math-segment">\(S_A(t)=P(T_A&gt;t)\)</span> and <span class="math-segment">\(S_B(t)=P(T_B&gt;t)\)</span>, where <span class="math-segment">\(T_g\)</span> is time to first failure under group <span class="math-segment">\(g\)</span>. This test is most immediately understood as a test of equality of the survival distributions. It is not an automatic causal comparison merely because we use the word <em>protocol</em>. Random assignment, comparable observation, and defensible follow-up are additional design requirements for causal interpretation.</p>
+</section><section class="chapter" id="section-2"><h2>2. Prerequisites, learning goals and the logical map</h2><p>You need basic probability, conditional probability, addition, fractions, square roots, hypothesis testing, and the distinction between a sample and a population. We explain the hypergeometric distribution in the specific form needed for the test; no prior combinatorics course is required. Guide 72 introduced event definitions and censoring, Guide 73 related survival and hazard, and Guide 74 constructed Kaplan–Meier estimates and risk sets. This guide reconstructs the relevant pieces so it can be read independently, but revisiting those guides may help when the terminology feels new.</p>
+<p>By the end, you should be able to identify distinct event times; count group-specific risk sets immediately before each event; compute observed and expected failures; derive the variance contribution; sum the contributions to obtain a chi-square statistic with one degree of freedom; and interpret its p-value without claiming a clinically important effect. You should also understand how tied failures change the calculation, why censoring is not entered as an event, how multi-group comparisons work, and what changes when curves cross or hazards are not proportional. We will revisit the distinction between detecting a difference and estimating its magnitude in every major interpretation.</p>
+<p>Our reasoning follows a fixed chain: define the question and the observation mechanism; display all data; rebuild the risk sets; formulate the null hypothesis; derive the null distribution at each event time; combine the evidence; check the result independently; inspect how the comparison relates to Kaplan–Meier curves; and finally assess uncertainty, power, multiplicity and external validity. The steps are ordered for a reason: a flawless chi-square computation cannot repair an incorrect definition of the event or a risk set that excludes censored machines prematurely.</p>
+</section><section class="chapter" id="section-3"><h2>3. Define the observational unit, event and censoring rules</h2><p>An observational unit here is one machine, not one monthly inspection. The start of follow-up is the moment its maintenance protocol begins. The endpoint is first major failure, and no machine can contribute a second failure to this particular analysis. An exit recorded with status <span class="math-segment">\(\delta_i=1\)</span> is observed failure; <span class="math-segment">\(\delta_i=0\)</span> means the machine was still event-free at its last recorded time. The observed time <span class="math-segment">\(X_i\)</span> is the smaller of the true event time and its censoring time. Thus <span class="math-segment">\(X_i=\min(T_i,C_i)\)</span>, and <span class="math-segment">\(\delta_i=I(T_i\le C_i)\)</span>, where <span class="math-segment">\(I\)</span> is an indicator equal to one when the stated condition is true.</p>
+<p>This coding matters. For a machine censored at month seven, we know that it was event-free through its observed follow-up. We do <em>not</em> know that its event occurred at seven; we also do not know whether it would fail at eight or remain operational for years. When the test reaches event time five, that machine still belongs to the risk set. When the test reaches time eight, it does not. The machine contributes information while observed but cannot be treated as a failure merely to complete a spreadsheet.</p>
+<p>For valid comparison, loss to follow-up must be independent of unobserved failure risk under appropriate conditioning, or a more specialized method must address informative censoring. For example, if highly damaged machines are quietly removed from Protocol A before formal failure is recorded, both the curve and log-rank comparison can be misleading. Administrative termination after a prespecified end date may be more defensible, although even then different calendar entry times and follow-up lengths need inspection. These assumptions concern data collection, not a cosmetic option inside a statistical package.</p>
+</section><section class="chapter" id="section-4"><h2>4. Full synthetic dataset: all twenty machines</h2><p>The table below contains the complete synthetic cohort, not a sample of its rows. Every machine begins at month zero, so the elementary risk set at time <span class="math-segment">\(t\)</span> includes machines whose observed exit time satisfies <span class="math-segment">\(X_i\ge t\)</span>. Group A has ten machines and six observed failures; Group B also has ten machines and five failures. The remaining exits are right censored. Times are months from protocol initiation. Identifiers carry no scientific information; they only allow a student to trace a risk-set count back to a record.</p>
+<div class="table-wrap"><table><caption>Complete synthetic records: time in months; 1 = failure, 0 = right-censored.</caption><thead><tr><th scope="col">Machine / Máquina</th><th scope="col">Group / Grupo</th><th scope="col">Time (months) / Tiempo (meses)</th><th scope="col">Event / Evento</th></tr></thead><tbody><tr><th scope="row">A01</th><td>A</td><td>2</td><td>1</td></tr><tr><th scope="row">A02</th><td>A</td><td>3</td><td>1</td></tr><tr><th scope="row">A03</th><td>A</td><td>4</td><td>1</td></tr><tr><th scope="row">A04</th><td>A</td><td>5</td><td>1</td></tr><tr><th scope="row">A05</th><td>A</td><td>6</td><td>1</td></tr><tr><th scope="row">A06</th><td>A</td><td>7</td><td>0</td></tr><tr><th scope="row">A07</th><td>A</td><td>8</td><td>0</td></tr><tr><th scope="row">A08</th><td>A</td><td>9</td><td>1</td></tr><tr><th scope="row">A09</th><td>A</td><td>10</td><td>0</td></tr><tr><th scope="row">A10</th><td>A</td><td>12</td><td>0</td></tr><tr><th scope="row">B01</th><td>B</td><td>3</td><td>0</td></tr><tr><th scope="row">B02</th><td>B</td><td>4</td><td>0</td></tr><tr><th scope="row">B03</th><td>B</td><td>6</td><td>0</td></tr><tr><th scope="row">B04</th><td>B</td><td>8</td><td>1</td></tr><tr><th scope="row">B05</th><td>B</td><td>9</td><td>0</td></tr><tr><th scope="row">B06</th><td>B</td><td>10</td><td>1</td></tr><tr><th scope="row">B07</th><td>B</td><td>11</td><td>1</td></tr><tr><th scope="row">B08</th><td>B</td><td>12</td><td>1</td></tr><tr><th scope="row">B09</th><td>B</td><td>13</td><td>1</td></tr><tr><th scope="row">B10</th><td>B</td><td>14</td><td>0</td></tr></tbody></table></div>
+<p>Before computing anything, count the status-one entries in each group and check that all times are nonnegative. Next sort the <em>event times</em> across groups, not all exits indiscriminately. The distinct pooled failure times are 2, 3, 4, 5, 6, 8, 9, 10, 11, 12 and 13 months. Month seven is a censoring time in A, not a failure. Month fourteen is a censoring time in B. These exits still change who remains under observation later, so their omission from the event-time list must not make them invisible in risk-set calculations.</p>
+<p>The dataset is intentionally small so every arithmetic step can be audited. It is not representative of any manufacturer or disease. A sample of only twenty machines produces large statistical uncertainty, and the event times were selected to illustrate survival-method reasoning, not to support a real maintenance policy. The appropriate final conclusion must therefore remain conditional on this synthetic design and its assumptions.</p>
+</section><section class="chapter" id="section-5"><h2>5. Construct the Kaplan–Meier context before testing</h2><p>A test should not replace the first descriptive inspection. For each group, a Kaplan–Meier estimator multiplies conditional survival fractions over that group's event times: <span class="math-segment">\(\widehat S_g(t)=\prod_{t_j\le t}(1-d_{gj}/n_{gj})\)</span>. Here <span class="math-segment">\(n_{gj}\)</span> is the number at risk in group <span class="math-segment">\(g\)</span> immediately before time <span class="math-segment">\(t_j\)</span>, while <span class="math-segment">\(d_{gj}\)</span> is the number of observed failures at that time. Censoring reduces later risk sets but never directly creates a downward step. The two groups are displayed using the same time axis and a stated end of observation.</p>
+<p>For A, the first five failures at months 2 through 6 occur while no A machine has been censored, so the product is <span class="math-segment">\((9/10)(8/9)(7/8)(6/7)(5/6)=0.5\)</span>. A further failure at month nine occurs after censoring at seven and eight, so three A machines remain immediately before nine; the survival estimate becomes <span class="math-segment">\(0.5(2/3)=1/3\)</span>. For B, the first recorded failure is at month eight, after three B machines were censored at months three, four and six. Seven remain at risk, giving <span class="math-segment">\(\widehat S_B(8)=6/7\)</span>. Subsequent failures modify this curve at 10, 11, 12 and 13 months.</p>
+<figure class="chart-figure"><svg aria-label="Kaplan–Meier estimates: + symbols mark censoring; pooled data are synthetic." preserveaspectratio="xMidYMid meet" role="img" style="width:100%;height:auto;display:block" version="1.1" viewbox="0 0 619.2 252" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<metadata>
+<rdf:rdf xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<cc:work>
+<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"></dc:type>
+<dc:format>image/svg+xml</dc:format>
+<dc:creator>
+<cc:agent>
+<dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+</cc:agent>
+</dc:creator>
+</cc:work>
+</rdf:rdf>
+</metadata>
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="g75km_figure_1">
+<g id="g75km_patch_1">
+<path d="M 0 252 
+L 619.2 252 
+L 619.2 0 
+L 0 0 
+z
+" style="fill: #ffffff"></path>
+</g>
+<g id="g75km_axes_1">
+<g id="g75km_patch_2">
+<path d="M 47.72 210.04 
+L 602.055 210.04 
+L 602.055 10.8 
+L 47.72 10.8 
+z
+" style="fill: #ffffff"></path>
+</g>
+<g id="g75km_PathCollection_1">
+<defs>
+<path d="M -4.092676 0 
+L 4.092676 0 
+M 0 4.092676 
+L 0 -4.092676 
+" id="g75km_m290f9665b7" style="stroke: #2563eb; stroke-width: 1.7"></path>
+</defs>
+<g clip-path="url(#g75km_p9044ec599e)">
+<use style="fill: #2563eb; stroke: #2563eb; stroke-width: 1.7" x="324.8875" xlink:href="#g75km_m290f9665b7" y="115.16381"></use>
+<use style="fill: #2563eb; stroke: #2563eb; stroke-width: 1.7" x="364.482857" xlink:href="#g75km_m290f9665b7" y="115.16381"></use>
+<use style="fill: #2563eb; stroke: #2563eb; stroke-width: 1.7" x="443.673571" xlink:href="#g75km_m290f9665b7" y="146.789206"></use>
+<use style="fill: #2563eb; stroke: #2563eb; stroke-width: 1.7" x="522.864286" xlink:href="#g75km_m290f9665b7" y="146.789206"></use>
+</g>
+</g>
+<g id="g75km_PathCollection_2">
+<defs>
+<path d="M -4.092676 0 
+L 4.092676 0 
+M 0 4.092676 
+L 0 -4.092676 
+" id="g75km_m44059524aa" style="stroke: #db783d; stroke-width: 1.7"></path>
+</defs>
+<g clip-path="url(#g75km_p9044ec599e)">
+<use style="fill: #db783d; stroke: #db783d; stroke-width: 1.7" x="166.506071" xlink:href="#g75km_m44059524aa" y="20.287619"></use>
+<use style="fill: #db783d; stroke: #db783d; stroke-width: 1.7" x="206.101429" xlink:href="#g75km_m44059524aa" y="20.287619"></use>
+<use style="fill: #db783d; stroke: #db783d; stroke-width: 1.7" x="285.292143" xlink:href="#g75km_m44059524aa" y="20.287619"></use>
+<use style="fill: #db783d; stroke: #db783d; stroke-width: 1.7" x="404.078214" xlink:href="#g75km_m44059524aa" y="47.395102"></use>
+<use style="fill: #db783d; stroke: #db783d; stroke-width: 1.7" x="602.055" xlink:href="#g75km_m44059524aa" y="177.51102"></use>
+</g>
+</g>
+<g id="g75km_matplotlib.axis_1">
+<g id="g75km_xtick_1">
+<g id="g75km_line2d_1">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="g75km_m4433598207" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#g75km_m4433598207" y="210.04"></use>
+</g>
+</g>
+<g id="g75km_text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 47.72 224.638438)" x="47.72" y="224.638438">0</text>
+</g>
+</g>
+<g id="g75km_xtick_2">
+<g id="g75km_line2d_2">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="126.910714" xlink:href="#g75km_m4433598207" y="210.04"></use>
+</g>
+</g>
+<g id="g75km_text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 126.910714 224.638438)" x="126.910714" y="224.638438">2</text>
+</g>
+</g>
+<g id="g75km_xtick_3">
+<g id="g75km_line2d_3">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="206.101429" xlink:href="#g75km_m4433598207" y="210.04"></use>
+</g>
+</g>
+<g id="g75km_text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 206.101429 224.638438)" x="206.101429" y="224.638438">4</text>
+</g>
+</g>
+<g id="g75km_xtick_4">
+<g id="g75km_line2d_4">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="285.292143" xlink:href="#g75km_m4433598207" y="210.04"></use>
+</g>
+</g>
+<g id="g75km_text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 285.292143 224.638438)" x="285.292143" y="224.638438">6</text>
+</g>
+</g>
+<g id="g75km_xtick_5">
+<g id="g75km_line2d_5">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="364.482857" xlink:href="#g75km_m4433598207" y="210.04"></use>
+</g>
+</g>
+<g id="g75km_text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 364.482857 224.638438)" x="364.482857" y="224.638438">8</text>
+</g>
+</g>
+<g id="g75km_xtick_6">
+<g id="g75km_line2d_6">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="443.673571" xlink:href="#g75km_m4433598207" y="210.04"></use>
+</g>
+</g>
+<g id="g75km_text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 443.673571 224.638438)" x="443.673571" y="224.638438">10</text>
+</g>
+</g>
+<g id="g75km_xtick_7">
+<g id="g75km_line2d_7">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="522.864286" xlink:href="#g75km_m4433598207" y="210.04"></use>
+</g>
+</g>
+<g id="g75km_text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 522.864286 224.638438)" x="522.864286" y="224.638438">12</text>
+</g>
+</g>
+<g id="g75km_xtick_8">
+<g id="g75km_line2d_8">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="602.055" xlink:href="#g75km_m4433598207" y="210.04"></use>
+</g>
+</g>
+<g id="g75km_text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 602.055 224.638438)" x="602.055" y="224.638438">14</text>
+</g>
+</g>
+<g id="g75km_text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 324.8875 238.316563)" x="324.8875" y="238.316563">Time since start (months)</text>
+</g>
+</g>
+<g id="g75km_matplotlib.axis_2">
+<g id="g75km_ytick_1">
+<g id="g75km_line2d_9">
+<path clip-path="url(#g75km_p9044ec599e)" d="M 47.72 210.04 
+L 602.055 210.04 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75km_line2d_10">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="g75km_m3a2505bf46" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#g75km_m3a2505bf46" y="210.04"></use>
+</g>
+</g>
+<g id="g75km_text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 40.72 213.839219)" x="40.72" y="213.839219">0.0</text>
+</g>
+</g>
+<g id="g75km_ytick_2">
+<g id="g75km_line2d_11">
+<path clip-path="url(#g75km_p9044ec599e)" d="M 47.72 172.089524 
+L 602.055 172.089524 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75km_line2d_12">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#g75km_m3a2505bf46" y="172.089524"></use>
+</g>
+</g>
+<g id="g75km_text_11">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 40.72 175.888743)" x="40.72" y="175.888743">0.2</text>
+</g>
+</g>
+<g id="g75km_ytick_3">
+<g id="g75km_line2d_13">
+<path clip-path="url(#g75km_p9044ec599e)" d="M 47.72 134.139048 
+L 602.055 134.139048 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75km_line2d_14">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#g75km_m3a2505bf46" y="134.139048"></use>
+</g>
+</g>
+<g id="g75km_text_12">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 40.72 137.938266)" x="40.72" y="137.938266">0.4</text>
+</g>
+</g>
+<g id="g75km_ytick_4">
+<g id="g75km_line2d_15">
+<path clip-path="url(#g75km_p9044ec599e)" d="M 47.72 96.188571 
+L 602.055 96.188571 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75km_line2d_16">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#g75km_m3a2505bf46" y="96.188571"></use>
+</g>
+</g>
+<g id="g75km_text_13">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 40.72 99.98779)" x="40.72" y="99.98779">0.6</text>
+</g>
+</g>
+<g id="g75km_ytick_5">
+<g id="g75km_line2d_17">
+<path clip-path="url(#g75km_p9044ec599e)" d="M 47.72 58.238095 
+L 602.055 58.238095 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75km_line2d_18">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#g75km_m3a2505bf46" y="58.238095"></use>
+</g>
+</g>
+<g id="g75km_text_14">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 40.72 62.037314)" x="40.72" y="62.037314">0.8</text>
+</g>
+</g>
+<g id="g75km_ytick_6">
+<g id="g75km_line2d_19">
+<path clip-path="url(#g75km_p9044ec599e)" d="M 47.72 20.287619 
+L 602.055 20.287619 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75km_line2d_20">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#g75km_m3a2505bf46" y="20.287619"></use>
+</g>
+</g>
+<g id="g75km_text_15">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 40.72 24.086838)" x="40.72" y="24.086838">1.0</text>
+</g>
+</g>
+<g id="g75km_text_16">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-90 18.737188 110.42)" x="18.737188" y="110.42">Estimated survival</text>
+</g>
+</g>
+<g id="g75km_line2d_21">
+<path clip-path="url(#g75km_p9044ec599e)" d="M 47.72 20.287619 
+L 126.910714 20.287619 
+L 126.910714 39.262857 
+L 166.506071 39.262857 
+L 166.506071 58.238095 
+L 206.101429 58.238095 
+L 206.101429 77.213333 
+L 245.696786 77.213333 
+L 245.696786 96.188571 
+L 285.292143 96.188571 
+L 285.292143 115.16381 
+L 404.078214 115.16381 
+L 404.078214 146.789206 
+L 602.055 146.789206 
+L 602.055 146.789206 
+" style="fill: none; stroke: #2563eb; stroke-width: 2.6; stroke-linecap: square"></path>
+</g>
+<g id="g75km_line2d_22">
+<path clip-path="url(#g75km_p9044ec599e)" d="M 47.72 20.287619 
+L 364.482857 20.287619 
+L 364.482857 47.395102 
+L 443.673571 47.395102 
+L 443.673571 79.924082 
+L 483.268929 79.924082 
+L 483.268929 112.453061 
+L 522.864286 112.453061 
+L 522.864286 144.982041 
+L 562.459643 144.982041 
+L 562.459643 177.51102 
+L 602.055 177.51102 
+L 602.055 177.51102 
+" style="fill: none; stroke: #db783d; stroke-width: 2.6; stroke-linecap: square"></path>
+</g>
+<g id="g75km_patch_3">
+<path d="M 47.72 210.04 
+L 47.72 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g75km_patch_4">
+<path d="M 602.055 210.04 
+L 602.055 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g75km_patch_5">
+<path d="M 47.72 210.04 
+L 602.055 210.04 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g75km_patch_6">
+<path d="M 47.72 10.8 
+L 602.055 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g75km_legend_1">
+<g id="g75km_line2d_23">
+<path d="M 56.72 180.782188 
+L 66.72 180.782188 
+L 66.72 180.782188 
+L 76.72 180.782188 
+L 76.72 180.782188 
+" style="fill: none; stroke: #2563eb; stroke-width: 2.6; stroke-linecap: square"></path>
+</g>
+<g id="g75km_text_17">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" transform="rotate(-0 84.72 184.282188)" x="84.72" y="184.282188">Protocol A</text>
+</g>
+<g id="g75km_line2d_24">
+<path d="M 56.72 195.460313 
+L 66.72 195.460313 
+L 66.72 195.460313 
+L 76.72 195.460313 
+L 76.72 195.460313 
+" style="fill: none; stroke: #db783d; stroke-width: 2.6; stroke-linecap: square"></path>
+</g>
+<g id="g75km_text_18">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" transform="rotate(-0 84.72 198.960313)" x="84.72" y="198.960313">Protocol B</text>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="g75km_p9044ec599e">
+<rect height="199.24" width="554.335" x="47.72" y="10.8"></rect>
+</clippath>
+</defs>
+</svg><figcaption>Kaplan–Meier estimates: + symbols mark censoring; pooled data are synthetic.</figcaption></figure>
+<p>The curves may appear separated for much of follow-up. Yet visual distance is not a significance test: at some times few machines remain at risk, and the precision of a plotted step can be poor. Conversely, a nonsignificant global test does not mean that the two estimated curves are identical or that a practically meaningful difference has been excluded. Descriptive survival at a clinically chosen time and a global log-rank p-value answer different questions; responsible reporting places them side by side.</p>
+</section><section class="chapter" id="section-6"><h2>6. Formulate the null and alternative hypotheses correctly</h2><p>The conventional two-group null hypothesis is <span class="math-segment">\(H_0:S_A(t)=S_B(t)\)</span> throughout the relevant time range. Equivalently, under suitable continuous-time conditions, their hazard functions agree at all relevant times. The alternative is that the survival distributions differ somewhere. The test aggregates information across observed failure times rather than selecting the month with the largest-looking curve gap after seeing the graph. Selecting a favorable month post hoc and testing only there would be another, potentially biased analysis.</p>
+<p>The null does <em>not</em> say that each machine must have the same failure time. Different machines can have different outcomes due to random variation while their underlying population distributions are the same. The test asks whether the group labels help explain the distribution of observed failures after accounting for who was actually at risk at each time. Under this null, when one failure occurs among the pooled at-risk machines, the chance it is from A is proportional to A's fraction of the current risk set.</p>
+<p>Set a significance threshold before seeing the result, such as <span class="math-segment">\(\alpha=0.05\)</span>. The frequentist rejection rule concerns the long-run Type I error probability under the assumed null and valid sampling mechanism. It does not say there is a 5% probability that the null is true. If the p-value exceeds 0.05, do not reject; do not write that the groups are equivalent, interchangeable or proven identical. Equivalence requires a different question, a prespecified acceptable margin and usually a specifically designed analysis.</p>
+</section><section class="chapter" id="section-7"><h2>7. Why risk sets must be counted immediately before events</h2><p>At time <span class="math-segment">\(t_j\)</span>, define <span class="math-segment">\(n_{Aj}\)</span> and <span class="math-segment">\(n_{Bj}\)</span> as the numbers in the two groups still observed and event-free just before <span class="math-segment">\(t_j\)</span>. Let <span class="math-segment">\(n_j=n_{Aj}+n_{Bj}\)</span>. A machine failing at <span class="math-segment">\(t_j\)</span> still counts among those at risk immediately before the failure; one censored strictly before <span class="math-segment">\(t_j\)</span> does not. This ordering prevents dividing by a risk set from which the very failure being analyzed has already been removed.</p>
+<p>For example, at month six A has six machines at risk and B has eight. B already had censored exits at months three and four but the B censoring scheduled at month six is treated as occurring after the time-six event for this conventional ordering. There is one failure at month six, in A. The pooled risk set is fourteen, so the expected number assigned to A under the null is <span class="math-segment">\(6/14\)</span>. At month eight A has four at risk because a machine censored at month seven has left, whereas B has seven at risk because a machine censored at month six has left. The failure at month eight belongs to B, yet A's expected number at that moment is still positive.</p>
+<p>Ties between censoring and events at exactly the same recorded instant need an explicit rule. A common product-limit convention counts event(s) before censoring at that time. Coarse monthly recording may create artificial ties compared with a precise date-time record; analysts should verify the source timestamp resolution rather than silently assume exact ordering is known. The risk sets displayed below implement the event-before-censoring convention and can be reproduced from the individual table.</p>
+</section><section class="chapter" id="section-8"><h2>8. Observed events and expected events: the essential comparison</h2><p>Let <span class="math-segment">\(d_{Aj}\)</span> and <span class="math-segment">\(d_{Bj}\)</span> be observed failures at pooled event time <span class="math-segment">\(t_j\)</span>, with <span class="math-segment">\(d_j=d_{Aj}+d_{Bj}\)</span>. Under equal hazards at that time, group A's expected failures conditional on the total number of failures and the risk-set composition are <span class="math-segment">\(E_{Aj}=d_j n_{Aj}/n_j\)</span>. This is a conditional expectation, not a prediction of a particular machine's failure date. It may be fractional even though the observed count is an integer, because it summarizes repeated hypothetical allocations of the <span class="math-segment">\(d_j\)</span> events among <span class="math-segment">\(n_j\)</span> at-risk machines.</p>
+<p>At month two, both groups have ten machines at risk and one A machine fails. Under the null the expected number of A failures is <span class="math-segment">\(1(10/20)=0.5\)</span>, so the observed-minus-expected contribution is <span class="math-segment">\(1-0.5=0.5\)</span>. At month eight the risk set has four A and seven B machines and the failure is in B. A is expected to account for <span class="math-segment">\(1(4/11)=0.363636\)</span> failures but observes none, yielding <span class="math-segment">\(-0.363636\)</span>. These positive and negative contributions make the test sensitive to the <em>sequence</em> of failures, rather than just comparing the final raw totals of six versus five.</p>
+<p>The total expected count for A is the sum of its expected contributions over every distinct pooled event time; the total observed count is six. The cumulative departure <span class="math-segment">\(U=\sum_j(d_{Aj}-E_{Aj})\)</span> is the score driving the comparison. A positive value suggests more A failures than expected during the observed risk-set history; a negative value suggests fewer. Squaring the standardized score yields a two-sided statistic. Direction by itself, however, does not estimate an adjusted hazard ratio or tell us the size of the survival-time benefit.</p>
+</section><section class="chapter" id="section-9"><h2>9. Why the hypergeometric variance is the correct denominator</h2><p>Condition on <span class="math-segment">\(n_j\)</span> at-risk machines, of whom <span class="math-segment">\(n_{Aj}\)</span> belong to A, and on <span class="math-segment">\(d_j\)</span> failures at that instant. Under the null, assigning these <span class="math-segment">\(d_j\)</span> failures among the pooled risk set resembles drawing without replacement. The number drawn from A has a hypergeometric distribution. Its expected value is <span class="math-segment">\(d_j n_{Aj}/n_j\)</span>, and its conditional variance for <span class="math-segment">\(n_j&gt;1\)</span> is <span class="math-segment">\(V_j=n_{Aj}n_{Bj}d_j(n_j-d_j)/[n_j^2(n_j-1)]\)</span>. This finite-population correction matters if more than one machine fails at the same time.</p>
+<p>With one failure, <span class="math-segment">\(d_j=1\)</span>, the expression simplifies to <span class="math-segment">\(n_{Aj}n_{Bj}/n_j^2\)</span>. At month two, that is <span class="math-segment">\(10\times10/20^2=0.25\)</span>. At month six it is <span class="math-segment">\(6\times8/14^2=48/196=0.244898\)</span>. At month twelve A has one at risk and B has three, so <span class="math-segment">\(V_{12}=1\times3/4^2=0.1875\)</span>. If only one group remains in a risk set, its conditional variance is zero: there is no remaining information for distinguishing groups at that failure time, although the failure itself still appears in the descriptive curve.</p>
+<p>We sum variance contributions: <span class="math-segment">\(V=\sum_j V_j\)</span>. This sum is not a raw variance of the twenty lifetimes, and it is not computed from squared deviations of event times. It is the null variance of the aggregate observed-minus-expected score, conditional on the evolving risk sets. That is why using the standard deviation of the recorded exit times as the denominator would answer the wrong question and mishandle censoring.</p>
+</section><section class="chapter" id="section-10"><h2>10. Reproduce every contribution from the full risk table</h2><p>The table lists the eleven distinct failure times. All risk-set counts, observed events, expected A events and variance contributions were recomputed from the twenty records. A machine censored at the same month as a failure remains in that month's pre-event risk set, then leaves for subsequent event times. Displayed fractions are rounded to six decimals only after calculation; summing prematurely rounded numbers can create a small discrepancy in the final statistic.</p>
+<div class="table-wrap"><table><caption>Observed, expected and conditional variance at each pooled failure time.</caption><thead><tr><th scope="col">t (months)</th><th scope="col">nA</th><th scope="col">nB</th><th scope="col">dA</th><th scope="col">dB</th><th scope="col">Expected A</th><th scope="col">Variance</th></tr></thead><tbody><tr><td>2</td><td>10</td><td>10</td><td>1</td><td>0</td><td>0.500000</td><td>0.250000</td></tr><tr><td>3</td><td>9</td><td>10</td><td>1</td><td>0</td><td>0.473684</td><td>0.249307</td></tr><tr><td>4</td><td>8</td><td>9</td><td>1</td><td>0</td><td>0.470588</td><td>0.249135</td></tr><tr><td>5</td><td>7</td><td>8</td><td>1</td><td>0</td><td>0.466667</td><td>0.248889</td></tr><tr><td>6</td><td>6</td><td>8</td><td>1</td><td>0</td><td>0.428571</td><td>0.244898</td></tr><tr><td>8</td><td>4</td><td>7</td><td>0</td><td>1</td><td>0.363636</td><td>0.231405</td></tr><tr><td>9</td><td>3</td><td>6</td><td>1</td><td>0</td><td>0.333333</td><td>0.222222</td></tr><tr><td>10</td><td>2</td><td>5</td><td>0</td><td>1</td><td>0.285714</td><td>0.204082</td></tr><tr><td>11</td><td>1</td><td>4</td><td>0</td><td>1</td><td>0.200000</td><td>0.160000</td></tr><tr><td>12</td><td>1</td><td>3</td><td>0</td><td>1</td><td>0.250000</td><td>0.187500</td></tr><tr><td>13</td><td>0</td><td>2</td><td>0</td><td>1</td><td>0.000000</td><td>0.000000</td></tr></tbody><tfoot><tr><th scope="row">TOTAL</th><td>—</td><td>—</td><td>6</td><td>5</td><td>3.772195</td><td>2.247438</td></tr></tfoot></table></div><p>The colored figure below shows signed deviations, not hazard ratios.</p><figure class="chart-figure"><svg aria-label="Signed observed-minus-expected score by event time." preserveaspectratio="xMidYMid meet" role="img" style="width:100%;height:auto;display:block" version="1.1" viewbox="0 0 619.2 237.6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<metadata>
+<rdf:rdf xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<cc:work>
+<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"></dc:type>
+<dc:format>image/svg+xml</dc:format>
+<dc:creator>
+<cc:agent>
+<dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+</cc:agent>
+</dc:creator>
+</cc:work>
+</rdf:rdf>
+</metadata>
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="g75score_figure_1">
+<g id="g75score_patch_1">
+<path d="M 0 237.6 
+L 619.2 237.6 
+L 619.2 0 
+L 0 0 
+z
+" style="fill: #ffffff"></path>
+</g>
+<g id="g75score_axes_1">
+<g id="g75score_patch_2">
+<path d="M 56 195.64 
+L 608.4 195.64 
+L 608.4 10.8 
+L 56 10.8 
+z
+" style="fill: #ffffff"></path>
+</g>
+<g id="g75score_patch_3">
+<path clip-path="url(#g75score_pa9986c3786)" d="M 81.109091 127.93123 
+L 110.345704 127.93123 
+L 110.345704 46.384171 
+L 81.109091 46.384171 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="g75score_patch_4">
+<path clip-path="url(#g75score_pa9986c3786)" d="M 124.10411 127.93123 
+L 153.340722 127.93123 
+L 153.340722 42.092221 
+L 124.10411 42.092221 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="g75score_patch_5">
+<path clip-path="url(#g75score_pa9986c3786)" d="M 167.099128 127.93123 
+L 196.335741 127.93123 
+L 196.335741 41.587285 
+L 167.099128 41.587285 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="g75score_patch_6">
+<path clip-path="url(#g75score_pa9986c3786)" d="M 210.094147 127.93123 
+L 239.33076 127.93123 
+L 239.33076 40.947701 
+L 210.094147 40.947701 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="g75score_patch_7">
+<path clip-path="url(#g75score_pa9986c3786)" d="M 253.089166 127.93123 
+L 282.325778 127.93123 
+L 282.325778 34.734591 
+L 253.089166 34.734591 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="g75score_patch_8">
+<path clip-path="url(#g75score_pa9986c3786)" d="M 339.079203 127.93123 
+L 368.315816 127.93123 
+L 368.315816 187.238182 
+L 339.079203 187.238182 
+z
+" style="fill: #db783d"></path>
+</g>
+<g id="g75score_patch_9">
+<path clip-path="url(#g75score_pa9986c3786)" d="M 382.074222 127.93123 
+L 411.310834 127.93123 
+L 411.310834 19.201818 
+L 382.074222 19.201818 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="g75score_patch_10">
+<path clip-path="url(#g75score_pa9986c3786)" d="M 425.06924 127.93123 
+L 454.305853 127.93123 
+L 454.305853 174.529549 
+L 425.06924 174.529549 
+z
+" style="fill: #db783d"></path>
+</g>
+<g id="g75score_patch_11">
+<path clip-path="url(#g75score_pa9986c3786)" d="M 468.064259 127.93123 
+L 497.300872 127.93123 
+L 497.300872 160.550053 
+L 468.064259 160.550053 
+z
+" style="fill: #db783d"></path>
+</g>
+<g id="g75score_patch_12">
+<path clip-path="url(#g75score_pa9986c3786)" d="M 511.059278 127.93123 
+L 540.29589 127.93123 
+L 540.29589 168.704759 
+L 511.059278 168.704759 
+z
+" style="fill: #db783d"></path>
+</g>
+<g id="g75score_patch_13">
+<path clip-path="url(#g75score_pa9986c3786)" d="M 554.054296 127.93123 
+L 583.290909 127.93123 
+L 583.290909 127.93123 
+L 554.054296 127.93123 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="g75score_matplotlib.axis_1">
+<g id="g75score_xtick_1">
+<g id="g75score_line2d_1">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="g75score_m5af6f20d3d" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="95.727397" xlink:href="#g75score_m5af6f20d3d" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 95.727397 210.238437)" x="95.727397" y="210.238437">2</text>
+</g>
+</g>
+<g id="g75score_xtick_2">
+<g id="g75score_line2d_2">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="138.722416" xlink:href="#g75score_m5af6f20d3d" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 138.722416 210.238437)" x="138.722416" y="210.238437">3</text>
+</g>
+</g>
+<g id="g75score_xtick_3">
+<g id="g75score_line2d_3">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="181.717435" xlink:href="#g75score_m5af6f20d3d" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 181.717435 210.238437)" x="181.717435" y="210.238437">4</text>
+</g>
+</g>
+<g id="g75score_xtick_4">
+<g id="g75score_line2d_4">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="224.712453" xlink:href="#g75score_m5af6f20d3d" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 224.712453 210.238437)" x="224.712453" y="210.238437">5</text>
+</g>
+</g>
+<g id="g75score_xtick_5">
+<g id="g75score_line2d_5">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="267.707472" xlink:href="#g75score_m5af6f20d3d" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 267.707472 210.238437)" x="267.707472" y="210.238437">6</text>
+</g>
+</g>
+<g id="g75score_xtick_6">
+<g id="g75score_line2d_6">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="353.697509" xlink:href="#g75score_m5af6f20d3d" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 353.697509 210.238437)" x="353.697509" y="210.238437">8</text>
+</g>
+</g>
+<g id="g75score_xtick_7">
+<g id="g75score_line2d_7">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="396.692528" xlink:href="#g75score_m5af6f20d3d" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 396.692528 210.238437)" x="396.692528" y="210.238437">9</text>
+</g>
+</g>
+<g id="g75score_xtick_8">
+<g id="g75score_line2d_8">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="439.687547" xlink:href="#g75score_m5af6f20d3d" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 439.687547 210.238437)" x="439.687547" y="210.238437">10</text>
+</g>
+</g>
+<g id="g75score_xtick_9">
+<g id="g75score_line2d_9">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="482.682565" xlink:href="#g75score_m5af6f20d3d" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 482.682565 210.238437)" x="482.682565" y="210.238437">11</text>
+</g>
+</g>
+<g id="g75score_xtick_10">
+<g id="g75score_line2d_10">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="525.677584" xlink:href="#g75score_m5af6f20d3d" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 525.677584 210.238437)" x="525.677584" y="210.238437">12</text>
+</g>
+</g>
+<g id="g75score_xtick_11">
+<g id="g75score_line2d_11">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="568.672603" xlink:href="#g75score_m5af6f20d3d" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_11">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 568.672603 210.238437)" x="568.672603" y="210.238437">13</text>
+</g>
+</g>
+<g id="g75score_text_12">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 332.2 223.916562)" x="332.2" y="223.916562">Pooled event time (months)</text>
+</g>
+</g>
+<g id="g75score_matplotlib.axis_2">
+<g id="g75score_ytick_1">
+<g id="g75score_line2d_12">
+<path clip-path="url(#g75score_pa9986c3786)" d="M 56 193.168877 
+L 608.4 193.168877 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75score_line2d_13">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="g75score_m70bd0471ba" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="56" xlink:href="#g75score_m70bd0471ba" y="193.168877"></use>
+</g>
+</g>
+<g id="g75score_text_13">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 49 196.968096)" x="49" y="196.968096">−0.4</text>
+</g>
+</g>
+<g id="g75score_ytick_2">
+<g id="g75score_line2d_14">
+<path clip-path="url(#g75score_pa9986c3786)" d="M 56 160.550053 
+L 608.4 160.550053 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75score_line2d_15">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="56" xlink:href="#g75score_m70bd0471ba" y="160.550053"></use>
+</g>
+</g>
+<g id="g75score_text_14">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 49 164.349272)" x="49" y="164.349272">−0.2</text>
+</g>
+</g>
+<g id="g75score_ytick_3">
+<g id="g75score_line2d_16">
+<path clip-path="url(#g75score_pa9986c3786)" d="M 56 127.93123 
+L 608.4 127.93123 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75score_line2d_17">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="56" xlink:href="#g75score_m70bd0471ba" y="127.93123"></use>
+</g>
+</g>
+<g id="g75score_text_15">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 49 131.730449)" x="49" y="131.730449">0.0</text>
+</g>
+</g>
+<g id="g75score_ytick_4">
+<g id="g75score_line2d_18">
+<path clip-path="url(#g75score_pa9986c3786)" d="M 56 95.312406 
+L 608.4 95.312406 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75score_line2d_19">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="56" xlink:href="#g75score_m70bd0471ba" y="95.312406"></use>
+</g>
+</g>
+<g id="g75score_text_16">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 49 99.111625)" x="49" y="99.111625">0.2</text>
+</g>
+</g>
+<g id="g75score_ytick_5">
+<g id="g75score_line2d_20">
+<path clip-path="url(#g75score_pa9986c3786)" d="M 56 62.693583 
+L 608.4 62.693583 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75score_line2d_21">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="56" xlink:href="#g75score_m70bd0471ba" y="62.693583"></use>
+</g>
+</g>
+<g id="g75score_text_17">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 49 66.492802)" x="49" y="66.492802">0.4</text>
+</g>
+</g>
+<g id="g75score_ytick_6">
+<g id="g75score_line2d_22">
+<path clip-path="url(#g75score_pa9986c3786)" d="M 56 30.074759 
+L 608.4 30.074759 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75score_line2d_23">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="56" xlink:href="#g75score_m70bd0471ba" y="30.074759"></use>
+</g>
+</g>
+<g id="g75score_text_18">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 49 33.873978)" x="49" y="33.873978">0.6</text>
+</g>
+</g>
+<g id="g75score_text_19">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-90 18.6375 103.22)" x="18.6375" y="103.22">Observed − expected (A)</text>
+</g>
+</g>
+<g id="g75score_line2d_24">
+<path clip-path="url(#g75score_pa9986c3786)" d="M 56 127.93123 
+L 608.4 127.93123 
+" style="fill: none; stroke: #60768e; stroke-linecap: square"></path>
+</g>
+<g id="g75score_patch_14">
+<path d="M 56 195.64 
+L 56 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g75score_patch_15">
+<path d="M 608.4 195.64 
+L 608.4 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g75score_patch_16">
+<path d="M 56 195.64 
+L 608.4 195.64 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g75score_patch_17">
+<path d="M 56 10.8 
+L 608.4 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="g75score_pa9986c3786">
+<rect height="184.84" width="552.4" x="56" y="10.8"></rect>
+</clippath>
+</defs>
+</svg><figcaption>Signed observed-minus-expected score by event time.</figcaption></figure>
+<p>Check the first four rows by hand. Their expected contributions are <span class="math-segment">\(0.5\)</span>, <span class="math-segment">\(9/19\)</span>, <span class="math-segment">\(8/17\)</span> and <span class="math-segment">\(7/15\)</span>. The observed contributions are all one, because the observed failure belongs to A at months two through five. Then verify month eight: A has zero observed and <span class="math-segment">\(4/11\)</span> expected. Finally inspect month thirteen: no A machines remain at risk, so both its expected contribution and its variance contribution are zero; the B event still changes B's Kaplan–Meier curve. Explaining why a row contributes zero is just as important as calculating a positive row.</p>
+<p>The expected counts in the two groups at each time add to the total failures: <span class="math-segment">\(E_{Aj}+E_{Bj}=d_j\)</span>. Accordingly, the observed-minus-expected total for B must be <span class="math-segment">\(-U\)</span>. This conservation property provides an immediate audit of the table. If both groups' scores have the same positive sign, or the expected counts do not sum to the total events, there is a coding or transcription error.</p>
+</section><section class="chapter" id="section-11"><h2>11. Obtain the chi-square statistic without skipping arithmetic</h2><p>Summing the table at full precision gives <span class="math-segment">\(O_A=6\)</span>, <span class="math-segment">\(E_A\approx3.7721945\)</span>, and therefore <span class="math-segment">\(U=O_A-E_A\approx2.2278055\)</span>. The sum of conditional variances is <span class="math-segment">\(V\approx2.2474381\)</span>. Standardize to obtain <span class="math-segment">\(Z=U/\sqrt V\approx1.48605\)</span>, then square: <span class="math-segment">\(\chi^2=U^2/V\approx2.2083444\)</span>. Under the usual large-sample null approximation, this statistic follows a chi-square distribution with one degree of freedom. The upper-tail probability is approximately 0.137266.</p>
+<div class="formula-box"><strong>Complete log-rank calculation</strong><div class="math-display"><span class="math-segment">\[\begin{aligned}U&amp;=O_A-E_A=6-3.7721945=2.2278055\\ V&amp;=\sum_jV_j=2.2474381\\ \chi^2&amp;=\frac{U^2}{V}=\frac{(2.2278055)^2}{2.2474381}=2.2083444\\ p&amp;=P(\chi^2_1\ge2.2083444)\approx0.137266\end{aligned}\]</span></div><small>One degree of freedom; two-sided global comparison.</small></div>
+<p>Because <span class="math-segment">\(0.137266&gt;0.05\)</span>, the stated decision at the five-percent level is <em>do not reject the null</em>. This does not erase the plotted differences; it says that with this limited set of observed failures the standardized difference is not sufficiently extreme by the prespecified criterion. One can report the result as “log-rank <span class="math-segment">\(\chi^2(1)=2.208\)</span>, <span class="math-segment">\(p=0.137\)</span>” and describe the direction and timing of the estimated survival curves separately. The p-value should not be used as a measure of months of benefit or as a probability that two protocols are identical.</p>
+<p>A useful sanity check is to change the group names everywhere. Then <span class="math-segment">\(U\)</span> reverses sign, but <span class="math-segment">\(U^2/V\)</span> and the two-sided p-value remain the same. Another check is to verify that adding a row with no group A at risk cannot change the statistic. Both checks hold for the complete example. Independent implementation with <code>statsmodels.duration.survfunc.survdiff</code> gives the same chi-square and p-value, providing verification outside the hand-built table.</p>
+</section><section class="chapter" id="section-12"><h2>12. What a p-value measures—and what it cannot measure</h2><p>The p-value is the probability, under the null and the assumptions of the test, of obtaining a statistic at least as extreme as the observed value using the reference distribution. It is conditional on the statistical model and data-collection mechanism. It is <em>not</em> the probability that the maintenance schedules have identical effects, not the fraction of future machines expected to fail, and not the probability that the next protocol comparison will replicate this result. A tiny sample can yield a large p-value even when differences are practically important.</p>
+<p>A hypothesis test gives a decision about evidence against equality; it does not give the scale of the effect. For practical interpretation, also report group-specific Kaplan–Meier survival at prespecified months, the numbers at risk, follow-up, event and censoring counts, and a suitable interval estimate for an effect measure. For example, a six-month difference in restricted mean survival time could be important even if a global test lacks power; conversely, a tiny time difference could generate a small p-value with a very large sample. Effect estimation should be chosen for the scientific decision, not retrofitted after a test is significant.</p>
+<p>A failure to reject must never be labeled proof of equivalence. An equivalence design asks whether the difference lies inside acceptable margins; that requires defining the margin in units relevant to maintenance or patient outcomes and building a confidence-based analysis for it. Nor is nonrejection evidence that maintenance cannot matter causally. Confounding, informative censoring, measurement error and insufficient events are all possible reasons a meaningful effect remains unresolved.</p>
+</section><section class="chapter" id="section-13"><h2>13. Tied failures and the finite-population correction</h2><p>The main dataset has one failure at each listed event time, so every variance contribution simplifies. To understand ties, consider an independent illustrative risk set with six A machines and four B machines, ten total, and two simultaneous failures. Suppose both failures are observed in A. Then <span class="math-segment">\(O_A=2\)</span>, <span class="math-segment">\(E_A=2(6/10)=1.2\)</span>, and the score contribution is <span class="math-segment">\(0.8\)</span>. The exact conditional hypergeometric variance is <span class="math-segment">\((6)(4)(2)(10-2)/(10^2(10-1))=384/900\approx0.426667\)</span>.</p>
+<p>If one incorrectly used the single-event variance twice without the finite-population correction, the result would be <span class="math-segment">\(2(6\times4/100)=0.48\)</span>, which is not the same. The difference arises because drawing two failures without replacement couples their allocations. The finite-population expression accounts for that dependence. If instead one A and one B failed, the expected A count would remain 1.2, but the score would be <span class="math-segment">\(-0.2\)</span>, with the <em>same</em> conditional variance for that fixed risk set and total event count.</p>
+<p>Ties can arise from genuinely simultaneous events or from rounding precise event times to days or months. Different software may implement equivalent large-sample tests with choices about entry and exit ordering or tied-time approximations in related regression models. Record timestamp granularity and the convention used. A formula copied correctly but applied to a wrongly ordered risk set is still a wrong analysis.</p>
+</section><section class="chapter" id="section-14"><h2>14. Censoring and delayed entry: different accounting rules</h2><p>Right censoring means a machine remains known event-free up to a last observation but has an unknown later event time. At a failure time <span class="math-segment">\(t\)</span>, it contributes to the risk set only if its exit is at or after <span class="math-segment">\(t\)</span>. Under the event-before-censoring convention a censoring event at exactly <span class="math-segment">\(t\)</span> occurs after failures recorded at <span class="math-segment">\(t\)</span>. This is why censoring changes future expected counts and variances without producing an observed failure itself.</p>
+<p>Delayed entry is a different phenomenon. If a machine joins a study at month four but its time scale is measured from some shared origin, it must not appear in the risk set at months two or three. With entry time <span class="math-segment">\(L_i\)</span> and exit <span class="math-segment">\(X_i\)</span>, a usual left-truncated risk set is <span class="math-segment">\(I(L_i<t\le span="" x_i)\)<="">. The comparison requires survival conditional on being observable at entry and assumptions supporting the left-truncation adjustment. A machine with delayed entry is not merely right censored at the start; its presence prior to entry is unknown or excluded by design.</t\le></span></p>
+<p>Our principal dataset has entry at zero for everyone, so <span class="math-segment">\(L_i\)</span> is not used in the arithmetic table. This simplification is declared rather than concealed. The point of the additional concept is to transfer the method without changing its meaning: whenever cohorts differ in enrollment ages, calendar entry, or observation windows, verify the time origin and eligibility logic first, then recompute risk sets before applying the test. A single <code>logrank</code> function call cannot rescue an incoherent time scale.</p>
+</section><section class="chapter" id="section-15"><h2>15. Why proportional hazards matters differently for validity and power</h2><p>It is common to hear that the log-rank test “requires proportional hazards.” That statement is too broad. Under the null of identical survival distributions, the ordinary test has an asymptotically valid null comparison under its usual assumptions even though proportional hazards is not a general prerequisite for stating that null. The proportional-hazards alternative is, however, especially favorable for its <em>power</em>: when one group has consistently higher instantaneous hazard, observed-minus-expected contributions tend to accumulate in one direction, yielding a larger standardized score.</p>
+<p>Under proportional hazards, <span class="math-segment">\(h_A(t)/h_B(t)\)</span> is constant over time; this assumption helps a single hazard ratio have a stable interpretation. The log-rank test itself does not estimate that ratio. Estimating a possibly adjusted hazard ratio and checking its assumptions belongs to Cox regression, developed in Guide 76. Even under perfect proportional hazards, a hazard ratio is not a ratio of survival probabilities, a ratio of medians, or a probability of failure. Reporting those quantities interchangeably would replace one estimand with another.</p>
+<p>When hazards differ early and later reverse, the ordinary log-rank score may experience cancellation. A significant result can still occur, and a nonsignificant result cannot be taken to establish equal curves. The appropriate method depends on the question and prespecified alternatives: time-specific survival contrasts, restricted mean survival time, carefully selected weighted tests, or models with time-varying effects may answer different aspects of the comparison. Changing methods only after inspecting which one gives the smallest p-value compromises nominal error control.</p>
+</section><section class="chapter" id="section-16"><h2>16. Crossing curves: calculate how evidence cancels</h2><p>Consider two stages of an illustrative test, separate from the twenty-machine dataset. During early follow-up the net observed-minus-expected contribution for A is <span class="math-segment">\(+3\)</span> with variance contribution 2. During late follow-up, after hazards reverse, the contribution is <span class="math-segment">\(-2.5\)</span> with variance contribution 2. The ordinary unweighted score is <span class="math-segment">\(U=3-2.5=0.5\)</span>, its variance is <span class="math-segment">\(V=2+2=4\)</span>, and the chi-square statistic is <span class="math-segment">\(0.5^2/4=0.0625\)</span>, giving a large p-value. If the early and late deviations had both been positive, the score would instead have reinforced itself.</p>
+<p>These are hypothetical aggregate score contributions, not a separately observed sample or a new claim about the main data. Their role is algebraic: they illustrate how an actual departure from equal survival may produce a weak global unweighted result. They also show why simply observing curves cross does not mechanically imply p-value above 0.05—how much they differ, when failures occur, and the precision of risk sets all matter. The shape of the difference must be described, not hidden behind the result of one test.</p>
+<p>A valid analysis plan might prespecify restricted mean survival time up to a clinically meaningful horizon, because the area under each curve is interpretable in units of event-free months. Alternatively a weighted log-rank test can prioritize early or late events, but the weighting rule and reason must be specified before inspecting results. Unreported searches among many weights or time windows inflate false-positive risk. Guide 46 provides the multiplicity framework for such analyses.</p>
+</section><section class="chapter" id="section-17"><h2>17. Weighted log-rank tests answer deliberately different questions</h2><p>The ordinary log-rank statistic gives the same score weight to each distinct event time in its sum. A weighted version uses <span class="math-segment">\(U_w=\sum_j w_j(d_{Aj}-E_{Aj})\)</span> and <span class="math-segment">\(V_w=\sum_j w_j^2 V_j\)</span>, with weights chosen using information available in a valid way under the null. For instance, a rule emphasizing early event times may address an expected early harm, whereas a late-weighting rule may emphasize delayed benefit. A zero weight excludes that time's contribution to the selected contrast even if a failure occurred there.</p>
+<p>The Gehan–Breslow form uses risk-set size as an early-emphasis weight; Tarone–Ware uses its square root. Fleming–Harrington weights can be formed from pooled Kaplan–Meier survival before an event time, using parameters often denoted <span class="math-segment">\(\rho\)</span> and <span class="math-segment">\(\gamma\)</span> to determine which portion of follow-up receives more weight. These tests do not automatically produce an effect size. Different weighting choices can produce different p-values because they define different sensitivity profiles, not because one package is necessarily broken.</p>
+<p>Such methods are especially tempting after viewing crossed curves. That is precisely when analysts need to distinguish planned analysis from exploratory follow-up. If one reports only the most significant among multiple weighted tests and time windows, the published p-value no longer describes a single prespecified comparison. The solution is to declare the primary comparison and report exploratory results with appropriate multiplicity awareness and full disclosure.</p>
+</section><section class="chapter" id="section-18"><h2>18. Comparing three or more groups</h2><p>With <span class="math-segment">\(K\)</span> groups, the global null states <span class="math-segment">\(S_1(t)=\cdots=S_K(t)\)</span> throughout the relevant time window. At each pooled event time the expected number of events in group <span class="math-segment">\(g\)</span> is <span class="math-segment">\(d_j n_{gj}/n_j\)</span>. Collect the observed-minus-expected deviations into a vector. Their covariance matrix accounts for the fact that the group totals sum to the number of events; hence the deviations add to zero and the full covariance matrix is singular. A generalized inverse or removal of one redundant component produces a global chi-square statistic with <span class="math-segment">\(K-1\)</span> degrees of freedom under regular conditions.</p>
+<p>A significant global test tells us that not all survival distributions are identical. It does not say which groups differ. If four treatment arms are compared, there are six possible pairs. Checking every pair at <span class="math-segment">\(\alpha=0.05\)</span> without a multiplicity plan increases the chance of at least one false-positive claim. Bonferroni, Holm or other justified procedures can control the desired error rate, with the family defined in advance. The principles established in Guide 46 therefore remain essential even though the outcome here is time to event rather than a simple numeric mean.</p>
+<p>A nonsignificant global result does not preclude a separately prespecified contrast if the design and multiplicity plan permit it. Conversely, routinely running every pairwise test after a nonsignificant result and selecting only favorable comparisons would be an exploratory search. Report the global statistic, degrees of freedom, follow-up, group-specific curves and at-risk counts, then identify which additional tests were planned and which were exploratory. These steps preserve the distinction between a scientific comparison and a screening exercise.</p>
+</section><section class="chapter" id="section-19"><h2>19. Sample size, number of events and power</h2><p>The log-rank test obtains information from <em>events</em> and the groups at risk when they occur. Twenty machines with eleven total observed failures provide far less stable evidence than a well-designed study with hundreds of informative failures. It is therefore misleading to call a study large simply because it enrolled many subjects if almost all remain censored before meaningful follow-up. Statistical power depends on event numbers, allocation balance, censoring, follow-up length, group separation and the shape of the hazard difference.</p>
+<p>The approximate chi-square reference becomes less reliable when expected event counts are extremely small or some groups contribute almost no risk-set information. In such settings, exact or resampling-based procedures may be considered when their assumptions and design can be justified; one should not automatically trust a small asymptotic p-value. Our worked example is deliberately small, so the p-value is a transparent demonstration of the standard asymptotic procedure rather than a guarantee that its nominal Type I error is exact for twenty observations.</p>
+<p>Prospective planning should define the event, expected event fraction, censoring and loss to follow-up, follow-up horizon, clinically meaningful alternatives, intended test, alpha and desired power. The sample-size calculation must be built around those assumptions. A post hoc “observed power” computed from the realized p-value adds little independent evidence; the confidence interval and effect estimates are generally more informative about uncertainty. If follow-up changes or the analysis is repeatedly checked, the monitoring plan must address the error consequences of those changes.</p>
+</section><section class="chapter" id="section-20"><h2>20. Graphs, at-risk tables and communication</h2><p>A useful Kaplan–Meier graphic should display time with units on the horizontal axis, survival probability from zero to one on the vertical axis, legible group labels and censoring marks when practical. Include the number at risk beneath the plot at meaningful times. Without that table, long flat tails may look precise even though one or two subjects remain under observation. Both the group-specific numbers and the study's end-of-follow-up must be transparent.</p>
+<p>A good results paragraph reports the number of subjects and failures in each arm, the method, the chi-square statistic with degrees of freedom, the p-value, and a carefully chosen effect summary. It does not say “Protocol A is significantly worse” when p=0.137, nor “Protocols are equally safe” because the result is nonsignificant. Rather it reports the visible direction, the uncertainty, the limited sample and the fact that the global null was not rejected. If a clinician needs survival at six months, give that estimate and its uncertainty; if operations require expected months without failure through a year, consider RMST to a prespecified horizon.</p>
+<p>Reproducibility also requires a data dictionary: group code, event code, units, time origin, enrollment and loss-to-follow-up rules, and handling of tied event/censor records. A plot may be visually attractive while concealing a methodological error. The first quality check is therefore whether a new analyst could reconstruct the risk table from the raw records, not whether the chart looks polished.</p>
+</section><section class="chapter" id="section-21"><h2>21. Association, causal claims and alternative explanations</h2><p>Suppose the two maintenance protocols were not randomly assigned: older machines preferentially received Protocol A. A log-rank comparison could then combine any protocol effect with the different age distribution. Group membership would be associated with risk, but that association would not by itself identify a causal treatment effect. Analogous problems arise in medicine when sicker patients select more intensive treatment. Even a precisely estimated p-value does not adjust for such baseline differences.</p>
+<p>When baseline factors matter, stratified tests can compare groups within predetermined strata, while regression models can estimate associations conditional on covariates. Stratification changes which risk sets are compared and typically sums evidence within strata; the choice of strata should be substantive and planned. An adjusted Cox model addresses a related but different objective—the conditional hazard ratio—subject to its model assumptions. Neither method magically fixes unmeasured confounding or informative censoring.</p>
+<p>Randomized allocation strengthens causal interpretation but does not eliminate every problem: nonadherence, treatment crossover, differential monitoring, competing events and loss to follow-up can affect the estimand and the meaning of the observed comparison. The analysis should specify whether it targets assignment to a protocol, actual received treatment, or a hypothetical fully adherent regimen. Do not infer the last two from an ordinary unadjusted log-rank test of assignment groups without additional assumptions.</p>
+</section><section class="chapter" id="section-22"><h2>22. Competing risks and events that prevent the target event</h2><p>In a reliability study, a machine may be permanently decommissioned for an unrelated reason before its first target failure. In medicine, a patient may die from another cause before experiencing the event of interest. If the competing event makes the target event impossible, treating it as ordinary independent right censoring can produce a misleading interpretation of the estimated probability of the target event. This is conceptually different from administrative censoring, after which the event could still occur outside observation.</p>
+<p>Cause-specific hazard comparisons can use suitable risk sets but do not directly estimate differences in cumulative incidence in the presence of competing events. The cumulative incidence function answers the probability of a particular event type by time, accounting for the other ways follow-up can end. A comparison of cause-specific hazards is therefore not interchangeable with a comparison of event probabilities. This guide does not derive competing-risk tests, because doing so would obscure the fundamental log-rank argument; it identifies the boundary where a more specialized design is needed.</p>
+<p>Before applying the ordinary procedure, ask whether every status-zero observation really represents an event-free subject who could still have failed later, or whether some zeros hide outcomes that preclude the event. If the latter is true, revise the event definition and select a method matching the scientific question. This check belongs at the beginning of analysis, not as a disclaimer after the p-value is calculated.</p>
+</section><section class="chapter" id="section-23"><h2>23. A complete decision workflow, from design to conclusion</h2><p>Begin by writing a one-sentence question about time until a named event under defined groups. Specify the origin, time units, follow-up horizon and which observations will count as events versus censoring. Confirm that the units are independent at the appropriate level, that the groups share a meaningful time scale, and that censoring mechanisms have been assessed. Then display all records for a small teaching dataset or a complete data dictionary and audit summary for a large real dataset.</p>
+<p>Next, calculate and plot Kaplan–Meier curves, including censoring and at-risk counts. Construct the pooled event-time sequence, group risk sets, observed failures, expected failures and conditional variance for each time. Sum the score and variance, derive the chi-square statistic, and obtain the upper-tail probability from the correct degrees of freedom. Verify the arithmetic using an independent implementation. Investigate ties and late entry before trusting a discrepancy between manual and software output.</p>
+<p>Finally, interpret the comparison in two distinct sentences: one about statistical evidence and another about the size, timing and practical importance of the differences. Check for crossing curves, low event counts, competing risks and multiple comparisons. State any exploratory decisions clearly. The final report should allow the reader to reproduce the test and to see where the conclusions stop. A decision about machinery, patient care or policy requires that broader evidence, not a solitary p-value.</p>
+</section><section class="chapter" id="section-24"><h2>24. Worked exercise 1 — Encode the event and censoring status</h2><p><strong>Problem.</strong> A machine starts at month zero, remains failure-free through a month-six inspection, and then leaves because the study ends. Another fails at month four. Give <span class="math-segment">\((X,\delta)\)</span> for each and explain whether a comparison test counts a failure at month six.</p>
+<p><strong>Solution.</strong> The first record is <span class="math-segment">\((6,0)\)</span>: six is the observed exit time, and zero says that the event was not observed. The second is <span class="math-segment">\((4,1)\)</span>, an actual failure. At pooled event time four, the first machine remains at risk because <span class="math-segment">\(6\ge4\)</span>. At month six, it contributes to the risk set immediately before any failure at that time but it does not create an event. The value <span class="math-segment">\(\delta=0\)</span> does not mean the machine will never fail; it means the observed follow-up ended without the defined failure. Coding the first machine as <span class="math-segment">\((6,1)\)</span> would fabricate an event and change observed counts, expected counts and test precision.</p>
+<p><strong>Transfer.</strong> In a clinical study replace “failure” with first relapse and “study ends” with last confirmed disease-free visit. The same representation applies, provided loss to follow-up satisfies the censoring assumptions.</p>
+</section><section class="chapter" id="section-25"><h2>25. Worked exercise 2 — Rebuild a risk set at time six</h2><p><strong>Problem.</strong> Use the twenty-machine table to find <span class="math-segment">\(n_{A,6}\)</span>, <span class="math-segment">\(n_{B,6}\)</span>, and <span class="math-segment">\(d_{A,6}\)</span>. What happens to a B machine censored at month six?</p>
+<p><strong>Solution.</strong> A has ten machines initially; failures at months two, three, four and five remove four, leaving six immediately before month six. Thus <span class="math-segment">\(n_{A,6}=6\)</span>. B has ten initially; two censorings at months three and four remove two, leaving <span class="math-segment">\(n_{B,6}=8\)</span>. Exactly one machine fails at month six, in A, so <span class="math-segment">\(d_{A,6}=1\)</span>, <span class="math-segment">\(d_{B,6}=0\)</span> and <span class="math-segment">\(n_6=14\)</span>. The B censoring at six is processed after the time-six failure in the specified convention and therefore affects risk sets for later times, not the risk set used for the event at six.</p>
+<p><strong>Verification.</strong> The next failure is at month eight; after the A event at six, A censoring at seven, and B censoring at six, the risk sets should become four and seven. Recounting from the original records gives the same values.</p>
+</section><section class="chapter" id="section-26"><h2>26. Worked exercise 3 — Expected failures and a signed contribution</h2><p><strong>Problem.</strong> At month eight there are four A and seven B machines at risk, and the only failure belongs to B. Compute expected A failures and the A score contribution.</p>
+<p><strong>Solution.</strong> First calculate the pooled risk set: <span class="math-segment">\(n=4+7=11\)</span>. The total number of failures is <span class="math-segment">\(d=1\)</span>. Under the equal-hazard null, the failure is allocated to A with conditional expected count <span class="math-segment">\(E_A=d(n_A/n)=1(4/11)=0.363636\)</span>. The actual A count is zero, so <span class="math-segment">\(O_A-E_A=0-4/11=-0.363636\)</span>. A negative contribution means fewer A failures than expected at this particular time, not proof that Protocol A has lower hazard at every time.</p>
+<p><strong>Check.</strong> B's expectation is <span class="math-segment">\(7/11\)</span>, and its score is <span class="math-segment">\(1-7/11=4/11\)</span>, exactly the negative of A's contribution. The two expectations sum to one observed failure. These identities would fail if the risk denominators were taken from the entire original cohort rather than the current risk set.</p>
+</section><section class="chapter" id="section-27"><h2>27. Worked exercise 4 — Calculate hypergeometric variance</h2><p><strong>Problem.</strong> Compute the variance contribution at month six and explain the units.</p>
+<p><strong>Solution.</strong> Here <span class="math-segment">\(n_A=6,n_B=8,n=14,d=1\)</span>. Apply <span class="math-segment">\(V_j=n_A n_B d(n-d)/[n^2(n-1)]\)</span>. Substitute: <span class="math-segment">\(V_6=(6)(8)(1)(13)/(14^2\cdot13)=48/196\approx0.244898\)</span>. The simpler single-failure expression <span class="math-segment">\(n_A n_B/n^2\)</span> yields the same answer. This is the variance of a conditional event <em>count</em>, so it is dimensionless in the usual count-variance sense; it is not measured in months squared. It concerns uncertainty about which group receives the event under the null.</p>
+<p><strong>Check.</strong> If all fourteen machines belonged to one group, the comparison would contain no cross-group allocation uncertainty and the variance would become zero. The present positive result is therefore sensible because both groups remain represented.</p>
+</section><section class="chapter" id="section-28"><h2>28. Worked exercise 5 — From cumulative score to p-value</h2><p><strong>Problem.</strong> Given <span class="math-segment">\(U=2.2278054763\)</span> and <span class="math-segment">\(V=2.2474380889\)</span>, calculate the log-rank statistic and state the decision at <span class="math-segment">\(\alpha=0.05\)</span>.</p>
+<p><strong>Solution.</strong> Square the score: <span class="math-segment">\(U^2\approx4.963117\)</span>. Divide by its null variance: <span class="math-segment">\(Q=4.963117/2.2474380889\approx2.208344\)</span>. The reference distribution is approximately chi-square with one degree of freedom because there are two groups and one independent group contrast. Its upper-tail probability is <span class="math-segment">\(P(\chi^2_1\ge2.208344)\approx0.137266\)</span>. Since this is greater than 0.05, we do not reject the hypothesis of equal survival distributions. The data do not establish equivalence or the absence of a clinically important difference.</p>
+<p><strong>Verification.</strong> Reversing the group names changes <span class="math-segment">\(U\)</span> to <span class="math-segment">\(-2.2278054763\)</span>, leaving <span class="math-segment">\(U^2\)</span>, <span class="math-segment">\(Q\)</span> and the two-sided p-value unchanged. That symmetry is required for a correct unweighted two-group result.</p>
+</section><section class="chapter" id="section-29"><h2>29. Worked exercise 6 — Interpret the Kaplan–Meier values at month eight</h2><p><strong>Problem.</strong> Find the KM survival probabilities immediately after month eight for A and B and explain why they need not agree with a significance decision.</p>
+<p><strong>Solution.</strong> For A the failures at months two through six leave <span class="math-segment">\(\widehat S_A=0.5\)</span>. There is no additional A failure by month eight; the censorings at seven and eight do not create downward steps. Hence <span class="math-segment">\(\widehat S_A(8)=0.5\)</span>. For B, three censorings at three, four and six leave seven at risk when the first B failure occurs at eight. Thus <span class="math-segment">\(\widehat S_B(8)=6/7\approx0.857143\)</span>. The descriptive gap is about 0.357143, or 35.7 percentage points.</p>
+<p><strong>Interpretation.</strong> That pointwise gap is not itself a log-rank effect size and has substantial uncertainty in a sample of ten per group. The global log-rank test combines events across the whole follow-up. A visually large step difference can coexist with <span class="math-segment">\(p=0.137\)</span> because the denominators are small and later observations contribute uncertainty.</p>
+</section><section class="chapter" id="section-30"><h2>30. Worked exercise 7 — Two tied failures</h2><p><strong>Problem.</strong> A pooled risk set contains six A machines and four B machines. Two fail simultaneously, both from A. Find expected A failures, the score contribution and its variance.</p>
+<p><strong>Solution.</strong> There are ten at risk and two failures. Under the null, <span class="math-segment">\(E_A=2(6/10)=1.2\)</span>. Observed A failures equal two, so the score contribution is <span class="math-segment">\(2-1.2=0.8\)</span>. With finite-population correction, <span class="math-segment">\(V=(6)(4)(2)(8)/(10^2\cdot9)=384/900\approx0.426667\)</span>. This is not the same as naively adding two single-event variances equal to <span class="math-segment">\(0.24\)</span>, which would give 0.48. Draws without replacement are not conditionally independent.</p>
+<p><strong>Transfer.</strong> If the recorded times are rounded to months, verify whether the two failures truly occurred together or are tied only by coarse measurement. State the resolution and test convention rather than changing data to avoid ties.</p>
+</section><section class="chapter" id="section-31"><h2>31. Worked exercise 8 — Recognize cancellation when curves cross</h2><p><strong>Problem.</strong> Early failures give a score contribution <span class="math-segment">\(+3\)</span> with variance 2; later failures give <span class="math-segment">\(-2.5\)</span> with variance 2. What does an unweighted log-rank statistic show?</p>
+<p><strong>Solution.</strong> Sum the signed contributions before squaring: <span class="math-segment">\(U=3-2.5=0.5\)</span>. Sum the variance contributions: <span class="math-segment">\(V=2+2=4\)</span>. Hence <span class="math-segment">\(Q=0.5^2/4=0.0625\)</span>, whose one-degree-of-freedom chi-square upper-tail probability is about 0.8026. If we had incorrectly squared early and late scores separately and added them, we would have removed the cancellation central to this test. The aggregate unweighted score is small despite meaningful shifts in opposite directions.</p>
+<p><strong>Interpretation.</strong> This calculation illustrates low power against certain crossing-hazard alternatives; it does not prove that every crossing example must have a large p-value. A prespecified RMST comparison or appropriately planned weighted test may be more responsive to the substantive question.</p>
+</section><section class="chapter" id="section-32"><h2>32. Worked exercise 9 — Add a machine at delayed entry</h2><p><strong>Problem.</strong> A new A machine is observed from month five to month eleven and fails at eleven. Should it count at month three? How does its inclusion differ at months six and eleven?</p>
+<p><strong>Solution.</strong> With left entry <span class="math-segment">\(L=5\)</span> and exit <span class="math-segment">\(X=11\)</span>, use the risk indicator <span class="math-segment">\(I(L<t\le span="" x)\)<="">. It equals zero at month three because the machine was not yet under observation; it equals one at months six and eleven. Its observed event at eleven is counted in A, and it belongs to the pre-event risk set at that time. Adding this machine would require recalculating <em>all affected</em> risk-set counts, expected events and variances from the original records; adding one to the final event count without rebuilding the table is invalid.</t\le></span></p>
+<p><strong>Limitation.</strong> Delayed entry also raises a selection question: machines that failed before they became eligible cannot appear. The method's interpretation depends on appropriate left-truncation assumptions, not merely on inserting an entry-time column.</p>
+</section><section class="chapter" id="section-33"><h2>33. Worked exercise 10 — Interpret a multi-group test</h2><p><strong>Problem.</strong> A global comparison of three survival distributions returns <span class="math-segment">\(Q=7.81\)</span> with two degrees of freedom. What is its p-value, and can you identify which pair differs?</p>
+<p><strong>Solution.</strong> The reference distribution is chi-square with <span class="math-segment">\(K-1=3-1=2\)</span> degrees of freedom. For a two-degree-of-freedom chi-square, the upper tail equals <span class="math-segment">\(e^{-Q/2}\)</span>, so <span class="math-segment">\(p=e^{-7.81/2}\approx0.0201\)</span>. We reject the global equality null at 0.05. This means the data provide evidence that not all three population survival distributions are identical. It does <em>not</em> identify the specific pair responsible for the departure.</p>
+<p><strong>Transfer.</strong> There are three pairwise comparisons. If all are planned for familywise error control, Holm's step-down procedure or another justified plan should be stated before inspecting which comparisons look attractive. Reporting only the smallest pairwise p-value would misrepresent the error rate.</p>
+</section><section class="chapter" id="section-34"><h2>34. Worked exercise 11 — Multiplicity after a global result</h2><p><strong>Problem.</strong> Three exploratory pairwise survival comparisons return p-values 0.012, 0.028 and 0.041. Apply Holm's familywise procedure at 0.05.</p>
+<p><strong>Solution.</strong> Sort the p-values, already ascending. Compare the smallest to <span class="math-segment">\(0.05/3\approx0.016667\)</span>: <span class="math-segment">\(0.012\le0.016667\)</span>, so reject that hypothesis. Next compare 0.028 to <span class="math-segment">\(0.05/2=0.025\)</span>: <span class="math-segment">\(0.028&gt;0.025\)</span>. Stop; neither the second nor the third null can be rejected by Holm. The only surviving claim is the first planned pairwise contrast. The nominal 0.028 would have appeared significant without adjustment, showing why the procedure changes interpretation.</p>
+<p><strong>Interpretation.</strong> Correct adjustment does not repair data-dependent decisions to hide other comparisons, redefine groups, or examine many unreported time windows. The family of hypotheses and exploratory status should be disclosed. Holm controls a familywise error criterion; it does not estimate a false-discovery probability for one specific comparison.</p>
+</section><section class="chapter" id="section-35"><h2>35. Worked exercise 12 — Distinguish a hazard ratio from a log-rank result</h2><p><strong>Problem.</strong> A researcher reports <span class="math-segment">\(p=0.04\)</span> from a log-rank test and writes “the hazard ratio is 0.04.” Explain the error.</p>
+<p><strong>Solution.</strong> The p-value of 0.04 is a tail-area probability under the hypothesis of identical survival distributions and the specified null reference. A hazard ratio is a <em>dimensionless ratio of instantaneous hazards</em>, usually estimated from a model such as Cox regression. The test output alone does not determine an HR. One may have a small p-value with a modest hazard ratio if precision is high or a comparatively large ratio with an inconclusive p-value if events are sparse. Further, when hazards vary in their relative magnitude over time, one constant HR may not summarize the pattern well.</p>
+<p><strong>Correction.</strong> Report the log-rank statistic and p-value, provide survival curves with at-risk counts, and estimate an appropriate effect with confidence interval if the scientific question calls for it. Do not turn a significance measure into an effect-size estimate.</p>
+</section><section class="chapter" id="section-36"><h2>36. Worked exercise 13 — Change the significance threshold</h2><p><strong>Problem.</strong> Reinterpret the main result <span class="math-segment">\(p=0.137266\)</span> under thresholds 0.05, 0.10 and 0.20. Is it legitimate to choose 0.20 after seeing the result?</p>
+<p><strong>Solution.</strong> At 0.05, do not reject because <span class="math-segment">\(0.137266&gt;0.05\)</span>. At 0.10, also do not reject. At 0.20, the p-value falls below the threshold and the formal decision changes to reject. But the observed data and evidence did not change: only the decision rule did. Choosing alpha=0.20 retrospectively solely to report a significant finding would be a post hoc change that undermines the stated Type I error interpretation.</p>
+<p><strong>Interpretation.</strong> Alpha must reflect the stakes of false positives and the analysis plan. Exploratory screening might sometimes tolerate a larger threshold, while confirmatory intervention decisions may demand stringent control. Neither choice converts a p-value into the probability that a treatment works.</p>
+</section><section class="chapter" id="section-37"><h2>37. Worked exercise 14 — Compare an event count and a survival test</h2><p><strong>Problem.</strong> The dataset has six A failures and five B failures. Why not use only these two totals to conclude that A is worse?</p>
+<p><strong>Solution.</strong> Each group begins with ten machines, but their censoring patterns and failure times differ. A six-versus-five event count ignores whether failures occurred at month two or month thirteen and how many machines were still observable at each point. The log-rank calculation conditions on every evolving pooled risk set, forming expected A events <span class="math-segment">\(E_A\approx3.7721945\)</span>, rather than comparing six and five against an unchanging denominator. Moreover, a simple event proportion measured through unequal follow-up can be a biased comparison of underlying failure risk.</p>
+<p><strong>Verification.</strong> The log-rank statistic for the complete records is <span class="math-segment">\(Q\approx2.208344\)</span> and <span class="math-segment">\(p\approx0.137266\)</span>, not a conclusion obtained by assuming that six and five are independent counts with equal exposure. The Kaplan–Meier plot and at-risk table explain the time-dependent context omitted by raw totals.</p>
+</section><section class="chapter" id="section-38"><h2>38. Worked exercise 15 — Design an honest scientific conclusion</h2><p><strong>Problem.</strong> Write a decision paragraph for a maintenance manager who asks whether to adopt A or B immediately based only on this synthetic cohort.</p>
+<p><strong>Solution.</strong> “In a synthetic comparison of twenty machines, ten per maintenance schedule, six A machines and five B machines experienced the defined major failure. Kaplan–Meier estimates differed over follow-up, with an especially visible early separation. However, the ordinary two-sided log-rank comparison produced <span class="math-segment">\(\chi^2(1)=2.208\)</span>, <span class="math-segment">\(p=0.137\)</span>; at the prespecified 0.05 threshold, we did not reject equality of the population survival distributions. This does not establish equivalence. With a small number of machines and events, uncertainty remains substantial, and the synthetic data do not provide evidence for an actual field decision. A real comparison should prespecify a meaningful time-based effect, collect sufficient events, assess censoring, and report survival at decision-relevant times or RMST together with uncertainty.”</p>
+<p><strong>Why this works.</strong> The paragraph states the data source, outcome, sample, method, numeric result, decision, uncertainty and limits. It avoids claiming a causal effect or a guaranteed engineering benefit. The student should be able to reproduce the risk table and explain in their own words why a visible descriptive gap does not necessarily yield a small p-value.</p>
+</section><section class="chapter" id="section-39"><h2>39. Final conceptual integration and transfer beyond the example</h2><p>Return to the opening question: can one test whether two survival distributions differ when some event times are unknown? The log-rank method answers by examining failures only among individuals currently at risk, asking how many failures each group would be expected to contribute if their hazards were identical at those moments. Subtracting expected from observed failures generates signed contributions; summing those contributions and scaling by the correct null variance produces a test of the global equality hypothesis. Censoring influences which subjects remain at risk, not whether an event is fabricated.</p>
+<p>The calculation is transparent: the individual records generate the eleven pooled event times; the risk table yields <span class="math-segment">\(U\approx2.227805\)</span> and <span class="math-segment">\(V\approx2.247438\)</span>; the resulting chi-square is about 2.2083, giving p about 0.1373. A student can audit the row at month eight, the tied-event variance example and the group-label symmetry without specialized software. A separate implementation reproduces the result. None of those numerical checks, however, validates informative censoring, randomization or representativeness; those require scientific scrutiny.</p>
+<p>A final transfer question is: what would change if the comparison involved patients with treatment crossover, a delayed benefit, competing deaths and three treatment arms? The answer is not simply to run the same formula with different labels. You would redefine the estimand and event, audit entry and censoring, inspect curve crossing, plan global and pairwise comparisons, decide whether the ordinary log-rank test has suitable power for the alternative, and choose effect summaries meaningful for the decision. That is the central competence this guide aims to establish: reproduce the calculation <em>and</em> explain why it is appropriate, what it measures and where its claims end.</p>
+</section><section class="chapter" id="section-40"><h2>40. References, provenance and boundaries</h2><p>This guide's twenty-machine dataset and its supplementary numerical examples are explicitly synthetic and created solely for teaching. They are not taken from a clinical registry or an industrial maintenance database. The statistical framework is consistent with the Stanford STATS 305B survival notes, Duke STA 490 log-rank teaching materials, and established survival-analysis literature. These sources support the observed-versus-expected construction, conditional hypergeometric variance, large-sample chi-square inference, and the role of risk sets; they do not validate the synthetic machines as evidence about any real protocol.</p>
+<p>Key references for verification: Stanford, <em>Survival Analysis: Log-Rank Test</em> (https://web.stanford.edu/class/stats305b/notes/Survival_I.html); Duke, <em>The Log-Rank Test</em> (https://www2.stat.duke.edu/courses/Fall24/sta490.01/slides/log-rank.html); and Simon Fraser University, <em>Comparing Groups: The Log-Rank Test and Hazard Ratio</em> (https://www.sfu-epi.ca/modules/HSCI_341_Lesson_8_Time_to_Event_Data.html). Our calculations were independently compared to the <code>statsmodels</code> implementation, without implying that the software verifies the underlying study design.</p>
+<p>Before considering this material a decision tool, verify the time origin, event and censoring definition, group composition, independent observation assumptions, competing events, and whether the log-rank test answers the scientific estimand. For a multi-group or exploratory analysis, prespecify the multiplicity plan. In the next curriculum unit, Cox regression will introduce covariate-adjusted hazard modeling; it should not be read backward as if the unadjusted log-rank statistic already supplied a hazard ratio.</p>
+<p><strong>Accessible source links</strong></p><ul><li><a href="https://web.stanford.edu/class/stats305b/notes/Survival_I.html" rel="noopener noreferrer" target="_blank">Stanford STATS 305B</a></li><li><a href="https://www2.stat.duke.edu/courses/Fall24/sta490.01/slides/log-rank.html" rel="noopener noreferrer" target="_blank">Duke STA 490</a></li><li><a href="https://www.sfu-epi.ca/modules/HSCI_341_Lesson_8_Time_to_Event_Data.html" rel="noopener noreferrer" target="_blank">Simon Fraser University</a></li></ul>
+</section></article></main><footer><div class="container">Alfredo Saldana · Statistics &amp; Probability · Guide 75 · Synthetic teaching data · <a href="#main-content">Back to top</a></div></footer><script>const b=document.querySelector('.menu-btn'),n=document.querySelector('#menu75');b?.addEventListener('click',()=>{const active=n.classList.toggle('open');b.setAttribute('aria-expanded',String(active));b.setAttribute('aria-label',active?'Close menu':'Open menu')});</script></body></html>

@@ -1,0 +1,2096 @@
+<!doctype html>
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="Alfredo Saldana" name="author"/><link href="/learn/statistics-probability/evaluating-and-applying-survival-models-an-integrated-case-study.html" hreflang="en" rel="alternate"/><link href="/es/learn/statistics-probability/evaluating-and-applying-survival-models-an-integrated-case-study-es.html" hreflang="es" rel="alternate"/><link href="/es/learn/statistics-probability/evaluating-and-applying-survival-models-an-integrated-case-study-es.html" rel="canonical"/><title>80 · Evaluación y aplicación de modelos de supervivencia: estudio de caso integrado | Alfredo Saldana</title><style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:wght@500;600;700&display=swap');
+:root{--navy:#0b1f3a;--blue:#2563eb;--ink:#1a314e;--muted:#56677c;--rule:#dbe6f2;--paper:#f6f9fe;--soft:#eef5ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font:16px/1.78 Inter,system-ui,sans-serif;color:var(--ink);background:var(--paper)}a{color:#2059b8}a:focus-visible,button:focus-visible{outline:3px solid #f59e0b;outline-offset:3px}.container{width:min(1150px,calc(100% - 32px));margin:auto}.site-header{position:sticky;top:0;z-index:30;background:#ffffffed;border-bottom:1px solid var(--rule);backdrop-filter:blur(16px)}.nav-wrap{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:14px}.identity{display:flex;align-items:center;gap:17px;min-width:0;flex-shrink:0}.brand{font-size:1.04rem;font-weight:800;letter-spacing:-.025em;text-decoration:none;color:var(--navy);white-space:nowrap}.lang-switch{display:flex;align-items:center;gap:9px;white-space:nowrap;font-size:.94rem}.lang-switch a{color:#111827;text-decoration:none;font-weight:700;padding:8px 2px}.lang-switch a[aria-current=page]{color:var(--blue);font-weight:800}.lang-switch span{color:#8b98a9}.nav{display:flex;gap:20px;align-items:center}.nav a{font-size:.89rem;color:#40516a;text-decoration:none}.nav a.active{font-weight:750;color:#2563eb}.menu-btn{display:none;border:0;background:transparent;font-size:1.5rem;line-height:1;cursor:pointer;color:var(--navy)}.study-hero{background:linear-gradient(115deg,#e6f1ff,#fff 65%,#f0f5ff);padding:62px 0 55px;border-bottom:1px solid var(--rule)}.eyebrow{color:#2865bd;font-size:.75rem;letter-spacing:.135em;font-weight:800;text-transform:uppercase}.study-hero h1{font:700 clamp(2.3rem,4.7vw,4.8rem)/1.1 'Source Serif 4',Georgia,serif;max-width:1050px;letter-spacing:-.035em;color:#071d3c;margin:14px 0 18px}.study-hero .lead{max-width:860px;color:#3c536d;font-size:clamp(1.03rem,1.9vw,1.22rem)}.meta{display:flex;flex-wrap:wrap;gap:9px;margin:24px 0 0}.meta span{font-size:.79rem;font-weight:650;border:1px solid #dbe8fa;border-radius:40px;padding:7px 11px;background:white}.layout{display:grid;grid-template-columns:minmax(0,1fr) 245px;align-items:start;gap:25px;padding:30px 0 90px}.prose{min-width:0;overflow-wrap:anywhere;background:white;border:1px solid #e2e9f4;border-radius:19px;box-shadow:0 10px 35px #0b1f3a09;padding:clamp(20px,3.7vw,49px)}.prose section{border-top:1px solid var(--rule);padding-top:28px;margin-top:65px;scroll-margin-top:94px}.prose section:first-child{margin-top:0;border:0;padding-top:0}.chapter-label{font-weight:800;letter-spacing:.15em;color:#2c63ae;font-size:.72rem}.prose h2{font:700 clamp(1.65rem,2.6vw,2.5rem)/1.18 'Source Serif 4',Georgia,serif;color:#091f3a;letter-spacing:-.022em;margin:8px 0 22px}.prose p{overflow-wrap:anywhere;font-size:1rem;line-height:1.92;margin:0 0 19px}.prose section>p:first-of-type{font-size:1.04rem;color:#1e416b}.prose strong{color:#0b376c}.prose .equation-card{border-radius:13px;background:linear-gradient(110deg,#f1f7ff,#fff);border:1px solid #d6e6fb;border-left:4px solid #3d76d7;padding:20px 18px;margin:22px 0 25px;max-width:100%}.equation-label{display:block;font-size:.68rem;color:#3267ad;font-weight:800;letter-spacing:.11em;margin:0 0 12px}.math-scroll{width:100%;overflow-x:auto;overflow-y:hidden;padding:8px 2px;max-width:100%;font-size:1.14rem}.math-scroll mjx-container[display=true]{margin:6px 0!important;max-width:100%;overflow-x:auto}.prose mjx-container[jax=CHTML][display=true]{overflow-x:auto;overflow-y:hidden;max-width:100%}.prose .table-wrap{overflow-x:auto;border:1px solid #d8e5f4;border-radius:10px;margin:19px 0 26px}.prose table{border-collapse:collapse;width:100%;min-width:480px;font-size:.88rem}.prose th{background:#ebf3ff;color:#123969;text-align:left;font-weight:800}.prose th,.prose td{border-bottom:1px solid #d9e5f3;padding:10px 13px;vertical-align:top}.prose tr:last-child td{border-bottom:0}.prose tr:nth-child(even) td{background:#fafcff}.prose figure{border:1px solid #deebf9;border-radius:16px;padding:18px;margin:28px 0;background:#fbfdff}.prose figure img,.prose figure svg{display:block;width:100%;height:auto}.prose figcaption{font-size:.88rem;color:#526880;line-height:1.6;margin-top:9px}.prose blockquote{border-left:4px solid #d9a24a;background:#fffaf1;padding:15px 20px;margin:24px 0;border-radius:0 12px 12px 0}.prose blockquote p:last-child{margin-bottom:0}.prose section:nth-child(5n+2)>p:nth-of-type(3){background:#f2f8ff;border-left:3px solid #7bb4f1;padding:15px 18px;border-radius:0 12px 12px 0}.toc{position:sticky;top:98px;max-height:calc(100vh - 120px);overflow:auto;background:#fff;border:1px solid var(--rule);border-radius:16px;padding:18px}.toc h2{font:800 .81rem Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px;color:#163e75}.toc a{display:block;text-decoration:none;color:#405875;font-size:.79rem;line-height:1.43;padding:7px 3px;border-bottom:1px solid #edf2f7}.toc a:hover{color:#2563eb}.foot{background:#0b1f3a;color:#dde9f8;padding:30px 0;font-size:.82rem}.foot p{margin:0}.skip{position:absolute;left:-9999px;top:0;background:white;color:#1f3c65;padding:12px}.skip:focus{left:12px;z-index:99}@media(max-width:950px){.layout{grid-template-columns:minmax(0,1fr)}.toc{position:static;max-height:260px;order:-1}.prose{order:1}.nav{display:none;position:absolute;top:72px;left:0;right:0;padding:17px 22px;background:white;border-bottom:1px solid var(--rule);flex-direction:column;align-items:flex-start}.nav.open{display:flex}.menu-btn{display:block}}@media(max-width:520px){.container{width:calc(100% - 22px)}.nav-wrap{min-height:69px}.identity{gap:10px}.brand{font-size:.92rem}.lang-switch{font-size:.82rem;gap:6px}.study-hero{padding:38px 0 33px}.prose{padding:20px 14px;border-radius:13px}.prose p{font-size:.95rem}.prose section{margin-top:51px}.equation-card{padding:14px 11px!important}.math-scroll{font-size:1.02rem}.prose figure{margin:23px 0;padding:9px}.toc{padding:13px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.prose section:nth-child(7n+3) blockquote{border-color:#2563eb;background:#f1f7ff}.prose section:last-child{padding-bottom:28px}.math-scroll mjx-container{max-width:none}.prose .equation-card:focus-within{outline:2px solid #2563eb}.prose figure svg{max-width:100%;overflow:visible}.prose section h2{max-width:38ch}
+
+.prose .equation-card{margin:26px 0 30px;padding:21px 20px;background:linear-gradient(115deg,#f0f6ff,#ffffff);border-left:4px solid #2563eb;box-shadow:0 5px 17px rgba(26,68,127,.04)}
+.prose .formula-intro{font-size:.77rem;font-weight:800;color:#24599c;letter-spacing:.04em;margin:20px 0 4px;text-transform:uppercase}
+.prose .callout{border-left:4px solid #2986c8;background:#f1f8ff;border-radius:0 12px 12px 0;padding:18px 21px;margin:24px 0}
+.prose .callout p{margin-bottom:0}.prose .practice{margin-top:54px;border-top:3px solid #2563eb;padding-top:28px}.prose .practice h2{color:#123d76}.prose .practice p:has(strong:first-child){margin-top:18px}.prose .practice p strong:first-child{color:#174c8c}
+.prose section .first-intuition{color:#1c466e;font-size:1.045rem;line-height:1.83;border-bottom:1px solid #e5edf7;padding-bottom:14px}
+.prose .info-strip{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0}.info-strip span{border:1px solid #d4e2f6;border-radius:9px;padding:11px 14px;background:#f7faff;font-size:.83rem;font-weight:700;color:#1a487c}
+.prose .charts-wrap{border-radius:15px;border:1px solid #dbe6f4;padding:16px 12px;background:white;margin:28px 0}.charts-wrap svg{max-width:100%;height:auto}.charts-wrap figcaption{font-size:.85rem;color:#536a84;line-height:1.65}
+.prose .math-scroll{overflow:auto;font-size:1.2rem;max-width:100%;scrollbar-width:thin}.equation-card:before{content:''}.prose section{scroll-margin-top:98px}
+@media(max-width:520px){.prose .math-scroll{font-size:1.04rem}.prose .equation-card{padding:14px 9px}.prose p{line-height:1.8}.prose .first-intuition{font-size:1rem}}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']],processEscapes:true,packages:{'[+]':['ams']}},options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']},chtml:{scale:1,matchFontHeight:false}};</script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script></head><body><a class="skip" href="#main">Saltar al contenido</a><header class="site-header"><div class="container nav-wrap"><div class="identity"><a class="brand" href="https://alfredosaldana.github.io/es/index.html">Alfredo Saldana</a><div aria-label="Idioma" class="lang-switch"><a href="/learn/statistics-probability/evaluating-and-applying-survival-models-an-integrated-case-study.html" lang="en">EN</a><span aria-hidden="true">|</span><a aria-current="page" href="/es/learn/statistics-probability/evaluating-and-applying-survival-models-an-integrated-case-study-es.html" lang="es">ES</a></div></div><nav aria-label="Navegación principal" class="nav" id="global-nav"><a href="https://alfredosaldana.github.io/index.html">Home</a><a href="https://alfredosaldana.github.io/projects.html">Projects</a><a class="active" href="/tutorials.html">Learn</a><a href="https://alfredosaldana.github.io/open-box.html">Open Box</a><a href="https://alfredosaldana.github.io/about.html">About</a><a href="https://alfredosaldana.github.io/contact.html">Contact</a></nav><button aria-controls="global-nav" aria-expanded="false" aria-label="Abrir menú" class="menu-btn" id="menu-btn">☰</button></div></header><main id="main"><div class="study-hero"><div class="container"><div class="eyebrow">LEARN · STATISTICS &amp; PROBABILITY · GUIDE 80</div><h1>Evaluación y aplicación de modelos de supervivencia: estudio de caso integrado</h1><p class="lead">De la definición del evento a la decisión: Kaplan–Meier, Cox, AFT, C-index, calibración, Brier IPCW, incertidumbre y Competing Risks.</p><div class="meta"><span>Prerequisites / Prerrequisitos: 35, 40, 50, 75, 77, 79</span><span>Dataset sintético íntegro</span><span>MathJax 3</span><span>34 modules / módulos</span></div></div></div><div class="container layout"><article class="prose"><section id="section-1"><div class="chapter-label">MÓDULO 01 / 34</div><h2>1. Una decisión integrada, no una competencia por una sola cifra</h2><p class="first-intuition">Un modelo de supervivencia es realmente útil cuando sus predicciones ayudan a tomar una decisión bien definida. La gerente de mantenimiento que decide qué módulos inspeccionar antes de la próxima parada programada no pregunta simplemente «¿qué regresión tiene el p-value más pequeño?». Necesita saber qué equipos podrían fallar antes del próximo intervalo operativo, si la clasificación de riesgos diferencia adecuadamente las fallas tempranas de las tardías, si las probabilidades corresponden a lo que se observa y cuánta incertidumbre permanece. Esta guía final integra Kaplan–Meier, Cox Regression, Accelerated Failure Time (AFT) Regression, métricas predictivas que respetan la censura, remuestreo y Competing Risks. Conecta conocimientos anteriores sin introducir un algoritmo aislado que reemplace todo lo estudiado.</p><p>La decisión se establecerá en un horizonte de <strong>ocho unidades de tiempo operativo</strong>, donde cada unidad equivale a <strong>100 horas</strong>. Preguntamos si un módulo necesita seguimiento adicional antes de completar <strong>800 horas de funcionamiento</strong> desde su incorporación al estudio. El evento será la primera falla funcional conforme a una definición técnica consistente. El reemplazo preventivo puede hacer imposible observar una falla futura: según la pregunta científica, podría tratarse como censura o como evento competidor. No confundiremos estas situaciones.</p><p>Los doce registros corresponden a <strong>datos enteramente sintéticos, construidos para enseñar</strong>. Su tamaño pequeño permite verificar cada operación, pero los resultados no son evidencia de confiabilidad industrial ni prueban efectos causales. Una evaluación verdadera requeriría módulos observados, distintos lotes y validación prospectiva. Elegimos deliberadamente tiempos de falla y de censura antes y después del horizonte, precisamente para demostrar las dificultades que no aparecen en una clasificación binaria ordinaria.</p><p><strong>Objetivos verificables.</strong> Al concluir, podrás definir tiempo cero, unidad y estimando; justificar una partición de entrenamiento y evaluación; obtener el C-index a partir de pares comparables; calcular un Brier Score con Inverse Probability of Censoring Weighting (IPCW); analizar calibración y evidencia de incertidumbre; y demostrar numéricamente por qué censurar eventos competidores y calcular uno menos Kaplan–Meier no produce la incidencia absoluta de una causa. Cada cálculo vendrá acompañado de una interpretación y de los supuestos que lo hacen válido. El aprendizaje consiste en comprender qué estima cada número, no únicamente memorizar su fórmula.</p><blockquote>
+<p><strong>Orientación:</strong> Una discriminación excelente no garantiza probabilidades bien calibradas. Una calibración promedio satisfactoria no protege automáticamente a un subgrupo. Y un intervalo estrecho no corrige una definición incorrecta del evento o un sesgo de selección.</p>
+</blockquote></section><section id="section-2"><div class="chapter-label">MÓDULO 02 / 34</div><h2>2. Prerrequisitos y mapa conceptual</h2><p class="first-intuition">Los prerrequisitos curriculares son la Guía 35 sobre estimación y muestreo, la 40 sobre validación y comparación, la 50 sobre intervalos e incertidumbre, la 75 sobre Kaplan–Meier, la 77 sobre diagnósticos de Cox y la 79 sobre predicción AFT. Aquí reconstruimos los pasos necesarios para que un estudiante de estadística introductoria con Cálculo I pueda seguir el razonamiento. Es importante recordar que una probabilidad de evento, una función de densidad y un Hazard tienen significados distintos. El Hazard es una tasa instantánea condicionada a continuar sin evento, no una probabilidad por sí misma.</p><p>Existen tres preguntas predictivas relacionadas pero diferentes. <strong>Discrimination</strong> se refiere al orden: ¿los individuos que fallan primero suelen recibir mayor riesgo que los sujetos comparables que sobreviven más? <strong>Calibration</strong> se refiere a la magnitud: ¿una probabilidad reportada de 30% coincide aproximadamente con una frecuencia de eventos de 30% en casos semejantes, considerando correctamente la censura? <strong>Prediction error</strong> resume discrepancias probabilísticas a un horizonte; el Brier Score mide errores cuadrados. Ninguna dimensión resuelve por sí sola el problema operativo. También importan los costos de fallar, la capacidad de inspección y la calidad del proceso de observación.</p><p>Seguiremos una secuencia disciplinada. Primero definiremos evento, origen y horizonte. Después revisaremos el seguimiento y los supuestos de censura. En tercer lugar separaremos entrenamiento de evaluación antes de ajustar modelos o transformaciones. Luego calcularemos probabilidades de supervivencia bajo un horizonte común. Finalmente estudiaremos discriminación, calibración, Brier con IPCW, incertidumbre, límites de extrapolación y utilidad para decidir. Este orden impide usar una métrica atractiva como justificación retrospectiva para seleccionar una pregunta distinta.</p><blockquote>
+<p><strong>Puente de vocabulario:</strong> «Riesgo a ocho unidades» significa \(P(T\le8\mid x)=1-S(8\mid x)\), no Hazard Ratio. Un AFT Time Ratio representa una multiplicación del tiempo, no una probabilidad absoluta. Kaplan–Meier resume una población o grupo; no genera por sí solo riesgos personalizados sin estructura adicional.</p>
+</blockquote></section><section id="section-3"><div class="chapter-label">MÓDULO 03 / 34</div><h2>3. Definir estimando, proceso de observación y tiempo cero</h2><p class="first-intuition">Sea \(T&gt;0\) el tiempo verdadero entre el inicio de operación supervisada y la primera falla que satisface la definición del evento. Sea \(C&gt;0\) el instante en que termina la posibilidad de observación. Registramos \(Y=\min(T,C)\), el menor de ambos tiempos, y \(\delta=I(T\le C)\), indicador que vale 1 cuando se observa la falla y 0 cuando hay Right Censoring. Un equipo retirado a las 600 horas mientras todavía funciona tiene un tiempo real de falla desconocido, aunque sabemos que es superior a 600. Registrarlo como superviviente a 800 fabricaría doscientas horas de información.</p><p>El estimando de nuestra pregunta es la probabilidad de experimentar la primera falla antes o durante 800 horas desde un origen común, para determinadas características y un régimen operativo declarado. Es necesario especificar si el riesgo supone operación continuada sin reemplazo, la política habitual de mantenimiento o una política con eventos terminales de reemplazo. Son preguntas distintas. El primer caso ilustrativo trata la primera falla y censura administrativa independiente; después utilizaremos otro dataset pequeño para Competing Risks.</p><p>El tiempo cero debe corresponder a un momento legítimo en que se conocen las variables predictoras. Si se comienza una predicción «basal» a las 500 horas y se incluyen solamente unidades que sobrevivieron hasta ese momento, se ha seleccionado a sobrevivientes. Clasificar desde el inicio a los equipos según si <strong>alguna vez</strong> recibieron reparación incorpora información futura; el período previo a la reparación se atribuye incorrectamente al grupo reparado. Ese es el problema de Immortal Time Bias, no una ventaja del modelo.</p><p>La censura administrativa puede considerarse independiente si obedece a una fecha previamente planificada, no relacionada con el tiempo de falla latente una vez condicionadas las variables relevantes. Pero si los inspectores abandonan el seguimiento cuando observan vibraciones preocupantes, la independencia puede fallar. Más adelante IPCW necesitará un modelo creíble de la probabilidad de seguir observando y una condición de <strong>positividad</strong>: debe existir una probabilidad mayor que cero de observar a los tipos de sujetos que queremos evaluar. Un p-value no demuestra la independencia de censura.</p><div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[Y_i=\min(T_i,C_i),\qquad \delta_i=I(T_i\le C_i),\qquad R_i(8)=1-S_i(8).\]</div></div></section><section id="section-4"><div class="chapter-label">MÓDULO 04 / 34</div><h2>4. Dataset sintético completo para evaluación</h2><p class="first-intuition">Cada fila corresponde a un módulo hipotético diferente; no son lecturas repetidas de un mismo equipo. Todos los tiempos están expresados en <strong>centenas de horas de operación</strong> y empiezan en la incorporación al monitoreo. Las probabilidades de supervivencia para el horizonte de ocho unidades constituyen <strong>predicciones fijas ilustrativas</strong>, tratadas como si hubieran quedado congeladas antes de observar las respuestas. No fueron calculadas ajustando un modelo real con una muestra de entrenamiento separada. Se proporcionan para reproducir las operaciones y no para sostener una afirmación de validación externa.</p><div class="table-wrap"><table>
+<thead>
+<tr>
+<th style="text-align:left" scope="col">Módulo</th>
+<th style="text-align:right" scope="col">Tiempo observado \(Y\) (×100 h)</th>
+<th style="text-align:right" scope="col">Evento \(\delta\)</th>
+<th style="text-align:right" scope="col">Supervivencia predicha \(S(8)\)</th>
+<th style="text-align:right" scope="col">Riesgo predicho \(1-S(8)\)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">A</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.24</td>
+<td style="text-align:right">0.76</td>
+</tr>
+<tr>
+<td style="text-align:left">B</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.32</td>
+<td style="text-align:right">0.68</td>
+</tr>
+<tr>
+<td style="text-align:left">C</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0.38</td>
+<td style="text-align:right">0.62</td>
+</tr>
+<tr>
+<td style="text-align:left">D</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.30</td>
+<td style="text-align:right">0.70</td>
+</tr>
+<tr>
+<td style="text-align:left">E</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.47</td>
+<td style="text-align:right">0.53</td>
+</tr>
+<tr>
+<td style="text-align:left">F</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0.44</td>
+<td style="text-align:right">0.56</td>
+</tr>
+<tr>
+<td style="text-align:left">G</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.40</td>
+<td style="text-align:right">0.60</td>
+</tr>
+<tr>
+<td style="text-align:left">H</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.58</td>
+<td style="text-align:right">0.42</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0.54</td>
+<td style="text-align:right">0.46</td>
+</tr>
+<tr>
+<td style="text-align:left">J</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.68</td>
+<td style="text-align:right">0.32</td>
+</tr>
+<tr>
+<td style="text-align:left">K</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0.74</td>
+<td style="text-align:right">0.26</td>
+</tr>
+<tr>
+<td style="text-align:left">L</td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.65</td>
+<td style="text-align:right">0.35</td>
+</tr>
+</tbody>
+</table></div><p>Encontramos ocho fallas registradas en los tiempos 2, 3, 5, 6, 8, 9, 11 y 13; cuatro observaciones censuradas en 4, 7, 10 y 12. Cinco fallas ocurren hasta el horizonte inclusive, dos módulos abandonan observación antes de ocho y cinco tienen supervivencia comprobada más allá del horizonte. La falla en el tiempo exactamente igual a ocho <strong>sí cuenta</strong> como evento hasta ocho. Diferenciar observación incompleta de supervivencia verificada es esencial para el Brier Score posterior.</p><p>Comprueba los datos: doce identificadores únicos, duraciones positivas, indicadores de evento 0 o 1 y probabilidades entre cero y uno. En cada fila, supervivencia y riesgo suman uno. Tampoco existen empates de tiempo ni de predicción, algo deliberado para simplificar C-index; un estudio real debe declarar cómo trata empates. No atribuyas precisión poblacional a este ejemplo: doce unidades no constituyen una validación operativa suficiente.</p></section><section id="section-5"><div class="chapter-label">MÓDULO 05 / 34</div><h2>5. ¿Qué es una partición válida de entrenamiento y evaluación?</h2><p class="first-intuition">Un registro que ayuda a determinar coeficientes no puede presentarse después como prueba independiente de esos mismos coeficientes. Un procedimiento defendible divide por <strong>identidad del módulo</strong> antes de ajustar imputadores, normalizadores, selección de características o modelos de supervivencia. Si existen múltiples ventanas de sensores para cada máquina, todas las ventanas de esa máquina deben permanecer en la misma partición. Si los equipos comparten lote, línea o fábrica, podría ser necesario evaluar lotes enteros fuera del entrenamiento para evitar que condiciones compartidas generen optimismo.</p><p>Una separación cronológica plantea una pregunta operativa diferente: entrenar con cohortes anteriores y evaluar módulos incorporados posteriormente. Puede descubrir cambios en fabricación y mantenimiento, aunque también debe reconocer nuevos patrones tecnológicos. Ninguna partición es universalmente óptima; depende del modo de implementación. Dentro del entrenamiento se ajustan hiperparámetros, transformaciones y familias de distribución mediante validación interna o Cross-Validation anidada. La prueba final debe reservarse para una evaluación previamente especificada: seleccionar repetidamente la mejor configuración mirando la prueba destruye su independencia.</p><p>El Leakage más evidente ocurre cuando una variable predictora se conoce solo después del momento de decisión. «Requirió alguna vez una reparación urgente» contiene futuro si la predicción se hace al instalar. Sería utilizable en un análisis posterior tipo <strong>Landmark</strong> únicamente para sujetos aún elegibles y con nuevo origen temporal. No basta con agregar la columna a un modelo basal y mejorar su C-index. Una definición retrospectiva inconsistente puede producir resultados numéricos sorprendentes y científicamente inválidos.</p><p>Para una comparación justa, todos los modelos deben compartir unidad, horizonte y evento. Ocho unidades de horas operativas no son lo mismo que ochocientas horas calendario; una curva KM que considera reemplazo como evento no es equivalente a un modelo Cox que solo registra falla funcional. Escribiremos un diccionario de variables y verificaremos la correspondencia antes de comparar familias. Nuestras predicciones fijas corresponden a la misma primera falla hipotética en todos los cálculos posteriores.</p></section><section id="section-6"><div class="chapter-label">MÓDULO 06 / 34</div><h2>6. Construir el punto de referencia Kaplan–Meier</h2><p class="first-intuition">Kaplan–Meier (KM) estima supervivencia grupal de forma no paramétrica bajo los supuestos habituales, especialmente censura independiente. En cada tiempo de falla \(t_j\), sean \(n_j\) los sujetos en riesgo inmediatamente antes y \(d_j\) las fallas ocurridas. La probabilidad condicional de superar ese instante es \(1-d_j/n_j\). Multiplicamos estos factores para obtener la estimación acumulada. Las personas censuradas no se convierten en fallas: simplemente dejan de integrar conjuntos de riesgo posteriores.</p><div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\widehat S_{KM}(t)=\prod_{t_j\le t}\left(1-\frac{d_j}{n_j}\right).\]</div></div><p>En nuestras doce unidades, la primera falla ocurre con doce en riesgo, de modo que la supervivencia pasa a \(11/12=0.91667\). La segunda ocurre con once en riesgo; por tanto, después del tiempo 3 la supervivencia es \((11/12)(10/11)=10/12=0.83333\). C se censura en 4, así que en 5 permanecen nueve y no diez. Se multiplica por \(8/9\), obteniendo \(20/27\approx0.74074\). En tiempo 6 el conjunto de riesgo tiene ocho; multiplicamos por \(7/8\) y llegamos a \(35/54\approx0.64815\). F se censura en 7; en 8 quedan seis en riesgo y una falla agrega factor \(5/6\).</p><div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\widehat S_{KM}(8)=\frac{11}{12}\frac{10}{11}\frac89\frac78\frac56=\frac{175}{324}\approx0.54012.\]</div></div><p>El complemento representa una probabilidad estimada de falla hasta ocho, \(1-175/324=149/324\approx0.45988\). En cambio, la proporción directa de fallas registradas hasta ocho es \(5/12\approx0.41667\). No coinciden porque dos módulos fueron censurados antes del horizonte. Bajo independencia, KM utiliza la información disponible durante el período efectivamente observado sin tratarlos como supervivientes eternos. KM sirve como referencia grupal y herramienta para entender soporte de seguimiento; no asigna riesgos individualizados a A o L sin modelado adicional.</p><figure class="charts-wrap" role="group"><svg role="img" aria-label="Kaplan–Meier, observaciones censuradas y horizonte ocho. La curva estima supervivencia grupal, no predicción individual." height="324pt" version="1.1" viewbox="0 0 648 324" width="648pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="a11yfig1-km-es-figure_1">
+<g id="a11yfig1-km-es-patch_1">
+<path d="M 0 324 
+L 648 324 
+L 648 0 
+L 0 0 
+L 0 324 
+z
+" style="fill: none"></path>
+</g>
+<g id="a11yfig1-km-es-axes_1">
+<g id="a11yfig1-km-es-patch_2">
+<path d="M 47.72 282.04 
+L 637.2 282.04 
+L 637.2 10.8 
+L 47.72 10.8 
+L 47.72 282.04 
+z
+" style="fill: none"></path>
+</g>
+<g id="a11yfig1-km-es-PathCollection_1">
+<defs>
+<path d="M -5.244044 0 
+L 5.244044 0 
+M 0 5.244044 
+L 0 -5.244044 
+" id="a11yfig1-km-es-ma3977d2ab3" style="stroke: #df823b; stroke-width: 1.5"></path>
+</defs>
+<g clip-path="url(#a11yfig1-km-es-pea1ab9c306)">
+<use style="fill: #df823b; stroke: #df823b; stroke-width: 1.5" x="227.626234" xlink:href="#a11yfig1-km-es-ma3977d2ab3" y="64.700256"></use>
+<use style="fill: #df823b; stroke: #df823b; stroke-width: 1.5" x="342.46" xlink:href="#a11yfig1-km-es-ma3977d2ab3" y="112.997977"></use>
+<use style="fill: #df823b; stroke: #df823b; stroke-width: 1.5" x="457.293766" xlink:href="#a11yfig1-km-es-ma3977d2ab3" y="169.345318"></use>
+<use style="fill: #df823b; stroke: #df823b; stroke-width: 1.5" x="533.84961" xlink:href="#a11yfig1-km-es-ma3977d2ab3" y="206.910212"></use>
+</g>
+</g>
+<g id="a11yfig1-km-es-matplotlib.axis_1">
+<g id="a11yfig1-km-es-xtick_1">
+<g id="a11yfig1-km-es-line2d_1">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="a11yfig1-km-es-mb2f8af104d" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="74.514545" xlink:href="#a11yfig1-km-es-mb2f8af104d" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig1-km-es-text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 74.514545 296.638438)" x="74.514545" y="296.638438">0</text>
+</g>
+</g>
+<g id="a11yfig1-km-es-xtick_2">
+<g id="a11yfig1-km-es-line2d_2">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="151.07039" xlink:href="#a11yfig1-km-es-mb2f8af104d" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig1-km-es-text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 151.07039 296.638438)" x="151.07039" y="296.638438">2</text>
+</g>
+</g>
+<g id="a11yfig1-km-es-xtick_3">
+<g id="a11yfig1-km-es-line2d_3">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="227.626234" xlink:href="#a11yfig1-km-es-mb2f8af104d" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig1-km-es-text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 227.626234 296.638438)" x="227.626234" y="296.638438">4</text>
+</g>
+</g>
+<g id="a11yfig1-km-es-xtick_4">
+<g id="a11yfig1-km-es-line2d_4">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="304.182078" xlink:href="#a11yfig1-km-es-mb2f8af104d" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig1-km-es-text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 304.182078 296.638438)" x="304.182078" y="296.638438">6</text>
+</g>
+</g>
+<g id="a11yfig1-km-es-xtick_5">
+<g id="a11yfig1-km-es-line2d_5">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="380.737922" xlink:href="#a11yfig1-km-es-mb2f8af104d" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig1-km-es-text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 380.737922 296.638438)" x="380.737922" y="296.638438">8</text>
+</g>
+</g>
+<g id="a11yfig1-km-es-xtick_6">
+<g id="a11yfig1-km-es-line2d_6">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="457.293766" xlink:href="#a11yfig1-km-es-mb2f8af104d" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig1-km-es-text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 457.293766 296.638438)" x="457.293766" y="296.638438">10</text>
+</g>
+</g>
+<g id="a11yfig1-km-es-xtick_7">
+<g id="a11yfig1-km-es-line2d_7">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="533.84961" xlink:href="#a11yfig1-km-es-mb2f8af104d" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig1-km-es-text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 533.84961 296.638438)" x="533.84961" y="296.638438">12</text>
+</g>
+</g>
+<g id="a11yfig1-km-es-xtick_8">
+<g id="a11yfig1-km-es-line2d_8">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="610.405455" xlink:href="#a11yfig1-km-es-mb2f8af104d" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig1-km-es-text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 610.405455 296.638438)" x="610.405455" y="296.638438">14</text>
+</g>
+</g>
+<g id="a11yfig1-km-es-text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 342.46 310.316563)" x="342.46" y="310.316563">Tiempo (×100 horas)</text>
+</g>
+</g>
+<g id="a11yfig1-km-es-matplotlib.axis_2">
+<g id="a11yfig1-km-es-ytick_1">
+<g id="a11yfig1-km-es-line2d_9">
+<path clip-path="url(#a11yfig1-km-es-pea1ab9c306)" d="M 47.72 282.04 
+L 637.2 282.04 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-km-es-line2d_10">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="a11yfig1-km-es-m27bb3ac5d8" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig1-km-es-m27bb3ac5d8" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig1-km-es-text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 285.839219)" x="40.72" y="285.839219">0.0</text>
+</g>
+</g>
+<g id="a11yfig1-km-es-ytick_2">
+<g id="a11yfig1-km-es-line2d_11">
+<path clip-path="url(#a11yfig1-km-es-pea1ab9c306)" d="M 47.72 229.878462 
+L 637.2 229.878462 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-km-es-line2d_12">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig1-km-es-m27bb3ac5d8" y="229.878462"></use>
+</g>
+</g>
+<g id="a11yfig1-km-es-text_11">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 233.67768)" x="40.72" y="233.67768">0.2</text>
+</g>
+</g>
+<g id="a11yfig1-km-es-ytick_3">
+<g id="a11yfig1-km-es-line2d_13">
+<path clip-path="url(#a11yfig1-km-es-pea1ab9c306)" d="M 47.72 177.716923 
+L 637.2 177.716923 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-km-es-line2d_14">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig1-km-es-m27bb3ac5d8" y="177.716923"></use>
+</g>
+</g>
+<g id="a11yfig1-km-es-text_12">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 181.516142)" x="40.72" y="181.516142">0.4</text>
+</g>
+</g>
+<g id="a11yfig1-km-es-ytick_4">
+<g id="a11yfig1-km-es-line2d_15">
+<path clip-path="url(#a11yfig1-km-es-pea1ab9c306)" d="M 47.72 125.555385 
+L 637.2 125.555385 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-km-es-line2d_16">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig1-km-es-m27bb3ac5d8" y="125.555385"></use>
+</g>
+</g>
+<g id="a11yfig1-km-es-text_13">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 129.354603)" x="40.72" y="129.354603">0.6</text>
+</g>
+</g>
+<g id="a11yfig1-km-es-ytick_5">
+<g id="a11yfig1-km-es-line2d_17">
+<path clip-path="url(#a11yfig1-km-es-pea1ab9c306)" d="M 47.72 73.393846 
+L 637.2 73.393846 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-km-es-line2d_18">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig1-km-es-m27bb3ac5d8" y="73.393846"></use>
+</g>
+</g>
+<g id="a11yfig1-km-es-text_14">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 77.193065)" x="40.72" y="77.193065">0.8</text>
+</g>
+</g>
+<g id="a11yfig1-km-es-ytick_6">
+<g id="a11yfig1-km-es-line2d_19">
+<path clip-path="url(#a11yfig1-km-es-pea1ab9c306)" d="M 47.72 21.232308 
+L 637.2 21.232308 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-km-es-line2d_20">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig1-km-es-m27bb3ac5d8" y="21.232308"></use>
+</g>
+</g>
+<g id="a11yfig1-km-es-text_15">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 25.031526)" x="40.72" y="25.031526">1.0</text>
+</g>
+</g>
+<g id="a11yfig1-km-es-text_16">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-90 18.737188 146.42)" x="18.737188" y="146.42">Supervivencia estimada</text>
+</g>
+</g>
+<g id="a11yfig1-km-es-line2d_21">
+<path clip-path="url(#a11yfig1-km-es-pea1ab9c306)" d="M 74.514545 21.232308 
+L 151.07039 21.232308 
+L 151.07039 42.966282 
+L 189.348312 42.966282 
+L 189.348312 64.700256 
+L 227.626234 64.700256 
+L 227.626234 64.700256 
+L 265.904156 64.700256 
+L 265.904156 88.849117 
+L 304.182078 88.849117 
+L 304.182078 112.997977 
+L 342.46 112.997977 
+L 342.46 112.997977 
+L 380.737922 112.997977 
+L 380.737922 141.171648 
+L 419.015844 141.171648 
+L 419.015844 169.345318 
+L 457.293766 169.345318 
+L 457.293766 169.345318 
+L 495.571688 169.345318 
+L 495.571688 206.910212 
+L 533.84961 206.910212 
+L 533.84961 206.910212 
+L 572.127532 206.910212 
+L 572.127532 282.04 
+L 610.405455 282.04 
+L 610.405455 282.04 
+" style="fill: none; stroke: #2563eb; stroke-width: 2.5; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-km-es-line2d_22">
+<path clip-path="url(#a11yfig1-km-es-pea1ab9c306)" d="M 380.737922 282.04 
+L 380.737922 10.8 
+" style="fill: none; stroke-dasharray: 4.44,1.92; stroke-dashoffset: 0; stroke: #6b7280; stroke-width: 1.2"></path>
+</g>
+<g id="a11yfig1-km-es-patch_3">
+<path d="M 47.72 282.04 
+L 47.72 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-km-es-patch_4">
+<path d="M 47.72 282.04 
+L 637.2 282.04 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-km-es-PathCollection_2">
+<defs>
+<path d="M 0 4.031129 
+C 1.069068 4.031129 2.094493 3.606384 2.850439 2.850439 
+C 3.606384 2.094493 4.031129 1.069068 4.031129 0 
+C 4.031129 -1.069068 3.606384 -2.094493 2.850439 -2.850439 
+C 2.094493 -3.606384 1.069068 -4.031129 0 -4.031129 
+C -1.069068 -4.031129 -2.094493 -3.606384 -2.850439 -2.850439 
+C -3.606384 -2.094493 -4.031129 -1.069068 -4.031129 0 
+C -4.031129 1.069068 -3.606384 2.094493 -2.850439 2.850439 
+C -2.094493 3.606384 -1.069068 4.031129 0 4.031129 
+z
+" id="a11yfig1-km-es-mc318ba2d4e" style="stroke: #15417a"></path>
+</defs>
+<g clip-path="url(#a11yfig1-km-es-pea1ab9c306)">
+<use style="fill: #15417a; stroke: #15417a" x="380.737922" xlink:href="#a11yfig1-km-es-mc318ba2d4e" y="141.171648"></use>
+</g>
+</g>
+<g id="a11yfig1-km-es-legend_1">
+<g id="a11yfig1-km-es-patch_5">
+<path d="M 541.866094 57.630938 
+L 630.9 57.630938 
+Q 632.7 57.630938 632.7 55.830938 
+L 632.7 17.1 
+Q 632.7 15.3 630.9 15.3 
+L 541.866094 15.3 
+Q 540.066094 15.3 540.066094 17.1 
+L 540.066094 55.830938 
+Q 540.066094 57.630938 541.866094 57.630938 
+z
+" style="fill: #ffffff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"></path>
+</g>
+<g id="a11yfig1-km-es-line2d_23">
+<path d="M 543.666094 22.588594 
+L 552.666094 22.588594 
+L 552.666094 22.588594 
+L 561.666094 22.588594 
+L 561.666094 22.588594 
+" style="fill: none; stroke: #2563eb; stroke-width: 2.5; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-km-es-text_17">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 568.866094 25.738594)" x="568.866094" y="25.738594">Kaplan–Meier</text>
+</g>
+<g id="a11yfig1-km-es-PathCollection_3">
+<g>
+<use style="fill: #df823b; stroke: #df823b; stroke-width: 1.5" x="552.666094" xlink:href="#a11yfig1-km-es-ma3977d2ab3" y="36.586406"></use>
+</g>
+</g>
+<g id="a11yfig1-km-es-text_18">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 568.866094 38.948906)" x="568.866094" y="38.948906">Censura</text>
+</g>
+<g id="a11yfig1-km-es-line2d_24">
+<path d="M 543.666094 49.009219 
+L 552.666094 49.009219 
+L 561.666094 49.009219 
+" style="fill: none; stroke-dasharray: 4.44,1.92; stroke-dashoffset: 0; stroke: #6b7280; stroke-width: 1.2"></path>
+</g>
+<g id="a11yfig1-km-es-text_19">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 568.866094 52.159219)" x="568.866094" y="52.159219">Horizonte 8</text>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="a11yfig1-km-es-pea1ab9c306">
+<rect height="271.24" width="589.48" x="47.72" y="10.8"></rect>
+</clippath>
+</defs>
+</svg><figcaption>Kaplan–Meier, observaciones censuradas y horizonte ocho. La curva estima supervivencia grupal, no predicción individual.</figcaption></figure></section><section id="section-7"><div class="chapter-label">MÓDULO 07 / 34</div><h2>7. Cox y AFT: predicciones comparables, parámetros diferentes</h2><p class="first-intuition">Cox Proportional Hazards (PH) expresa el Hazard instantáneo mediante una función basal multiplicada por el efecto de las covariables: \(h(t\mid x)=h_0(t)\exp(x^{\mathsf T}\beta)\). La supervivencia condicional bajo el modelo es \(S(t\mid x)=S_0(t)^{\exp(x^{\mathsf T}\beta)}\). Un Hazard Ratio compara tasas instantáneas bajo los supuestos del modelo. No describe directamente una diferencia fija de probabilidad entre dos personas, porque el riesgo absoluto también depende del horizonte y de la curva basal.</p><p>En Accelerated Failure Time (AFT), la regresión opera sobre el logaritmo del tiempo: \(\log T=\alpha+x^{\mathsf T}\gamma+\sigma\varepsilon\). El exponencial de un coeficiente, \(\exp(\gamma_k)\), representa un <strong>Time Ratio</strong> para un cambio unitario de la covariable, manteniendo lo demás constante. Un Time Ratio de 0.8 sugiere cuantiles de duración 20% más cortos; no significa probabilidad de falla 20% mayor. Las distribuciones Lognormal y Weibull permiten construir curvas completas de supervivencia, pero imponen estructuras distintas sobre Hazard y colas.</p><div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[h(t\mid x)=h_0(t)e^{x^{\mathsf T}\beta},\qquad \log T=\alpha+x^{\mathsf T}\gamma+\sigma\varepsilon.\]</div></div><p>La comparación justa exige <strong>mismo evento, horizonte, personas, unidades y criterio de censura</strong>. Cox puede ofrecer una interpretación de Hazard Ratio cuando PH se sostiene; AFT puede facilitar la interpretación de duraciones y cuantiles. Kaplan–Meier funciona como referencia, aunque sin ajuste individualizado salvo separación por grupos, que puede crear conjuntos de riesgo demasiado pequeños. No existe un ganador universal por una cifra de desempeño.</p><p>La evaluación debe incluir diagnósticos. Para Cox, estudia Schoenfeld Residuals, tendencias temporales, funcionalidad no lineal e influencia. Para AFT, examina plausibilidad de distribución, residuos, observaciones extremas y extrapolación. Una estimación aparentemente buena de C-index no demuestra que una suposición incorrecta sea inocua para interpretar el coeficiente. Los diagnósticos complementan el resultado predictivo y ayudan a explicar por qué una curva funciona o falla en el horizonte de interés.</p></section><section id="section-8"><div class="chapter-label">MÓDULO 08 / 34</div><h2>8. Por qué la Accuracy binaria convencional engaña con censura temprana</h2><p class="first-intuition">Una solución aparentemente sencilla consiste en marcar “falló antes de ocho” y calcular Accuracy o Brier ordinario. Pero esa codificación asignaría falsamente a C y F la condición de supervivientes: salieron de observación en 4 y 7. Para C conocemos \(T&gt;4\), pero no sabemos si \(T&gt;8\). Para F sucede algo equivalente. Decir «no se registró falla» no implica haber observado ausencia de falla hasta el horizonte. La información que falta no puede crearse mediante una nueva columna de valores cero.</p><p>Eliminar C y F tampoco garantiza corrección: la muestra completa solo con resultados observables puede estar seleccionada según mecanismos relacionados con falla o covariables. Los métodos con ponderación por censura intentan recuperar la población objetivo bajo supuestos sobre observación. No corrigen automáticamente cualquier Missing Data: si la censura es informativa y el modelo no incluye los factores pertinentes, el peso puede producir resultados sesgados.</p><p>Define para \(\tau=8\) el indicador real \(Z_i(8)=I(T_i&gt;8)\). Sabemos que \(Z=0\) en A, B, D, E y G, puesto que fallaron hasta ocho. Sabemos que \(Z=1\) en H, I, J, K y L, observados más allá de ocho. <strong>Desconocemos</strong> el resultado binario de C y F. La predicción \(\widehat S_i(8)\) sigue siendo una probabilidad continua, no una etiqueta de clase. Podemos calcular errores cuadrados para diez resultados conocidos y usar ponderación para recuperar el estimando poblacional cuando se cumplen sus condiciones.</p><p>Además, predecir a ocho no es lo mismo que evaluar curvas completas. Un modelo puede funcionar cerca de ese horizonte y fallar a veinte unidades. Debemos escoger el horizonte según la intervención, antes de mirar qué tiempo produce la mejor métrica. Podemos mostrar una trayectoria temporal complementaria, pero el análisis principal debe quedar fijado con anterioridad y tener soporte de seguimiento suficiente.</p></section><section id="section-9"><div class="chapter-label">MÓDULO 09 / 34</div><h2>9. Discrimination como pregunta de ordenamiento</h2><p class="first-intuition">El C-index resume si el modelo suele asignar más riesgo a quien experimenta primero una falla conocida dentro de una pareja que puede evaluarse. En la formulación básica de Harrell, un par es comparable cuando <strong>la menor duración observada termina en un evento</strong>. Si la duración menor termina en censura, desconocemos qué tiempo de falla latente fue anterior y debemos excluir esa pareja. Los empates requieren reglas explícitas; aquí todos los tiempos y puntajes son diferentes para facilitar la reproducción.</p><p>Como ordenamos mediante \(S(8)\), una supervivencia predicha <strong>menor</strong> implica riesgo de falla <strong>mayor</strong>. Si A falla en 2 y H permanece observado hasta 9, el par es concordante cuando \(S_A(8)&lt;S_H(8)\). En efecto, \(0.24&lt;0.58\). Si la unidad que falla después recibe una predicción de supervivencia menor, hay discordancia. En caso de empate de puntaje, la convención usual concede medio crédito, pero aquí no ocurre ningún empate.</p><div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\widehat C=\frac{N_{\mathrm{concordant}}+\tfrac12N_{\mathrm{tied\ score}}}{N_{\mathrm{comparable}}}.\]</div></div><p>El C-index representa capacidad de ordenar <strong>pares comparables bajo el esquema observado</strong>, no la fracción de fallas correctamente clasificadas. Una cifra de 0.80 no significa que 80% de los módulos fallarán ni que las probabilidades están bien calibradas. La composición de pares depende de censura, variabilidad del riesgo y selección de casos. Harrell C puede presentar sesgo con censura elevada; alternativas ajustadas, como Uno C, requieren conocer su metodología y estimar incertidumbre apropiadamente.</p><p>Vamos a enumerar todos los pares en lugar de confiar ciegamente en una librería. El tamaño pequeño lo permite y es pedagógicamente revelador. En conjuntos mayores un programa puede recorrer pares, aunque debe manejar empates, pesos, eficiencia computacional y condiciones de entrada tardía cuando existan. La transparencia sobre el denominador es parte esencial de una interpretación correcta.</p><figure class="charts-wrap" role="group"><svg role="img" aria-label="Riesgo de falla predicho frente a seguimiento observado; las marcas naranjas representan censura y no fallas." height="324pt" version="1.1" viewbox="0 0 648 324" width="648pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="a11yfig2-scores-es-figure_1">
+<g id="a11yfig2-scores-es-patch_1">
+<path d="M 0 324 
+L 648 324 
+L 648 0 
+L 0 0 
+L 0 324 
+z
+" style="fill: none"></path>
+</g>
+<g id="a11yfig2-scores-es-axes_1">
+<g id="a11yfig2-scores-es-patch_2">
+<path d="M 47.72 282.04 
+L 637.2 282.04 
+L 637.2 10.8 
+L 47.72 10.8 
+L 47.72 282.04 
+z
+" style="fill: none"></path>
+</g>
+<g id="a11yfig2-scores-es-PathCollection_1">
+<defs>
+<path d="M 0 4.358899 
+C 1.155994 4.358899 2.264796 3.899618 3.082207 3.082207 
+C 3.899618 2.264796 4.358899 1.155994 4.358899 -0 
+C 4.358899 -1.155994 3.899618 -2.264796 3.082207 -3.082207 
+C 2.264796 -3.899618 1.155994 -4.358899 0 -4.358899 
+C -1.155994 -4.358899 -2.264796 -3.899618 -3.082207 -3.082207 
+C -3.899618 -2.264796 -4.358899 -1.155994 -4.358899 0 
+C -4.358899 1.155994 -3.899618 2.264796 -3.082207 3.082207 
+C -2.264796 3.899618 -1.155994 4.358899 0 4.358899 
+z
+" id="a11yfig2-scores-es-C0_0_6b92f4d6ab"></path>
+</defs>
+<g clip-path="url(#a11yfig2-scores-es-pe02d213807)">
+<use style="fill: #2563eb; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="79.707287" xlink:href="#a11yfig2-scores-es-C0_0_6b92f4d6ab" y="49.548571"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-es-pe02d213807)">
+<use style="fill: #2563eb; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="125.403411" xlink:href="#a11yfig2-scores-es-C0_0_6b92f4d6ab" y="80.547429"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-es-pe02d213807)">
+<use style="fill: #dc8a42; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="171.099535" xlink:href="#a11yfig2-scores-es-C0_0_6b92f4d6ab" y="103.796571"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-es-pe02d213807)">
+<use style="fill: #2563eb; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="216.795659" xlink:href="#a11yfig2-scores-es-C0_0_6b92f4d6ab" y="72.797714"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-es-pe02d213807)">
+<use style="fill: #2563eb; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="262.491783" xlink:href="#a11yfig2-scores-es-C0_0_6b92f4d6ab" y="138.670286"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-es-pe02d213807)">
+<use style="fill: #dc8a42; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="308.187907" xlink:href="#a11yfig2-scores-es-C0_0_6b92f4d6ab" y="127.045714"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-es-pe02d213807)">
+<use style="fill: #2563eb; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="353.884031" xlink:href="#a11yfig2-scores-es-C0_0_6b92f4d6ab" y="111.546286"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-es-pe02d213807)">
+<use style="fill: #2563eb; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="399.580155" xlink:href="#a11yfig2-scores-es-C0_0_6b92f4d6ab" y="181.293714"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-es-pe02d213807)">
+<use style="fill: #dc8a42; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="445.276279" xlink:href="#a11yfig2-scores-es-C0_0_6b92f4d6ab" y="165.794286"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-es-pe02d213807)">
+<use style="fill: #2563eb; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="490.972403" xlink:href="#a11yfig2-scores-es-C0_0_6b92f4d6ab" y="220.042286"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-es-pe02d213807)">
+<use style="fill: #dc8a42; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="536.668527" xlink:href="#a11yfig2-scores-es-C0_0_6b92f4d6ab" y="243.291429"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-es-pe02d213807)">
+<use style="fill: #2563eb; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="582.364651" xlink:href="#a11yfig2-scores-es-C0_0_6b92f4d6ab" y="208.417714"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-es-matplotlib.axis_1">
+<g id="a11yfig2-scores-es-xtick_1">
+<g id="a11yfig2-scores-es-line2d_1">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="a11yfig2-scores-es-mbb7e95cb63" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="79.707287" xlink:href="#a11yfig2-scores-es-mbb7e95cb63" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-es-text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 79.707287 296.638438)" x="79.707287" y="296.638438">2</text>
+</g>
+</g>
+<g id="a11yfig2-scores-es-xtick_2">
+<g id="a11yfig2-scores-es-line2d_2">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="171.099535" xlink:href="#a11yfig2-scores-es-mbb7e95cb63" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-es-text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 171.099535 296.638438)" x="171.099535" y="296.638438">4</text>
+</g>
+</g>
+<g id="a11yfig2-scores-es-xtick_3">
+<g id="a11yfig2-scores-es-line2d_3">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="262.491783" xlink:href="#a11yfig2-scores-es-mbb7e95cb63" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-es-text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 262.491783 296.638438)" x="262.491783" y="296.638438">6</text>
+</g>
+</g>
+<g id="a11yfig2-scores-es-xtick_4">
+<g id="a11yfig2-scores-es-line2d_4">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="353.884031" xlink:href="#a11yfig2-scores-es-mbb7e95cb63" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-es-text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 353.884031 296.638438)" x="353.884031" y="296.638438">8</text>
+</g>
+</g>
+<g id="a11yfig2-scores-es-xtick_5">
+<g id="a11yfig2-scores-es-line2d_5">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="445.276279" xlink:href="#a11yfig2-scores-es-mbb7e95cb63" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-es-text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 445.276279 296.638438)" x="445.276279" y="296.638438">10</text>
+</g>
+</g>
+<g id="a11yfig2-scores-es-xtick_6">
+<g id="a11yfig2-scores-es-line2d_6">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="536.668527" xlink:href="#a11yfig2-scores-es-mbb7e95cb63" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-es-text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 536.668527 296.638438)" x="536.668527" y="296.638438">12</text>
+</g>
+</g>
+<g id="a11yfig2-scores-es-xtick_7">
+<g id="a11yfig2-scores-es-line2d_7">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="628.060775" xlink:href="#a11yfig2-scores-es-mbb7e95cb63" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-es-text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 628.060775 296.638438)" x="628.060775" y="296.638438">14</text>
+</g>
+</g>
+<g id="a11yfig2-scores-es-text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 342.46 310.316563)" x="342.46" y="310.316563">Tiempo observado (×100 horas)</text>
+</g>
+</g>
+<g id="a11yfig2-scores-es-matplotlib.axis_2">
+<g id="a11yfig2-scores-es-ytick_1">
+<g id="a11yfig2-scores-es-line2d_8">
+<path clip-path="url(#a11yfig2-scores-es-pe02d213807)" d="M 47.72 266.540571 
+L 637.2 266.540571 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-scores-es-line2d_9">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="a11yfig2-scores-es-m10fba0d008" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig2-scores-es-m10fba0d008" y="266.540571"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-es-text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 270.33979)" x="40.72" y="270.33979">0.2</text>
+</g>
+</g>
+<g id="a11yfig2-scores-es-ytick_2">
+<g id="a11yfig2-scores-es-line2d_10">
+<path clip-path="url(#a11yfig2-scores-es-pe02d213807)" d="M 47.72 227.792 
+L 637.2 227.792 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-scores-es-line2d_11">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig2-scores-es-m10fba0d008" y="227.792"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-es-text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 231.591219)" x="40.72" y="231.591219">0.3</text>
+</g>
+</g>
+<g id="a11yfig2-scores-es-ytick_3">
+<g id="a11yfig2-scores-es-line2d_12">
+<path clip-path="url(#a11yfig2-scores-es-pe02d213807)" d="M 47.72 189.043429 
+L 637.2 189.043429 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-scores-es-line2d_13">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig2-scores-es-m10fba0d008" y="189.043429"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-es-text_11">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 192.842647)" x="40.72" y="192.842647">0.4</text>
+</g>
+</g>
+<g id="a11yfig2-scores-es-ytick_4">
+<g id="a11yfig2-scores-es-line2d_14">
+<path clip-path="url(#a11yfig2-scores-es-pe02d213807)" d="M 47.72 150.294857 
+L 637.2 150.294857 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-scores-es-line2d_15">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig2-scores-es-m10fba0d008" y="150.294857"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-es-text_12">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 154.094076)" x="40.72" y="154.094076">0.5</text>
+</g>
+</g>
+<g id="a11yfig2-scores-es-ytick_5">
+<g id="a11yfig2-scores-es-line2d_16">
+<path clip-path="url(#a11yfig2-scores-es-pe02d213807)" d="M 47.72 111.546286 
+L 637.2 111.546286 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-scores-es-line2d_17">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig2-scores-es-m10fba0d008" y="111.546286"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-es-text_13">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 115.345504)" x="40.72" y="115.345504">0.6</text>
+</g>
+</g>
+<g id="a11yfig2-scores-es-ytick_6">
+<g id="a11yfig2-scores-es-line2d_18">
+<path clip-path="url(#a11yfig2-scores-es-pe02d213807)" d="M 47.72 72.797714 
+L 637.2 72.797714 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-scores-es-line2d_19">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig2-scores-es-m10fba0d008" y="72.797714"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-es-text_14">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 76.596933)" x="40.72" y="76.596933">0.7</text>
+</g>
+</g>
+<g id="a11yfig2-scores-es-ytick_7">
+<g id="a11yfig2-scores-es-line2d_20">
+<path clip-path="url(#a11yfig2-scores-es-pe02d213807)" d="M 47.72 34.049143 
+L 637.2 34.049143 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-scores-es-line2d_21">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig2-scores-es-m10fba0d008" y="34.049143"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-es-text_15">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 37.848362)" x="40.72" y="37.848362">0.8</text>
+</g>
+</g>
+<g id="a11yfig2-scores-es-text_16">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-90 18.737188 146.42)" x="18.737188" y="146.42">Riesgo predicho de falla en 8</text>
+</g>
+</g>
+<g id="a11yfig2-scores-es-line2d_22">
+<path clip-path="url(#a11yfig2-scores-es-pe02d213807)" d="M 353.884031 282.04 
+L 353.884031 10.8 
+" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #94a3b8; stroke-width: 1.5"></path>
+</g>
+<g id="a11yfig2-scores-es-patch_3">
+<path d="M 47.72 282.04 
+L 47.72 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-scores-es-patch_4">
+<path d="M 47.72 282.04 
+L 637.2 282.04 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-scores-es-text_17">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 84.707287 44.548571)" x="84.707287" y="44.548571">A</text>
+</g>
+<g id="a11yfig2-scores-es-text_18">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 130.403411 75.547429)" x="130.403411" y="75.547429">B</text>
+</g>
+<g id="a11yfig2-scores-es-text_19">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 176.099535 98.796571)" x="176.099535" y="98.796571">C</text>
+</g>
+<g id="a11yfig2-scores-es-text_20">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 221.795659 67.797714)" x="221.795659" y="67.797714">D</text>
+</g>
+<g id="a11yfig2-scores-es-text_21">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 267.491783 133.670286)" x="267.491783" y="133.670286">E</text>
+</g>
+<g id="a11yfig2-scores-es-text_22">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 313.187907 122.045714)" x="313.187907" y="122.045714">F</text>
+</g>
+<g id="a11yfig2-scores-es-text_23">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 358.884031 106.546286)" x="358.884031" y="106.546286">G</text>
+</g>
+<g id="a11yfig2-scores-es-text_24">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 404.580155 176.293714)" x="404.580155" y="176.293714">H</text>
+</g>
+<g id="a11yfig2-scores-es-text_25">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 450.276279 160.794286)" x="450.276279" y="160.794286">I</text>
+</g>
+<g id="a11yfig2-scores-es-text_26">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 495.972403 215.042286)" x="495.972403" y="215.042286">J</text>
+</g>
+<g id="a11yfig2-scores-es-text_27">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 541.668527 238.291429)" x="541.668527" y="238.291429">K</text>
+</g>
+<g id="a11yfig2-scores-es-text_28">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 587.364651 203.417714)" x="587.364651" y="203.417714">L</text>
+</g>
+<g id="a11yfig2-scores-es-legend_1">
+<g id="a11yfig2-scores-es-patch_5">
+<path d="M 556.940625 48.15625 
+L 630.2 48.15625 
+Q 632.2 48.15625 632.2 46.15625 
+L 632.2 17.8 
+Q 632.2 15.8 630.2 15.8 
+L 556.940625 15.8 
+Q 554.940625 15.8 554.940625 17.8 
+L 554.940625 46.15625 
+Q 554.940625 48.15625 556.940625 48.15625 
+z
+" style="fill: #ffffff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"></path>
+</g>
+<g id="a11yfig2-scores-es-line2d_23">
+<path d="M 558.940625 23.898438 
+L 568.940625 23.898438 
+L 578.940625 23.898438 
+" style="fill: none; stroke: #ffffff; stroke-width: 1.5; stroke-linecap: square"></path>
+<defs>
+<path d="M 0 4.5 
+C 1.193414 4.5 2.338109 4.025852 3.181981 3.181981 
+C 4.025852 2.338109 4.5 1.193414 4.5 0 
+C 4.5 -1.193414 4.025852 -2.338109 3.181981 -3.181981 
+C 2.338109 -4.025852 1.193414 -4.5 0 -4.5 
+C -1.193414 -4.5 -2.338109 -4.025852 -3.181981 -3.181981 
+C -4.025852 -2.338109 -4.5 -1.193414 -4.5 0 
+C -4.5 1.193414 -4.025852 2.338109 -3.181981 3.181981 
+C -2.338109 4.025852 -1.193414 4.5 0 4.5 
+z
+" id="a11yfig2-scores-es-m60cc4c9b48" style="stroke: #ffffff"></path>
+</defs>
+<g>
+<use style="fill: #2563eb; stroke: #ffffff" x="568.940625" xlink:href="#a11yfig2-scores-es-m60cc4c9b48" y="23.898438"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-es-text_29">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 586.940625 27.398438)" x="586.940625" y="27.398438">Falla</text>
+</g>
+<g id="a11yfig2-scores-es-line2d_24">
+<path d="M 558.940625 38.576563 
+L 568.940625 38.576563 
+L 578.940625 38.576563 
+" style="fill: none; stroke: #ffffff; stroke-width: 1.5; stroke-linecap: square"></path>
+<defs>
+<path d="M 0 4.5 
+C 1.193414 4.5 2.338109 4.025852 3.181981 3.181981 
+C 4.025852 2.338109 4.5 1.193414 4.5 0 
+C 4.5 -1.193414 4.025852 -2.338109 3.181981 -3.181981 
+C 2.338109 -4.025852 1.193414 -4.5 0 -4.5 
+C -1.193414 -4.5 -2.338109 -4.025852 -3.181981 -3.181981 
+C -4.025852 -2.338109 -4.5 -1.193414 -4.5 0 
+C -4.5 1.193414 -4.025852 2.338109 -3.181981 3.181981 
+C -2.338109 4.025852 -1.193414 4.5 0 4.5 
+z
+" id="a11yfig2-scores-es-m4893b6aa52" style="stroke: #ffffff"></path>
+</defs>
+<g>
+<use style="fill: #dc8a42; stroke: #ffffff" x="568.940625" xlink:href="#a11yfig2-scores-es-m4893b6aa52" y="38.576563"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-es-text_30">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 586.940625 42.076563)" x="586.940625" y="42.076563">Censura</text>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="a11yfig2-scores-es-pe02d213807">
+<rect height="271.24" width="589.48" x="47.72" y="10.8"></rect>
+</clippath>
+</defs>
+</svg><figcaption>Riesgo de falla predicho frente a seguimiento observado; las marcas naranjas representan censura y no fallas.</figcaption></figure></section><section id="section-10"><div class="chapter-label">MÓDULO 10 / 34</div><h2>10. Enumerar pares comparables y verificar el C-index</h2><p class="first-intuition">Ordenamos los módulos según la duración registrada. Cada fila que termina en falla puede iniciar una comparación con una fila posterior: A tiene once posteriores; B diez; D, cuya falla ocurre en 5, tiene ocho; E siete; G cinco; H cuatro; J dos; y L ninguna. Las filas censuradas C, F, I y K no pueden iniciar pares en esta construcción. Sumamos \(11+10+8+7+5+4+2=47\) parejas comparables.</p><p>Ahora contamos concordancias examinando el orden de \(S(8)\). A es concordante con sus once parejas. B presenta una discordancia respecto a D, pues \(0.32&gt;0.30\), y nueve concordancias. D concuerda con las ocho posteriores. E discrepa con F y G: \(0.47&gt;0.44\) y \(0.47&gt;0.40\), por lo que conserva cinco concordancias. G concuerda en cinco. H discrepa frente a I (\(0.58&gt;0.54\)), quedando tres concordancias. J discrepa frente a L (\(0.68&gt;0.65\)), mientras concuerda frente a K. Totalizamos cinco pares discordantes y ningún empate de puntaje.</p><div class="table-wrap"><table>
+<thead>
+<tr>
+<th style="text-align:left" scope="col">Evento inicial</th>
+<th style="text-align:right" scope="col">Pares posteriores comparables</th>
+<th style="text-align:right" scope="col">Concordantes</th>
+<th style="text-align:right" scope="col">Discordantes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">A, tiempo 2</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td style="text-align:left">B, tiempo 3</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td style="text-align:left">D, tiempo 5</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td style="text-align:left">E, tiempo 6</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td style="text-align:left">G, tiempo 8</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td style="text-align:left">H, tiempo 9</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td style="text-align:left">J, tiempo 11</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td style="text-align:left">L, tiempo 13</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Total</strong></td>
+<td style="text-align:right"><strong>47</strong></td>
+<td style="text-align:right"><strong>42</strong></td>
+<td style="text-align:right"><strong>5</strong></td>
+</tr>
+</tbody>
+</table></div><div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\widehat C=\frac{42+\tfrac12(0)}{47}=0.893617\ldots\approx0.8936.\]</div></div><p>Es una cifra ilustrativamente elevada; <strong>las parejas no son observaciones independientes</strong>. Un mismo módulo participa repetidamente y no corresponde tratar los 47 pares como 47 ensayos Bernoulli para generar un intervalo binomial sencillo. Además, las predicciones se construyeron para enseñanza y no provienen de un modelo realmente entrenado en una cohorte independiente. El 89.36% no constituye una medida validada de éxito futuro, y debemos impedir que el resultado se comunique de esa manera.</p></section><section id="section-11"><div class="chapter-label">MÓDULO 11 / 34</div><h2>11. Discrimination no equivale a Calibration</h2><p class="first-intuition">Imagina que un segundo modelo transforma monótonamente todos los puntajes del primero y empuja las probabilidades hacia los extremos cero o uno, sin alterar su orden. El C-index permanecería igual porque las desigualdades entre pares no cambian, pero las probabilidades extremas podrían alejarse mucho de las frecuencias observadas. Por ello una buena discriminación no permite confiar automáticamente en un umbral operativo ni en el número esperado de fallas.</p><p><strong>Calibration-in-the-large</strong> compara la magnitud agregada de las probabilidades predichas con la incidencia estimada del evento. La <strong>Calibration Slope</strong> y las curvas de calibración investigan cómo cambian los resultados observados según el nivel de riesgo. Con tiempos censurados, esta tarea no es una clasificación binaria sin complicaciones: necesitamos KM por grupos con seguimiento suficiente, estimaciones ajustadas por censura u otros métodos apropiados. Convertir la censura temprana en no-evento altera el estimando.</p><p>Un promedio correcto puede esconder un error grave en un subgrupo: quizá el modelo sea razonable para equipos estándar pero subestime fallas bajo carga elevada. Por otro lado, doce módulos producen oscilaciones grandes en estimaciones por grupos. Dividirlos en diez deciles equivaldría a producir gráficos basados en una o dos observaciones por casilla, creando una apariencia de precisión sin sustento. La visualización debe mostrar la falta de información en vez de disimularla con una línea suavizada atractiva.</p><p>En el ejemplo, la supervivencia promedio predicha es \(\bar S(8)=5.74/12\approx0.47833\), pues la suma de los doce valores es 5.74. El riesgo promedio predicho es \(1-0.47833\approx0.52167\). La probabilidad grupal de falla estimada con KM es \(149/324\approx0.45988\); la diferencia descriptiva es aproximadamente 0.06179. Esta discrepancia puede sugerir predicciones más pesimistas en promedio, pero <strong>no constituye una prueba formal de mala calibración</strong> en doce observaciones sintéticas.</p></section><section id="section-12"><div class="chapter-label">MÓDULO 12 / 34</div><h2>12. Un gráfico de calibración honesto con muestra pequeña</h2><p class="first-intuition">Un gráfico responsable debe aclarar cuántos módulos hay por grupo de riesgo, cómo se estima la supervivencia observada y cuánta incertidumbre queda. Se podrían formar dos grupos según riesgo predicho, pero tendrían muy pocos eventos y estimadores KM muy inestables. Para introducir el concepto, es mejor mostrar primero las predicciones individuales, distinguir con símbolos fallas y censura, y contrastar el promedio predicho con el valor KM total. Una curva suave obtenida de pocos puntos puede ser estéticamente atractiva y estadísticamente engañosa.</p><p>La supervivencia media predicha de 0.4783 es inferior a la referencia KM de 0.5401 a ocho unidades. Se puede describir una tendencia a pronosticar más fallas en esta muestra diseñada; no se puede asegurar que exista una diferencia sistemática en una población real. No hemos definido una población de despliegue, ni contamos con suficientes sujetos independientes, ni una prueba de validación temporal. Sería improcedente construir bandas estrechas de incertidumbre sin datos adecuados.</p><p>En una validación amplia, una curva mostraría incidencia observada ajustada por censura en el eje vertical e incidencia media predicha en el horizontal. La diagonal representa acuerdo perfecto solo cuando los horizontes y definiciones coinciden. La selección de grupos o suavizadores debe estar declarada previamente. Debe informarse incertidumbre tanto en la estimación de supervivencia como en el proceso predictivo cuando corresponda, y evitar inferencias fuertes en los extremos con escasos sujetos.</p><p>La calibración requiere vigilancia después del entrenamiento, especialmente si se transporta el modelo a otra fábrica o cambian los criterios de seguimiento. Puede preservarse el orden de riesgos mientras cambia la tasa basal, deteriorándose las probabilidades absolutas. La <strong>recalibración</strong> podría ayudar, pero ha de evaluarse sobre datos nuevos. Ajustar una función de recalibración usando la misma muestra de prueba y luego presentarla como evidencia externa sería otra forma de contaminación de la evaluación.</p><figure class="charts-wrap" role="group"><svg role="img" aria-label="Comparación descriptiva del riesgo medio predicho con KM grupal. Un punto NO constituye una curva de calibración validada." height="324pt" version="1.1" viewbox="0 0 648 324" width="648pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="a11yfig3-cal-es-figure_1">
+<g id="a11yfig3-cal-es-patch_1">
+<path d="M 0 324 
+L 648 324 
+L 648 0 
+L 0 0 
+L 0 324 
+z
+" style="fill: none"></path>
+</g>
+<g id="a11yfig3-cal-es-axes_1">
+<g id="a11yfig3-cal-es-patch_2">
+<path d="M 47.72 282.04 
+L 629.28 282.04 
+L 629.28 14.76 
+L 47.72 14.76 
+L 47.72 282.04 
+z
+" style="fill: none"></path>
+</g>
+<g id="a11yfig3-cal-es-matplotlib.axis_1">
+<g id="a11yfig3-cal-es-xtick_1">
+<g id="a11yfig3-cal-es-line2d_1">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="a11yfig3-cal-es-m8eeba4ddc6" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig3-cal-es-m8eeba4ddc6" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-es-text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 47.72 296.638438)" x="47.72" y="296.638438">0.0</text>
+</g>
+</g>
+<g id="a11yfig3-cal-es-xtick_2">
+<g id="a11yfig3-cal-es-line2d_2">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="164.032" xlink:href="#a11yfig3-cal-es-m8eeba4ddc6" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-es-text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 164.032 296.638438)" x="164.032" y="296.638438">0.2</text>
+</g>
+</g>
+<g id="a11yfig3-cal-es-xtick_3">
+<g id="a11yfig3-cal-es-line2d_3">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="280.344" xlink:href="#a11yfig3-cal-es-m8eeba4ddc6" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-es-text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 280.344 296.638438)" x="280.344" y="296.638438">0.4</text>
+</g>
+</g>
+<g id="a11yfig3-cal-es-xtick_4">
+<g id="a11yfig3-cal-es-line2d_4">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="396.656" xlink:href="#a11yfig3-cal-es-m8eeba4ddc6" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-es-text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 396.656 296.638438)" x="396.656" y="296.638438">0.6</text>
+</g>
+</g>
+<g id="a11yfig3-cal-es-xtick_5">
+<g id="a11yfig3-cal-es-line2d_5">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="512.968" xlink:href="#a11yfig3-cal-es-m8eeba4ddc6" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-es-text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 512.968 296.638438)" x="512.968" y="296.638438">0.8</text>
+</g>
+</g>
+<g id="a11yfig3-cal-es-xtick_6">
+<g id="a11yfig3-cal-es-line2d_6">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="629.28" xlink:href="#a11yfig3-cal-es-m8eeba4ddc6" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-es-text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 629.28 296.638438)" x="629.28" y="296.638438">1.0</text>
+</g>
+</g>
+<g id="a11yfig3-cal-es-text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 338.5 310.316563)" x="338.5" y="310.316563">Riesgo promedio predicho</text>
+</g>
+</g>
+<g id="a11yfig3-cal-es-matplotlib.axis_2">
+<g id="a11yfig3-cal-es-ytick_1">
+<g id="a11yfig3-cal-es-line2d_7">
+<path clip-path="url(#a11yfig3-cal-es-pd9b5a48829)" d="M 47.72 282.04 
+L 629.28 282.04 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig3-cal-es-line2d_8">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="a11yfig3-cal-es-m5febe93e0d" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig3-cal-es-m5febe93e0d" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-es-text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 285.839219)" x="40.72" y="285.839219">0.0</text>
+</g>
+</g>
+<g id="a11yfig3-cal-es-ytick_2">
+<g id="a11yfig3-cal-es-line2d_9">
+<path clip-path="url(#a11yfig3-cal-es-pd9b5a48829)" d="M 47.72 228.584 
+L 629.28 228.584 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig3-cal-es-line2d_10">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig3-cal-es-m5febe93e0d" y="228.584"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-es-text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 232.383219)" x="40.72" y="232.383219">0.2</text>
+</g>
+</g>
+<g id="a11yfig3-cal-es-ytick_3">
+<g id="a11yfig3-cal-es-line2d_11">
+<path clip-path="url(#a11yfig3-cal-es-pd9b5a48829)" d="M 47.72 175.128 
+L 629.28 175.128 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig3-cal-es-line2d_12">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig3-cal-es-m5febe93e0d" y="175.128"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-es-text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 178.927219)" x="40.72" y="178.927219">0.4</text>
+</g>
+</g>
+<g id="a11yfig3-cal-es-ytick_4">
+<g id="a11yfig3-cal-es-line2d_13">
+<path clip-path="url(#a11yfig3-cal-es-pd9b5a48829)" d="M 47.72 121.672 
+L 629.28 121.672 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig3-cal-es-line2d_14">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig3-cal-es-m5febe93e0d" y="121.672"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-es-text_11">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 125.471219)" x="40.72" y="125.471219">0.6</text>
+</g>
+</g>
+<g id="a11yfig3-cal-es-ytick_5">
+<g id="a11yfig3-cal-es-line2d_15">
+<path clip-path="url(#a11yfig3-cal-es-pd9b5a48829)" d="M 47.72 68.216 
+L 629.28 68.216 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig3-cal-es-line2d_16">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig3-cal-es-m5febe93e0d" y="68.216"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-es-text_12">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 72.015219)" x="40.72" y="72.015219">0.8</text>
+</g>
+</g>
+<g id="a11yfig3-cal-es-ytick_6">
+<g id="a11yfig3-cal-es-line2d_17">
+<path clip-path="url(#a11yfig3-cal-es-pd9b5a48829)" d="M 47.72 14.76 
+L 629.28 14.76 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig3-cal-es-line2d_18">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig3-cal-es-m5febe93e0d" y="14.76"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-es-text_13">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 18.559219)" x="40.72" y="18.559219">1.0</text>
+</g>
+</g>
+<g id="a11yfig3-cal-es-text_14">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-90 18.737188 148.4)" x="18.737188" y="148.4">Riesgo grupal KM a 8</text>
+</g>
+</g>
+<g id="a11yfig3-cal-es-line2d_19">
+<path clip-path="url(#a11yfig3-cal-es-pd9b5a48829)" d="M 47.72 282.04 
+L 629.28 14.76 
+" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #9ca3af; stroke-width: 1.5"></path>
+</g>
+<g id="a11yfig3-cal-es-patch_3">
+<path d="M 47.72 282.04 
+L 47.72 14.76 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig3-cal-es-patch_4">
+<path d="M 47.72 282.04 
+L 629.28 282.04 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig3-cal-es-PathCollection_1">
+<defs>
+<path d="M 0 5.700877 
+C 1.51189 5.700877 2.962061 5.100197 4.031129 4.031129 
+C 5.100197 2.962061 5.700877 1.51189 5.700877 0 
+C 5.700877 -1.51189 5.100197 -2.962061 4.031129 -4.031129 
+C 2.962061 -5.100197 1.51189 -5.700877 0 -5.700877 
+C -1.51189 -5.700877 -2.962061 -5.100197 -4.031129 -4.031129 
+C -5.100197 -2.962061 -5.700877 -1.51189 -5.700877 0 
+C -5.700877 1.51189 -5.100197 2.962061 -4.031129 4.031129 
+C -2.962061 5.100197 -1.51189 5.700877 0 5.700877 
+z
+" id="a11yfig3-cal-es-m42e762e37e" style="stroke: #2563eb"></path>
+</defs>
+<g clip-path="url(#a11yfig3-cal-es-pd9b5a48829)">
+<use style="fill: #2563eb; stroke: #2563eb" x="351.100467" xlink:href="#a11yfig3-cal-es-m42e762e37e" y="159.124198"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-es-legend_1">
+<g id="a11yfig3-cal-es-patch_5">
+<path d="M 484.797656 277.54 
+L 622.98 277.54 
+Q 624.78 277.54 624.78 275.74 
+L 624.78 249.859375 
+Q 624.78 248.059375 622.98 248.059375 
+L 484.797656 248.059375 
+Q 482.997656 248.059375 482.997656 249.859375 
+L 482.997656 275.74 
+Q 482.997656 277.54 484.797656 277.54 
+z
+" style="fill: #ffffff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"></path>
+</g>
+<g id="a11yfig3-cal-es-line2d_20">
+<path d="M 486.597656 255.707969 
+L 495.597656 255.707969 
+L 504.597656 255.707969 
+" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #9ca3af; stroke-width: 1.5"></path>
+</g>
+<g id="a11yfig3-cal-es-text_15">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 511.797656 258.857969)" x="511.797656" y="258.857969">Calibración perfecta</text>
+</g>
+<g id="a11yfig3-cal-es-PathCollection_2">
+<g>
+<use style="fill: #2563eb; stroke: #2563eb" x="495.597656" xlink:href="#a11yfig3-cal-es-m42e762e37e" y="269.705781"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-es-text_16">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 511.797656 272.068281)" x="511.797656" y="272.068281">Solo resumen ilustrativo</text>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="a11yfig3-cal-es-pd9b5a48829">
+<rect height="267.28" width="581.56" x="47.72" y="14.76"></rect>
+</clippath>
+</defs>
+</svg><figcaption>Comparación descriptiva del riesgo medio predicho con KM grupal. Un punto NO constituye una curva de calibración validada.</figcaption></figure></section><section id="section-13"><div class="chapter-label">MÓDULO 13 / 34</div><h2>13. Del Brier binario al Brier Score de supervivencia censurada</h2><p class="first-intuition">Para un resultado binario completamente observado a horizonte \(\tau\), el Brier Score promedia el cuadrado de la diferencia entre el indicador real de supervivencia y la probabilidad pronosticada. Quien falla hasta ocho tiene resultado \(Z=0\); quien sobrevive observado más allá de ocho tiene \(Z=1\). Si se pronostica supervivencia 0.80 y el equipo falla en el tiempo 3, el error cuadrado es \((0-0.80)^2=0.64\). Si realmente supera ocho, el error es \((1-0.80)^2=0.04\). El castigo depende de cuán lejos quedó la probabilidad de lo que se observó.</p><div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[BS(\tau)=\frac1n\sum_{i=1}^n\bigl[I(T_i&gt;\tau)-\widehat S_i(\tau)\bigr]^2.\]</div></div><p>La fórmula presupone que conocemos el estado verdadero de supervivencia al horizonte para todas las filas. En C y F eso no sucede. Codificarlos como sobrevivientes asignaría un uno falso, mientras excluirlos sin corrección alteraría la población evaluada. Para estimar el error promedio de la población originalmente incorporada necesitamos compensar matemáticamente la probabilidad de que cada resultado permanezca observable hasta el momento requerido.</p><p>La idea de <strong>Inverse Probability of Censoring Weighting (IPCW)</strong> consiste en ponderar una contribución observable por el inverso de su probabilidad de permanecer observable. La falla de un módulo en tiempo 5 requiere seguimiento hasta 5; el estado de supervivencia a 8 exige seguimiento hasta 8. Cuando se satisfacen los supuestos apropiados, la ponderación permite estimar el promedio deseado aunque existan estados incompletos. Los pesos muy grandes aumentan la variabilidad y ningún peso elimina automáticamente la censura informativa no modelada.</p><p>Estamos aplicando principios de Missing Data al contexto de supervivencia. Derivaremos la función de supervivencia de la censura, sustituiremos todas las observaciones en una fórmula verificable y leeremos el resultado como un error de predicción, no como una probabilidad de evento. Comprender el mecanismo es más importante que llamar a una función estadística especializada.</p></section><section id="section-14"><div class="chapter-label">MÓDULO 14 / 34</div><h2>14. Estimar la distribución de censura, no la distribución de falla</h2><p class="first-intuition">Sea \(G(t)=P(C&gt;t)\), la probabilidad de que una unidad conserve posibilidad de observación más allá de \(t\). Puede estimarse con <strong>Reverse Kaplan–Meier</strong>, intercambiando los papeles de falla y censura para modelar el proceso de finalización del seguimiento. No es la misma curva que \(S_{KM}(t)\) para fallas: una describe observabilidad, la otra tiempo hasta el evento científico. Confundirlas produce pesos y estimandos incorrectos.</p><p>La primera censura original ocurre en 4. De doce sujetos iniciales, A y B ya fallaron, así que quedan diez en riesgo justo antes de 4. La censura de C produce factor \((10-1)/10=9/10=0.9\). Las fallas originales en 5 y 6 reducen el conjunto de riesgo siguiente, pero no hacen caer el producto de supervivencia de la censura. En 7 permanecen siete sujetos en riesgo; F se censura y aporta factor \((7-1)/7=6/7\). Obtenemos \(G(7)=0.9(6/7)=27/35\approx0.77143\). No hay nuevas censuras entre 7 y nuestro horizonte 8.</p><div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\widehat G(4)=\frac9{10}=0.9,\qquad \widehat G(8)=\frac9{10}\frac67=\frac{27}{35}\approx0.77143.\]</div></div><p>Para fallas en 2 y 3, anteriores a la primera censura, el peso es uno. Para fallas en 5 y 6, dividimos entre 0.9. La falla exactamente en 8 requiere \(G(8-)\), la supervivencia de censura inmediatamente anterior, igual aquí a \(27/35\) porque no hay empate. Los sobrevivientes observados más allá de 8 usan \(G(8)\). Cuando coinciden fallas y censuras, debe definirse una convención de tratamiento de empates y conservarla en todos los cálculos.</p><p>Si la posibilidad de censura depende de características medidas, un Reverse KM agrupado puede ser insuficiente. Podría requerirse un modelo condicional \(G(t\mid x)\). Debe revisarse si existen probabilidades cercanas a cero, pues sus inversos provocan contribuciones dominantes. Calcular un Brier en un horizonte prácticamente sin observación no es evidencia científica confiable, aun si el software devuelve seis decimales.</p></section><section id="section-15"><div class="chapter-label">MÓDULO 15 / 34</div><h2>15. Derivar y calcular el IPCW Brier Score a ocho unidades</h2><p class="first-intuition">La fórmula ajustada separa dos clases de contribuciones disponibles. Quien <strong>falla hasta ocho</strong> tiene supervivencia verdadera cero y aporta el cuadrado de la supervivencia pronosticada, dividido entre la probabilidad de ser observado hasta su falla. Quien se sabe <strong>libre de evento más allá de ocho</strong> tiene supervivencia verdadera uno y aporta el cuadrado del riesgo pronosticado, dividido entre la probabilidad de conservar observación hasta el horizonte. Quien se censura antes de ocho no aporta un error cuadrado observable directamente; su término en este estimador vale cero, sin que ello signifique que haya sobrevivido o que el modelo acertó.</p><div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\widehat{BS}_{IPCW}(\tau)=\frac1n\sum_{i=1}^{n}\left[\frac{I(Y_i\le\tau,\delta_i=1)\widehat S_i(\tau)^2}{\widehat G(Y_i-)}+\frac{I(Y_i&gt;\tau)(1-\widehat S_i(\tau))^2}{\widehat G(\tau)}\right].\]</div></div><p>Sustituimos los doce casos. A falla en 2 y aporta \(0.24^2/1=0.057600\). B falla en 3: \(0.32^2/1=0.102400\). D falla en 5, después de la primera censura, y aporta \(0.30^2/0.9=0.100000\). E falla en 6: \(0.47^2/0.9\approx0.245444\). G falla exactamente en 8: \(0.40^2/(27/35)\approx0.207407\). C y F no se recodifican como supervivientes, pues salieron antes del horizonte y desconocemos sus estados verdaderos en 8.</p><p>Para H, I, J, K y L, seguidos más allá del horizonte, aplicamos \(35/27\) a los cuadrados de sus probabilidades pronosticadas de falla. Los resultados son \(0.42^2(35/27)\approx0.228667\), \(0.46^2(35/27)\approx0.274296\), \(0.32^2(35/27)\approx0.132741\), \(0.26^2(35/27)\approx0.087630\) y \(0.35^2(35/27)\approx0.158796\). Observa que usamos \(1-S_i(8)\) para sujetos que sí sobrevivieron, no el propio valor \(S_i(8)\).</p><div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\widehat{BS}_{IPCW}(8)=\frac{0.057600+0.102400+0.100000+0.245444+0.207407+0.228667+0.274296+0.132741+0.087630+0.158796}{12}\approx\boxed{0.132915}.\]</div></div><p>Interpretamos 0.132915 como error cuadrático medio de probabilidades bajo corrección de censura y sus supuestos. Un valor menor suele indicar mejor predicción cuando se compara <strong>la misma población y horizonte</strong>. No es riesgo de falla, Hazard Ratio ni efecto causal. Comparar directamente un Brier de ocho unidades con uno de veinte sin aclaraciones no constituye una comparación justa.</p></section><section id="section-16"><div class="chapter-label">MÓDULO 16 / 34</div><h2>16. Auditoría completa de las contribuciones individuales</h2><p class="first-intuition">Ver cada contribución permite detectar errores que un solo promedio ocultaría. Los ceros correspondientes a C y F no representan predicciones perfectas: indican que su resultado a ocho es desconocido. La contribución relativamente elevada de E surge de pronosticar supervivencia 0.47 pese a observar falla, ampliada por el peso de observabilidad. I sobrevivió hasta más de ocho, pero el modelo le asignó supervivencia 0.54 y recibió un error cuadrado de su riesgo 0.46, incrementado por \(35/27\).</p><div class="table-wrap"><table>
+<thead>
+<tr>
+<th style="text-align:left" scope="col">Módulo</th>
+<th style="text-align:left" scope="col">Situación en \(\tau=8\)</th>
+<th style="text-align:right" scope="col">Error cuadrado o dato desconocido</th>
+<th style="text-align:right" scope="col">Contribución IPCW</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">A</td>
+<td style="text-align:left">Falla hasta 8</td>
+<td style="text-align:right">\(0.24^2\)</td>
+<td style="text-align:right">0.057600</td>
+</tr>
+<tr>
+<td style="text-align:left">B</td>
+<td style="text-align:left">Falla hasta 8</td>
+<td style="text-align:right">\(0.32^2\)</td>
+<td style="text-align:right">0.102400</td>
+</tr>
+<tr>
+<td style="text-align:left">C</td>
+<td style="text-align:left">Censura antes de 8</td>
+<td style="text-align:right">Desconocido</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td style="text-align:left">D</td>
+<td style="text-align:left">Falla hasta 8</td>
+<td style="text-align:right">\(0.30^2\)</td>
+<td style="text-align:right">0.100000</td>
+</tr>
+<tr>
+<td style="text-align:left">E</td>
+<td style="text-align:left">Falla hasta 8</td>
+<td style="text-align:right">\(0.47^2\)</td>
+<td style="text-align:right">0.245444</td>
+</tr>
+<tr>
+<td style="text-align:left">F</td>
+<td style="text-align:left">Censura antes de 8</td>
+<td style="text-align:right">Desconocido</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td style="text-align:left">G</td>
+<td style="text-align:left">Falla en 8</td>
+<td style="text-align:right">\(0.40^2\)</td>
+<td style="text-align:right">0.207407</td>
+</tr>
+<tr>
+<td style="text-align:left">H</td>
+<td style="text-align:left">Sobrevive observado más allá de 8</td>
+<td style="text-align:right">\(0.42^2\)</td>
+<td style="text-align:right">0.228667</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">Sobrevive observado más allá de 8</td>
+<td style="text-align:right">\(0.46^2\)</td>
+<td style="text-align:right">0.274296</td>
+</tr>
+<tr>
+<td style="text-align:left">J</td>
+<td style="text-align:left">Sobrevive observado más allá de 8</td>
+<td style="text-align:right">\(0.32^2\)</td>
+<td style="text-align:right">0.132741</td>
+</tr>
+<tr>
+<td style="text-align:left">K</td>
+<td style="text-align:left">Sobrevive observado más allá de 8</td>
+<td style="text-align:right">\(0.26^2\)</td>
+<td style="text-align:right">0.087630</td>
+</tr>
+<tr>
+<td style="text-align:left">L</td>
+<td style="text-align:left">Sobrevive observado más allá de 8</td>
+<td style="text-align:right">\(0.35^2\)</td>
+<td style="text-align:right">0.158796</td>
+</tr>
+</tbody>
+</table></div><p>Un Brier ordinario <strong>mal codificado</strong>, que considera supervivientes a todos los censurados antes del horizonte, resultaría aproximadamente 0.13745 con estos valores específicos. No está demasiado lejos de 0.132915, pero eso no justifica el procedimiento: la cercanía es circunstancial y en otras bases el error puede cambiar sustancialmente. Los métodos se validan por el estimando y las condiciones, no porque dos cifras casualmente se parezcan.</p><p>El Brier puede evaluarse a lo largo de diferentes tiempos para producir una curva. El <strong>Integrated Brier Score (IBS)</strong> integra o promedia el error sobre un intervalo declarado, aplicando una regla de integración y escala explícita. La elección del intervalo importa: las zonas tardías pueden carecer de suficientes sujetos en riesgo o de observabilidad. Un modelo puede funcionar cerca de ocho y ser pobre a veinte. La integración no debe ocultar qué horizonte corresponde a la decisión.</p><blockquote>
+<p><strong>Comprobación:</strong> Toda curva de supervivencia válida debe permanecer entre cero y uno y ser no creciente en el tiempo. Predicciones aisladas a ocho pueden parecer razonables incluso cuando una curva generada incorrectamente aumenta entre siete y ocho.</p>
+</blockquote><figure class="charts-wrap" role="group"><svg role="img" aria-label="Contribuciones al Brier IPCW a ocho; los dos censurados antes del horizonte tienen estado desconocido, no error predictivo nulo." height="324pt" version="1.1" viewbox="0 0 648 324" width="648pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="a11yfig4-brier-es-figure_1">
+<g id="a11yfig4-brier-es-patch_1">
+<path d="M 0 324 
+L 648 324 
+L 648 0 
+L 0 0 
+L 0 324 
+z
+" style="fill: none"></path>
+</g>
+<g id="a11yfig4-brier-es-axes_1">
+<g id="a11yfig4-brier-es-patch_2">
+<path d="M 54.38 282.04 
+L 637.2 282.04 
+L 637.2 10.8 
+L 54.38 10.8 
+L 54.38 282.04 
+z
+" style="fill: none"></path>
+</g>
+<g id="a11yfig4-brier-es-patch_3">
+<path clip-path="url(#a11yfig4-brier-es-pc8ddeff0b9)" d="M 80.871818 282.04 
+L 116.792928 282.04 
+L 116.792928 227.794093 
+L 80.871818 227.794093 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="a11yfig4-brier-es-patch_4">
+<path clip-path="url(#a11yfig4-brier-es-pc8ddeff0b9)" d="M 125.773205 282.04 
+L 161.694314 282.04 
+L 161.694314 185.602832 
+L 125.773205 185.602832 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="a11yfig4-brier-es-patch_5">
+<path clip-path="url(#a11yfig4-brier-es-pc8ddeff0b9)" d="M 170.674592 282.04 
+L 206.595701 282.04 
+L 206.595701 282.04 
+L 170.674592 282.04 
+z
+" style="fill: #e3e8f0"></path>
+</g>
+<g id="a11yfig4-brier-es-patch_6">
+<path clip-path="url(#a11yfig4-brier-es-pc8ddeff0b9)" d="M 215.575978 282.04 
+L 251.497088 282.04 
+L 251.497088 187.863078 
+L 215.575978 187.863078 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="a11yfig4-brier-es-patch_7">
+<path clip-path="url(#a11yfig4-brier-es-pc8ddeff0b9)" d="M 260.477365 282.04 
+L 296.398475 282.04 
+L 296.398475 50.887977 
+L 260.477365 50.887977 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="a11yfig4-brier-es-patch_8">
+<path clip-path="url(#a11yfig4-brier-es-pc8ddeff0b9)" d="M 305.378752 282.04 
+L 341.299861 282.04 
+L 341.299861 282.04 
+L 305.378752 282.04 
+z
+" style="fill: #e3e8f0"></path>
+</g>
+<g id="a11yfig4-brier-es-patch_9">
+<path clip-path="url(#a11yfig4-brier-es-pc8ddeff0b9)" d="M 350.280139 282.04 
+L 386.201248 282.04 
+L 386.201248 86.710087 
+L 350.280139 86.710087 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="a11yfig4-brier-es-patch_10">
+<path clip-path="url(#a11yfig4-brier-es-pc8ddeff0b9)" d="M 395.181525 282.04 
+L 431.102635 282.04 
+L 431.102635 66.688771 
+L 395.181525 66.688771 
+z
+" style="fill: #57a5ac"></path>
+</g>
+<g id="a11yfig4-brier-es-patch_11">
+<path clip-path="url(#a11yfig4-brier-es-pc8ddeff0b9)" d="M 440.082912 282.04 
+L 476.004022 282.04 
+L 476.004022 23.71619 
+L 440.082912 23.71619 
+z
+" style="fill: #57a5ac"></path>
+</g>
+<g id="a11yfig4-brier-es-patch_12">
+<path clip-path="url(#a11yfig4-brier-es-pc8ddeff0b9)" d="M 484.984299 282.04 
+L 520.905408 282.04 
+L 520.905408 157.028856 
+L 484.984299 157.028856 
+z
+" style="fill: #57a5ac"></path>
+</g>
+<g id="a11yfig4-brier-es-patch_13">
+<path clip-path="url(#a11yfig4-brier-es-pc8ddeff0b9)" d="M 529.885686 282.04 
+L 565.806795 282.04 
+L 565.806795 199.513112 
+L 529.885686 199.513112 
+z
+" style="fill: #57a5ac"></path>
+</g>
+<g id="a11yfig4-brier-es-patch_14">
+<path clip-path="url(#a11yfig4-brier-es-pc8ddeff0b9)" d="M 574.787072 282.04 
+L 610.708182 282.04 
+L 610.708182 132.490536 
+L 574.787072 132.490536 
+z
+" style="fill: #57a5ac"></path>
+</g>
+<g id="a11yfig4-brier-es-matplotlib.axis_1">
+<g id="a11yfig4-brier-es-xtick_1">
+<g id="a11yfig4-brier-es-line2d_1">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="a11yfig4-brier-es-m2ab55c6305" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="98.832373" xlink:href="#a11yfig4-brier-es-m2ab55c6305" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-es-text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 98.832373 296.638438)" x="98.832373" y="296.638438">A</text>
+</g>
+</g>
+<g id="a11yfig4-brier-es-xtick_2">
+<g id="a11yfig4-brier-es-line2d_2">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="143.73376" xlink:href="#a11yfig4-brier-es-m2ab55c6305" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-es-text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 143.73376 296.638438)" x="143.73376" y="296.638438">B</text>
+</g>
+</g>
+<g id="a11yfig4-brier-es-xtick_3">
+<g id="a11yfig4-brier-es-line2d_3">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="188.635146" xlink:href="#a11yfig4-brier-es-m2ab55c6305" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-es-text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 188.635146 296.638438)" x="188.635146" y="296.638438">C</text>
+</g>
+</g>
+<g id="a11yfig4-brier-es-xtick_4">
+<g id="a11yfig4-brier-es-line2d_4">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="233.536533" xlink:href="#a11yfig4-brier-es-m2ab55c6305" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-es-text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 233.536533 296.638438)" x="233.536533" y="296.638438">D</text>
+</g>
+</g>
+<g id="a11yfig4-brier-es-xtick_5">
+<g id="a11yfig4-brier-es-line2d_5">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="278.43792" xlink:href="#a11yfig4-brier-es-m2ab55c6305" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-es-text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 278.43792 296.638438)" x="278.43792" y="296.638438">E</text>
+</g>
+</g>
+<g id="a11yfig4-brier-es-xtick_6">
+<g id="a11yfig4-brier-es-line2d_6">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="323.339307" xlink:href="#a11yfig4-brier-es-m2ab55c6305" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-es-text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 323.339307 296.638438)" x="323.339307" y="296.638438">F</text>
+</g>
+</g>
+<g id="a11yfig4-brier-es-xtick_7">
+<g id="a11yfig4-brier-es-line2d_7">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="368.240693" xlink:href="#a11yfig4-brier-es-m2ab55c6305" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-es-text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 368.240693 296.638438)" x="368.240693" y="296.638438">G</text>
+</g>
+</g>
+<g id="a11yfig4-brier-es-xtick_8">
+<g id="a11yfig4-brier-es-line2d_8">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="413.14208" xlink:href="#a11yfig4-brier-es-m2ab55c6305" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-es-text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 413.14208 296.638438)" x="413.14208" y="296.638438">H</text>
+</g>
+</g>
+<g id="a11yfig4-brier-es-xtick_9">
+<g id="a11yfig4-brier-es-line2d_9">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="458.043467" xlink:href="#a11yfig4-brier-es-m2ab55c6305" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-es-text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 458.043467 296.638438)" x="458.043467" y="296.638438">I</text>
+</g>
+</g>
+<g id="a11yfig4-brier-es-xtick_10">
+<g id="a11yfig4-brier-es-line2d_10">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="502.944854" xlink:href="#a11yfig4-brier-es-m2ab55c6305" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-es-text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 502.944854 296.638438)" x="502.944854" y="296.638438">J</text>
+</g>
+</g>
+<g id="a11yfig4-brier-es-xtick_11">
+<g id="a11yfig4-brier-es-line2d_11">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="547.84624" xlink:href="#a11yfig4-brier-es-m2ab55c6305" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-es-text_11">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 547.84624 296.638438)" x="547.84624" y="296.638438">K</text>
+</g>
+</g>
+<g id="a11yfig4-brier-es-xtick_12">
+<g id="a11yfig4-brier-es-line2d_12">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="592.747627" xlink:href="#a11yfig4-brier-es-m2ab55c6305" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-es-text_12">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 592.747627 296.638438)" x="592.747627" y="296.638438">L</text>
+</g>
+</g>
+<g id="a11yfig4-brier-es-text_13">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 345.79 310.316563)" x="345.79" y="310.316563">Módulo</text>
+</g>
+</g>
+<g id="a11yfig4-brier-es-matplotlib.axis_2">
+<g id="a11yfig4-brier-es-ytick_1">
+<g id="a11yfig4-brier-es-line2d_13">
+<path clip-path="url(#a11yfig4-brier-es-pc8ddeff0b9)" d="M 54.38 282.04 
+L 637.2 282.04 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig4-brier-es-line2d_14">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="a11yfig4-brier-es-m41936718e9" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="54.38" xlink:href="#a11yfig4-brier-es-m41936718e9" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-es-text_14">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 47.38 285.839219)" x="47.38" y="285.839219">0.00</text>
+</g>
+</g>
+<g id="a11yfig4-brier-es-ytick_2">
+<g id="a11yfig4-brier-es-line2d_15">
+<path clip-path="url(#a11yfig4-brier-es-pc8ddeff0b9)" d="M 54.38 234.951539 
+L 637.2 234.951539 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig4-brier-es-line2d_16">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="54.38" xlink:href="#a11yfig4-brier-es-m41936718e9" y="234.951539"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-es-text_15">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 47.38 238.750758)" x="47.38" y="238.750758">0.05</text>
+</g>
+</g>
+<g id="a11yfig4-brier-es-ytick_3">
+<g id="a11yfig4-brier-es-line2d_17">
+<path clip-path="url(#a11yfig4-brier-es-pc8ddeff0b9)" d="M 54.38 187.863078 
+L 637.2 187.863078 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig4-brier-es-line2d_18">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="54.38" xlink:href="#a11yfig4-brier-es-m41936718e9" y="187.863078"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-es-text_16">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 47.38 191.662297)" x="47.38" y="191.662297">0.10</text>
+</g>
+</g>
+<g id="a11yfig4-brier-es-ytick_4">
+<g id="a11yfig4-brier-es-line2d_19">
+<path clip-path="url(#a11yfig4-brier-es-pc8ddeff0b9)" d="M 54.38 140.774617 
+L 637.2 140.774617 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig4-brier-es-line2d_20">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="54.38" xlink:href="#a11yfig4-brier-es-m41936718e9" y="140.774617"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-es-text_17">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 47.38 144.573835)" x="47.38" y="144.573835">0.15</text>
+</g>
+</g>
+<g id="a11yfig4-brier-es-ytick_5">
+<g id="a11yfig4-brier-es-line2d_21">
+<path clip-path="url(#a11yfig4-brier-es-pc8ddeff0b9)" d="M 54.38 93.686156 
+L 637.2 93.686156 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig4-brier-es-line2d_22">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="54.38" xlink:href="#a11yfig4-brier-es-m41936718e9" y="93.686156"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-es-text_18">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 47.38 97.485374)" x="47.38" y="97.485374">0.20</text>
+</g>
+</g>
+<g id="a11yfig4-brier-es-ytick_6">
+<g id="a11yfig4-brier-es-line2d_23">
+<path clip-path="url(#a11yfig4-brier-es-pc8ddeff0b9)" d="M 54.38 46.597695 
+L 637.2 46.597695 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig4-brier-es-line2d_24">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="54.38" xlink:href="#a11yfig4-brier-es-m41936718e9" y="46.597695"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-es-text_19">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 47.38 50.396913)" x="47.38" y="50.396913">0.25</text>
+</g>
+</g>
+<g id="a11yfig4-brier-es-text_20">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-90 19.034688 146.42)" x="19.034688" y="146.42">Contribución ponderada</text>
+</g>
+</g>
+<g id="a11yfig4-brier-es-line2d_25">
+<path clip-path="url(#a11yfig4-brier-es-pc8ddeff0b9)" d="M 54.38 156.864628 
+L 637.2 156.864628 
+" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #b56523; stroke-width: 1.5"></path>
+</g>
+<g id="a11yfig4-brier-es-patch_15">
+<path d="M 54.38 282.04 
+L 54.38 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig4-brier-es-patch_16">
+<path d="M 54.38 282.04 
+L 637.2 282.04 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig4-brier-es-legend_1">
+<g id="a11yfig4-brier-es-patch_17">
+<path d="M 495.43125 33.478125 
+L 630.2 33.478125 
+Q 632.2 33.478125 632.2 31.478125 
+L 632.2 17.8 
+Q 632.2 15.8 630.2 15.8 
+L 495.43125 15.8 
+Q 493.43125 15.8 493.43125 17.8 
+L 493.43125 31.478125 
+Q 493.43125 33.478125 495.43125 33.478125 
+z
+" style="fill: #ffffff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"></path>
+</g>
+<g id="a11yfig4-brier-es-line2d_26">
+<path d="M 497.43125 23.898438 
+L 507.43125 23.898438 
+L 517.43125 23.898438 
+" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #b56523; stroke-width: 1.5"></path>
+</g>
+<g id="a11yfig4-brier-es-text_21">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 525.43125 27.398438)" x="525.43125" y="27.398438">Brier IPCW ≈ 0.1329</text>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="a11yfig4-brier-es-pc8ddeff0b9">
+<rect height="271.24" width="582.82" x="54.38" y="10.8"></rect>
+</clippath>
+</defs>
+</svg><figcaption>Contribuciones al Brier IPCW a ocho; los dos censurados antes del horizonte tienen estado desconocido, no error predictivo nulo.</figcaption></figure></section><section id="section-17"><div class="chapter-label">MÓDULO 17 / 34</div><h2>17. Comparación con un predictor de referencia explícito</h2><p class="first-intuition">Una métrica carece de interpretación práctica cuando no existe alternativa. Un punto de comparación sencillo asigna a todos la misma probabilidad de supervivencia a ocho, idealmente estimada en datos de entrenamiento independientes. Sería tentador usar el KM de la propia muestra evaluada para construir esa constante; podría servir como descripción, pero sería una referencia in-sample optimista, no evidencia de desempeño externo. En este material tratamos el KM de aproximadamente 0.5401 como referencia conceptual, reconociendo su origen.</p><p>La evaluación justa obtiene el Brier del candidato y del modelo de referencia <strong>sobre exactamente los mismos sujetos</strong>, con idéntico horizonte y la misma estimación de pesos de censura. Definimos \(\Delta BS=BS_{candidato}-BS_{referencia}\). Si el resultado es negativo, el candidato presenta menor error cuadrático medio bajo esa evaluación; pero su importancia operativa depende de magnitud, incertidumbre, costos y consecuencias. Una diferencia en el sexto decimal no demuestra utilidad empresarial ni relevancia científica.</p><p>En discriminación, un predictor constante empata todos los puntajes y obtiene C-index 0.5 con medio crédito por empate en pares comparables. Nuestras predicciones ilustrativas alcanzan 0.8936, aunque fueron construidas para enseñar y no resultan de entrenamiento real. Un incremento frente a una constante puede deberse a información predictiva legítima, Leakage o una partición poco realista. El protocolo de validación debe distinguir estas posibilidades.</p><p>Para comparar KM, Cox y AFT, todos deben ajustarse únicamente en entrenamiento, y sus predicciones congeladas se evalúan en una misma prueba. Documenta número de eventos, proporción censurada y horizonte. Log-Likelihood o AIC dentro del entrenamiento evalúan aspectos distintos del error de predicción en personas nuevas; un ajuste excelente a la muestra usada puede generalizar mal. La evaluación no debe confundirse con una competencia de cifras inconmensurables.</p></section><section id="section-18"><div class="chapter-label">MÓDULO 18 / 34</div><h2>18. Incertidumbre: las unidades independientes no son los pares</h2><p class="first-intuition">Un C-index o Brier sin incertidumbre describe solo una muestra. Nuevos grupos independientes de módulos producirían valores diferentes. El intervalo debe reflejar las entidades que son independientes, cómo se entrenó el modelo y cómo se estimó la censura. Los 47 pares del ejemplo provienen de solo doce módulos: contarlos como 47 ensayos Bernoulli independientes es incorrecto porque un equipo participa reiteradamente en diferentes comparaciones.</p><p>Con suficientes módulos independientes, un <strong>Bootstrap por sujeto</strong> remuestrea identificadores completos con reemplazo, conservando juntos duración, indicador y predicción. En cada réplica se reestima \(G\) y se vuelve a calcular la métrica. Si queremos medir incertidumbre de todo el proceso predictivo, también debemos repetir el entrenamiento o definir un diseño anidado apropiado; remuestrear solo el test con predicciones fijas estima una pregunta más estrecha, condicionada al modelo. Hay que declarar cuál es el objetivo.</p><p>Cuando varios módulos pertenecen al mismo lote o fábrica, quizá corresponda un Cluster Bootstrap, pues el lote es una fuente de dependencia. Para validación futura en tiempo calendario, una estrategia temporal podría representar mejor la implementación que un remuestreo intercambiable. Ciertas réplicas Bootstrap pueden carecer de pares comparables o producir \(G(8)=0\), haciendo indefinido un estimador. Debe decidirse antes cómo manejar esas réplicas e informar su frecuencia. La muestra inventada de doce es especialmente vulnerable.</p><p>Un intervalo percentil podría usar los percentiles 2.5 y 97.5 de muchas réplicas, pero ejecutar dos mil replicaciones no garantiza cobertura correcta. Escasos grupos efectivos, censura severa, selección adaptativa y especificación incorrecta pueden invalidar los resultados. Por ello no publicamos un Confidence Interval ficticio para este dataset sintético. Explicamos qué tendría que comprobarse en una investigación verdadera y por qué la incertidumbre no puede separarse de su diseño.</p></section><section id="section-19"><div class="chapter-label">MÓDULO 19 / 34</div><h2>19. Horizontes, soporte de seguimiento y extrapolación</h2><p class="first-intuition">Toda predicción de supervivencia depende del tiempo. Preguntar por falla antes de cuatro unidades no es lo mismo que hacerlo antes de veinte. El horizonte de ocho corresponde a un momento con observaciones que todavía continúan después de él. Esto hace posible la demostración aritmética, aunque no demuestra que doce módulos basten para una decisión industrial. Los tiempos llegan hasta trece, pero la calidad de información se deteriora a medida que se reduce el número en riesgo.</p><p>En tiempos tardíos, pocos sujetos permanecen bajo observación y la función \(G(t)\) puede acercarse a cero. Los pesos IPCW contienen \(1/G(t)\) y entonces pueden crecer mucho. Un modelo AFT paramétrico continuará generando números más allá del máximo observado, pero esos números dependen de las colas supuestas de Weibull o Lognormal. El modelo Cox también tiene límites de soporte de su estimación basal. No poder pronosticar de forma confiable fuera del seguimiento observado es un hallazgo metodológico, no un defecto informático.</p><p>Elige anticipadamente un horizonte principal vinculado al programa de inspección y plantea horizontes secundarios como sensibilidad, no como oportunidades de escoger la cifra más atractiva. Un gráfico KM acompañado de cantidades en riesgo ayuda a visualizar dónde se agota evidencia. Para Calibration al horizonte declara cuántas observaciones se censuraron antes y qué estimador las considera. Si un subgrupo no conserva sujetos observables cerca del horizonte, no publiques una calibración detallada artificial.</p><p>Un informe serio diferencia claramente el <strong>rango respaldado por observaciones</strong> del intervalo de extrapolación gobernado por supuestos. «El modelo Weibull proyecta» no significa «observamos». Cuando están en juego seguridad, costos o decisiones clínicas, los conocimientos físicos y la validación externa pueden informar la plausibilidad de una extrapolación, pero no reemplazan datos de seguimiento longitudinal adecuados.</p></section><section id="section-20"><div class="chapter-label">MÓDULO 20 / 34</div><h2>20. Competing Risks: ¿qué evento queremos estimar?</h2><p class="first-intuition">Hasta ahora el evento era primera falla, mientras la pérdida administrativa del seguimiento era censura. En problemas reales, otra clase de evento puede <strong>impedir</strong> que el evento de interés ocurra como primer desenlace. Una máquina puede retirarse definitivamente por una falla mecánica diferente; un paciente puede fallecer por otra causa antes de manifestar la enfermedad estudiada. Estos son <strong>Competing Risks</strong>, no simplemente casos con seguimiento incompleto. La probabilidad de falla de causa A en un mundo con causa B difiere de una probabilidad hipotética sin competencia.</p><p>Sea \(T\) el tiempo al primer evento terminal y \(J\) la categoría que ocurre primero. La <strong>Cumulative Incidence Function (CIF)</strong> específica de la causa \(k\) es \(F_k(t)=P(T\le t,J=k)\). Expresa la probabilidad absoluta de haber experimentado esa causa como primer evento hasta el horizonte, en presencia de las demás causas posibles. La supervivencia libre de <strong>todo</strong> evento es \(S_{all}(t)=P(T&gt;t)\). Para causas excluyentes y exhaustivas, sus incidencias acumuladas suman \(1-S_{all}(t)\).</p><div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[F_k(t)=P(T\le t,J=k),\qquad \sum_kF_k(t)=1-S_{all}(t).\]</div></div><p>El Cause-Specific Hazard \(\lambda_k(t)\) mide la tasa instantánea del tipo \(k\) entre quienes aún no tuvieron ningún evento. La CIF depende tanto de esa tasa como de la supervivencia total: \(F_k(t)=\int_0^tS_{all}(u-)\,d\Lambda_k(u)\). Cuando otros eventos retiran sujetos del conjunto libre de eventos, pueden disminuir la probabilidad absoluta de que A sea el primero. Por ello un aumento en un Hazard específico no se traduce automáticamente en igual magnitud de riesgo acumulado.</p><p>Censurar eventos B en un KM que registra solo A puede responder a ciertas preguntas hipotéticas de <strong>net risk</strong>, bajo interpretaciones adicionales. Pero el complemento \(1-KM\) no estima directamente la incidencia absoluta de A en el mundo donde B sí ocurre. Lo verificaremos con cuatro sujetos, mostrando números diferentes obtenidos de los mismos datos.</p></section><section id="section-21"><div class="chapter-label">MÓDULO 21 / 34</div><h2>21. Contraejemplo numérico de Competing Risks con cuatro sujetos</h2><p class="first-intuition">Considera cuatro equipos hipotéticos incluidos al mismo tiempo y seguidos hasta su primer evento terminal o el cierre en tiempo 5. Antes del horizonte no existe censura administrativa. P experimenta falla tipo A en tiempo 1; Q experimenta el evento competidor B en tiempo 2; R tiene falla A en tiempo 3; y S llega sin evento al final del estudio en tiempo 5. Queremos conocer la probabilidad absoluta de que A sea el primer evento hasta tiempo 4 en esta cohorte totalmente sintética.</p><div class="table-wrap"><table>
+<thead>
+<tr>
+<th style="text-align:left" scope="col">Unidad</th>
+<th style="text-align:right" scope="col">Tiempo</th>
+<th style="text-align:left" scope="col">Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">P</td>
+<td style="text-align:right">1</td>
+<td style="text-align:left">Falla tipo A</td>
+</tr>
+<tr>
+<td style="text-align:left">Q</td>
+<td style="text-align:right">2</td>
+<td style="text-align:left">Evento competidor B</td>
+</tr>
+<tr>
+<td style="text-align:left">R</td>
+<td style="text-align:right">3</td>
+<td style="text-align:left">Falla tipo A</td>
+</tr>
+<tr>
+<td style="text-align:left">S</td>
+<td style="text-align:right">5</td>
+<td style="text-align:left">Final administrativo sin evento</td>
+</tr>
+</tbody>
+</table></div><p>En tiempo 1 todos los cuatro están en riesgo. El incremento de incidencia de A es \(S_{all}(1-)\cdot(1/4)=1(1/4)=0.25\). Después de A, la supervivencia libre de todo evento es \(3/4\). En tiempo 2, B reduce esa supervivencia a \((3/4)(2/3)=1/2\). En tiempo 3 quedan dos sujetos en riesgo y ocurre A; el incremento correspondiente es \((1/2)(1/2)=1/4\). La CIF de A hasta tiempo 4 es \(0.25+0.25=0.50\). La CIF de B es 0.25 y el porcentaje libre de cualquier evento es 0.25; suman uno.</p><div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\widehat F_A(4)=1\cdot\frac14+\frac12\cdot\frac12=\boxed{0.50}.\]</div></div><p>Apliquemos ahora <strong>incorrectamente</strong> Kaplan–Meier solo a A, tratando B como censura. En tiempo 1, el factor KM es \(3/4\). En tiempo 2, Q se elimina por «censura». En tiempo 3 quedan dos en riesgo, y la segunda falla A aporta factor \(1/2\). El resultado es \(S_{KM,A}(4)=(3/4)(1/2)=3/8\). Su complemento es \(1-3/8=5/8=0.625\), que <strong>no es 0.50</strong>. Sobreestima la incidencia de A en este ejemplo por 0.125, equivalentes a 12.5 puntos porcentuales.</p><div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[1-\widehat S_{KM,A}(4)=1-\frac38=\boxed{0.625}\ne\widehat F_A(4)=0.50.\]</div></div><p>La diferencia es estructural, no un redondeo. Censurar B trata la desaparición de Q como simple falta de observación, pero Q ya no puede experimentar A como <strong>primer</strong> desenlace. La incidencia acumulada reconoce ese hecho. La regresión avanzada Fine–Gray y otros modelos específicos quedan fuera del alcance central de esta guía. La lección transferible es definir primero la probabilidad científica que se necesita y solo después elegir el estimador.</p><figure class="charts-wrap" role="group"><svg role="img" aria-label="Incidencia acumulada de A frente a uno menos KM censurando B. La diferencia se debe al estimando y no al redondeo." height="324pt" version="1.1" viewbox="0 0 648 324" width="648pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="a11yfig5-comp-es-figure_1">
+<g id="a11yfig5-comp-es-patch_1">
+<path d="M 0 324 
+L 648 324 
+L 648 0 
+L 0 0 
+L 0 324 
+z
+" style="fill: none"></path>
+</g>
+<g id="a11yfig5-comp-es-axes_1">
+<g id="a11yfig5-comp-es-patch_2">
+<path d="M 47.72 282.04 
+L 637.2 282.04 
+L 637.2 10.8 
+L 47.72 10.8 
+L 47.72 282.04 
+z
+" style="fill: none"></path>
+</g>
+<g id="a11yfig5-comp-es-matplotlib.axis_1">
+<g id="a11yfig5-comp-es-xtick_1">
+<g id="a11yfig5-comp-es-line2d_1">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="a11yfig5-comp-es-m341510f669" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig5-comp-es-m341510f669" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-es-text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 47.72 296.638438)" x="47.72" y="296.638438">0.0</text>
+</g>
+</g>
+<g id="a11yfig5-comp-es-xtick_2">
+<g id="a11yfig5-comp-es-line2d_2">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="117.89619" xlink:href="#a11yfig5-comp-es-m341510f669" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-es-text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 117.89619 296.638438)" x="117.89619" y="296.638438">0.5</text>
+</g>
+</g>
+<g id="a11yfig5-comp-es-xtick_3">
+<g id="a11yfig5-comp-es-line2d_3">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="188.072381" xlink:href="#a11yfig5-comp-es-m341510f669" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-es-text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 188.072381 296.638438)" x="188.072381" y="296.638438">1.0</text>
+</g>
+</g>
+<g id="a11yfig5-comp-es-xtick_4">
+<g id="a11yfig5-comp-es-line2d_4">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="258.248571" xlink:href="#a11yfig5-comp-es-m341510f669" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-es-text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 258.248571 296.638438)" x="258.248571" y="296.638438">1.5</text>
+</g>
+</g>
+<g id="a11yfig5-comp-es-xtick_5">
+<g id="a11yfig5-comp-es-line2d_5">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="328.424762" xlink:href="#a11yfig5-comp-es-m341510f669" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-es-text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 328.424762 296.638438)" x="328.424762" y="296.638438">2.0</text>
+</g>
+</g>
+<g id="a11yfig5-comp-es-xtick_6">
+<g id="a11yfig5-comp-es-line2d_6">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="398.600952" xlink:href="#a11yfig5-comp-es-m341510f669" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-es-text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 398.600952 296.638438)" x="398.600952" y="296.638438">2.5</text>
+</g>
+</g>
+<g id="a11yfig5-comp-es-xtick_7">
+<g id="a11yfig5-comp-es-line2d_7">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="468.777143" xlink:href="#a11yfig5-comp-es-m341510f669" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-es-text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 468.777143 296.638438)" x="468.777143" y="296.638438">3.0</text>
+</g>
+</g>
+<g id="a11yfig5-comp-es-xtick_8">
+<g id="a11yfig5-comp-es-line2d_8">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="538.953333" xlink:href="#a11yfig5-comp-es-m341510f669" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-es-text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 538.953333 296.638438)" x="538.953333" y="296.638438">3.5</text>
+</g>
+</g>
+<g id="a11yfig5-comp-es-xtick_9">
+<g id="a11yfig5-comp-es-line2d_9">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="609.129524" xlink:href="#a11yfig5-comp-es-m341510f669" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-es-text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 609.129524 296.638438)" x="609.129524" y="296.638438">4.0</text>
+</g>
+</g>
+<g id="a11yfig5-comp-es-text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 342.46 310.316563)" x="342.46" y="310.316563">Tiempo</text>
+</g>
+</g>
+<g id="a11yfig5-comp-es-matplotlib.axis_2">
+<g id="a11yfig5-comp-es-ytick_1">
+<g id="a11yfig5-comp-es-line2d_10">
+<path clip-path="url(#a11yfig5-comp-es-p0c16a5fde7)" d="M 47.72 282.04 
+L 637.2 282.04 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-es-line2d_11">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="a11yfig5-comp-es-m440a408e82" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig5-comp-es-m440a408e82" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-es-text_11">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 285.839219)" x="40.72" y="285.839219">0.0</text>
+</g>
+</g>
+<g id="a11yfig5-comp-es-ytick_2">
+<g id="a11yfig5-comp-es-line2d_12">
+<path clip-path="url(#a11yfig5-comp-es-p0c16a5fde7)" d="M 47.72 245.385946 
+L 637.2 245.385946 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-es-line2d_13">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig5-comp-es-m440a408e82" y="245.385946"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-es-text_12">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 249.185165)" x="40.72" y="249.185165">0.1</text>
+</g>
+</g>
+<g id="a11yfig5-comp-es-ytick_3">
+<g id="a11yfig5-comp-es-line2d_14">
+<path clip-path="url(#a11yfig5-comp-es-p0c16a5fde7)" d="M 47.72 208.731892 
+L 637.2 208.731892 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-es-line2d_15">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig5-comp-es-m440a408e82" y="208.731892"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-es-text_13">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 212.531111)" x="40.72" y="212.531111">0.2</text>
+</g>
+</g>
+<g id="a11yfig5-comp-es-ytick_4">
+<g id="a11yfig5-comp-es-line2d_16">
+<path clip-path="url(#a11yfig5-comp-es-p0c16a5fde7)" d="M 47.72 172.077838 
+L 637.2 172.077838 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-es-line2d_17">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig5-comp-es-m440a408e82" y="172.077838"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-es-text_14">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 175.877057)" x="40.72" y="175.877057">0.3</text>
+</g>
+</g>
+<g id="a11yfig5-comp-es-ytick_5">
+<g id="a11yfig5-comp-es-line2d_18">
+<path clip-path="url(#a11yfig5-comp-es-p0c16a5fde7)" d="M 47.72 135.423784 
+L 637.2 135.423784 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-es-line2d_19">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig5-comp-es-m440a408e82" y="135.423784"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-es-text_15">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 139.223003)" x="40.72" y="139.223003">0.4</text>
+</g>
+</g>
+<g id="a11yfig5-comp-es-ytick_6">
+<g id="a11yfig5-comp-es-line2d_20">
+<path clip-path="url(#a11yfig5-comp-es-p0c16a5fde7)" d="M 47.72 98.76973 
+L 637.2 98.76973 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-es-line2d_21">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig5-comp-es-m440a408e82" y="98.76973"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-es-text_16">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 102.568948)" x="40.72" y="102.568948">0.5</text>
+</g>
+</g>
+<g id="a11yfig5-comp-es-ytick_7">
+<g id="a11yfig5-comp-es-line2d_22">
+<path clip-path="url(#a11yfig5-comp-es-p0c16a5fde7)" d="M 47.72 62.115676 
+L 637.2 62.115676 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-es-line2d_23">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig5-comp-es-m440a408e82" y="62.115676"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-es-text_17">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 65.914894)" x="40.72" y="65.914894">0.6</text>
+</g>
+</g>
+<g id="a11yfig5-comp-es-ytick_8">
+<g id="a11yfig5-comp-es-line2d_24">
+<path clip-path="url(#a11yfig5-comp-es-p0c16a5fde7)" d="M 47.72 25.461622 
+L 637.2 25.461622 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-es-line2d_25">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig5-comp-es-m440a408e82" y="25.461622"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-es-text_18">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 29.26084)" x="40.72" y="29.26084">0.7</text>
+</g>
+</g>
+<g id="a11yfig5-comp-es-text_19">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-90 18.737188 146.42)" x="18.737188" y="146.42">Probabilidad acumulada</text>
+</g>
+</g>
+<g id="a11yfig5-comp-es-line2d_26">
+<path clip-path="url(#a11yfig5-comp-es-p0c16a5fde7)" d="M 47.72 282.04 
+L 188.072381 282.04 
+L 188.072381 190.404865 
+L 328.424762 190.404865 
+L 328.424762 190.404865 
+L 468.777143 190.404865 
+L 468.777143 98.76973 
+L 609.129524 98.76973 
+L 609.129524 98.76973 
+" style="fill: none; stroke: #2563eb; stroke-width: 2.7; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-es-line2d_27">
+<path clip-path="url(#a11yfig5-comp-es-p0c16a5fde7)" d="M 47.72 282.04 
+L 188.072381 282.04 
+L 188.072381 190.404865 
+L 328.424762 190.404865 
+L 328.424762 190.404865 
+L 468.777143 190.404865 
+L 468.777143 52.952162 
+L 609.129524 52.952162 
+L 609.129524 52.952162 
+" style="fill: none; stroke-dasharray: 8.51,3.68; stroke-dashoffset: 0; stroke: #cf7044; stroke-width: 2.3"></path>
+</g>
+<g id="a11yfig5-comp-es-patch_3">
+<path d="M 47.72 282.04 
+L 47.72 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-es-patch_4">
+<path d="M 47.72 282.04 
+L 637.2 282.04 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-es-legend_1">
+<g id="a11yfig5-comp-es-patch_5">
+<path d="M 54.02 44.420625 
+L 220.439844 44.420625 
+Q 222.239844 44.420625 222.239844 42.620625 
+L 222.239844 17.1 
+Q 222.239844 15.3 220.439844 15.3 
+L 54.02 15.3 
+Q 52.22 15.3 52.22 17.1 
+L 52.22 42.620625 
+Q 52.22 44.420625 54.02 44.420625 
+z
+" style="fill: #ffffff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"></path>
+</g>
+<g id="a11yfig5-comp-es-line2d_28">
+<path d="M 55.82 22.588594 
+L 64.82 22.588594 
+L 64.82 22.588594 
+L 73.82 22.588594 
+L 73.82 22.588594 
+" style="fill: none; stroke: #2563eb; stroke-width: 2.7; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-es-text_20">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 81.02 25.738594)" x="81.02" y="25.738594">CIF A = 0.50</text>
+</g>
+<g id="a11yfig5-comp-es-line2d_29">
+<path d="M 55.82 35.798906 
+L 64.82 35.798906 
+L 64.82 35.798906 
+L 73.82 35.798906 
+L 73.82 35.798906 
+" style="fill: none; stroke-dasharray: 8.51,3.68; stroke-dashoffset: 0; stroke: #cf7044; stroke-width: 2.3"></path>
+</g>
+<g id="a11yfig5-comp-es-text_21">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 81.02 38.948906)" x="81.02" y="38.948906">1 − KM (B censurado) = 0.625</text>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="a11yfig5-comp-es-p0c16a5fde7">
+<rect height="271.24" width="589.48" x="47.72" y="10.8"></rect>
+</clippath>
+</defs>
+</svg><figcaption>Incidencia acumulada de A frente a uno menos KM censurando B. La diferencia se debe al estimando y no al redondeo.</figcaption></figure></section><section id="section-22"><div class="chapter-label">MÓDULO 22 / 34</div><h2>22. Verificación adicional mediante la descomposición por causa</h2><p class="first-intuition">Podemos comprobar el resultado anterior distribuyendo las probabilidades en cada tiempo de evento. Comenzamos con supervivencia libre de evento igual a uno. En tiempo 1, un A entre cuatro produce \(\Delta F_A=1(1/4)=0.25\), dejando 0.75 sin evento. En tiempo 2, B entre tres aporta \(\Delta F_B=0.75(1/3)=0.25\), dejando 0.50. En tiempo 3, A entre dos añade \(0.50(1/2)=0.25\), con 0.25 libres de cualquier evento. Hasta tiempo 4, la identidad verificable es \(F_A+F_B+S_{all}=0.50+0.25+0.25=1\).</p><div class="table-wrap"><table>
+<thead>
+<tr>
+<th style="text-align:right" scope="col">Tiempo</th>
+<th style="text-align:right" scope="col">En riesgo antes</th>
+<th style="text-align:left" scope="col">Tipo</th>
+<th style="text-align:right" scope="col">Supervivencia total anterior</th>
+<th style="text-align:right" scope="col">Incremento CIF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">1</td>
+<td style="text-align:right">4</td>
+<td style="text-align:left">A</td>
+<td style="text-align:right">1.00</td>
+<td style="text-align:right">A: 0.25</td>
+</tr>
+<tr>
+<td style="text-align:right">2</td>
+<td style="text-align:right">3</td>
+<td style="text-align:left">B</td>
+<td style="text-align:right">0.75</td>
+<td style="text-align:right">B: 0.25</td>
+</tr>
+<tr>
+<td style="text-align:right">3</td>
+<td style="text-align:right">2</td>
+<td style="text-align:left">A</td>
+<td style="text-align:right">0.50</td>
+<td style="text-align:right">A: 0.25</td>
+</tr>
+</tbody>
+</table></div><p>Esta es una forma simplificada de calcular la incidencia mediante <strong>Aalen–Johansen</strong>. No consiste simplemente en renombrar el Hazard específico de Cox; incorpora la probabilidad de permanecer libre de todos los eventos cuando se produce cada incremento por causa. Las posibilidades de primer desenlace forman una partición del espacio de resultados. Si existiera censura ordinaria, necesitaríamos los supuestos y ajustes correspondientes, pero la definición del estimando seguiría siendo la misma.</p><p>¿Por qué importa al comparar modelos? Si un reemplazo preventivo es evento competidor, un modelo que predice falla latente bajo uso continuado responde una pregunta hipotética. La probabilidad de falla <strong>antes del reemplazo</strong> es una CIF en el sistema operacional observado. Ambas pueden ser importantes para la ingeniería, pero no deben intercambiarse. Además, implementar una política nueva de reemplazo modifica la frecuencia del evento competidor y puede cambiar la distribución observada. Un modelo predictivo descriptivo no identifica automáticamente el efecto causal de la política.</p><p>Una comprobación general concluye este ejercicio: cada CIF debe ser no decreciente y la suma de las CIF mutuamente excluyentes no puede superar uno. La supervivencia libre de evento es no creciente. Si un gráfico reporta 0.7 de incidencia para A y 0.6 para B a un mismo horizonte, la suma excede uno y existe un error de modelo, estimando o visualización.</p></section><section id="section-23"><div class="chapter-label">MÓDULO 23 / 34</div><h2>23. De la evaluación a una decisión por umbral</h2><p class="first-intuition">La gerente puede fijar un umbral para inspeccionar. Supongamos costo de inspección \(c_I\) y costo \(c_F\) de una falla evitable. Una regla simplificada sería inspeccionar cuando el riesgo de falla \(r_i(8)\) excede \(c_I/c_F\), pero requiere suposiciones muy fuertes: la inspección evitaría completamente la falla, los costos serían aditivos, no habría efectos secundarios y las cifras estarían bien medidas. Si la inspección evita solo una proporción \(e\), un modelo simple de costo esperado produce el umbral \(c_I/(e c_F)\).</p><div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[\text{Inspeccionar si }r_i(8)\,e\,c_F&gt;c_I\quad\Longleftrightarrow\quad r_i(8)&gt;\frac{c_I}{e c_F}.\]</div></div><p>Como ejemplo exclusivamente hipotético, fija \(c_I=20\) unidades monetarias, \(c_F=200\) y efectividad \(e=0.5\). El umbral es \(20/(0.5\cdot200)=0.20\). Todos los módulos de nuestra tabla tienen riesgo superior a 0.20, así que la política simplificada inspeccionaría los doce. La conclusión muestra que no basta con un C-index elevado: los supuestos de intervención y la relación costo-beneficio determinan la acción. Otra efectividad o presupuesto produciría una elección distinta.</p><p>Si solo pudiéramos inspeccionar tres módulos, la clasificación de riesgo seleccionaría A 0.76, D 0.70 y B 0.68. La elección se reproduce ordenando la columna de riesgo, pero el beneficio esperado exige riesgos <strong>calibrados</strong> y evidencia del efecto causal de inspeccionar. Nada de los datos sintéticos demuestra que actuar sobre A, D y B habría evitado fallas. Una evaluación real incorpora capacidad, costos, perjuicios, posibles inequidades y diseños adecuados para medir eficacia.</p><p>Esta distinción es central: <strong>Prediction</strong> no equivale a <strong>Intervention</strong>. Un modelo puede anticipar desenlaces bajo políticas históricas, pero actuar sobre sus predicciones puede cambiar la distribución de resultados, el mecanismo de censura y los eventos competidores. La implementación exige vigilancia continua y una evaluación causal pertinente para afirmar beneficios. Un excelente indicador de ranking no demuestra por sí solo que una política preventiva mejore resultados.</p></section><section id="section-24"><div class="chapter-label">MÓDULO 24 / 34</div><h2>24. Comunicar la comparación sin fabricar certeza</h2><p class="first-intuition">Un reporte académico responsable declara cohorte, horizonte, eventos, sujetos censurados antes del horizonte, definiciones exactas de métricas e intervalos cuando existen fundamentos. La comparación entre familias no puede atribuir nuestras probabilidades sintéticas fijas a un Cox realmente entrenado en otra muestra. En cambio, podemos explicar el <strong>protocolo de evaluación</strong> y el vector ilustrativo utilizado, sin inventar resultados de modelos que no se ajustaron.</p><div class="table-wrap"><table>
+<thead>
+<tr>
+<th style="text-align:left" scope="col">Método</th>
+<th style="text-align:left" scope="col">Función dentro del análisis</th>
+<th style="text-align:left" scope="col">Resultado principal</th>
+<th style="text-align:left" scope="col">Verificación esencial</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Kaplan–Meier</td>
+<td style="text-align:left">Referencia grupal</td>
+<td style="text-align:left">\(\widehat S(t)\)</td>
+<td style="text-align:left">Censura independiente y soporte de riesgo</td>
+</tr>
+<tr>
+<td style="text-align:left">Cox PH</td>
+<td style="text-align:left">Supervivencia condicional</td>
+<td style="text-align:left">\(\widehat S(t\mid x)\), HR</td>
+<td style="text-align:left">PH, forma funcional e influencia</td>
+</tr>
+<tr>
+<td style="text-align:left">AFT</td>
+<td style="text-align:left">Duración/supervivencia condicional</td>
+<td style="text-align:left">Time Ratios, \(\widehat S(t\mid x)\)</td>
+<td style="text-align:left">Distribución paramétrica y plausibilidad de cola</td>
+</tr>
+<tr>
+<td style="text-align:left">Predicciones ilustrativas fijas</td>
+<td style="text-align:left">Reproducción de operaciones</td>
+<td style="text-align:left">\(S_i(8)\) para doce unidades</td>
+<td style="text-align:left">No constituyen un modelo validado externamente</td>
+</tr>
+</tbody>
+</table></div><p>Nuestro vector sintético obtiene C-index aproximadamente 0.8936 y Brier con IPCW aproximadamente 0.1329. El riesgo de falla agregado predicho es aproximadamente 0.5217; como comparación descriptiva, el KM grupal entrega aproximadamente 0.4599. Son cantidades de distinta naturaleza. La primera resume orden de parejas, la segunda error probabilístico con ponderación, la tercera nivel agregado de probabilidad. Ninguna sustituye a las demás ni demuestra generalización a datos observados reales.</p><p>Una redacción responsable podría ser: «En esta cohorte sintética y a horizonte ocho, el vector de predicciones ilustrativas clasifica muchos pares comparables en el orden correcto, presenta un error cuadrado finito corregido por censura y cierta diferencia de riesgo promedio respecto de KM. La muestra es demasiado pequeña y fue diseñada para enseñar; se requiere una cohorte independiente, temporalmente relevante y de tamaño adecuado antes de cualquier afirmación de desempeño». Es mejor que decir «nuestro modelo tiene 89% de Accuracy», afirmación que confunde el C-index.</p></section><section id="section-25"><div class="chapter-label">MÓDULO 25 / 34</div><h2>25. Diagnósticos y análisis de sensibilidad</h2><p class="first-intuition">Una comparación seria debe intentar refutar sus propios supuestos. En Cox, revisa si las asociaciones con Hazard permanecen aproximadamente constantes en el tiempo mediante Schoenfeld Residuals escalados, tendencias y posibles interacciones temporales. Explora no linealidades e influencia de sujetos extremos. Un resultado PH no significativo no demuestra la hipótesis: con pocos eventos quizá no exista potencia para detectar diferencias. La evidencia gráfica y el conocimiento del proceso también forman parte del diagnóstico.</p><p>En AFT, cuestiona Weibull, Lognormal u otra distribución elegida, la estructura de errores y las colas. Un Time Ratio intuitivo no protege contra probabilidades absolutas incorrectas cuando la familia está mal especificada. Contrasta curvas modeladas con KM en grupos razonables, examina supervivencias imposibles fuera de \([0,1]\) o que aumentan con el tiempo. Los intervalos de parámetros reflejan solo parte de la incertidumbre y no abarcan automáticamente el error de especificación.</p><p>Para IPCW, compara opciones justificadas del modelo de censura y analiza si esta depende de características medidas. Reporta el valor mínimo de \(G(8\mid x)\), pesos máximos y número efectivo de contribuyentes. Truncar pesos extremos puede reducir varianza, pero introduce posibles sesgos; requiere planificación y debe etiquetarse como sensibilidad. También se pueden examinar horizontes próximos, manteniendo ocho como pregunta principal para evitar selección retrospectiva del mejor resultado.</p><p>Finalmente revisa transportabilidad por lotes, fábricas, condiciones de carga y fechas de instalación. Diferencias en riesgo basal o censura pueden producir Calibration Drift aunque el ranking aparente estabilidad. Una conclusión robusta delimita <strong>cuándo, dónde y para quién</strong> existe soporte. No hallar diferencia estadísticamente significativa en un subgrupo pequeño no demuestra equivalencia, especialmente cuando los errores podrían afectar seguridad operacional.</p></section><section id="section-26"><div class="chapter-label">MÓDULO 26 / 34</div><h2>26. Verificación manual completamente reproducible</h2><p class="first-intuition">El estudiante debe poder reconstruir tres resultados centrales utilizando la tabla y una calculadora. Para KM, ordena tiempos, marca fallas/censuras, calcula conjuntos de riesgo y multiplica factores \(1-d_j/n_j\) hasta ocho: \(175/324\approx0.54012\). Para C-index, solo inicia pares donde el tiempo observado más corto es falla: cuenta 47 comparaciones y comprueba que la predicción de supervivencia menor corresponde a la falla más temprana en 42 pares. Los otros cinco son discordantes.</p><p>Para IPCW, invierte el indicador de evento para estimar observabilidad. Comprueba \(G(4)=0.9\) y \(G(8)=27/35\). Las contribuciones de las cinco fallas antes o en ocho suman aproximadamente 0.7128519; las cinco contribuciones de supervivencia observada más allá de ocho suman aproximadamente 0.8821296. El total es cercano a 1.5949815 y, dividido entre doce, produce 0.132915. C y F no aportan directamente errores cuadrados observables, pero sí influyen en los pesos de censura. Es incorrecto asignarles supervivencia cierta hasta ocho.</p><p>La suma de probabilidades de supervivencia predichas es 5.74.</p><div class="equation-card"><span class="equation-label">ECUACIÓN DESTACADA</span><div class="math-scroll">\[0.24+0.32+0.38+0.30+0.47+0.44+0.40+0.58+0.54+0.68+0.74+0.65=5.74\]</div></div><p>Presentamos la suma por separado para que sus sumandos permanezcan legibles también en una pantalla pequeña.. Al dividir entre doce obtenemos \(0.47833\); el complemento es riesgo promedio predicho 0.52167. El KM proporciona riesgo grupal \(1-175/324=149/324\approx0.45988\). La diferencia de aproximadamente 0.06179 es una comparación descriptiva, no un intervalo ni evidencia de sesgo poblacional.</p><p>Si se implementan programas, una práctica importante consiste en verificar independientemente los resultados numéricos calculados por dos procedimientos sobre el mismo array de datos y establecer tolerancias de redondeo. Una captura de pantalla de software no demuestra reproducibilidad cuando faltan dataset, código, versión, reglas de censura o parámetros. Siempre debe distinguirse una simulación didáctica de resultados realmente observados.</p></section><section class="practice" id="section-27"><div class="chapter-label">MÓDULO 27 / 34</div><h2>27. Ejercicio 1 — evento, reloj y censura</h2><p class="first-intuition"><strong>Problema.</strong> Una fábrica incorpora equipos al instalarse. Uno falla después de 500 horas. Otro se retira del seguimiento tras 600 horas mientras todavía funciona. Un analista clasifica ambos como «no falló antes de 800» porque no observa eventos adicionales al cierre de su base. Identifica los errores y define los registros. Explica si el equipo seguido solo hasta 600 puede entrar sin ajuste en una Calibration binaria a horizonte ocho.</p><p><strong>Pista.</strong> Escribe \(Y=\min(T,C)\) y el indicador de evento. Diferencia un evento conocido antes del horizonte de un estado desconocido después de una censura temprana.</p><p><strong>Solución desarrollada.</strong> El primer equipo falla en tiempo 5 de centenas de horas, por lo que \(Y=5,\delta=1\), y su indicador verdadero de supervivencia a ocho es cero. Etiquetarlo como no falla contradice el registro. El segundo tiene \(Y=6,\delta=0\); sabemos que \(T&gt;6\), pero no sabemos si alcanza 8. No corresponde asignarle ni falla ni supervivencia al horizonte. El analista mezcló observación incompleta con ausencia comprobada de evento. Un método de calibración binaria ordinaria no puede usarlo como superviviente; debe aplicar una metodología que respete censura, como IPCW bajo supuestos pertinentes u otro estimador de Calibration específico. La conclusión transferible es auditar qué se observa realmente <strong>antes</strong> de calcular métricas.</p></section><section class="practice" id="section-28"><div class="chapter-label">MÓDULO 28 / 34</div><h2>28. Ejercicio 2 — Kaplan–Meier sin confundir tipos de evento</h2><p class="first-intuition"><strong>Problema.</strong> Con el dataset de doce unidades calcula KM después de tiempos 3, 5, 6 y 8. Explica por qué la proporción directa 5/12 de fallas observadas no coincide con el riesgo estimado mediante KM a ocho. Después considera que las salidas de 4 y 7 fueran fallas terminales competidoras en lugar de censuras administrativas; explica qué cambiaría en la interpretación.</p><p><strong>Pista.</strong> Para las fallas hasta ocho, los conjuntos de riesgo son 12, 11, 9, 8 y 6. Una censura disminuye el número en riesgo posterior sin generar un factor de falla.</p><p><strong>Solución desarrollada.</strong> En 3, \(S=(11/12)(10/11)=5/6\approx0.83333\). En 5, multiplicar por 8/9 da \(20/27\approx0.74074\). En 6, el factor 7/8 produce \(35/54\approx0.64815\). Tras la censura en 7, el conjunto en riesgo en 8 es seis, y el factor 5/6 lleva a \(175/324\approx0.54012\). El riesgo KM es \(149/324\approx0.45988\), frente a \(5/12\approx0.41667\) como proporción observada bruta. KM usa observaciones parciales bajo independencia para construir conjuntos de riesgo. Si las salidas fueran eventos competidores, el objetivo de incidencia de la causa principal sería una CIF; censurar competidores y calcular uno menos KM no estimaría su probabilidad absoluta en el mundo observado. Cambiar el tipo de evento modifica la pregunta científica.</p></section><section class="practice" id="section-29"><div class="chapter-label">MÓDULO 29 / 34</div><h2>29. Ejercicio 3 — obtener concordancias y discordancias</h2><p class="first-intuition"><strong>Problema.</strong> Deriva C-index con las duraciones, estados y predicciones de supervivencia a ocho de la tabla. ¿Por qué no son comparables las parejas que comienzan con un tiempo menor censurado? ¿Qué pasaría con C-index si todas las predicciones se transformaran mediante una función estrictamente creciente que preserva el orden?</p><p><strong>Pista.</strong> Suma 11, 10, 8, 7, 5, 4 y 2; para falla temprana, la probabilidad predicha de supervivencia debe ser <strong>menor</strong> para concordancia.</p><p><strong>Solución desarrollada.</strong> Existen 47 pares comparables. Las concordancias son 11 para A, 9 para B, 8 para D, 5 para E, 5 para G, 3 para H y 1 para J: total 42. Quedan cinco discordancias y no hay empates. Así \(C=42/47\approx0.89362\). Si el tiempo observado más corto termina en censura, no conocemos el orden de tiempos verdaderos de falla: la unidad censurada podría fallar antes o después de la otra. Una transformación estrictamente monótona que conserve orden no cambia el C-index, aunque las nuevas probabilidades podrían estar terriblemente mal calibradas. Esta es la razón matemática para evaluar ranking y magnitud probabilística por separado.</p></section><section class="practice" id="section-30"><div class="chapter-label">MÓDULO 30 / 34</div><h2>30. Ejercicio 4 — distribución de censura y Brier con IPCW</h2><p class="first-intuition"><strong>Problema.</strong> Calcula Reverse KM para censura hasta ocho y después el IPCW Brier Score. Clasifica los aportes de fallas, supervivientes comprobados y censurados antes del horizonte. Justifica por qué unos términos se dividen por \(G\) en tiempo de falla y otros por \(G\) en el horizonte.</p><p><strong>Pista.</strong> Antes de censura en 4 quedan diez en riesgo y antes de 7 quedan siete. Una falla en 5 necesita observación hasta 5; un superviviente a 8 requiere observación hasta 8.</p><p><strong>Solución desarrollada.</strong> \(\widehat G(4)=9/10=0.9\) y \(\widehat G(8)=(9/10)(6/7)=27/35\approx0.77143\). Las fallas A, B, D, E y G aportan 0.057600, 0.102400, 0.100000, 0.245444 y 0.207407. Los módulos H, I, J, K y L, seguidos más allá de ocho, aportan 0.228667, 0.274296, 0.132741, 0.087630 y 0.158796. C y F quedan censurados antes del horizonte y aportan cero directamente porque su estado a ocho es desconocido. Sumamos las diez contribuciones no nulas, aproximadamente 1.594981, y dividimos entre los doce incorporados: \(BS_{IPCW}(8)\approx0.132915\). Los pesos de fallas consideran observabilidad hasta tiempo de falla; los de supervivientes, hasta el horizonte. El estimador apunta al error cuadrático promedio bajo sus supuestos de censura.</p></section><section class="practice" id="section-31"><div class="chapter-label">MÓDULO 31 / 34</div><h2>31. Ejercicio 5 — eventos competidores no son censura ordinaria</h2><p class="first-intuition"><strong>Problema.</strong> En el ejemplo de cuatro unidades calcula la CIF de A hasta tiempo 4 mediante supervivencia libre de todo evento e incrementos por causa. Obtén por separado uno menos KM si B se trata como censura. Explica la diferencia sin tecnicismos y comprueba que las probabilidades de desenlaces excluyentes suman uno.</p><p><strong>Pista.</strong> En tiempo 1 ocurre A entre cuatro; en 2 ocurre B entre tres; en 3 ocurre A entre dos.</p><p><strong>Solución desarrollada.</strong> Los incrementos de incidencia para A son \(1(1/4)=0.25\) y \((1/2)(1/2)=0.25\); por tanto, \(F_A(4)=0.50\). B aporta \((3/4)(1/3)=0.25\), mientras la supervivencia libre de evento es 0.25. Verificamos \(0.50+0.25+0.25=1\). Si B se censura para hacer KM de A, \(S_{KM,A}(4)=(3/4)(1/2)=3/8\), y su complemento es \(5/8=0.625\). Diferencia: 0.125. Una persona que experimentó B ya no puede experimentar A como <strong>primer</strong> evento, pero el cálculo KM censurando B actúa como si la eliminación fuera solo pérdida independiente de observación. El número mayor no es la incidencia absoluta de A en presencia de eventos competidores.</p></section><section class="practice" id="section-32"><div class="chapter-label">MÓDULO 32 / 34</div><h2>32. Ejercicio 6 — decidir responsablemente sobre un modelo</h2><p class="first-intuition"><strong>Problema.</strong> Un equipo anuncia: «Tenemos 89% de Accuracy, por tanto inspeccionaremos solo los tres módulos con mayor riesgo y desplegaremos el sistema». Critica la afirmación usando C-index, calibración, Brier, incertidumbre y diferencias entre predicción y causalidad. Identifica los tres módulos y enumera evidencia faltante para autorizar una implementación.</p><p><strong>Pista.</strong> Ordena \(1-S_i(8)\). El C-index resume orden de pares y los doce registros fueron construidos artificialmente, no observados de manera prospectiva.</p><p><strong>Solución desarrollada.</strong> Los riesgos mayores pertenecen a A (0.76), D (0.70) y B (0.68). El C-index \(42/47\approx0.8936\) no representa 89% de Accuracy binaria. El Brier con IPCW es aproximadamente 0.1329 y el riesgo agregado predicho 0.5217 difiere del riesgo KM descriptivo 0.4599. Doce módulos artificiales no proporcionan un intervalo prospectivo creíble. Incluso un riesgo bien calibrado no demuestra que inspeccionar evite la falla; se requiere evidencia de eficacia causal, costos y capacidad. Por tanto A, D y B son los primeros en <strong>este ranking ilustrativo</strong>, pero no existe justificación suficiente para desplegarlo sin datos reales, entrenamiento independiente, evaluación externa, diagnósticos de censura, validación de calibración e investigación del beneficio real de la intervención.</p></section><section class="practice" id="section-33"><div class="chapter-label">MÓDULO 33 / 34</div><h2>33. Ejercicio 7 — transferencia clínica y síntesis aplicada</h2><p class="first-intuition"><strong>Problema.</strong> Un hospital pronostica muerte dentro de 90 días desde el alta. Algunos pacientes pierden contacto en día 30; otros fallecen por una causa diferente antes del desenlace específico investigado; y ciertos pacientes tienen varias admisiones. Diseña un plan de evaluación que cubra evento, reloj, partición, métricas, censura, Competing Risks, incertidumbre y límites de comunicación. Termina con un mensaje comprensible para gestores no técnicos.</p><p><strong>Pista.</strong> No confundas All-Cause Mortality con incidencia por causa. Conserva admisiones del mismo paciente en una misma partición cuando corresponda; considera validación temporal y calidad de seguimiento.</p><p><strong>Solución desarrollada.</strong> Si el objetivo es <strong>muerte por cualquier causa antes de 90 días</strong>, el alta define tiempo cero, cualquier muerte es evento y la pérdida auténtica de observación puede producir Right Censoring. Si el objetivo es muerte por una causa específica, otras causas de muerte son eventos competidores y la probabilidad absoluta apropiada es una CIF. Divide por paciente y no por filas de admisión; valora cohortes posteriores para validación temporal. Ajusta Cox y AFT únicamente con entrenamiento y comprueba diagnósticos; usa KM para mortalidad total o la incidencia pertinente para desenlaces específicos. En pacientes independientes calcula discriminación con tratamiento correcto de censura, Calibration a 90 días, Brier IPCW cuando sean defendibles sus supuestos e intervalos que respeten agrupación por paciente u hospital. Documenta estabilidad de pesos, valores faltantes, transportabilidad, sesgos y subgrupos. Una comunicación responsable sería: «El modelo podría ayudar a priorizar seguimiento, pero sus probabilidades y beneficios deben validarse en pacientes comparables, y las otras causas de muerte deben considerarse desenlaces alternativos».</p></section><section id="section-34"><div class="chapter-label">MÓDULO 34 / 34</div><h2>34. Síntesis final: ¿cuándo está completa la evaluación?</h2><p class="first-intuition">Una evaluación confiable comienza antes de ajustar cualquier regresión: evento, tiempo cero, unidad de análisis, horizonte y mecanismo de observación deben responder una pregunta científica coherente. De lo contrario, incluso un C-index preciso y una curva atractiva pueden resumir el estimando equivocado. Nuestro caso construido mostró por qué Right Censoring no es equivalente a ausencia de falla y por qué un evento exactamente en el horizonte sí debe contarse cuando así se define.</p><p>Integramos tres perspectivas. Kaplan–Meier estimó supervivencia grupal a ocho de aproximadamente 0.54012, bajo independencia de censura. El vector fijo de predicciones ilustrativas produjo 42 pares concordantes entre 47 comparables, C≈0.8936. El Brier Score ajustado con IPCW, usando supervivencia de censura \(G(8)=27/35\), fue aproximadamente 0.132915. El riesgo agregado predicho de aproximadamente 0.5217 se comparó descriptivamente con el riesgo KM de 0.4599; doce módulos artificiales no validan Calibration operacional. Ninguna de estas cifras reemplaza a las otras.</p><p>También demostramos la advertencia fundamental de Competing Risks: en cuatro unidades, la incidencia absoluta de A hasta tiempo cuatro fue 0.50, mientras uno menos KM censurando B resultó 0.625. La diferencia no se debe al redondeo, sino a preguntas científicas distintas. Es decisiva cuando la muerte por otra causa, el reemplazo permanente, un prepago de préstamo o la migración del cliente impiden que el evento principal ocurra como primer desenlace.</p><p>La regla práctica final es no extender las afirmaciones más allá de la evidencia. Valida sobre sujetos independientes y cohortes futuras relevantes; compara idénticos horizontes y eventos; inspecciona diagnósticos y pesos; cuantifica incertidumbre por unidad o grupo; y juzga decisiones mediante efectos reales y posibles perjuicios. Un modelo puede ordenar muy bien y asignar probabilidades absolutas equivocadas; un riesgo calibrado tampoco demuestra por sí solo que actuar mejorará resultados. Entender estas distinciones constituye la competencia central de nuestra última guía.</p><blockquote>
+<p><strong>Student Understanding Test.</strong> Sin utilizar una librería, ¿puedes reconstruir los doce datos, reproducir KM igual a 175/324, C-index 42/47 y Brier con IPCW ≈0.132915, explicar 0.50 frente a 0.625 en Competing Risks y justificar cuándo esos números respaldan una decisión? Si no puedes hacerlo, vuelve a las derivaciones correspondientes antes de considerar completada la evaluación.</p>
+</blockquote></section></article><aside aria-label="Índice" class="toc"><h2>Contenido</h2><a href="#section-1">1. Una decisión integrada, no una competencia por una sola cifra</a><a href="#section-2">2. Prerrequisitos y mapa conceptual</a><a href="#section-3">3. Definir estimando, proceso de observación y tiempo cero</a><a href="#section-4">4. Dataset sintético completo para evaluación</a><a href="#section-5">5. ¿Qué es una partición válida de entrenamiento y evaluación?</a><a href="#section-6">6. Construir el punto de referencia Kaplan–Meier</a><a href="#section-7">7. Cox y AFT: predicciones comparables, parámetros diferentes</a><a href="#section-8">8. Por qué la Accuracy binaria convencional engaña con censura temprana</a><a href="#section-9">9. Discrimination como pregunta de ordenamiento</a><a href="#section-10">10. Enumerar pares comparables y verificar el C-index</a><a href="#section-11">11. Discrimination no equivale a Calibration</a><a href="#section-12">12. Un gráfico de calibración honesto con muestra pequeña</a><a href="#section-13">13. Del Brier binario al Brier Score de supervivencia censurada</a><a href="#section-14">14. Estimar la distribución de censura, no la distribución de falla</a><a href="#section-15">15. Derivar y calcular el IPCW Brier Score a ocho unidades</a><a href="#section-16">16. Auditoría completa de las contribuciones individuales</a><a href="#section-17">17. Comparación con un predictor de referencia explícito</a><a href="#section-18">18. Incertidumbre: las unidades independientes no son los pares</a><a href="#section-19">19. Horizontes, soporte de seguimiento y extrapolación</a><a href="#section-20">20. Competing Risks: ¿qué evento queremos estimar?</a><a href="#section-21">21. Contraejemplo numérico de Competing Risks con cuatro sujetos</a><a href="#section-22">22. Verificación adicional mediante la descomposición por causa</a><a href="#section-23">23. De la evaluación a una decisión por umbral</a><a href="#section-24">24. Comunicar la comparación sin fabricar certeza</a><a href="#section-25">25. Diagnósticos y análisis de sensibilidad</a><a href="#section-26">26. Verificación manual completamente reproducible</a><a href="#section-27">27. Ejercicio 1 — evento, reloj y censura</a><a href="#section-28">28. Ejercicio 2 — Kaplan–Meier sin confundir tipos de evento</a><a href="#section-29">29. Ejercicio 3 — obtener concordancias y discordancias</a><a href="#section-30">30. Ejercicio 4 — distribución de censura y Brier con IPCW</a><a href="#section-31">31. Ejercicio 5 — eventos competidores no son censura ordinaria</a><a href="#section-32">32. Ejercicio 6 — decidir responsablemente sobre un modelo</a><a href="#section-33">33. Ejercicio 7 — transferencia clínica y síntesis aplicada</a><a href="#section-34">34. Síntesis final: ¿cuándo está completa la evaluación?</a></aside></div></main><footer class="foot"><div class="container"><p>© Alfredo Saldana · Guía 80 · Statistics &amp; Probability · Ejemplos sintéticos de enseñanza · READY FOR AUTHOR REVIEW</p></div></footer><script>document.querySelector('#menu-btn').addEventListener('click',function(){let n=document.querySelector('#global-nav');let open=n.classList.toggle('open');this.setAttribute('aria-expanded',String(open));this.setAttribute('aria-label',open?'Close menu':'Open menu')});</script></body></html>

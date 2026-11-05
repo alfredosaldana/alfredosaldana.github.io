@@ -1,0 +1,2096 @@
+<!doctype html>
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="Alfredo Saldana" name="author"/><link href="/learn/statistics-probability/evaluating-and-applying-survival-models-an-integrated-case-study.html" hreflang="en" rel="alternate"/><link href="/es/learn/statistics-probability/evaluating-and-applying-survival-models-an-integrated-case-study-es.html" hreflang="es" rel="alternate"/><link href="/learn/statistics-probability/evaluating-and-applying-survival-models-an-integrated-case-study.html" rel="canonical"/><title>80 · Evaluating and Applying Survival Models: An Integrated Case Study | Alfredo Saldana</title><style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:wght@500;600;700&display=swap');
+:root{--navy:#0b1f3a;--blue:#2563eb;--ink:#1a314e;--muted:#56677c;--rule:#dbe6f2;--paper:#f6f9fe;--soft:#eef5ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font:16px/1.78 Inter,system-ui,sans-serif;color:var(--ink);background:var(--paper)}a{color:#2059b8}a:focus-visible,button:focus-visible{outline:3px solid #f59e0b;outline-offset:3px}.container{width:min(1150px,calc(100% - 32px));margin:auto}.site-header{position:sticky;top:0;z-index:30;background:#ffffffed;border-bottom:1px solid var(--rule);backdrop-filter:blur(16px)}.nav-wrap{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:14px}.identity{display:flex;align-items:center;gap:17px;min-width:0;flex-shrink:0}.brand{font-size:1.04rem;font-weight:800;letter-spacing:-.025em;text-decoration:none;color:var(--navy);white-space:nowrap}.lang-switch{display:flex;align-items:center;gap:9px;white-space:nowrap;font-size:.94rem}.lang-switch a{color:#111827;text-decoration:none;font-weight:700;padding:8px 2px}.lang-switch a[aria-current=page]{color:var(--blue);font-weight:800}.lang-switch span{color:#8b98a9}.nav{display:flex;gap:20px;align-items:center}.nav a{font-size:.89rem;color:#40516a;text-decoration:none}.nav a.active{font-weight:750;color:#2563eb}.menu-btn{display:none;border:0;background:transparent;font-size:1.5rem;line-height:1;cursor:pointer;color:var(--navy)}.study-hero{background:linear-gradient(115deg,#e6f1ff,#fff 65%,#f0f5ff);padding:62px 0 55px;border-bottom:1px solid var(--rule)}.eyebrow{color:#2865bd;font-size:.75rem;letter-spacing:.135em;font-weight:800;text-transform:uppercase}.study-hero h1{font:700 clamp(2.3rem,4.7vw,4.8rem)/1.1 'Source Serif 4',Georgia,serif;max-width:1050px;letter-spacing:-.035em;color:#071d3c;margin:14px 0 18px}.study-hero .lead{max-width:860px;color:#3c536d;font-size:clamp(1.03rem,1.9vw,1.22rem)}.meta{display:flex;flex-wrap:wrap;gap:9px;margin:24px 0 0}.meta span{font-size:.79rem;font-weight:650;border:1px solid #dbe8fa;border-radius:40px;padding:7px 11px;background:white}.layout{display:grid;grid-template-columns:minmax(0,1fr) 245px;align-items:start;gap:25px;padding:30px 0 90px}.prose{min-width:0;overflow-wrap:anywhere;background:white;border:1px solid #e2e9f4;border-radius:19px;box-shadow:0 10px 35px #0b1f3a09;padding:clamp(20px,3.7vw,49px)}.prose section{border-top:1px solid var(--rule);padding-top:28px;margin-top:65px;scroll-margin-top:94px}.prose section:first-child{margin-top:0;border:0;padding-top:0}.chapter-label{font-weight:800;letter-spacing:.15em;color:#2c63ae;font-size:.72rem}.prose h2{font:700 clamp(1.65rem,2.6vw,2.5rem)/1.18 'Source Serif 4',Georgia,serif;color:#091f3a;letter-spacing:-.022em;margin:8px 0 22px}.prose p{overflow-wrap:anywhere;font-size:1rem;line-height:1.92;margin:0 0 19px}.prose section>p:first-of-type{font-size:1.04rem;color:#1e416b}.prose strong{color:#0b376c}.prose .equation-card{border-radius:13px;background:linear-gradient(110deg,#f1f7ff,#fff);border:1px solid #d6e6fb;border-left:4px solid #3d76d7;padding:20px 18px;margin:22px 0 25px;max-width:100%}.equation-label{display:block;font-size:.68rem;color:#3267ad;font-weight:800;letter-spacing:.11em;margin:0 0 12px}.math-scroll{width:100%;overflow-x:auto;overflow-y:hidden;padding:8px 2px;max-width:100%;font-size:1.14rem}.math-scroll mjx-container[display=true]{margin:6px 0!important;max-width:100%;overflow-x:auto}.prose mjx-container[jax=CHTML][display=true]{overflow-x:auto;overflow-y:hidden;max-width:100%}.prose .table-wrap{overflow-x:auto;border:1px solid #d8e5f4;border-radius:10px;margin:19px 0 26px}.prose table{border-collapse:collapse;width:100%;min-width:480px;font-size:.88rem}.prose th{background:#ebf3ff;color:#123969;text-align:left;font-weight:800}.prose th,.prose td{border-bottom:1px solid #d9e5f3;padding:10px 13px;vertical-align:top}.prose tr:last-child td{border-bottom:0}.prose tr:nth-child(even) td{background:#fafcff}.prose figure{border:1px solid #deebf9;border-radius:16px;padding:18px;margin:28px 0;background:#fbfdff}.prose figure img,.prose figure svg{display:block;width:100%;height:auto}.prose figcaption{font-size:.88rem;color:#526880;line-height:1.6;margin-top:9px}.prose blockquote{border-left:4px solid #d9a24a;background:#fffaf1;padding:15px 20px;margin:24px 0;border-radius:0 12px 12px 0}.prose blockquote p:last-child{margin-bottom:0}.prose section:nth-child(5n+2)>p:nth-of-type(3){background:#f2f8ff;border-left:3px solid #7bb4f1;padding:15px 18px;border-radius:0 12px 12px 0}.toc{position:sticky;top:98px;max-height:calc(100vh - 120px);overflow:auto;background:#fff;border:1px solid var(--rule);border-radius:16px;padding:18px}.toc h2{font:800 .81rem Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px;color:#163e75}.toc a{display:block;text-decoration:none;color:#405875;font-size:.79rem;line-height:1.43;padding:7px 3px;border-bottom:1px solid #edf2f7}.toc a:hover{color:#2563eb}.foot{background:#0b1f3a;color:#dde9f8;padding:30px 0;font-size:.82rem}.foot p{margin:0}.skip{position:absolute;left:-9999px;top:0;background:white;color:#1f3c65;padding:12px}.skip:focus{left:12px;z-index:99}@media(max-width:950px){.layout{grid-template-columns:minmax(0,1fr)}.toc{position:static;max-height:260px;order:-1}.prose{order:1}.nav{display:none;position:absolute;top:72px;left:0;right:0;padding:17px 22px;background:white;border-bottom:1px solid var(--rule);flex-direction:column;align-items:flex-start}.nav.open{display:flex}.menu-btn{display:block}}@media(max-width:520px){.container{width:calc(100% - 22px)}.nav-wrap{min-height:69px}.identity{gap:10px}.brand{font-size:.92rem}.lang-switch{font-size:.82rem;gap:6px}.study-hero{padding:38px 0 33px}.prose{padding:20px 14px;border-radius:13px}.prose p{font-size:.95rem}.prose section{margin-top:51px}.equation-card{padding:14px 11px!important}.math-scroll{font-size:1.02rem}.prose figure{margin:23px 0;padding:9px}.toc{padding:13px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.prose section:nth-child(7n+3) blockquote{border-color:#2563eb;background:#f1f7ff}.prose section:last-child{padding-bottom:28px}.math-scroll mjx-container{max-width:none}.prose .equation-card:focus-within{outline:2px solid #2563eb}.prose figure svg{max-width:100%;overflow:visible}.prose section h2{max-width:38ch}
+
+.prose .equation-card{margin:26px 0 30px;padding:21px 20px;background:linear-gradient(115deg,#f0f6ff,#ffffff);border-left:4px solid #2563eb;box-shadow:0 5px 17px rgba(26,68,127,.04)}
+.prose .formula-intro{font-size:.77rem;font-weight:800;color:#24599c;letter-spacing:.04em;margin:20px 0 4px;text-transform:uppercase}
+.prose .callout{border-left:4px solid #2986c8;background:#f1f8ff;border-radius:0 12px 12px 0;padding:18px 21px;margin:24px 0}
+.prose .callout p{margin-bottom:0}.prose .practice{margin-top:54px;border-top:3px solid #2563eb;padding-top:28px}.prose .practice h2{color:#123d76}.prose .practice p:has(strong:first-child){margin-top:18px}.prose .practice p strong:first-child{color:#174c8c}
+.prose section .first-intuition{color:#1c466e;font-size:1.045rem;line-height:1.83;border-bottom:1px solid #e5edf7;padding-bottom:14px}
+.prose .info-strip{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0}.info-strip span{border:1px solid #d4e2f6;border-radius:9px;padding:11px 14px;background:#f7faff;font-size:.83rem;font-weight:700;color:#1a487c}
+.prose .charts-wrap{border-radius:15px;border:1px solid #dbe6f4;padding:16px 12px;background:white;margin:28px 0}.charts-wrap svg{max-width:100%;height:auto}.charts-wrap figcaption{font-size:.85rem;color:#536a84;line-height:1.65}
+.prose .math-scroll{overflow:auto;font-size:1.2rem;max-width:100%;scrollbar-width:thin}.equation-card:before{content:''}.prose section{scroll-margin-top:98px}
+@media(max-width:520px){.prose .math-scroll{font-size:1.04rem}.prose .equation-card{padding:14px 9px}.prose p{line-height:1.8}.prose .first-intuition{font-size:1rem}}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']],processEscapes:true,packages:{'[+]':['ams']}},options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']},chtml:{scale:1,matchFontHeight:false}};</script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script></head><body><a class="skip" href="#main">Skip to content</a><header class="site-header"><div class="container nav-wrap"><div class="identity"><a class="brand" href="https://alfredosaldana.github.io/index.html">Alfredo Saldana</a><div aria-label="Language" class="lang-switch"><a aria-current="page" href="/learn/statistics-probability/evaluating-and-applying-survival-models-an-integrated-case-study.html" lang="en">EN</a><span aria-hidden="true">|</span><a href="/es/learn/statistics-probability/evaluating-and-applying-survival-models-an-integrated-case-study-es.html" lang="es">ES</a></div></div><nav aria-label="Main navigation" class="nav" id="global-nav"><a href="https://alfredosaldana.github.io/index.html">Home</a><a href="https://alfredosaldana.github.io/projects.html">Projects</a><a class="active" href="/tutorials.html">Learn</a><a href="https://alfredosaldana.github.io/open-box.html">Open Box</a><a href="https://alfredosaldana.github.io/about.html">About</a><a href="https://alfredosaldana.github.io/contact.html">Contact</a></nav><button aria-controls="global-nav" aria-expanded="false" aria-label="Open menu" class="menu-btn" id="menu-btn">☰</button></div></header><main id="main"><div class="study-hero"><div class="container"><div class="eyebrow">LEARN · STATISTICS &amp; PROBABILITY · GUIDE 80</div><h1>Evaluating and Applying Survival Models: An Integrated Case Study</h1><p class="lead">From event definition to decision: Kaplan–Meier, Cox, AFT, C-index, calibration, IPCW Brier, uncertainty and competing risks.</p><div class="meta"><span>Prerequisites / Prerrequisitos: 35, 40, 50, 75, 77, 79</span><span>Complete synthetic dataset</span><span>MathJax 3</span><span>34 modules / módulos</span></div></div></div><div class="container layout"><article class="prose"><section id="section-1"><div class="chapter-label">MODULE 01 / 34</div><h2>1. An integrated decision, not a competition for a single number</h2><p class="first-intuition">A survival model is useful only when its predictions can support a well-defined decision. A manager deciding which component modules to inspect before the next planned shutdown does not ask merely, “Which fitted regression has the smallest p-value?” She asks which modules are likely to fail before the next operating interval, how reliably the ranking distinguishes failures from survivors, whether the predicted probabilities correspond to what actually happens, and how uncertain the answer is. Guide 80 integrates the Kaplan–Meier estimator, Cox regression, Accelerated Failure Time (AFT) regression, censoring-aware prediction scores, resampling, and the limits introduced by competing events. This is a capstone that deliberately connects earlier statistical ideas rather than replacing them with a new algorithm.</p><p>We will make a decision at a defined horizon of <strong>eight units of operating time</strong>, where one unit equals <strong>100 hours</strong>. The question is whether a module needs additional monitoring before <strong>800 operating hours</strong> from enrollment. Failure means first functional failure according to a consistent engineering definition. Preventive replacement, if it makes future failure unobservable, needs special treatment: sometimes it is censoring, sometimes it is a competing event, depending on the estimand. We will keep those cases distinct.</p><p>Our twelve-record dataset is <strong>entirely synthetic, constructed for instruction</strong>, with intentionally small sample size and transparent predictions. Its numerical results demonstrate calculations; they are neither measured reliability results nor evidence of causal effects. A real industrial program would require many independent modules across production batches and prospective validation. The dataset was deliberately designed to exhibit both events and right censoring before and after the horizon, because that is where ordinary binary-classification metrics can mislead.</p><p><strong>Learning objectives.</strong> At the end you should be able to define the clock and estimand, describe a defensible split, calculate Harrell's concordance index from comparable event pairs, evaluate an Inverse Probability of Censoring Weighted (IPCW) Brier Score, investigate calibration, justify uncertainty assessment, and explain with a numerical example why censoring competing events in a Kaplan–Meier calculation does not estimate cause-specific cumulative incidence. Each result will be interpreted before a decision is made. The task is more than reporting metrics: you must know what quantity each number estimates and which assumptions sustain it.</p><blockquote>
+<p><strong>Orientation:</strong> Excellent discrimination does not guarantee accurate probabilities. Good average calibration does not guarantee safety for a particular subgroup. A narrow confidence interval does not rescue a biased measurement design.</p>
+</blockquote></section><section id="section-2"><div class="chapter-label">MODULE 02 / 34</div><h2>2. Prerequisites and the conceptual map</h2><p class="first-intuition">This guide assumes knowledge of sampling and estimation from Guide 35; model comparison and validation from Guide 40; uncertainty and confidence intervals from Guide 50; Kaplan–Meier and the log-rank framework from Guide 75; Cox diagnostics from Guide 77; and AFT prediction from Guide 79. We reconstruct the necessary steps here. Students with introductory statistics and Calculus I should remember the distinction between an event probability, a density and a conditional instantaneous rate. A <strong>hazard</strong> is a rate per unit time conditional on surviving to that time; it is not itself a probability.</p><p>There are three complementary prediction questions. <strong>Discrimination</strong> concerns order: do failures tend to receive higher predicted risk than comparable longer-surviving observations? <strong>Calibration</strong> concerns magnitude: does a reported 30% failure probability correspond approximately to a 30% event frequency among similarly predicted cases, under proper treatment of censoring? <strong>Overall prediction error</strong> combines direction and magnitude at a horizon; the Brier Score is a squared-error measure of this kind. None of these captures every operational objective. Decision usefulness also depends on the cost of missed failures, preventive interventions and the reliability of the data-generating process.</p><p>The analysis sequence is deliberately fixed. First specify the event and time zero. Second audit follow-up, censoring and independence. Third freeze an evaluation sample that models did not use for tuning. Fourth obtain survival predictions on the same horizon and units. Fifth examine discrimination, calibration and Brier error, checking the censoring weights. Sixth quantify uncertainty using entity-level resampling when justified. Seventh assess whether assumptions and follow-up support the proposed action. Eighth communicate both the decision and reasons not to overstate it.</p><blockquote>
+<p><strong>Vocabulary bridge:</strong> “Risk at eight units” means \(P(T\le8\mid x)=1-S(8\mid x)\), not the Cox hazard ratio. An AFT Time Ratio concerns multiplicative duration, not the absolute risk by eight units. A KM curve summarizes a group, not individualized risks without additional structure.</p>
+</blockquote></section><section id="section-3"><div class="chapter-label">MODULE 03 / 34</div><h2>3. Specify the estimand, observation process and time zero</h2><p class="first-intuition">Let \(T&gt;0\) denote time from first monitored operation to first qualifying failure, and \(C&gt;0\) time to the end of observable follow-up. What we record is the smaller of the two: the observed duration \(Y=\min(T,C)\). The event indicator is \(\delta=I(T\le C)\), meaning 1 for a confirmed failure and 0 for right censoring. If a unit is withdrawn at hour 600 while still functioning, we know only \(T&gt;600\). Entering “no failure by hour 800” for that unit would invent an additional 200 hours of observation.</p><p>The estimand for our engineering question is the probability of failure from a common origin through 800 hours, for a module with declared characteristics and under the specified operating regime. We should state whether failure risk is predicted under continued operation without replacement, under ordinary operational policy, or under a competing-replacement process; these are different questions. Our initial example uses the hypothetical event-free lifetime to first failure with administratively independent censoring, and later introduces a distinct competing-risk example.</p><p>Time zero must be before predictors are measured or at a legitimate landmark when new information becomes available. Starting a “baseline” prediction at 500 hours while demanding that every enrolled unit survive to that landmark quietly selects survivors. If a service treatment is classified as “ever received” using information acquired after enrollment, pre-treatment survival can be incorrectly credited to treatment. That is immortal time bias, not a modeling improvement.</p><p>Administrative censoring is reasonable when the test simply closes on a preplanned date, independently of the future unobserved failure time conditional on measured variables. If inspectors preferentially stop observing units with suspicious vibrations, censoring could be informative. Later IPCW calculations rely on a model for the probability of remaining observable and require positivity: observations like those evaluated must have a nonzero chance of remaining observed. The definition of independence is conditional and substantive; it cannot be proved by a p-value.</p><div class="equation-card"><span class="equation-label">KEY EQUATION</span><div class="math-scroll">\[Y_i=\min(T_i,C_i),\qquad \delta_i=I(T_i\le C_i),\qquad R_i(8)=1-S_i(8).\]</div></div></section><section id="section-4"><div class="chapter-label">MODULE 04 / 34</div><h2>4. Complete synthetic evaluation dataset</h2><p class="first-intuition">Each row represents a different hypothetical component, not repeated readings of one component. All time values are measured in <strong>hundreds of operating hours</strong> and follow-up begins at first monitored operation. The twelve predicted probabilities below are illustrative <strong>held-out predictions</strong> for a candidate model. They are not estimated from these twelve outcomes; treating them as truly external would require a separately trained model and an untouched evaluation cohort. We retain them as fixed numbers for reproducible arithmetic, not as evidence of successful prospective validation.</p><div class="table-wrap"><table>
+<thead>
+<tr>
+<th style="text-align:left" scope="col">Module</th>
+<th style="text-align:right" scope="col">Observed time \(Y\) (×100 h)</th>
+<th style="text-align:right" scope="col">Event \(\delta\)</th>
+<th style="text-align:right" scope="col">Predicted survival \(S(8)\)</th>
+<th style="text-align:right" scope="col">Predicted failure risk \(1-S(8)\)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">A</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.24</td>
+<td style="text-align:right">0.76</td>
+</tr>
+<tr>
+<td style="text-align:left">B</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.32</td>
+<td style="text-align:right">0.68</td>
+</tr>
+<tr>
+<td style="text-align:left">C</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0.38</td>
+<td style="text-align:right">0.62</td>
+</tr>
+<tr>
+<td style="text-align:left">D</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.30</td>
+<td style="text-align:right">0.70</td>
+</tr>
+<tr>
+<td style="text-align:left">E</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.47</td>
+<td style="text-align:right">0.53</td>
+</tr>
+<tr>
+<td style="text-align:left">F</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0.44</td>
+<td style="text-align:right">0.56</td>
+</tr>
+<tr>
+<td style="text-align:left">G</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.40</td>
+<td style="text-align:right">0.60</td>
+</tr>
+<tr>
+<td style="text-align:left">H</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.58</td>
+<td style="text-align:right">0.42</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0.54</td>
+<td style="text-align:right">0.46</td>
+</tr>
+<tr>
+<td style="text-align:left">J</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.68</td>
+<td style="text-align:right">0.32</td>
+</tr>
+<tr>
+<td style="text-align:left">K</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0.74</td>
+<td style="text-align:right">0.26</td>
+</tr>
+<tr>
+<td style="text-align:left">L</td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.65</td>
+<td style="text-align:right">0.35</td>
+</tr>
+</tbody>
+</table></div><p>There are eight recorded failures at 2, 3, 5, 6, 8, 9, 11 and 13; four censored observations at 4, 7, 10 and 12. Five failures occur by the chosen horizon, two observations become unknown before the horizon, and five are definitely event-free through it. Here and throughout, a failure at exactly time 8 is counted as a failure by the horizon. The distinction between “observed longer than eight” and “not observed to fail by eight” will matter in the Brier Score.</p><p>Check the data manually: twelve unique IDs; strictly positive durations; event indicators in \(\{0,1\}\); probabilities inside \([0,1]\). Predicted survival and predicted risk sum to one in every row. Ordering by time has no ties in this illustration, which simplifies the first concordance calculation; real software must define ties in time and prediction scores. We will not pretend the dataset has the size needed to calibrate an operational model.</p></section><section id="section-5"><div class="chapter-label">MODULE 05 / 34</div><h2>5. What constitutes valid training and validation?</h2><p class="first-intuition">The same record must not both determine model coefficients and serve as an independent test of those coefficients. A transparent workflow splits data by <strong>module identity</strong> before fitting transformations, imputers, feature selectors or survival models. If a factory logs multiple sensor windows per module, all windows of one module must remain in the same split. If several components share a manufacturing batch, a cluster- or batch-held-out test is often more honest than a random row split because shared conditions make outcomes correlated.</p><p>A chronological split can answer a different operational question: train on historical cohorts, test on modules enrolled later. It guards against some forms of look-ahead but also exposes changing manufacturing and maintenance practices. No splitting scheme is automatically correct. Choose one that matches deployment. Within the training portion, tune preprocessing, regularization and model families using properly nested cross-validation or a separate validation set. Reserve the final evaluation sample for one predeclared assessment; repeated tuning against the test set makes its apparent performance optimistic.</p><p>An additional leakage trap occurs when a predictor is measured after the requested prediction time. The indicator “eventually required urgent repair” contains information from the future if the decision is supposed to occur at first installation. At an eight-hour landmark, it could become usable only for modules demonstrably still under observation and if the prediction origin and outcome clock are redefined consistently. That produces a landmark analysis, not a baseline model with a clever feature.</p><p>Modeling and validation should share explicit units, horizon and outcome definition. A survival probability at 800 calendar hours is not interchangeable with one at 800 operating hours. A Cox model that predicts first failure and a KM curve that counts replacement as failure have different endpoints. The evaluation notebook or guide should maintain a data dictionary and verify that every prediction is measured on the same target. Here all three families will be conceptual alternatives for the <strong>same</strong> hypothetical first-failure endpoint.</p></section><section id="section-6"><div class="chapter-label">MODULE 06 / 34</div><h2>6. Establish the Kaplan–Meier benchmark</h2><p class="first-intuition">Kaplan–Meier (KM) offers a nonparametric estimate of group survival under the usual independent-censoring conditions. At each distinct failure time \(t_j\), let \(n_j\) be the number still under observation just before \(t_j\) and \(d_j\) the number who fail then. Conditional survival through that step is \(1-d_j/n_j\). Multiply the steps to obtain the estimated survival probability. Censored cases are not counted as failures; they leave subsequent risk sets after their censoring time.</p><div class="equation-card"><span class="equation-label">KEY EQUATION</span><div class="math-scroll">\[\widehat S_{KM}(t)=\prod_{t_j\le t}\left(1-\frac{d_j}{n_j}\right).\]</div></div><p>For our sorted twelve modules, the first two failures occur with risk sets of 12 and 11. Thus survival just after time 2 equals \(11/12=0.91667\); just after time 3 it becomes \((11/12)(10/11)=10/12=0.83333\). Module C is censored at time 4, so the risk set at time 5 is 9 rather than 10. The survival at time 5 is therefore \((10/12)(8/9)=20/27\approx0.74074\). At time 6, the next factor is \(7/8\), giving \(35/54\approx0.64815\). Module F is censored at 7, and at time 8 the risk set is six; one failure gives \(5/6\). Therefore KM survival at our horizon is about 0.54012 and group failure probability is about 0.45988.</p><div class="equation-card"><span class="equation-label">KEY EQUATION</span><div class="math-scroll">\[\widehat S_{KM}(8)=\frac{11}{12}\frac{10}{11}\frac89\frac78\frac56=\frac{175}{324}\approx0.54012.\]</div></div><p>The raw proportion with observed failure by time 8 is \(5/12\approx0.41667\). It differs from \(1-\widehat S_{KM}(8)\) because two participants were censored before 8; under the KM assumptions, each remains relevant through the interval it was observed, not forever. The KM curve is the <strong>overall benchmark</strong>, not an individualized probability for A or L. We will compare its group trend and support of follow-up with conditional Cox and AFT predictions.</p><figure class="charts-wrap" role="group"><svg role="img" aria-label="Kaplan–Meier, censored observations and the eight-unit horizon. The curve is an overall group estimate, not an individual prediction." height="324pt" version="1.1" viewbox="0 0 648 324" width="648pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="a11yfig1-km-en-figure_1">
+<g id="a11yfig1-km-en-patch_1">
+<path d="M 0 324 
+L 648 324 
+L 648 0 
+L 0 0 
+L 0 324 
+z
+" style="fill: none"></path>
+</g>
+<g id="a11yfig1-km-en-axes_1">
+<g id="a11yfig1-km-en-patch_2">
+<path d="M 47.72 282.04 
+L 637.2 282.04 
+L 637.2 10.8 
+L 47.72 10.8 
+L 47.72 282.04 
+z
+" style="fill: none"></path>
+</g>
+<g id="a11yfig1-km-en-PathCollection_1">
+<defs>
+<path d="M -5.244044 0 
+L 5.244044 0 
+M 0 5.244044 
+L 0 -5.244044 
+" id="a11yfig1-km-en-m9f121c9fe0" style="stroke: #df823b; stroke-width: 1.5"></path>
+</defs>
+<g clip-path="url(#a11yfig1-km-en-p25812bba7d)">
+<use style="fill: #df823b; stroke: #df823b; stroke-width: 1.5" x="227.626234" xlink:href="#a11yfig1-km-en-m9f121c9fe0" y="64.700256"></use>
+<use style="fill: #df823b; stroke: #df823b; stroke-width: 1.5" x="342.46" xlink:href="#a11yfig1-km-en-m9f121c9fe0" y="112.997977"></use>
+<use style="fill: #df823b; stroke: #df823b; stroke-width: 1.5" x="457.293766" xlink:href="#a11yfig1-km-en-m9f121c9fe0" y="169.345318"></use>
+<use style="fill: #df823b; stroke: #df823b; stroke-width: 1.5" x="533.84961" xlink:href="#a11yfig1-km-en-m9f121c9fe0" y="206.910212"></use>
+</g>
+</g>
+<g id="a11yfig1-km-en-matplotlib.axis_1">
+<g id="a11yfig1-km-en-xtick_1">
+<g id="a11yfig1-km-en-line2d_1">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="a11yfig1-km-en-m00c6a111d4" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="74.514545" xlink:href="#a11yfig1-km-en-m00c6a111d4" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig1-km-en-text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 74.514545 296.638438)" x="74.514545" y="296.638438">0</text>
+</g>
+</g>
+<g id="a11yfig1-km-en-xtick_2">
+<g id="a11yfig1-km-en-line2d_2">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="151.07039" xlink:href="#a11yfig1-km-en-m00c6a111d4" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig1-km-en-text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 151.07039 296.638438)" x="151.07039" y="296.638438">2</text>
+</g>
+</g>
+<g id="a11yfig1-km-en-xtick_3">
+<g id="a11yfig1-km-en-line2d_3">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="227.626234" xlink:href="#a11yfig1-km-en-m00c6a111d4" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig1-km-en-text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 227.626234 296.638438)" x="227.626234" y="296.638438">4</text>
+</g>
+</g>
+<g id="a11yfig1-km-en-xtick_4">
+<g id="a11yfig1-km-en-line2d_4">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="304.182078" xlink:href="#a11yfig1-km-en-m00c6a111d4" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig1-km-en-text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 304.182078 296.638438)" x="304.182078" y="296.638438">6</text>
+</g>
+</g>
+<g id="a11yfig1-km-en-xtick_5">
+<g id="a11yfig1-km-en-line2d_5">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="380.737922" xlink:href="#a11yfig1-km-en-m00c6a111d4" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig1-km-en-text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 380.737922 296.638438)" x="380.737922" y="296.638438">8</text>
+</g>
+</g>
+<g id="a11yfig1-km-en-xtick_6">
+<g id="a11yfig1-km-en-line2d_6">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="457.293766" xlink:href="#a11yfig1-km-en-m00c6a111d4" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig1-km-en-text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 457.293766 296.638438)" x="457.293766" y="296.638438">10</text>
+</g>
+</g>
+<g id="a11yfig1-km-en-xtick_7">
+<g id="a11yfig1-km-en-line2d_7">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="533.84961" xlink:href="#a11yfig1-km-en-m00c6a111d4" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig1-km-en-text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 533.84961 296.638438)" x="533.84961" y="296.638438">12</text>
+</g>
+</g>
+<g id="a11yfig1-km-en-xtick_8">
+<g id="a11yfig1-km-en-line2d_8">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="610.405455" xlink:href="#a11yfig1-km-en-m00c6a111d4" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig1-km-en-text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 610.405455 296.638438)" x="610.405455" y="296.638438">14</text>
+</g>
+</g>
+<g id="a11yfig1-km-en-text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 342.46 310.316563)" x="342.46" y="310.316563">Time (×100 hours)</text>
+</g>
+</g>
+<g id="a11yfig1-km-en-matplotlib.axis_2">
+<g id="a11yfig1-km-en-ytick_1">
+<g id="a11yfig1-km-en-line2d_9">
+<path clip-path="url(#a11yfig1-km-en-p25812bba7d)" d="M 47.72 282.04 
+L 637.2 282.04 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-km-en-line2d_10">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="a11yfig1-km-en-mfccb5ee6f8" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig1-km-en-mfccb5ee6f8" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig1-km-en-text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 285.839219)" x="40.72" y="285.839219">0.0</text>
+</g>
+</g>
+<g id="a11yfig1-km-en-ytick_2">
+<g id="a11yfig1-km-en-line2d_11">
+<path clip-path="url(#a11yfig1-km-en-p25812bba7d)" d="M 47.72 229.878462 
+L 637.2 229.878462 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-km-en-line2d_12">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig1-km-en-mfccb5ee6f8" y="229.878462"></use>
+</g>
+</g>
+<g id="a11yfig1-km-en-text_11">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 233.67768)" x="40.72" y="233.67768">0.2</text>
+</g>
+</g>
+<g id="a11yfig1-km-en-ytick_3">
+<g id="a11yfig1-km-en-line2d_13">
+<path clip-path="url(#a11yfig1-km-en-p25812bba7d)" d="M 47.72 177.716923 
+L 637.2 177.716923 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-km-en-line2d_14">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig1-km-en-mfccb5ee6f8" y="177.716923"></use>
+</g>
+</g>
+<g id="a11yfig1-km-en-text_12">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 181.516142)" x="40.72" y="181.516142">0.4</text>
+</g>
+</g>
+<g id="a11yfig1-km-en-ytick_4">
+<g id="a11yfig1-km-en-line2d_15">
+<path clip-path="url(#a11yfig1-km-en-p25812bba7d)" d="M 47.72 125.555385 
+L 637.2 125.555385 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-km-en-line2d_16">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig1-km-en-mfccb5ee6f8" y="125.555385"></use>
+</g>
+</g>
+<g id="a11yfig1-km-en-text_13">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 129.354603)" x="40.72" y="129.354603">0.6</text>
+</g>
+</g>
+<g id="a11yfig1-km-en-ytick_5">
+<g id="a11yfig1-km-en-line2d_17">
+<path clip-path="url(#a11yfig1-km-en-p25812bba7d)" d="M 47.72 73.393846 
+L 637.2 73.393846 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-km-en-line2d_18">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig1-km-en-mfccb5ee6f8" y="73.393846"></use>
+</g>
+</g>
+<g id="a11yfig1-km-en-text_14">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 77.193065)" x="40.72" y="77.193065">0.8</text>
+</g>
+</g>
+<g id="a11yfig1-km-en-ytick_6">
+<g id="a11yfig1-km-en-line2d_19">
+<path clip-path="url(#a11yfig1-km-en-p25812bba7d)" d="M 47.72 21.232308 
+L 637.2 21.232308 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-km-en-line2d_20">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig1-km-en-mfccb5ee6f8" y="21.232308"></use>
+</g>
+</g>
+<g id="a11yfig1-km-en-text_15">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 25.031526)" x="40.72" y="25.031526">1.0</text>
+</g>
+</g>
+<g id="a11yfig1-km-en-text_16">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-90 18.737188 146.42)" x="18.737188" y="146.42">Estimated survival</text>
+</g>
+</g>
+<g id="a11yfig1-km-en-line2d_21">
+<path clip-path="url(#a11yfig1-km-en-p25812bba7d)" d="M 74.514545 21.232308 
+L 151.07039 21.232308 
+L 151.07039 42.966282 
+L 189.348312 42.966282 
+L 189.348312 64.700256 
+L 227.626234 64.700256 
+L 227.626234 64.700256 
+L 265.904156 64.700256 
+L 265.904156 88.849117 
+L 304.182078 88.849117 
+L 304.182078 112.997977 
+L 342.46 112.997977 
+L 342.46 112.997977 
+L 380.737922 112.997977 
+L 380.737922 141.171648 
+L 419.015844 141.171648 
+L 419.015844 169.345318 
+L 457.293766 169.345318 
+L 457.293766 169.345318 
+L 495.571688 169.345318 
+L 495.571688 206.910212 
+L 533.84961 206.910212 
+L 533.84961 206.910212 
+L 572.127532 206.910212 
+L 572.127532 282.04 
+L 610.405455 282.04 
+L 610.405455 282.04 
+" style="fill: none; stroke: #2563eb; stroke-width: 2.5; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-km-en-line2d_22">
+<path clip-path="url(#a11yfig1-km-en-p25812bba7d)" d="M 380.737922 282.04 
+L 380.737922 10.8 
+" style="fill: none; stroke-dasharray: 4.44,1.92; stroke-dashoffset: 0; stroke: #6b7280; stroke-width: 1.2"></path>
+</g>
+<g id="a11yfig1-km-en-patch_3">
+<path d="M 47.72 282.04 
+L 47.72 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-km-en-patch_4">
+<path d="M 47.72 282.04 
+L 637.2 282.04 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-km-en-PathCollection_2">
+<defs>
+<path d="M 0 4.031129 
+C 1.069068 4.031129 2.094493 3.606384 2.850439 2.850439 
+C 3.606384 2.094493 4.031129 1.069068 4.031129 0 
+C 4.031129 -1.069068 3.606384 -2.094493 2.850439 -2.850439 
+C 2.094493 -3.606384 1.069068 -4.031129 0 -4.031129 
+C -1.069068 -4.031129 -2.094493 -3.606384 -2.850439 -2.850439 
+C -3.606384 -2.094493 -4.031129 -1.069068 -4.031129 0 
+C -4.031129 1.069068 -3.606384 2.094493 -2.850439 2.850439 
+C -2.094493 3.606384 -1.069068 4.031129 0 4.031129 
+z
+" id="a11yfig1-km-en-m01b8494a76" style="stroke: #15417a"></path>
+</defs>
+<g clip-path="url(#a11yfig1-km-en-p25812bba7d)">
+<use style="fill: #15417a; stroke: #15417a" x="380.737922" xlink:href="#a11yfig1-km-en-m01b8494a76" y="141.171648"></use>
+</g>
+</g>
+<g id="a11yfig1-km-en-legend_1">
+<g id="a11yfig1-km-en-patch_5">
+<path d="M 541.866094 57.630938 
+L 630.9 57.630938 
+Q 632.7 57.630938 632.7 55.830938 
+L 632.7 17.1 
+Q 632.7 15.3 630.9 15.3 
+L 541.866094 15.3 
+Q 540.066094 15.3 540.066094 17.1 
+L 540.066094 55.830938 
+Q 540.066094 57.630938 541.866094 57.630938 
+z
+" style="fill: #ffffff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"></path>
+</g>
+<g id="a11yfig1-km-en-line2d_23">
+<path d="M 543.666094 22.588594 
+L 552.666094 22.588594 
+L 552.666094 22.588594 
+L 561.666094 22.588594 
+L 561.666094 22.588594 
+" style="fill: none; stroke: #2563eb; stroke-width: 2.5; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig1-km-en-text_17">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 568.866094 25.738594)" x="568.866094" y="25.738594">Kaplan–Meier</text>
+</g>
+<g id="a11yfig1-km-en-PathCollection_3">
+<g>
+<use style="fill: #df823b; stroke: #df823b; stroke-width: 1.5" x="552.666094" xlink:href="#a11yfig1-km-en-m9f121c9fe0" y="36.586406"></use>
+</g>
+</g>
+<g id="a11yfig1-km-en-text_18">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 568.866094 38.948906)" x="568.866094" y="38.948906">Censored</text>
+</g>
+<g id="a11yfig1-km-en-line2d_24">
+<path d="M 543.666094 49.009219 
+L 552.666094 49.009219 
+L 561.666094 49.009219 
+" style="fill: none; stroke-dasharray: 4.44,1.92; stroke-dashoffset: 0; stroke: #6b7280; stroke-width: 1.2"></path>
+</g>
+<g id="a11yfig1-km-en-text_19">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 568.866094 52.159219)" x="568.866094" y="52.159219">Horizon 8</text>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="a11yfig1-km-en-p25812bba7d">
+<rect height="271.24" width="589.48" x="47.72" y="10.8"></rect>
+</clippath>
+</defs>
+</svg><figcaption>Kaplan–Meier, censored observations and the eight-unit horizon. The curve is an overall group estimate, not an individual prediction.</figcaption></figure></section><section id="section-7"><div class="chapter-label">MODULE 07 / 34</div><h2>7. Cox and AFT: comparable predictions, different parameter meanings</h2><p class="first-intuition">A Cox Proportional Hazards (PH) model expresses instantaneous hazard as a baseline function times a relative-risk multiplier. For covariates \(x\), \(h(t\mid x)=h_0(t)\exp(x^{\mathsf T}\beta)\), and its survival prediction is \(S(t\mid x)=S_0(t)^{\exp(x^{\mathsf T}\beta)}\). A coefficient produces a Hazard Ratio only when compared under the model's assumptions. A constant HR does not imply a constant difference in absolute failure probability; that depends on baseline risk and the evaluation time.</p><p>An AFT model instead expresses log time as a linear predictor plus a stochastic error: \(\log T=\alpha+x^{\mathsf T}\gamma+\sigma\varepsilon\). In the common time-scale interpretation, \(\exp(\gamma_k)\) is the <strong>Time Ratio</strong> associated with a unit covariate change holding other model terms fixed. A Time Ratio of 0.8 indicates a 20% shorter modeled duration quantile, not a 20% higher failure probability. Lognormal and Weibull AFT models yield complete conditional survival curves; the two distributional choices impose different tail behavior.</p><div class="equation-card"><span class="equation-label">KEY EQUATION</span><div class="math-scroll">\[h(t\mid x)=h_0(t)e^{x^{\mathsf T}\beta},\qquad \log T=\alpha+x^{\mathsf T}\gamma+\sigma\varepsilon.\]</div></div><p>The only fair predictive comparison evaluates <strong>the same outcome, horizon, held-out modules, and censoring protocol</strong>. Cox, AFT and KM offer different flexibility and assumptions; there is no universal numerical winner. Cox may be attractive when relative hazards are interpretable and PH is adequate, while AFT is attractive when duration multipliers and parametric quantiles are useful. The KM curve is a useful reality check but has no individualized covariates unless stratified into groups, which itself may create small unstable risk sets.</p><p>Before comparing predictions, examine Cox scaled Schoenfeld residuals versus time, possible nonlinearity using functional-form checks, influential observations and the PH assumption. For AFT inspect residual structure, plausible family, outliers and extrapolated tail behavior. A violation can invalidate the coefficient's interpretation even if a single predictive metric looks favorable. Model evaluation therefore includes diagnostics, not only a leaderboard.</p></section><section id="section-8"><div class="chapter-label">MODULE 08 / 34</div><h2>8. Why ordinary classification accuracy is wrong under early censoring</h2><p class="first-intuition">A tempting shortcut labels each row “failure by eight” if it failed by time 8, and “no failure” otherwise, then calculates ordinary accuracy or squared error. It would incorrectly place modules C and F in the known-survivor group even though they leave observation at 4 and 7. For C, \(T&gt;4\), but \(T&gt;8\) is unknown. The same logic holds for F. Treating these two labels as known inserts information the dataset does not contain.</p><p>One might instead discard C and F. That is not automatically unbiased: the remaining sample overrepresents individuals whose follow-up stayed observable, and the extent of this selection may depend on their covariates and failure risk. Censoring-aware methods reconstruct the evaluation target under assumptions about observation probabilities. They are not miraculous corrections for any missing-data mechanism; <strong>informative censoring unaccounted for by the weighting model</strong> can bias them.</p><p>At horizon \(\tau=8\), define the true survival indicator \(Z_i(8)=I(T_i&gt;8)\). We know \(Z=0\) for A, B, D, E and G because these failed by eight. We know \(Z=1\) for H, I, J, K and L because they remained under observation beyond eight. We do <strong>not</strong> know \(Z\) for C and F. The corresponding model prediction is \(\widehat S_i(8)\), a continuous probability, not a classification label. The squared error \((Z_i-\widehat S_i)^2\) can therefore be computed for ten cases, with suitable censoring weights to recover population-average meaning.</p><p>There is also a distinction between fixed-horizon predictions and a full survival curve. A candidate that is good at eight units may be poor at two or twenty. Horizon selection should follow the operational question before examining outcomes, with a sufficient number of events and censored risk sets at that time. A time-dependent performance curve can supplement the declared primary horizon but does not license choosing the best-looking time after analysis.</p></section><section id="section-9"><div class="chapter-label">MODULE 09 / 34</div><h2>9. Discrimination as an ordering question</h2><p class="first-intuition">The C-index summarizes whether the model tends to assign greater failure risk to the module known to fail earlier within evaluable comparisons. In Harrell's basic formulation, a pair is comparable if the <strong>shorter observed time corresponds to an event</strong>. If the shorter observation is censored, we cannot infer which latent failure occurred first, so that pair is excluded. Ties in event time or prediction score require declared conventions; our dataset has unique times and distinct scores, making the core arithmetic transparent.</p><p>Because we use \(S(8)\) as a risk ranking, <strong>lower</strong> survival prediction means <strong>higher</strong> predicted failure risk. In a comparable pair where A fails at time 2 and H survives under observation to time 9, a concordant prediction has \(S_A(8)&lt;S_H(8)\): \(0.24&lt;0.58\), so the pair is concordant. If a later-failing row has a smaller predicted survival, that pair is discordant. A model assigning identical risk scores would receive half credit for tied predictions under the common convention.</p><div class="equation-card"><span class="equation-label">KEY EQUATION</span><div class="math-scroll">\[\widehat C=\frac{N_{\mathrm{concordant}}+\tfrac12N_{\mathrm{tied\ score}}}{N_{\mathrm{comparable}}}.\]</div></div><p>Interpret the metric as a ranking score over the <strong>comparable pairs in this evaluation design</strong>, not as the proportion of failures correctly classified. A C-index of 0.8 does not mean 80% of people fail or that predicted probabilities are correct 80% of the time. It is affected by how follow-up, censoring, risk heterogeneity and case selection shape comparable pairs. Harrell's version may be biased under heavy censoring; censoring-adjusted alternatives, including Uno's C, are often worth considering with appropriate uncertainty methods.</p><p>We will now enumerate pairs rather than merely trust a library implementation. This is possible only because the synthetic dataset is small. The same logic can be implemented with a double loop on larger validation samples, though production code must handle ties, weights, compute cost and left-truncated risk sets where relevant.</p><figure class="charts-wrap" role="group"><svg role="img" aria-label="Fixed synthetic predicted event risks versus observed follow-up. The orange marks identify censored records and are not failures." height="324pt" version="1.1" viewbox="0 0 648 324" width="648pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="a11yfig2-scores-en-figure_1">
+<g id="a11yfig2-scores-en-patch_1">
+<path d="M 0 324 
+L 648 324 
+L 648 0 
+L 0 0 
+L 0 324 
+z
+" style="fill: none"></path>
+</g>
+<g id="a11yfig2-scores-en-axes_1">
+<g id="a11yfig2-scores-en-patch_2">
+<path d="M 47.72 282.04 
+L 637.2 282.04 
+L 637.2 10.8 
+L 47.72 10.8 
+L 47.72 282.04 
+z
+" style="fill: none"></path>
+</g>
+<g id="a11yfig2-scores-en-PathCollection_1">
+<defs>
+<path d="M 0 4.358899 
+C 1.155994 4.358899 2.264796 3.899618 3.082207 3.082207 
+C 3.899618 2.264796 4.358899 1.155994 4.358899 -0 
+C 4.358899 -1.155994 3.899618 -2.264796 3.082207 -3.082207 
+C 2.264796 -3.899618 1.155994 -4.358899 0 -4.358899 
+C -1.155994 -4.358899 -2.264796 -3.899618 -3.082207 -3.082207 
+C -3.899618 -2.264796 -4.358899 -1.155994 -4.358899 0 
+C -4.358899 1.155994 -3.899618 2.264796 -3.082207 3.082207 
+C -2.264796 3.899618 -1.155994 4.358899 0 4.358899 
+z
+" id="a11yfig2-scores-en-C0_0_c0631a9f9b"></path>
+</defs>
+<g clip-path="url(#a11yfig2-scores-en-pa2d38e2a6c)">
+<use style="fill: #2563eb; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="79.707287" xlink:href="#a11yfig2-scores-en-C0_0_c0631a9f9b" y="49.548571"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-en-pa2d38e2a6c)">
+<use style="fill: #2563eb; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="125.403411" xlink:href="#a11yfig2-scores-en-C0_0_c0631a9f9b" y="80.547429"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-en-pa2d38e2a6c)">
+<use style="fill: #dc8a42; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="171.099535" xlink:href="#a11yfig2-scores-en-C0_0_c0631a9f9b" y="103.796571"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-en-pa2d38e2a6c)">
+<use style="fill: #2563eb; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="216.795659" xlink:href="#a11yfig2-scores-en-C0_0_c0631a9f9b" y="72.797714"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-en-pa2d38e2a6c)">
+<use style="fill: #2563eb; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="262.491783" xlink:href="#a11yfig2-scores-en-C0_0_c0631a9f9b" y="138.670286"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-en-pa2d38e2a6c)">
+<use style="fill: #dc8a42; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="308.187907" xlink:href="#a11yfig2-scores-en-C0_0_c0631a9f9b" y="127.045714"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-en-pa2d38e2a6c)">
+<use style="fill: #2563eb; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="353.884031" xlink:href="#a11yfig2-scores-en-C0_0_c0631a9f9b" y="111.546286"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-en-pa2d38e2a6c)">
+<use style="fill: #2563eb; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="399.580155" xlink:href="#a11yfig2-scores-en-C0_0_c0631a9f9b" y="181.293714"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-en-pa2d38e2a6c)">
+<use style="fill: #dc8a42; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="445.276279" xlink:href="#a11yfig2-scores-en-C0_0_c0631a9f9b" y="165.794286"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-en-pa2d38e2a6c)">
+<use style="fill: #2563eb; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="490.972403" xlink:href="#a11yfig2-scores-en-C0_0_c0631a9f9b" y="220.042286"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-en-pa2d38e2a6c)">
+<use style="fill: #dc8a42; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="536.668527" xlink:href="#a11yfig2-scores-en-C0_0_c0631a9f9b" y="243.291429"></use>
+</g>
+<g clip-path="url(#a11yfig2-scores-en-pa2d38e2a6c)">
+<use style="fill: #2563eb; fill-opacity: 0.9; stroke: #ffffff; stroke-opacity: 0.9; stroke-width: 0.8" x="582.364651" xlink:href="#a11yfig2-scores-en-C0_0_c0631a9f9b" y="208.417714"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-en-matplotlib.axis_1">
+<g id="a11yfig2-scores-en-xtick_1">
+<g id="a11yfig2-scores-en-line2d_1">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="a11yfig2-scores-en-m8fc01abafb" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="79.707287" xlink:href="#a11yfig2-scores-en-m8fc01abafb" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-en-text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 79.707287 296.638438)" x="79.707287" y="296.638438">2</text>
+</g>
+</g>
+<g id="a11yfig2-scores-en-xtick_2">
+<g id="a11yfig2-scores-en-line2d_2">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="171.099535" xlink:href="#a11yfig2-scores-en-m8fc01abafb" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-en-text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 171.099535 296.638438)" x="171.099535" y="296.638438">4</text>
+</g>
+</g>
+<g id="a11yfig2-scores-en-xtick_3">
+<g id="a11yfig2-scores-en-line2d_3">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="262.491783" xlink:href="#a11yfig2-scores-en-m8fc01abafb" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-en-text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 262.491783 296.638438)" x="262.491783" y="296.638438">6</text>
+</g>
+</g>
+<g id="a11yfig2-scores-en-xtick_4">
+<g id="a11yfig2-scores-en-line2d_4">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="353.884031" xlink:href="#a11yfig2-scores-en-m8fc01abafb" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-en-text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 353.884031 296.638438)" x="353.884031" y="296.638438">8</text>
+</g>
+</g>
+<g id="a11yfig2-scores-en-xtick_5">
+<g id="a11yfig2-scores-en-line2d_5">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="445.276279" xlink:href="#a11yfig2-scores-en-m8fc01abafb" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-en-text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 445.276279 296.638438)" x="445.276279" y="296.638438">10</text>
+</g>
+</g>
+<g id="a11yfig2-scores-en-xtick_6">
+<g id="a11yfig2-scores-en-line2d_6">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="536.668527" xlink:href="#a11yfig2-scores-en-m8fc01abafb" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-en-text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 536.668527 296.638438)" x="536.668527" y="296.638438">12</text>
+</g>
+</g>
+<g id="a11yfig2-scores-en-xtick_7">
+<g id="a11yfig2-scores-en-line2d_7">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="628.060775" xlink:href="#a11yfig2-scores-en-m8fc01abafb" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-en-text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 628.060775 296.638438)" x="628.060775" y="296.638438">14</text>
+</g>
+</g>
+<g id="a11yfig2-scores-en-text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 342.46 310.316563)" x="342.46" y="310.316563">Observed time (×100 hours)</text>
+</g>
+</g>
+<g id="a11yfig2-scores-en-matplotlib.axis_2">
+<g id="a11yfig2-scores-en-ytick_1">
+<g id="a11yfig2-scores-en-line2d_8">
+<path clip-path="url(#a11yfig2-scores-en-pa2d38e2a6c)" d="M 47.72 266.540571 
+L 637.2 266.540571 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-scores-en-line2d_9">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="a11yfig2-scores-en-ma1bcee6fb0" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig2-scores-en-ma1bcee6fb0" y="266.540571"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-en-text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 270.33979)" x="40.72" y="270.33979">0.2</text>
+</g>
+</g>
+<g id="a11yfig2-scores-en-ytick_2">
+<g id="a11yfig2-scores-en-line2d_10">
+<path clip-path="url(#a11yfig2-scores-en-pa2d38e2a6c)" d="M 47.72 227.792 
+L 637.2 227.792 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-scores-en-line2d_11">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig2-scores-en-ma1bcee6fb0" y="227.792"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-en-text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 231.591219)" x="40.72" y="231.591219">0.3</text>
+</g>
+</g>
+<g id="a11yfig2-scores-en-ytick_3">
+<g id="a11yfig2-scores-en-line2d_12">
+<path clip-path="url(#a11yfig2-scores-en-pa2d38e2a6c)" d="M 47.72 189.043429 
+L 637.2 189.043429 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-scores-en-line2d_13">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig2-scores-en-ma1bcee6fb0" y="189.043429"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-en-text_11">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 192.842647)" x="40.72" y="192.842647">0.4</text>
+</g>
+</g>
+<g id="a11yfig2-scores-en-ytick_4">
+<g id="a11yfig2-scores-en-line2d_14">
+<path clip-path="url(#a11yfig2-scores-en-pa2d38e2a6c)" d="M 47.72 150.294857 
+L 637.2 150.294857 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-scores-en-line2d_15">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig2-scores-en-ma1bcee6fb0" y="150.294857"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-en-text_12">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 154.094076)" x="40.72" y="154.094076">0.5</text>
+</g>
+</g>
+<g id="a11yfig2-scores-en-ytick_5">
+<g id="a11yfig2-scores-en-line2d_16">
+<path clip-path="url(#a11yfig2-scores-en-pa2d38e2a6c)" d="M 47.72 111.546286 
+L 637.2 111.546286 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-scores-en-line2d_17">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig2-scores-en-ma1bcee6fb0" y="111.546286"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-en-text_13">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 115.345504)" x="40.72" y="115.345504">0.6</text>
+</g>
+</g>
+<g id="a11yfig2-scores-en-ytick_6">
+<g id="a11yfig2-scores-en-line2d_18">
+<path clip-path="url(#a11yfig2-scores-en-pa2d38e2a6c)" d="M 47.72 72.797714 
+L 637.2 72.797714 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-scores-en-line2d_19">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig2-scores-en-ma1bcee6fb0" y="72.797714"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-en-text_14">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 76.596933)" x="40.72" y="76.596933">0.7</text>
+</g>
+</g>
+<g id="a11yfig2-scores-en-ytick_7">
+<g id="a11yfig2-scores-en-line2d_20">
+<path clip-path="url(#a11yfig2-scores-en-pa2d38e2a6c)" d="M 47.72 34.049143 
+L 637.2 34.049143 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-scores-en-line2d_21">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig2-scores-en-ma1bcee6fb0" y="34.049143"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-en-text_15">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 37.848362)" x="40.72" y="37.848362">0.8</text>
+</g>
+</g>
+<g id="a11yfig2-scores-en-text_16">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-90 18.737188 146.42)" x="18.737188" y="146.42">Predicted failure risk at 8</text>
+</g>
+</g>
+<g id="a11yfig2-scores-en-line2d_22">
+<path clip-path="url(#a11yfig2-scores-en-pa2d38e2a6c)" d="M 353.884031 282.04 
+L 353.884031 10.8 
+" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #94a3b8; stroke-width: 1.5"></path>
+</g>
+<g id="a11yfig2-scores-en-patch_3">
+<path d="M 47.72 282.04 
+L 47.72 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-scores-en-patch_4">
+<path d="M 47.72 282.04 
+L 637.2 282.04 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig2-scores-en-text_17">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 84.707287 44.548571)" x="84.707287" y="44.548571">A</text>
+</g>
+<g id="a11yfig2-scores-en-text_18">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 130.403411 75.547429)" x="130.403411" y="75.547429">B</text>
+</g>
+<g id="a11yfig2-scores-en-text_19">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 176.099535 98.796571)" x="176.099535" y="98.796571">C</text>
+</g>
+<g id="a11yfig2-scores-en-text_20">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 221.795659 67.797714)" x="221.795659" y="67.797714">D</text>
+</g>
+<g id="a11yfig2-scores-en-text_21">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 267.491783 133.670286)" x="267.491783" y="133.670286">E</text>
+</g>
+<g id="a11yfig2-scores-en-text_22">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 313.187907 122.045714)" x="313.187907" y="122.045714">F</text>
+</g>
+<g id="a11yfig2-scores-en-text_23">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 358.884031 106.546286)" x="358.884031" y="106.546286">G</text>
+</g>
+<g id="a11yfig2-scores-en-text_24">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 404.580155 176.293714)" x="404.580155" y="176.293714">H</text>
+</g>
+<g id="a11yfig2-scores-en-text_25">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 450.276279 160.794286)" x="450.276279" y="160.794286">I</text>
+</g>
+<g id="a11yfig2-scores-en-text_26">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 495.972403 215.042286)" x="495.972403" y="215.042286">J</text>
+</g>
+<g id="a11yfig2-scores-en-text_27">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 541.668527 238.291429)" x="541.668527" y="238.291429">K</text>
+</g>
+<g id="a11yfig2-scores-en-text_28">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 587.364651 203.417714)" x="587.364651" y="203.417714">L</text>
+</g>
+<g id="a11yfig2-scores-en-legend_1">
+<g id="a11yfig2-scores-en-patch_5">
+<path d="M 547.823437 48.15625 
+L 630.2 48.15625 
+Q 632.2 48.15625 632.2 46.15625 
+L 632.2 17.8 
+Q 632.2 15.8 630.2 15.8 
+L 547.823437 15.8 
+Q 545.823437 15.8 545.823437 17.8 
+L 545.823437 46.15625 
+Q 545.823437 48.15625 547.823437 48.15625 
+z
+" style="fill: #ffffff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"></path>
+</g>
+<g id="a11yfig2-scores-en-line2d_23">
+<path d="M 549.823437 23.898438 
+L 559.823437 23.898438 
+L 569.823437 23.898438 
+" style="fill: none; stroke: #ffffff; stroke-width: 1.5; stroke-linecap: square"></path>
+<defs>
+<path d="M 0 4.5 
+C 1.193414 4.5 2.338109 4.025852 3.181981 3.181981 
+C 4.025852 2.338109 4.5 1.193414 4.5 0 
+C 4.5 -1.193414 4.025852 -2.338109 3.181981 -3.181981 
+C 2.338109 -4.025852 1.193414 -4.5 0 -4.5 
+C -1.193414 -4.5 -2.338109 -4.025852 -3.181981 -3.181981 
+C -4.025852 -2.338109 -4.5 -1.193414 -4.5 0 
+C -4.5 1.193414 -4.025852 2.338109 -3.181981 3.181981 
+C -2.338109 4.025852 -1.193414 4.5 0 4.5 
+z
+" id="a11yfig2-scores-en-m226000b7e1" style="stroke: #ffffff"></path>
+</defs>
+<g>
+<use style="fill: #2563eb; stroke: #ffffff" x="559.823437" xlink:href="#a11yfig2-scores-en-m226000b7e1" y="23.898438"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-en-text_29">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 577.823437 27.398438)" x="577.823437" y="27.398438">Failure</text>
+</g>
+<g id="a11yfig2-scores-en-line2d_24">
+<path d="M 549.823437 38.576563 
+L 559.823437 38.576563 
+L 569.823437 38.576563 
+" style="fill: none; stroke: #ffffff; stroke-width: 1.5; stroke-linecap: square"></path>
+<defs>
+<path d="M 0 4.5 
+C 1.193414 4.5 2.338109 4.025852 3.181981 3.181981 
+C 4.025852 2.338109 4.5 1.193414 4.5 0 
+C 4.5 -1.193414 4.025852 -2.338109 3.181981 -3.181981 
+C 2.338109 -4.025852 1.193414 -4.5 0 -4.5 
+C -1.193414 -4.5 -2.338109 -4.025852 -3.181981 -3.181981 
+C -4.025852 -2.338109 -4.5 -1.193414 -4.5 0 
+C -4.5 1.193414 -4.025852 2.338109 -3.181981 3.181981 
+C -2.338109 4.025852 -1.193414 4.5 0 4.5 
+z
+" id="a11yfig2-scores-en-mee3247813d" style="stroke: #ffffff"></path>
+</defs>
+<g>
+<use style="fill: #dc8a42; stroke: #ffffff" x="559.823437" xlink:href="#a11yfig2-scores-en-mee3247813d" y="38.576563"></use>
+</g>
+</g>
+<g id="a11yfig2-scores-en-text_30">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 577.823437 42.076563)" x="577.823437" y="42.076563">Censoring</text>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="a11yfig2-scores-en-pa2d38e2a6c">
+<rect height="271.24" width="589.48" x="47.72" y="10.8"></rect>
+</clippath>
+</defs>
+</svg><figcaption>Fixed synthetic predicted event risks versus observed follow-up. The orange marks identify censored records and are not failures.</figcaption></figure></section><section id="section-10"><div class="chapter-label">MODULE 10 / 34</div><h2>10. Enumerating every comparable pair and verifying the C-index</h2><p class="first-intuition">Sort the data by observed time as in our table. For each row with an observed event, count how many later observations could form a comparable pair: A has 11 later rows, B has 10, D at time 5 has 8, E at time 6 has 7, G at time 8 has 5, H at time 9 has 4, J at time 11 has 2, and L at time 13 has none. We do not initiate pairs at censored rows C, F, I and K. The sum is \(11+10+8+7+5+4+2=47\).</p><p>To count concordant predictions, compare the lower \(S(8)\) score for each earlier event with every later row's \(S(8)\). For A, all 11 pairs agree with the ordering. For B, the comparison with D is discordant (\(0.32&gt;0.30\)) while nine agree. D's eight later comparisons all agree. For E, its comparisons with F and G are discordant (\(0.47&gt;0.44\) and \(0.47&gt;0.40\)), leaving five concordant. G's five later comparisons agree. H disagrees with I (\(0.58&gt;0.54\)) and agrees with three. J disagrees with L (\(0.68&gt;0.65\)) and agrees with K. There are therefore five discordant pairs and no score ties.</p><div class="table-wrap"><table>
+<thead>
+<tr>
+<th style="text-align:left" scope="col">Earlier event</th>
+<th style="text-align:right" scope="col">Later comparable observations</th>
+<th style="text-align:right" scope="col">Concordant</th>
+<th style="text-align:right" scope="col">Discordant</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">A, time 2</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td style="text-align:left">B, time 3</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td style="text-align:left">D, time 5</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td style="text-align:left">E, time 6</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td style="text-align:left">G, time 8</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td style="text-align:left">H, time 9</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td style="text-align:left">J, time 11</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td style="text-align:left">L, time 13</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Total</strong></td>
+<td style="text-align:right"><strong>47</strong></td>
+<td style="text-align:right"><strong>42</strong></td>
+<td style="text-align:right"><strong>5</strong></td>
+</tr>
+</tbody>
+</table></div><div class="equation-card"><span class="equation-label">KEY EQUATION</span><div class="math-scroll">\[\widehat C=\frac{42+\tfrac12(0)}{47}=0.893617\ldots\approx0.8936.\]</div></div><p>This relatively high value is <strong>illustrative</strong>, and the pairs are not independent measurements; a single module contributes to many comparisons. Computing a standard binomial confidence interval from 42 successes in 47 pairs would therefore be inappropriate. Furthermore, the ranking was intentionally constructed for teaching, not obtained by a genuine model trained externally. A trustworthy report must state these caveats prominently instead of claiming that 89.36% is a validated probability of success.</p></section><section id="section-11"><div class="chapter-label">MODULE 11 / 34</div><h2>11. Discrimination is not calibration</h2><p class="first-intuition">Suppose one model predicts eight-unit survival probabilities \(0.24,0.32,\ldots\) as in the table. A second model transforms every risk score monotonically, moving them all toward extreme 0 or 1 predictions while preserving their ordering. Its C-index can remain exactly the same: all comparable pair inequalities are unchanged. Yet its predictions may become substantially worse probabilities. This is why a discrimination statistic cannot by itself justify a decision threshold or an expected failure count.</p><p><strong>Calibration-in-the-large</strong> compares aggregate predicted probability with event frequency or censoring-adjusted event probability. <strong>Calibration slope</strong> and a calibration curve examine how observed outcomes vary across the risk spectrum, not just the average. In survival settings the relevant outcome at \(\tau\) is not always observed; a calibration plot needs a method, such as group KM estimates with sufficient follow-up or censoring-adjusted techniques, that respects censoring. Ordinary binary grouping of censored cases as non-events biases the comparison.</p><p>A model can be well calibrated on average but fail dangerously for a subgroup. For example, perhaps predictions are accurate for standard-load modules but underestimate failure among high-load modules. Aggregated figures can conceal that discrepancy. Conversely, a small validation cohort can produce a jagged calibration curve merely because each bin contains few events. Choosing ten equal-count bins for twelve records would create near-singleton points and false visual precision. The right response is to present informative uncertainty and admit limited resolution.</p><p>At our horizon, the mean predicted failure probability from the twelve rows is \(1-\bar S(8)\). Because \(\sum_iS_i(8)=5.74\), mean predicted survival is \(5.74/12\approx0.4783\), and mean predicted failure risk is about \(0.5217\). The overall KM failure estimate is about 0.4599. Their difference is about 0.0618. These are useful descriptive comparisons, <strong>not a validated formal recalibration test</strong> on twelve synthetic observations.</p></section><section id="section-12"><div class="chapter-label">MODULE 12 / 34</div><h2>12. An honest small-sample calibration display</h2><p class="first-intuition">A useful calibration display should identify the number of modules per risk group, how their observed survival is estimated, and which uncertainty remains. For demonstration we can divide our scores into a lower predicted-failure group and a higher group. But each group contains few events, and simple KM estimates may be especially unstable around censoring. Rather than produce a smooth curve through a handful of points, display the individual predictions and the overall benchmark first. A second plot can show predicted survival on one axis against observed follow-up, with event/censor markers, making censoring visible.</p><p>The mean predicted survival of 0.4783 lies below the unadjusted overall Kaplan–Meier benchmark of 0.5401 at eight. This suggests possible pessimism on average—more predicted failure than the observed group estimate—<strong>under the synthetic example</strong>, but the two quantities are not guaranteed to coincide in small samples. The sample is not a random draw from a known deployed prediction population, and no confidence interval or formal calibration model is defensibly established by twelve invented points.</p><p>Calibration curves are more meaningful with adequate numbers of independent subjects and events, stable estimates of group survival at the horizon, and a prespecified smoothing or grouping strategy. A proper curve may plot estimated observed event incidence on the vertical axis against mean predicted incidence on the horizontal axis. The 45-degree line represents perfect agreement only for comparable definitions and horizons. Confidence bands should reflect variability in both the survival estimate and the prediction procedure where appropriate.</p><p>In deployment, check calibration again after retraining, after model transport to a new factory, and when the prevalence of failure or observation policy changes. A model can preserve rank ordering despite baseline-risk shifts while producing wrong probabilities. In that case <strong>recalibration</strong> may be appropriate, but the recalibration procedure must itself be evaluated on fresh data. Do not select a recalibration function based on an evaluation set and then report accuracy on that same set as independent evidence.</p><figure class="charts-wrap" role="group"><svg role="img" aria-label="Descriptive comparison of mean predicted risk and the overall KM estimate. One plotted point is NOT a validated calibration curve." height="324pt" version="1.1" viewbox="0 0 648 324" width="648pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="a11yfig3-cal-en-figure_1">
+<g id="a11yfig3-cal-en-patch_1">
+<path d="M 0 324 
+L 648 324 
+L 648 0 
+L 0 0 
+L 0 324 
+z
+" style="fill: none"></path>
+</g>
+<g id="a11yfig3-cal-en-axes_1">
+<g id="a11yfig3-cal-en-patch_2">
+<path d="M 47.72 282.04 
+L 629.28 282.04 
+L 629.28 14.76 
+L 47.72 14.76 
+L 47.72 282.04 
+z
+" style="fill: none"></path>
+</g>
+<g id="a11yfig3-cal-en-matplotlib.axis_1">
+<g id="a11yfig3-cal-en-xtick_1">
+<g id="a11yfig3-cal-en-line2d_1">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="a11yfig3-cal-en-m71c1c034d8" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig3-cal-en-m71c1c034d8" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-en-text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 47.72 296.638438)" x="47.72" y="296.638438">0.0</text>
+</g>
+</g>
+<g id="a11yfig3-cal-en-xtick_2">
+<g id="a11yfig3-cal-en-line2d_2">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="164.032" xlink:href="#a11yfig3-cal-en-m71c1c034d8" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-en-text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 164.032 296.638438)" x="164.032" y="296.638438">0.2</text>
+</g>
+</g>
+<g id="a11yfig3-cal-en-xtick_3">
+<g id="a11yfig3-cal-en-line2d_3">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="280.344" xlink:href="#a11yfig3-cal-en-m71c1c034d8" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-en-text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 280.344 296.638438)" x="280.344" y="296.638438">0.4</text>
+</g>
+</g>
+<g id="a11yfig3-cal-en-xtick_4">
+<g id="a11yfig3-cal-en-line2d_4">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="396.656" xlink:href="#a11yfig3-cal-en-m71c1c034d8" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-en-text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 396.656 296.638438)" x="396.656" y="296.638438">0.6</text>
+</g>
+</g>
+<g id="a11yfig3-cal-en-xtick_5">
+<g id="a11yfig3-cal-en-line2d_5">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="512.968" xlink:href="#a11yfig3-cal-en-m71c1c034d8" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-en-text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 512.968 296.638438)" x="512.968" y="296.638438">0.8</text>
+</g>
+</g>
+<g id="a11yfig3-cal-en-xtick_6">
+<g id="a11yfig3-cal-en-line2d_6">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="629.28" xlink:href="#a11yfig3-cal-en-m71c1c034d8" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-en-text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 629.28 296.638438)" x="629.28" y="296.638438">1.0</text>
+</g>
+</g>
+<g id="a11yfig3-cal-en-text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 338.5 310.316563)" x="338.5" y="310.316563">Mean predicted event risk</text>
+</g>
+</g>
+<g id="a11yfig3-cal-en-matplotlib.axis_2">
+<g id="a11yfig3-cal-en-ytick_1">
+<g id="a11yfig3-cal-en-line2d_7">
+<path clip-path="url(#a11yfig3-cal-en-pfa149eeb2f)" d="M 47.72 282.04 
+L 629.28 282.04 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig3-cal-en-line2d_8">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="a11yfig3-cal-en-m7c35e68300" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig3-cal-en-m7c35e68300" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-en-text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 285.839219)" x="40.72" y="285.839219">0.0</text>
+</g>
+</g>
+<g id="a11yfig3-cal-en-ytick_2">
+<g id="a11yfig3-cal-en-line2d_9">
+<path clip-path="url(#a11yfig3-cal-en-pfa149eeb2f)" d="M 47.72 228.584 
+L 629.28 228.584 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig3-cal-en-line2d_10">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig3-cal-en-m7c35e68300" y="228.584"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-en-text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 232.383219)" x="40.72" y="232.383219">0.2</text>
+</g>
+</g>
+<g id="a11yfig3-cal-en-ytick_3">
+<g id="a11yfig3-cal-en-line2d_11">
+<path clip-path="url(#a11yfig3-cal-en-pfa149eeb2f)" d="M 47.72 175.128 
+L 629.28 175.128 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig3-cal-en-line2d_12">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig3-cal-en-m7c35e68300" y="175.128"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-en-text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 178.927219)" x="40.72" y="178.927219">0.4</text>
+</g>
+</g>
+<g id="a11yfig3-cal-en-ytick_4">
+<g id="a11yfig3-cal-en-line2d_13">
+<path clip-path="url(#a11yfig3-cal-en-pfa149eeb2f)" d="M 47.72 121.672 
+L 629.28 121.672 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig3-cal-en-line2d_14">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig3-cal-en-m7c35e68300" y="121.672"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-en-text_11">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 125.471219)" x="40.72" y="125.471219">0.6</text>
+</g>
+</g>
+<g id="a11yfig3-cal-en-ytick_5">
+<g id="a11yfig3-cal-en-line2d_15">
+<path clip-path="url(#a11yfig3-cal-en-pfa149eeb2f)" d="M 47.72 68.216 
+L 629.28 68.216 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig3-cal-en-line2d_16">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig3-cal-en-m7c35e68300" y="68.216"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-en-text_12">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 72.015219)" x="40.72" y="72.015219">0.8</text>
+</g>
+</g>
+<g id="a11yfig3-cal-en-ytick_6">
+<g id="a11yfig3-cal-en-line2d_17">
+<path clip-path="url(#a11yfig3-cal-en-pfa149eeb2f)" d="M 47.72 14.76 
+L 629.28 14.76 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig3-cal-en-line2d_18">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig3-cal-en-m7c35e68300" y="14.76"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-en-text_13">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 18.559219)" x="40.72" y="18.559219">1.0</text>
+</g>
+</g>
+<g id="a11yfig3-cal-en-text_14">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-90 18.737188 148.4)" x="18.737188" y="148.4">Group KM event risk at 8</text>
+</g>
+</g>
+<g id="a11yfig3-cal-en-line2d_19">
+<path clip-path="url(#a11yfig3-cal-en-pfa149eeb2f)" d="M 47.72 282.04 
+L 629.28 14.76 
+" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #9ca3af; stroke-width: 1.5"></path>
+</g>
+<g id="a11yfig3-cal-en-patch_3">
+<path d="M 47.72 282.04 
+L 47.72 14.76 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig3-cal-en-patch_4">
+<path d="M 47.72 282.04 
+L 629.28 282.04 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig3-cal-en-PathCollection_1">
+<defs>
+<path d="M 0 5.700877 
+C 1.51189 5.700877 2.962061 5.100197 4.031129 4.031129 
+C 5.100197 2.962061 5.700877 1.51189 5.700877 0 
+C 5.700877 -1.51189 5.100197 -2.962061 4.031129 -4.031129 
+C 2.962061 -5.100197 1.51189 -5.700877 0 -5.700877 
+C -1.51189 -5.700877 -2.962061 -5.100197 -4.031129 -4.031129 
+C -5.100197 -2.962061 -5.700877 -1.51189 -5.700877 0 
+C -5.700877 1.51189 -5.100197 2.962061 -4.031129 4.031129 
+C -2.962061 5.100197 -1.51189 5.700877 0 5.700877 
+z
+" id="a11yfig3-cal-en-m933fb56892" style="stroke: #2563eb"></path>
+</defs>
+<g clip-path="url(#a11yfig3-cal-en-pfa149eeb2f)">
+<use style="fill: #2563eb; stroke: #2563eb" x="351.100467" xlink:href="#a11yfig3-cal-en-m933fb56892" y="159.124198"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-en-legend_1">
+<g id="a11yfig3-cal-en-patch_5">
+<path d="M 479.269687 277.54 
+L 622.98 277.54 
+Q 624.78 277.54 624.78 275.74 
+L 624.78 250.219375 
+Q 624.78 248.419375 622.98 248.419375 
+L 479.269687 248.419375 
+Q 477.469687 248.419375 477.469687 250.219375 
+L 477.469687 275.74 
+Q 477.469687 277.54 479.269687 277.54 
+z
+" style="fill: #ffffff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"></path>
+</g>
+<g id="a11yfig3-cal-en-line2d_20">
+<path d="M 481.069687 255.707969 
+L 490.069687 255.707969 
+L 499.069687 255.707969 
+" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #9ca3af; stroke-width: 1.5"></path>
+</g>
+<g id="a11yfig3-cal-en-text_15">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 506.269687 258.857969)" x="506.269687" y="258.857969">Perfect calibration</text>
+</g>
+<g id="a11yfig3-cal-en-PathCollection_2">
+<g>
+<use style="fill: #2563eb; stroke: #2563eb" x="490.069687" xlink:href="#a11yfig3-cal-en-m933fb56892" y="269.705781"></use>
+</g>
+</g>
+<g id="a11yfig3-cal-en-text_16">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 506.269687 272.068281)" x="506.269687" y="272.068281">Illustrative summary only</text>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="a11yfig3-cal-en-pfa149eeb2f">
+<rect height="267.28" width="581.56" x="47.72" y="14.76"></rect>
+</clippath>
+</defs>
+</svg><figcaption>Descriptive comparison of mean predicted risk and the overall KM estimate. One plotted point is NOT a validated calibration curve.</figcaption></figure></section><section id="section-13"><div class="chapter-label">MODULE 13 / 34</div><h2>13. From the binary Brier Score to a censored survival Brier Score</h2><p class="first-intuition">For a fully observed binary survival outcome at horizon \(\tau\), the Brier Score is the average squared difference between whether the subject survived and the predicted survival probability. If survival is known, an event by time eight has target \(Z=0\), and someone known to survive beyond eight has target \(Z=1\). A module predicted to survive with probability 0.80 but failing at hour 300 incurs squared error \((0-0.80)^2=0.64\); a module predicted 0.80 and known to survive beyond the horizon incurs \((1-0.80)^2=0.04\).</p><div class="equation-card"><span class="equation-label">KEY EQUATION</span><div class="math-scroll">\[BS(\tau)=\frac1n\sum_{i=1}^n\bigl[I(T_i&gt;\tau)-\widehat S_i(\tau)\bigr]^2.\]</div></div><p>However, this expression assumes the true survival status at \(\tau\) is observable for every row. In our data, C and F are censored at 4 and 7, so the target cannot be assigned for them. A naïve Brier Score that declares these rows event-free introduces a false value of 1. A complete-case Brier Score that merely drops them changes the population being averaged. To target the original population's expected squared error, we must correct for the probability that each required observation remains visible.</p><p>The idea of <strong>Inverse Probability of Censoring Weighting</strong> (IPCW) is to upweight observable contributions according to the inverse of their chance of being observed. A failure at time 5 must remain observable through time 5; a survivor at horizon 8 must remain observable through time 8. Under appropriate conditional independence assumptions, weighting restores the target expectation even though not all outcomes are fully observed. Large inverse weights can be unstable, and the method does not repair unmodeled informative censoring.</p><p>This is a direct bridge from missing-data weighting to survival analysis. We will compute every required censoring survival factor, substitute them into the score, and interpret the resulting average. No function call is needed to understand the basic arithmetic.</p></section><section id="section-14"><div class="chapter-label">MODULE 14 / 34</div><h2>14. Estimate the censoring distribution, not the failure distribution</h2><p class="first-intuition">Let \(G(t)=P(C&gt;t)\) be the probability that follow-up has not been censored by time \(t\). A standard way to estimate it is the <strong>reverse Kaplan–Meier estimator</strong>: treat original censoring times as the events of interest and original failure times as censoring. This is not the same curve as \(S_{KM}(t)\) for failure. The distinction is crucial: inverse weights correct the observation process, not the underlying failure hazard.</p><p>In our ordered table, the first original censoring occurs at time 4. At that instant, twelve subjects began, and two (A and B) have already failed, so ten remain under observation. A single censoring event makes the reverse-KM factor \((10-1)/10=9/10=0.9\). Original failures at 5 and 6 reduce subsequent risk sets but not the censoring-survival product. At time 7 there are seven still at risk, and another original censoring event gives factor \((7-1)/7=6/7\). Therefore \(\widehat G(7)=0.9(6/7)=27/35\approx0.77143\). There are no original censorings between time 7 and our horizon 8.</p><div class="equation-card"><span class="equation-label">KEY EQUATION</span><div class="math-scroll">\[\widehat G(4)=\frac9{10}=0.9,\qquad \widehat G(8)=\frac9{10}\frac67=\frac{27}{35}\approx0.77143.\]</div></div><p>For an event occurring before the first censoring, such as at 2 or 3, the observation weight is 1. For failures at 5 and 6, divide by 0.9. For a failure at exactly 8, use the censoring probability <strong>just before</strong> the event, \(\widehat G(8-)\), which equals \(27/35\) in this no-tie example. For a module followed beyond 8, the relevant denominator is \(\widehat G(8)\). The notation matters in datasets with coincident failure and censoring times, which require a prespecified tie convention.</p><p>In applications censoring may depend on measured covariates; a pooled reverse-KM is then not sufficient even if censoring is conditionally independent. One may need \(G(t\mid x)\) estimated with a censoring model. Report the method and inspect whether weights explode because \(G\) approaches zero. Evaluating the Brier Score at a horizon where almost nobody remains under observation is not credible, no matter how elegant the formula looks.</p></section><section id="section-15"><div class="chapter-label">MODULE 15 / 34</div><h2>15. Derive and calculate the IPCW Brier Score at eight units</h2><p class="first-intuition">The censoring-adjusted Brier Score has two observable types of contributions. A subject who <strong>fails by the horizon</strong> has target survival zero and contributes the squared predicted survival \(\widehat S_i(8)^2\), divided by the probability of being observable up to its failure time. A subject known to be <strong>event-free beyond the horizon</strong> has target survival one and contributes \((1-\widehat S_i(8))^2\), divided by the probability of being observable through the horizon. A subject censored before or at the horizon without an event contributes zero to this particular estimating expression, not because the subject is known to survive, but because the outcome is unavailable and weights adjust the observed contributions.</p><div class="equation-card"><span class="equation-label">KEY EQUATION</span><div class="math-scroll">\[\widehat{BS}_{IPCW}(\tau)=\frac1n\sum_{i=1}^{n}\left[\frac{I(Y_i\le\tau,\delta_i=1)\widehat S_i(\tau)^2}{\widehat G(Y_i-)}+\frac{I(Y_i&gt;\tau)(1-\widehat S_i(\tau))^2}{\widehat G(\tau)}\right].\]</div></div><p>Substitute the actual twelve records. A fails at 2 and contributes \(0.24^2/1=0.057600\). B fails at 3 and contributes \(0.32^2/1=0.102400\). D fails at 5, after the first censoring, and contributes \(0.30^2/0.9=0.100000\). E fails at 6, contributing \(0.47^2/0.9\approx0.245444\). G fails at 8, contributing \(0.40^2/(27/35)\approx0.207407\). Modules C and F contribute zero because they are censored before eight and their survival outcomes at eight are unknown.</p><p>For modules H, I, J, K and L with follow-up beyond eight, multiply each squared failure-risk prediction by \(35/27\). Their contributions are respectively \(0.42^2(35/27)\approx0.228667\), \(0.46^2(35/27)\approx0.274296\), \(0.32^2(35/27)\approx0.132741\), \(0.26^2(35/27)\approx0.087630\), and \(0.35^2(35/27)\approx0.158796\). Note that these five values come from \(1-S_i(8)\), not from \(S_i(8)\).</p><div class="equation-card"><span class="equation-label">KEY EQUATION</span><div class="math-scroll">\[\widehat{BS}_{IPCW}(8)=\frac{0.057600+0.102400+0.100000+0.245444+0.207407+0.228667+0.274296+0.132741+0.087630+0.158796}{12}\approx\boxed{0.132915}.\]</div></div><p>This score is a mean squared probability error adjusted for censoring <strong>under the assumptions of the weighting procedure</strong>. Smaller is generally better when calculated on the same target population and horizon. The value is not a probability of failure, a hazard ratio or a causal effect. Do not compare it directly with a Brier Score computed at a different horizon or in a different case mix and infer superiority without qualification.</p></section><section id="section-16"><div class="chapter-label">MODULE 16 / 34</div><h2>16. Interpret a full record-level scoring audit</h2><p class="first-intuition">Audits are much more informative when every contribution can be reconstructed. In this table, a zero in the scoring column does not mean a prediction was flawless; it flags the two rows with unavailable eight-unit outcomes. The contribution of E at time 6 is relatively large because its predicted survival of 0.47 was substantial even though failure occurred, and the inverse observation probability further increases the term. Module I is known to be working at time 8, but was assigned survival 0.54; its squared failure probability receives a factor of \(35/27\).</p><div class="table-wrap"><table>
+<thead>
+<tr>
+<th style="text-align:left" scope="col">Module</th>
+<th style="text-align:left" scope="col">Role at \(\tau=8\)</th>
+<th style="text-align:right" scope="col">Squared error or unavailable</th>
+<th style="text-align:right" scope="col">IPCW contribution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">A</td>
+<td style="text-align:left">Failure by 8</td>
+<td style="text-align:right">\(0.24^2\)</td>
+<td style="text-align:right">0.057600</td>
+</tr>
+<tr>
+<td style="text-align:left">B</td>
+<td style="text-align:left">Failure by 8</td>
+<td style="text-align:right">\(0.32^2\)</td>
+<td style="text-align:right">0.102400</td>
+</tr>
+<tr>
+<td style="text-align:left">C</td>
+<td style="text-align:left">Censored before 8</td>
+<td style="text-align:right">Unknown</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td style="text-align:left">D</td>
+<td style="text-align:left">Failure by 8</td>
+<td style="text-align:right">\(0.30^2\)</td>
+<td style="text-align:right">0.100000</td>
+</tr>
+<tr>
+<td style="text-align:left">E</td>
+<td style="text-align:left">Failure by 8</td>
+<td style="text-align:right">\(0.47^2\)</td>
+<td style="text-align:right">0.245444</td>
+</tr>
+<tr>
+<td style="text-align:left">F</td>
+<td style="text-align:left">Censored before 8</td>
+<td style="text-align:right">Unknown</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td style="text-align:left">G</td>
+<td style="text-align:left">Failure at 8</td>
+<td style="text-align:right">\(0.40^2\)</td>
+<td style="text-align:right">0.207407</td>
+</tr>
+<tr>
+<td style="text-align:left">H</td>
+<td style="text-align:left">Known survival past 8</td>
+<td style="text-align:right">\(0.42^2\)</td>
+<td style="text-align:right">0.228667</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">Known survival past 8</td>
+<td style="text-align:right">\(0.46^2\)</td>
+<td style="text-align:right">0.274296</td>
+</tr>
+<tr>
+<td style="text-align:left">J</td>
+<td style="text-align:left">Known survival past 8</td>
+<td style="text-align:right">\(0.32^2\)</td>
+<td style="text-align:right">0.132741</td>
+</tr>
+<tr>
+<td style="text-align:left">K</td>
+<td style="text-align:left">Known survival past 8</td>
+<td style="text-align:right">\(0.26^2\)</td>
+<td style="text-align:right">0.087630</td>
+</tr>
+<tr>
+<td style="text-align:left">L</td>
+<td style="text-align:left">Known survival past 8</td>
+<td style="text-align:right">\(0.35^2\)</td>
+<td style="text-align:right">0.158796</td>
+</tr>
+</tbody>
+</table></div><p>The unweighted but <strong>incorrectly relabeled</strong> Brier Score obtained by treating every censored-before-eight module as a survivor would be about 0.13745 for these chosen predictions. The difference from 0.132915 is not enormous here, but that does not validate the shortcut. In other datasets it can be substantial and directionally unpredictable. Correct methodology is not determined by whether two answers happen to be close in one constructed example.</p><p>The score can be plotted across a clinically or operationally meaningful time grid to form a time-dependent Brier curve. An <strong>Integrated Brier Score (IBS)</strong> averages Brier performance over a specified time interval, using an integration rule and scaling. State the interval because late times may have inadequate censoring support. A candidate can have a lower score around eight units and a higher score around twenty; averaging hides which operational decisions are affected. More complicated software often estimates censoring weights from training data or a separate model; the evaluation design and assumptions should be documented explicitly.</p><blockquote>
+<p><strong>Sanity check:</strong> Predictions of survival at any horizon must be between 0 and 1 and must not increase with the horizon for a valid survival curve. A model can produce attractive isolated values at eight that would be internally inconsistent if its predicted survival curve rises from time seven to time eight.</p>
+</blockquote><figure class="charts-wrap" role="group"><svg role="img" aria-label="Every weighted contribution to the eight-unit IPCW Brier Score; the two pre-horizon censored rows have unavailable status, not zero prediction error." height="324pt" version="1.1" viewbox="0 0 648 324" width="648pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="a11yfig4-brier-en-figure_1">
+<g id="a11yfig4-brier-en-patch_1">
+<path d="M 0 324 
+L 648 324 
+L 648 0 
+L 0 0 
+L 0 324 
+z
+" style="fill: none"></path>
+</g>
+<g id="a11yfig4-brier-en-axes_1">
+<g id="a11yfig4-brier-en-patch_2">
+<path d="M 54.02 282.04 
+L 637.2 282.04 
+L 637.2 10.8 
+L 54.02 10.8 
+L 54.02 282.04 
+z
+" style="fill: none"></path>
+</g>
+<g id="a11yfig4-brier-en-patch_3">
+<path clip-path="url(#a11yfig4-brier-en-pd851d18981)" d="M 80.528182 282.04 
+L 116.471479 282.04 
+L 116.471479 227.794093 
+L 80.528182 227.794093 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="a11yfig4-brier-en-patch_4">
+<path clip-path="url(#a11yfig4-brier-en-pd851d18981)" d="M 125.457304 282.04 
+L 161.400601 282.04 
+L 161.400601 185.602832 
+L 125.457304 185.602832 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="a11yfig4-brier-en-patch_5">
+<path clip-path="url(#a11yfig4-brier-en-pd851d18981)" d="M 170.386425 282.04 
+L 206.329723 282.04 
+L 206.329723 282.04 
+L 170.386425 282.04 
+z
+" style="fill: #e3e8f0"></path>
+</g>
+<g id="a11yfig4-brier-en-patch_6">
+<path clip-path="url(#a11yfig4-brier-en-pd851d18981)" d="M 215.315547 282.04 
+L 251.258844 282.04 
+L 251.258844 187.863078 
+L 215.315547 187.863078 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="a11yfig4-brier-en-patch_7">
+<path clip-path="url(#a11yfig4-brier-en-pd851d18981)" d="M 260.244669 282.04 
+L 296.187966 282.04 
+L 296.187966 50.887977 
+L 260.244669 50.887977 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="a11yfig4-brier-en-patch_8">
+<path clip-path="url(#a11yfig4-brier-en-pd851d18981)" d="M 305.17379 282.04 
+L 341.117088 282.04 
+L 341.117088 282.04 
+L 305.17379 282.04 
+z
+" style="fill: #e3e8f0"></path>
+</g>
+<g id="a11yfig4-brier-en-patch_9">
+<path clip-path="url(#a11yfig4-brier-en-pd851d18981)" d="M 350.102912 282.04 
+L 386.04621 282.04 
+L 386.04621 86.710087 
+L 350.102912 86.710087 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="a11yfig4-brier-en-patch_10">
+<path clip-path="url(#a11yfig4-brier-en-pd851d18981)" d="M 395.032034 282.04 
+L 430.975331 282.04 
+L 430.975331 66.688771 
+L 395.032034 66.688771 
+z
+" style="fill: #57a5ac"></path>
+</g>
+<g id="a11yfig4-brier-en-patch_11">
+<path clip-path="url(#a11yfig4-brier-en-pd851d18981)" d="M 439.961156 282.04 
+L 475.904453 282.04 
+L 475.904453 23.71619 
+L 439.961156 23.71619 
+z
+" style="fill: #57a5ac"></path>
+</g>
+<g id="a11yfig4-brier-en-patch_12">
+<path clip-path="url(#a11yfig4-brier-en-pd851d18981)" d="M 484.890277 282.04 
+L 520.833575 282.04 
+L 520.833575 157.028856 
+L 484.890277 157.028856 
+z
+" style="fill: #57a5ac"></path>
+</g>
+<g id="a11yfig4-brier-en-patch_13">
+<path clip-path="url(#a11yfig4-brier-en-pd851d18981)" d="M 529.819399 282.04 
+L 565.762696 282.04 
+L 565.762696 199.513112 
+L 529.819399 199.513112 
+z
+" style="fill: #57a5ac"></path>
+</g>
+<g id="a11yfig4-brier-en-patch_14">
+<path clip-path="url(#a11yfig4-brier-en-pd851d18981)" d="M 574.748521 282.04 
+L 610.691818 282.04 
+L 610.691818 132.490536 
+L 574.748521 132.490536 
+z
+" style="fill: #57a5ac"></path>
+</g>
+<g id="a11yfig4-brier-en-matplotlib.axis_1">
+<g id="a11yfig4-brier-en-xtick_1">
+<g id="a11yfig4-brier-en-line2d_1">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="a11yfig4-brier-en-m0360d5220d" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="98.499831" xlink:href="#a11yfig4-brier-en-m0360d5220d" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-en-text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 98.499831 296.638438)" x="98.499831" y="296.638438">A</text>
+</g>
+</g>
+<g id="a11yfig4-brier-en-xtick_2">
+<g id="a11yfig4-brier-en-line2d_2">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="143.428952" xlink:href="#a11yfig4-brier-en-m0360d5220d" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-en-text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 143.428952 296.638438)" x="143.428952" y="296.638438">B</text>
+</g>
+</g>
+<g id="a11yfig4-brier-en-xtick_3">
+<g id="a11yfig4-brier-en-line2d_3">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="188.358074" xlink:href="#a11yfig4-brier-en-m0360d5220d" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-en-text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 188.358074 296.638438)" x="188.358074" y="296.638438">C</text>
+</g>
+</g>
+<g id="a11yfig4-brier-en-xtick_4">
+<g id="a11yfig4-brier-en-line2d_4">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="233.287196" xlink:href="#a11yfig4-brier-en-m0360d5220d" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-en-text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 233.287196 296.638438)" x="233.287196" y="296.638438">D</text>
+</g>
+</g>
+<g id="a11yfig4-brier-en-xtick_5">
+<g id="a11yfig4-brier-en-line2d_5">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="278.216317" xlink:href="#a11yfig4-brier-en-m0360d5220d" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-en-text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 278.216317 296.638438)" x="278.216317" y="296.638438">E</text>
+</g>
+</g>
+<g id="a11yfig4-brier-en-xtick_6">
+<g id="a11yfig4-brier-en-line2d_6">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="323.145439" xlink:href="#a11yfig4-brier-en-m0360d5220d" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-en-text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 323.145439 296.638438)" x="323.145439" y="296.638438">F</text>
+</g>
+</g>
+<g id="a11yfig4-brier-en-xtick_7">
+<g id="a11yfig4-brier-en-line2d_7">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="368.074561" xlink:href="#a11yfig4-brier-en-m0360d5220d" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-en-text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 368.074561 296.638438)" x="368.074561" y="296.638438">G</text>
+</g>
+</g>
+<g id="a11yfig4-brier-en-xtick_8">
+<g id="a11yfig4-brier-en-line2d_8">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="413.003683" xlink:href="#a11yfig4-brier-en-m0360d5220d" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-en-text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 413.003683 296.638438)" x="413.003683" y="296.638438">H</text>
+</g>
+</g>
+<g id="a11yfig4-brier-en-xtick_9">
+<g id="a11yfig4-brier-en-line2d_9">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="457.932804" xlink:href="#a11yfig4-brier-en-m0360d5220d" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-en-text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 457.932804 296.638438)" x="457.932804" y="296.638438">I</text>
+</g>
+</g>
+<g id="a11yfig4-brier-en-xtick_10">
+<g id="a11yfig4-brier-en-line2d_10">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="502.861926" xlink:href="#a11yfig4-brier-en-m0360d5220d" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-en-text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 502.861926 296.638438)" x="502.861926" y="296.638438">J</text>
+</g>
+</g>
+<g id="a11yfig4-brier-en-xtick_11">
+<g id="a11yfig4-brier-en-line2d_11">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="547.791048" xlink:href="#a11yfig4-brier-en-m0360d5220d" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-en-text_11">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 547.791048 296.638438)" x="547.791048" y="296.638438">K</text>
+</g>
+</g>
+<g id="a11yfig4-brier-en-xtick_12">
+<g id="a11yfig4-brier-en-line2d_12">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="592.720169" xlink:href="#a11yfig4-brier-en-m0360d5220d" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-en-text_12">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 592.720169 296.638438)" x="592.720169" y="296.638438">L</text>
+</g>
+</g>
+<g id="a11yfig4-brier-en-text_13">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 345.61 310.316563)" x="345.61" y="310.316563">Module</text>
+</g>
+</g>
+<g id="a11yfig4-brier-en-matplotlib.axis_2">
+<g id="a11yfig4-brier-en-ytick_1">
+<g id="a11yfig4-brier-en-line2d_13">
+<path clip-path="url(#a11yfig4-brier-en-pd851d18981)" d="M 54.02 282.04 
+L 637.2 282.04 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig4-brier-en-line2d_14">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="a11yfig4-brier-en-m7af6d2787c" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="54.02" xlink:href="#a11yfig4-brier-en-m7af6d2787c" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-en-text_14">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 47.02 285.839219)" x="47.02" y="285.839219">0.00</text>
+</g>
+</g>
+<g id="a11yfig4-brier-en-ytick_2">
+<g id="a11yfig4-brier-en-line2d_15">
+<path clip-path="url(#a11yfig4-brier-en-pd851d18981)" d="M 54.02 234.951539 
+L 637.2 234.951539 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig4-brier-en-line2d_16">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="54.02" xlink:href="#a11yfig4-brier-en-m7af6d2787c" y="234.951539"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-en-text_15">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 47.02 238.750758)" x="47.02" y="238.750758">0.05</text>
+</g>
+</g>
+<g id="a11yfig4-brier-en-ytick_3">
+<g id="a11yfig4-brier-en-line2d_17">
+<path clip-path="url(#a11yfig4-brier-en-pd851d18981)" d="M 54.02 187.863078 
+L 637.2 187.863078 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig4-brier-en-line2d_18">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="54.02" xlink:href="#a11yfig4-brier-en-m7af6d2787c" y="187.863078"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-en-text_16">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 47.02 191.662297)" x="47.02" y="191.662297">0.10</text>
+</g>
+</g>
+<g id="a11yfig4-brier-en-ytick_4">
+<g id="a11yfig4-brier-en-line2d_19">
+<path clip-path="url(#a11yfig4-brier-en-pd851d18981)" d="M 54.02 140.774617 
+L 637.2 140.774617 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig4-brier-en-line2d_20">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="54.02" xlink:href="#a11yfig4-brier-en-m7af6d2787c" y="140.774617"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-en-text_17">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 47.02 144.573835)" x="47.02" y="144.573835">0.15</text>
+</g>
+</g>
+<g id="a11yfig4-brier-en-ytick_5">
+<g id="a11yfig4-brier-en-line2d_21">
+<path clip-path="url(#a11yfig4-brier-en-pd851d18981)" d="M 54.02 93.686156 
+L 637.2 93.686156 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig4-brier-en-line2d_22">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="54.02" xlink:href="#a11yfig4-brier-en-m7af6d2787c" y="93.686156"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-en-text_18">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 47.02 97.485374)" x="47.02" y="97.485374">0.20</text>
+</g>
+</g>
+<g id="a11yfig4-brier-en-ytick_6">
+<g id="a11yfig4-brier-en-line2d_23">
+<path clip-path="url(#a11yfig4-brier-en-pd851d18981)" d="M 54.02 46.597695 
+L 637.2 46.597695 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig4-brier-en-line2d_24">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="54.02" xlink:href="#a11yfig4-brier-en-m7af6d2787c" y="46.597695"></use>
+</g>
+</g>
+<g id="a11yfig4-brier-en-text_19">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 47.02 50.396913)" x="47.02" y="50.396913">0.25</text>
+</g>
+</g>
+<g id="a11yfig4-brier-en-text_20">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-90 18.674688 146.42)" x="18.674688" y="146.42">Weighted contribution</text>
+</g>
+</g>
+<g id="a11yfig4-brier-en-line2d_25">
+<path clip-path="url(#a11yfig4-brier-en-pd851d18981)" d="M 54.02 156.864628 
+L 637.2 156.864628 
+" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #b56523; stroke-width: 1.5"></path>
+</g>
+<g id="a11yfig4-brier-en-patch_15">
+<path d="M 54.02 282.04 
+L 54.02 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig4-brier-en-patch_16">
+<path d="M 54.02 282.04 
+L 637.2 282.04 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig4-brier-en-legend_1">
+<g id="a11yfig4-brier-en-patch_17">
+<path d="M 495.43125 33.478125 
+L 630.2 33.478125 
+Q 632.2 33.478125 632.2 31.478125 
+L 632.2 17.8 
+Q 632.2 15.8 630.2 15.8 
+L 495.43125 15.8 
+Q 493.43125 15.8 493.43125 17.8 
+L 493.43125 31.478125 
+Q 493.43125 33.478125 495.43125 33.478125 
+z
+" style="fill: #ffffff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"></path>
+</g>
+<g id="a11yfig4-brier-en-line2d_26">
+<path d="M 497.43125 23.898438 
+L 507.43125 23.898438 
+L 517.43125 23.898438 
+" style="fill: none; stroke-dasharray: 5.55,2.4; stroke-dashoffset: 0; stroke: #b56523; stroke-width: 1.5"></path>
+</g>
+<g id="a11yfig4-brier-en-text_21">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 525.43125 27.398438)" x="525.43125" y="27.398438">Brier IPCW ≈ 0.1329</text>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="a11yfig4-brier-en-pd851d18981">
+<rect height="271.24" width="583.18" x="54.02" y="10.8"></rect>
+</clippath>
+</defs>
+</svg><figcaption>Every weighted contribution to the eight-unit IPCW Brier Score; the two pre-horizon censored rows have unavailable status, not zero prediction error.</figcaption></figure></section><section id="section-17"><div class="chapter-label">MODULE 17 / 34</div><h2>17. Compare against an explicit reference predictor</h2><p class="first-intuition">A metric is difficult to interpret without an alternative. One simple benchmark assigns every subject the same survival probability at eight, estimated from appropriately separated training data. On an evaluation cohort it is tempting to use the cohort's KM estimate itself to define the constant benchmark, but that is an in-sample comparison and may be optimistic. For pedagogy, consider the overall KM survival of about 0.5401 as a descriptive baseline, while acknowledging that it uses outcomes from the illustrative cohort.</p><p>A fair test computes the candidate-model and reference-model Brier Scores <strong>on exactly the same evaluation subjects</strong>, under the same censoring weights and at the same horizon. The difference \(\Delta BS=BS_{candidate}-BS_{reference}\) is negative when the candidate has lower average squared error. Whether the improvement is operationally important depends on its size, uncertainty, resource cost and decision consequences. It is inappropriate to declare “better” simply because a tenth-decimal place differs between two scores.</p><p>Discrimination also needs context. A constant-risk baseline has tied scores for every comparable pair and obtains C-index 0.5 under the usual half-credit rule. Our synthetic scores yield 0.8936, but the example was designed to make ranking instructive; this is not evidence that a Cox or AFT model would achieve that performance on new modules. Improvements over a constant benchmark may come from genuine predictive information, leakage, or unrealistic splits. The evaluation protocol distinguishes those possibilities.</p><p>When comparing model families, train KM baseline, Cox and AFT <strong>only on the training data</strong> and evaluate their frozen predictions in the test data. Use the same target definition and common time horizon. Provide the number of observed events, the censoring distribution, group sizes, and a plot of the survival predictions. Model selection via training-set log-likelihood or AIC answers a different question from test-set predictive loss; an excellent fit inside the sample need not translate into good out-of-sample prediction.</p></section><section id="section-18"><div class="chapter-label">MODULE 18 / 34</div><h2>18. Uncertainty is about independent units, not pair counts</h2><p class="first-intuition">A point estimate of C-index or Brier Score is incomplete as an evaluation report. Repeated samples of independent modules would generally produce different values. The uncertainty interval should reflect which units are independent, how models were trained and how censoring was estimated. In our example, forty-seven comparable pairs come from only twelve modules; pretending these are forty-seven independent Bernoulli trials would drastically misunderstand the dependence structure.</p><p>For a reasonably large collection of independent modules, a <strong>subject-level bootstrap</strong> draws module IDs with replacement, carrying all of a module's follow-up and predicted values together. For each resample, re-estimate the censoring distribution and recompute the metric. If the goal is uncertainty for the entire training-and-deployment pipeline, repeat the training procedure within each resample or use a nested design, rather than bootstrapping only a fixed test score and claiming to cover model-training uncertainty. Resampling only evaluation records targets a narrower, conditional question.</p><p>When multiple modules share a factory line or batch, resample at the cluster level if those clusters are the independent sampling units; when deployment is forward in time, a temporal validation approach may be more relevant than exchangeable bootstrap sampling. Some bootstrap resamples may contain no comparable events or have a zero censoring-survival estimate by the horizon; their scores can be undefined. Predefine the handling procedure and report how often it occurs. This is particularly important with very small samples.</p><p>A percentile interval from many replicates would select, for example, the 2.5th and 97.5th percentiles of the replicate metrics. Those bounds are not automatically valid merely because one ran 2,000 resamples. Dependence, few effective clusters, heavy censoring, misspecification and adaptive model selection may undermine coverage. We do not publish a fictitious confidence interval for the twelve synthetic cases. Instead, we explain precisely what a larger study should estimate and how it should evaluate interval credibility.</p></section><section id="section-19"><div class="chapter-label">MODULE 19 / 34</div><h2>19. Horizons, follow-up support and extrapolation</h2><p class="first-intuition">A survival prediction is always indexed by time. Asking whether a module fails by 400 hours and asking whether it fails by 2,000 hours are different targets with different numbers of events and observable outcomes. Our fixed horizon of eight hundred-hour units lies inside the observed follow-up range of two to thirteen units, with several subjects still followed beyond the horizon. That does not make the dataset sufficient for high-confidence industrial decisions; it only makes the arithmetic of an eight-unit score possible.</p><p>Later horizons encounter fewer at-risk subjects and possibly much lower censoring survival \(G(t)\). IPCW terms then become unstable because they contain \(1/G(t)\). A parametric AFT model can continue to output predictions beyond the longest observation, but such numbers depend heavily on Weibull or Lognormal tail assumptions, not direct evidence. A Cox estimator may be unable to identify a useful baseline survival beyond its observed event support. The inability to calculate a robust tail prediction is itself important information, not a software defect.</p><p>Specify in advance a primary horizon aligned with the intervention schedule, then consider secondary horizons as sensitivity analyses. A plot of the number at risk below the KM curve should remind readers when the observed evidence thins. For a calibration plot at the primary horizon, show how many records are censored before that time, because these records require specific estimation treatment. If a subgroup has no observable subjects near the horizon, do not force a subgroup calibration claim.</p><p>A good decision report states both the <strong>range of reliable observation</strong> and the range of model-based extrapolation. It distinguishes “the fitted Weibull model predicts” from “we observed.” This distinction matters when maintenance costs, patient safety or economic forecasts are affected. Mechanistic considerations and external validation may help judge extrapolation plausibility, but cannot replace actual long-term outcome information.</p></section><section id="section-20"><div class="chapter-label">MODULE 20 / 34</div><h2>20. Competing risks: define which event you mean</h2><p class="first-intuition">So far, our endpoint was first functional failure, with independent loss of observation treated as censoring. In many studies, another event <strong>prevents</strong> the event of interest from being observed in its original form. A device may be permanently replaced for another mechanical reason, and a patient may die from an unrelated cause before the disease-specific event. These are <strong>competing risks</strong>, not simply administrative missing follow-up. The quantity “failure from cause A by time \(t\)” is now different from survival free of <strong>any</strong> event.</p><p>Let \(T\) denote time to the first of several mutually exclusive event types, and \(J\) the type that occurs first. The <strong>cause-specific cumulative incidence function</strong> is \(F_k(t)=P(T\le t,J=k)\). It asks for the probability that type \(k\) has occurred by the horizon in the world where other causes can happen. Overall event-free survival is \(S_{all}(t)=P(T&gt;t)\), and under standard competing-risk definitions, the cumulative incidences sum to \(1-S_{all}(t)\).</p><div class="equation-card"><span class="equation-label">KEY EQUATION</span><div class="math-scroll">\[F_k(t)=P(T\le t,J=k),\qquad \sum_kF_k(t)=1-S_{all}(t).\]</div></div><p>A cause-specific hazard \(\lambda_k(t)\) is the instantaneous rate of cause \(k\) <strong>among individuals still free of every event</strong>. Its cumulative incidence depends both on that hazard and on survival from all causes: \(F_k(t)=\int_0^tS_{all}(u-)\,d\Lambda_k(u)\). This is why a high cause-specific hazard does not automatically imply the same absolute cumulative incidence when competing events are common. The risk set can disappear through other causes.</p><p>A Kaplan–Meier calculation that treats other event types as censored can describe a hypothetical <strong>net</strong> event quantity under extra interpretations, but \(1-KM\) from that calculation does <strong>not</strong> equal the observed-world cumulative incidence of the chosen cause. We will show the discrepancy with a complete four-subject example, avoiding an appeal to theory alone.</p></section><section id="section-21"><div class="chapter-label">MODULE 21 / 34</div><h2>21. Four-subject competing-risk counterexample</h2><p class="first-intuition">Consider four hypothetical identical-start units, all followed completely until their first terminal event or until the study ends at time 5. There is no ordinary censoring before the horizon. At time 1, one unit develops failure type A; at time 2, one different unit experiences competing type B; at time 3, another unit develops type A; and the last unit remains event-free through time 5. We want the absolute probability of having experienced type A by time 4 in this synthetic cohort.</p><div class="table-wrap"><table>
+<thead>
+<tr>
+<th style="text-align:left" scope="col">Unit</th>
+<th style="text-align:right" scope="col">Time</th>
+<th style="text-align:left" scope="col">Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">P</td>
+<td style="text-align:right">1</td>
+<td style="text-align:left">Failure type A</td>
+</tr>
+<tr>
+<td style="text-align:left">Q</td>
+<td style="text-align:right">2</td>
+<td style="text-align:left">Competing type B</td>
+</tr>
+<tr>
+<td style="text-align:left">R</td>
+<td style="text-align:right">3</td>
+<td style="text-align:left">Failure type A</td>
+</tr>
+<tr>
+<td style="text-align:left">S</td>
+<td style="text-align:right">5</td>
+<td style="text-align:left">Event-free administrative end</td>
+</tr>
+</tbody>
+</table></div><p>At time 1, all four are at risk. The observed type-A increment in cumulative incidence is \(S_{all}(1-)\cdot(1/4)=1\cdot1/4=0.25\). Immediately after A, event-free survival is \(3/4\). At time 2, the type-B event reduces overall event-free survival to \((3/4)(2/3)=1/2\). At time 3, two units remain at risk, and type A occurs; its increment is \((1/2)(1/2)=1/4\). Thus the actual type-A cumulative incidence by time 4 is \(0.25+0.25=0.50\). Type-B cumulative incidence is 0.25, and the remaining event-free proportion is 0.25; the three probabilities add to one.</p><div class="equation-card"><span class="equation-label">KEY EQUATION</span><div class="math-scroll">\[\widehat F_A(4)=1\cdot\frac14+\frac12\cdot\frac12=\boxed{0.50}.\]</div></div><p>Now <strong>incorrectly</strong> censor Q at time 2 and apply a Kaplan–Meier curve only to A events. At time 1, survival from A has factor \(3/4\). Q is then removed as a censoring, so at time 3 the risk set is two and the factor for the second A event is \(1/2\). The resulting curve is \(\widehat S_{KM,A}(4)=(3/4)(1/2)=3/8\). Its complement is \(1-3/8=5/8=0.625\), <strong>not 0.50</strong>. It overstates observed-world type-A incidence in this example by 0.125, or 12.5 percentage points.</p><div class="equation-card"><span class="equation-label">KEY EQUATION</span><div class="math-scroll">\[1-\widehat S_{KM,A}(4)=1-\frac38=\boxed{0.625}\ne\widehat F_A(4)=0.50.\]</div></div><p>The discrepancy is structural. Censoring type B pretends that Q can simply disappear without contributing to the probability of an alternative terminal outcome, whereas cumulative incidence must acknowledge that once B happens, A cannot become the first event for Q. More sophisticated competing-risk regression, including Fine–Gray, is <strong>outside this guide's central scope</strong>. The essential transferable lesson is to define the desired probability before choosing an estimator.</p><figure class="charts-wrap" role="group"><svg role="img" aria-label="Cause-A cumulative incidence versus one minus KM with cause B censored. The disagreement is caused by the estimand, not rounding." height="324pt" version="1.1" viewbox="0 0 648 324" width="648pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="a11yfig5-comp-en-figure_1">
+<g id="a11yfig5-comp-en-patch_1">
+<path d="M 0 324 
+L 648 324 
+L 648 0 
+L 0 0 
+L 0 324 
+z
+" style="fill: none"></path>
+</g>
+<g id="a11yfig5-comp-en-axes_1">
+<g id="a11yfig5-comp-en-patch_2">
+<path d="M 47.72 282.04 
+L 637.2 282.04 
+L 637.2 10.8 
+L 47.72 10.8 
+L 47.72 282.04 
+z
+" style="fill: none"></path>
+</g>
+<g id="a11yfig5-comp-en-matplotlib.axis_1">
+<g id="a11yfig5-comp-en-xtick_1">
+<g id="a11yfig5-comp-en-line2d_1">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="a11yfig5-comp-en-m6ddb88c1db" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig5-comp-en-m6ddb88c1db" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-en-text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 47.72 296.638438)" x="47.72" y="296.638438">0.0</text>
+</g>
+</g>
+<g id="a11yfig5-comp-en-xtick_2">
+<g id="a11yfig5-comp-en-line2d_2">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="117.89619" xlink:href="#a11yfig5-comp-en-m6ddb88c1db" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-en-text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 117.89619 296.638438)" x="117.89619" y="296.638438">0.5</text>
+</g>
+</g>
+<g id="a11yfig5-comp-en-xtick_3">
+<g id="a11yfig5-comp-en-line2d_3">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="188.072381" xlink:href="#a11yfig5-comp-en-m6ddb88c1db" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-en-text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 188.072381 296.638438)" x="188.072381" y="296.638438">1.0</text>
+</g>
+</g>
+<g id="a11yfig5-comp-en-xtick_4">
+<g id="a11yfig5-comp-en-line2d_4">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="258.248571" xlink:href="#a11yfig5-comp-en-m6ddb88c1db" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-en-text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 258.248571 296.638438)" x="258.248571" y="296.638438">1.5</text>
+</g>
+</g>
+<g id="a11yfig5-comp-en-xtick_5">
+<g id="a11yfig5-comp-en-line2d_5">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="328.424762" xlink:href="#a11yfig5-comp-en-m6ddb88c1db" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-en-text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 328.424762 296.638438)" x="328.424762" y="296.638438">2.0</text>
+</g>
+</g>
+<g id="a11yfig5-comp-en-xtick_6">
+<g id="a11yfig5-comp-en-line2d_6">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="398.600952" xlink:href="#a11yfig5-comp-en-m6ddb88c1db" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-en-text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 398.600952 296.638438)" x="398.600952" y="296.638438">2.5</text>
+</g>
+</g>
+<g id="a11yfig5-comp-en-xtick_7">
+<g id="a11yfig5-comp-en-line2d_7">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="468.777143" xlink:href="#a11yfig5-comp-en-m6ddb88c1db" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-en-text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 468.777143 296.638438)" x="468.777143" y="296.638438">3.0</text>
+</g>
+</g>
+<g id="a11yfig5-comp-en-xtick_8">
+<g id="a11yfig5-comp-en-line2d_8">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="538.953333" xlink:href="#a11yfig5-comp-en-m6ddb88c1db" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-en-text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 538.953333 296.638438)" x="538.953333" y="296.638438">3.5</text>
+</g>
+</g>
+<g id="a11yfig5-comp-en-xtick_9">
+<g id="a11yfig5-comp-en-line2d_9">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="609.129524" xlink:href="#a11yfig5-comp-en-m6ddb88c1db" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-en-text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 609.129524 296.638438)" x="609.129524" y="296.638438">4.0</text>
+</g>
+</g>
+<g id="a11yfig5-comp-en-text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-0 342.46 310.316563)" x="342.46" y="310.316563">Time</text>
+</g>
+</g>
+<g id="a11yfig5-comp-en-matplotlib.axis_2">
+<g id="a11yfig5-comp-en-ytick_1">
+<g id="a11yfig5-comp-en-line2d_10">
+<path clip-path="url(#a11yfig5-comp-en-pe4fa41564b)" d="M 47.72 282.04 
+L 637.2 282.04 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-en-line2d_11">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="a11yfig5-comp-en-m00c071392e" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig5-comp-en-m00c071392e" y="282.04"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-en-text_11">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 285.839219)" x="40.72" y="285.839219">0.0</text>
+</g>
+</g>
+<g id="a11yfig5-comp-en-ytick_2">
+<g id="a11yfig5-comp-en-line2d_12">
+<path clip-path="url(#a11yfig5-comp-en-pe4fa41564b)" d="M 47.72 245.385946 
+L 637.2 245.385946 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-en-line2d_13">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig5-comp-en-m00c071392e" y="245.385946"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-en-text_12">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 249.185165)" x="40.72" y="249.185165">0.1</text>
+</g>
+</g>
+<g id="a11yfig5-comp-en-ytick_3">
+<g id="a11yfig5-comp-en-line2d_14">
+<path clip-path="url(#a11yfig5-comp-en-pe4fa41564b)" d="M 47.72 208.731892 
+L 637.2 208.731892 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-en-line2d_15">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig5-comp-en-m00c071392e" y="208.731892"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-en-text_13">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 212.531111)" x="40.72" y="212.531111">0.2</text>
+</g>
+</g>
+<g id="a11yfig5-comp-en-ytick_4">
+<g id="a11yfig5-comp-en-line2d_16">
+<path clip-path="url(#a11yfig5-comp-en-pe4fa41564b)" d="M 47.72 172.077838 
+L 637.2 172.077838 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-en-line2d_17">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig5-comp-en-m00c071392e" y="172.077838"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-en-text_14">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 175.877057)" x="40.72" y="175.877057">0.3</text>
+</g>
+</g>
+<g id="a11yfig5-comp-en-ytick_5">
+<g id="a11yfig5-comp-en-line2d_18">
+<path clip-path="url(#a11yfig5-comp-en-pe4fa41564b)" d="M 47.72 135.423784 
+L 637.2 135.423784 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-en-line2d_19">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig5-comp-en-m00c071392e" y="135.423784"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-en-text_15">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 139.223003)" x="40.72" y="139.223003">0.4</text>
+</g>
+</g>
+<g id="a11yfig5-comp-en-ytick_6">
+<g id="a11yfig5-comp-en-line2d_20">
+<path clip-path="url(#a11yfig5-comp-en-pe4fa41564b)" d="M 47.72 98.76973 
+L 637.2 98.76973 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-en-line2d_21">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig5-comp-en-m00c071392e" y="98.76973"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-en-text_16">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 102.568948)" x="40.72" y="102.568948">0.5</text>
+</g>
+</g>
+<g id="a11yfig5-comp-en-ytick_7">
+<g id="a11yfig5-comp-en-line2d_22">
+<path clip-path="url(#a11yfig5-comp-en-pe4fa41564b)" d="M 47.72 62.115676 
+L 637.2 62.115676 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-en-line2d_23">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig5-comp-en-m00c071392e" y="62.115676"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-en-text_17">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 65.914894)" x="40.72" y="65.914894">0.6</text>
+</g>
+</g>
+<g id="a11yfig5-comp-en-ytick_8">
+<g id="a11yfig5-comp-en-line2d_24">
+<path clip-path="url(#a11yfig5-comp-en-pe4fa41564b)" d="M 47.72 25.461622 
+L 637.2 25.461622 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.16; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-en-line2d_25">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#a11yfig5-comp-en-m00c071392e" y="25.461622"></use>
+</g>
+</g>
+<g id="a11yfig5-comp-en-text_18">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: end" transform="rotate(-0 40.72 29.26084)" x="40.72" y="29.26084">0.7</text>
+</g>
+</g>
+<g id="a11yfig5-comp-en-text_19">
+<text style="font-size: 10px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle" transform="rotate(-90 18.737188 146.42)" x="18.737188" y="146.42">Cumulative probability</text>
+</g>
+</g>
+<g id="a11yfig5-comp-en-line2d_26">
+<path clip-path="url(#a11yfig5-comp-en-pe4fa41564b)" d="M 47.72 282.04 
+L 188.072381 282.04 
+L 188.072381 190.404865 
+L 328.424762 190.404865 
+L 328.424762 190.404865 
+L 468.777143 190.404865 
+L 468.777143 98.76973 
+L 609.129524 98.76973 
+L 609.129524 98.76973 
+" style="fill: none; stroke: #2563eb; stroke-width: 2.7; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-en-line2d_27">
+<path clip-path="url(#a11yfig5-comp-en-pe4fa41564b)" d="M 47.72 282.04 
+L 188.072381 282.04 
+L 188.072381 190.404865 
+L 328.424762 190.404865 
+L 328.424762 190.404865 
+L 468.777143 190.404865 
+L 468.777143 52.952162 
+L 609.129524 52.952162 
+L 609.129524 52.952162 
+" style="fill: none; stroke-dasharray: 8.51,3.68; stroke-dashoffset: 0; stroke: #cf7044; stroke-width: 2.3"></path>
+</g>
+<g id="a11yfig5-comp-en-patch_3">
+<path d="M 47.72 282.04 
+L 47.72 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-en-patch_4">
+<path d="M 47.72 282.04 
+L 637.2 282.04 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-en-legend_1">
+<g id="a11yfig5-comp-en-patch_5">
+<path d="M 54.02 44.420625 
+L 214.556094 44.420625 
+Q 216.356094 44.420625 216.356094 42.620625 
+L 216.356094 17.1 
+Q 216.356094 15.3 214.556094 15.3 
+L 54.02 15.3 
+Q 52.22 15.3 52.22 17.1 
+L 52.22 42.620625 
+Q 52.22 44.420625 54.02 44.420625 
+z
+" style="fill: #ffffff; opacity: 0.8; stroke: #cccccc; stroke-linejoin: miter"></path>
+</g>
+<g id="a11yfig5-comp-en-line2d_28">
+<path d="M 55.82 22.588594 
+L 64.82 22.588594 
+L 64.82 22.588594 
+L 73.82 22.588594 
+L 73.82 22.588594 
+" style="fill: none; stroke: #2563eb; stroke-width: 2.7; stroke-linecap: square"></path>
+</g>
+<g id="a11yfig5-comp-en-text_20">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 81.02 25.738594)" x="81.02" y="25.738594">CIF A = 0.50</text>
+</g>
+<g id="a11yfig5-comp-en-line2d_29">
+<path d="M 55.82 35.798906 
+L 64.82 35.798906 
+L 64.82 35.798906 
+L 73.82 35.798906 
+L 73.82 35.798906 
+" style="fill: none; stroke-dasharray: 8.51,3.68; stroke-dashoffset: 0; stroke: #cf7044; stroke-width: 2.3"></path>
+</g>
+<g id="a11yfig5-comp-en-text_21">
+<text style="font-size: 9px; font-family: 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start" transform="rotate(-0 81.02 38.948906)" x="81.02" y="38.948906">1 − KM (B censored) = 0.625</text>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="a11yfig5-comp-en-pe4fa41564b">
+<rect height="271.24" width="589.48" x="47.72" y="10.8"></rect>
+</clippath>
+</defs>
+</svg><figcaption>Cause-A cumulative incidence versus one minus KM with cause B censored. The disagreement is caused by the estimand, not rounding.</figcaption></figure></section><section id="section-22"><div class="chapter-label">MODULE 22 / 34</div><h2>22. The cause-specific decomposition, worked another way</h2><p class="first-intuition">We can verify the preceding example using a probability accounting table at each event time. Start with overall event-free survival 1. At time 1, one A event among four leads to \(\Delta F_A=1\cdot(1/4)=0.25\) and overall remaining survival 0.75. At time 2, the B event among three leads to \(\Delta F_B=0.75(1/3)=0.25\), leaving 0.50 event-free. At time 3, the A event among two leads to another \(0.50(1/2)=0.25\), leaving 0.25 event-free. By time 4, \(F_A+F_B+S_{all}=0.50+0.25+0.25=1\).</p><div class="table-wrap"><table>
+<thead>
+<tr>
+<th style="text-align:right" scope="col">Time</th>
+<th style="text-align:right" scope="col">Risk set just before</th>
+<th style="text-align:left" scope="col">Event type</th>
+<th style="text-align:right" scope="col">Overall survival before</th>
+<th style="text-align:right" scope="col">CIF increment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">1</td>
+<td style="text-align:right">4</td>
+<td style="text-align:left">A</td>
+<td style="text-align:right">1.00</td>
+<td style="text-align:right">A: 0.25</td>
+</tr>
+<tr>
+<td style="text-align:right">2</td>
+<td style="text-align:right">3</td>
+<td style="text-align:left">B</td>
+<td style="text-align:right">0.75</td>
+<td style="text-align:right">B: 0.25</td>
+</tr>
+<tr>
+<td style="text-align:right">3</td>
+<td style="text-align:right">2</td>
+<td style="text-align:left">A</td>
+<td style="text-align:right">0.50</td>
+<td style="text-align:right">A: 0.25</td>
+</tr>
+</tbody>
+</table></div><p>This is a small-sample form of the <strong>Aalen–Johansen</strong> cumulative-incidence calculation. It is not simply a renaming of the Cox cause-specific hazard; it uses the overall probability of remaining event-free as the multiplier of each cause-specific event increment. The observed outcomes partition the first-event possibilities. If censoring were present, additional assumptions and risk-set adjustments would be required, but the target definition would remain the same.</p><p>Why does this matter for the integrated analysis? If maintenance replacement is a competing event, a model predicting the latent failure time under continued use can answer a hypothetical engineering question, whereas the actual probability of a failure <strong>before replacement</strong> is a competing-risk quantity. Both may be useful but they are not interchangeable. Decisions about replacement policy can alter the occurrence of the competing event itself, which further complicates interpretation. A descriptive prediction model does not identify the causal effect of introducing a new policy.</p><p>The four-unit calculation also illustrates a general check: cumulative incidence curves are nondecreasing and their sum cannot exceed one; all-event survival is nonincreasing. If a plot has type-A incidence 0.7 and type-B incidence 0.6 at the same horizon, at least one estimate, definition or display is wrong, because the mutually exclusive first-event probabilities sum to more than one.</p></section><section id="section-23"><div class="chapter-label">MODULE 23 / 34</div><h2>23. From evaluation to threshold-based action</h2><p class="first-intuition">A manager may need to choose an intervention threshold. Suppose an inspection costs \(c_I\) per unit, while a failure that would have been preventable costs \(c_F\). A simplistic decision rule might inspect whenever predicted failure risk \(r_i(8)\) exceeds \(c_I/c_F\), but this follows only under strong conditions: inspection must completely avert the relevant failure, the costs must be additive and correctly measured, and there must be no harms or downstream effects. If inspection prevents only a fraction \(e\) of failures, the threshold would involve \(c_I/(e c_F)\) in that simplified expected-cost model.</p><div class="equation-card"><span class="equation-label">KEY EQUATION</span><div class="math-scroll">\[\text{Inspect if }r_i(8)\,e\,c_F&gt;c_I\quad\Longleftrightarrow\quad r_i(8)&gt;\frac{c_I}{e c_F}.\]</div></div><p>For an illustrative purely hypothetical cost ratio, set \(c_I=20\) cost units, \(c_F=200\), and inspection effectiveness \(e=0.5\). The threshold is \(20/(0.5\cdot200)=0.20\). In our constructed table, all twelve predicted failure risks exceed 0.20, so the simplified policy would inspect everyone. This result exposes rather than hides a problem: the ratio and intervention effect, not only the discrimination metric, determine whether the decision rule is useful. Changing the assumed effectiveness or action capacity changes the choice.</p><p>If only three inspections are possible, one could rank the highest predicted failure risks: A 0.76, D 0.70 and B 0.68. Their ranking can be computed from the table, but expected prevention depends on the absolute calibration of those risks and the causal efficacy of inspections. We cannot infer from the synthetic validation records that inspecting these modules would prevent their failures. In real decision analysis, evaluate costs, benefits, equity or operational allocation and potential harms, alongside calibration and uncertainty.</p><p>This leads to an important distinction between <strong>prediction</strong> and <strong>intervention</strong>. A calibrated model may predict outcomes under historical maintenance policies; acting on its predictions can change the outcome distribution. Deploying a monitoring policy can also change censoring and competing events. Performance after deployment must therefore be monitored, and causal claims about policy benefit demand a suitable experimental or quasi-experimental design, not merely a survival C-index.</p></section><section id="section-24"><div class="chapter-label">MODULE 24 / 34</div><h2>24. Communicating the model comparison without claiming false certainty</h2><p class="first-intuition">An academically honest results table should include the cohort definition, horizon, number of events, number censored before that horizon, metric definitions, and intervals where supported. A comparison of model families should not pretend that our fixed synthetic probabilities are genuine held-out Cox predictions. Instead, we can show the <strong>evaluation protocol</strong> and the one candidate vector used to reproduce the metrics; values for a separately trained Cox or AFT model are not invented when not supplied.</p><div class="table-wrap"><table>
+<thead>
+<tr>
+<th style="text-align:left" scope="col">Method</th>
+<th style="text-align:left" scope="col">Role in integrated assessment</th>
+<th style="text-align:left" scope="col">Main output</th>
+<th style="text-align:left" scope="col">Crucial check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Kaplan–Meier</td>
+<td style="text-align:left">Overall benchmark</td>
+<td style="text-align:left">\(\widehat S(t)\)</td>
+<td style="text-align:left">Independent censoring and risk-set support</td>
+</tr>
+<tr>
+<td style="text-align:left">Cox PH</td>
+<td style="text-align:left">Conditional survival/risk</td>
+<td style="text-align:left">\(\widehat S(t\mid x)\), HR</td>
+<td style="text-align:left">Proportional hazards, functional form, influences</td>
+</tr>
+<tr>
+<td style="text-align:left">AFT</td>
+<td style="text-align:left">Conditional duration/survival</td>
+<td style="text-align:left">Time Ratios, \(\widehat S(t\mid x)\)</td>
+<td style="text-align:left">Parametric family and tail plausibility</td>
+</tr>
+<tr>
+<td style="text-align:left">Fixed illustrative predictions</td>
+<td style="text-align:left">Arithmetic demonstration</td>
+<td style="text-align:left">\(S_i(8)\) for 12 units</td>
+<td style="text-align:left">Not independently validated model output</td>
+</tr>
+</tbody>
+</table></div><p>Our synthetic vector yields C-index approximately 0.8936 and IPCW Brier Score approximately 0.1329. The aggregate predicted event risk is approximately 0.5217, compared descriptively with KM event probability approximately 0.4599 at the eight-unit horizon. These numbers describe different performance aspects. The first concerns ranking of comparable outcomes; the second concerns probability error under weighting assumptions; the third comparison concerns aggregate probability level. None is sufficient on its own to demonstrate real-world transferability.</p><p>A responsible narrative would say: “For the declared synthetic cohort and eight-unit horizon, the fixed illustrative prediction vector has high apparent ranking concordance, finite censoring-adjusted squared error and some discrepancy in aggregate risk. The sample is too small and constructed to estimate deployed performance or uncertainty. A future independent and temporally relevant cohort is required.” This is more informative than “our model is 89% accurate,” which misstates the C-index.</p></section><section id="section-25"><div class="chapter-label">MODULE 25 / 34</div><h2>25. Model diagnostics and sensitivity analyses</h2><p class="first-intuition">A model comparison should deliberately challenge its assumptions. For Cox, inspect whether the association of covariates with hazard is constant in time: plot appropriately scaled Schoenfeld residuals against follow-up and consider time interactions or stratification if a violation is substantively meaningful. For continuous features, check nonlinear effects and influential subjects. A nonsignificant PH test does not prove PH; it may simply have low power, especially with few events. The decision should also consider visual evidence and domain knowledge.</p><p>For AFT, check the chosen parametric distribution (Weibull, Lognormal or alternatives), residual patterns and tail behavior. An AFT model's Time Ratio can be intuitive, but an incorrect family may distort absolute horizon risk even when the time coefficient direction is plausible. Compare modeled survival with KM within sensible groups; check whether a probability curve leaves the unit interval or increases with time. Parameter confidence intervals do not capture all uncertainty from misspecification.</p><p>For IPCW performance, vary the censoring model and evaluate whether censoring appears related to measured characteristics. Display the smallest estimated \(G(8\mid x)\), largest weights and number of effective contributors. A stabilizing truncation of extreme weights may reduce variance but can introduce bias; it should be prespecified and reported as sensitivity analysis, not silently selected to improve the score. Explore nearby operational horizons while keeping eight as the declared primary endpoint.</p><p>Finally examine subgroup transportability: product batches, factories, operating conditions, installation dates and any protected or operationally meaningful groups. Differences in baseline failure risk or censoring can produce calibration drift even when overall C-index appears stable. A robust conclusion is one that explains which assumptions, groups and horizons support it and where it becomes uncertain. “No significant difference” in a small subgroup is not evidence of equivalence.</p></section><section id="section-26"><div class="chapter-label">MODULE 26 / 34</div><h2>26. Fully reproducible manual calculations: checklist and independent checks</h2><p class="first-intuition">A reader should be able to reproduce the three central outcomes using only the dataset table and a calculator. For Kaplan–Meier, order all observed times, mark failures versus censoring, form the risk set at each failure and multiply \(1-d_j/n_j\) through eight. The answer should be \(175/324\approx0.54012\). For C-index, initiate pairs only from earlier observed events and count 47 comparable comparisons; compare survival predictions so the lower score is assigned to the earlier failure, finding 42 concordant and five discordant pairs.</p><p>For IPCW Brier, reverse the status role to construct \(G\). Verify \(G(4)=0.9\) and \(G(8)=27/35\). The event contributions before eight sum to approximately \(0.7128519\), the five known-survivor contributions sum to approximately \(0.8821296\), for a total near \(1.5949815\). Divide by 12 to obtain approximately 0.132915. C and F contribute no directly observable squared error, but they affect the censoring weights and therefore the adjusted estimate. They should not be recoded as known survivors.</p><p>The overall mean of the twelve survival probabilities can also be independently verified by summing 5.74.</p><div class="equation-card"><span class="equation-label">KEY EQUATION</span><div class="math-scroll">\[0.24+0.32+0.38+0.30+0.47+0.44+0.40+0.58+0.54+0.68+0.74+0.65=5.74\]</div></div><p>The calculation is shown separately so that its individual addends remain visible on a narrow screen.. Divide by twelve to obtain \(0.47833\) and subtract from one to obtain predicted failure risk \(0.52167\). The KM benchmark gives \(1-175/324=149/324\approx0.45988\). The difference in these two descriptive risks is approximately \(0.06179\).</p><p>A useful test of program code is to compute the manual quantities separately from the same recorded array, then compare both implementations within a declared floating-point tolerance. All summaries should specify whether they were obtained from hypothetical outcomes or real observations. Any screenshot of a software result is evidence only if the underlying data, code and parameterization are available for reproduction.</p></section><section class="practice" id="section-27"><div class="chapter-label">MODULE 27 / 34</div><h2>27. Practice problem 1 — event definition, clock and censoring</h2><p class="first-intuition"><strong>Problem.</strong> A new plant enrolls units at installation. One unit fails after 500 operating hours. Another is removed from observation after 600 hours while still functioning. An analyst labels both as “failure by 800 hours = no” because no failure was recorded at the database closing date. Identify every conceptual error and specify the correct observation records. Explain whether the unit followed only to 600 hours can enter an ordinary eight-unit binary calibration calculation without correction.</p><p><strong>Hint.</strong> Write \(Y=\min(T,C)\) and the event indicator. Separate a known event at or before the horizon from an unknown outcome after a censoring time. Remember that “no observed event” differs from “observed to be event-free.”</p><p><strong>Worked solution.</strong> The first unit failed at time 5 in hundreds of hours, so \(Y=5,\delta=1\), and its eight-unit survival target is zero. Labelling it a nonfailure is a direct outcome error. The second unit has \(Y=6,\delta=0\), since its actual failure time, if any, is greater than six but unknown. We cannot assign it either a failure or a nonfailure by eight. The incorrect analyst collapsed two distinct observation processes and fabricated a binary outcome for one of them. An ordinary complete binary calibration comparison cannot simply include the second as a survivor; it requires a censoring-aware method such as IPCW under its assumptions or another coherent survival-calibration estimator. The general transfer lesson is to audit the observation process <strong>before</strong> calculating predictive metrics.</p></section><section class="practice" id="section-28"><div class="chapter-label">MODULE 28 / 34</div><h2>28. Practice problem 2 — calculate Kaplan–Meier without mixing event types</h2><p class="first-intuition"><strong>Problem.</strong> Using the twelve-unit dataset, calculate the Kaplan–Meier estimate at times 3, 5, 6 and 8. Explain why the raw proportion 5/12 does not equal the failure probability estimated by KM at eight. Then explain how the answer would change in interpretation if the censoring times at 4 and 7 represented competing terminal failures rather than administrative exits.</p><p><strong>Hint.</strong> Use risk sets 12, 11, 9, 8 and 6 for failures through eight; censored units reduce later risk sets but do not directly contribute an event step.</p><p><strong>Worked solution.</strong> At time 3, \(S=(11/12)(10/11)=5/6\approx0.83333\). At time 5, multiply by 8/9 to obtain \(20/27\approx0.74074\). At time 6 multiply by 7/8 to obtain \(35/54\approx0.64815\). After the censoring at 7, the risk set at 8 is six, so multiply by 5/6 to obtain \(175/324\approx0.54012\). The KM estimate of failure by eight is \(149/324\approx0.45988\), compared with raw observed failure frequency \(5/12\approx0.41667\). Under independent censoring, KM adjusts the risk sets to account for partial follow-up. If records at 4 and 7 were competing terminal outcomes, the scientific target for <em>failure of a particular cause</em> would be a cumulative incidence function, not one minus a KM curve that simply censors competing outcomes. Changing event definitions changes the estimand, not merely the arithmetic.</p></section><section class="practice" id="section-29"><div class="chapter-label">MODULE 29 / 34</div><h2>29. Practice problem 3 — enumerate concordant and discordant pairs</h2><p class="first-intuition"><strong>Problem.</strong> Derive the Harrell-style C-index using the twelve recorded durations, event statuses and eight-unit survival predictions. State why pairs starting with a censored shorter time are not comparable. Explain what would happen to the C-index if all survival predictions were transformed by a strictly increasing function that still preserved their ordering.</p><p><strong>Hint.</strong> Count the later observations for each earlier event: 11, 10, 8, 7, 5, 4 and 2. Compare predictions using <strong>lower</strong> survival for the shorter failure time.</p><p><strong>Worked solution.</strong> The comparable count is 47. Concordant counts are 11 for A, 9 for B, 8 for D, 5 for E, 5 for G, 3 for H and 1 for J, totaling 42; the remaining five are discordant and no predictions tie. Thus \(C=42/47\approx0.89362\). A pair where the shorter follow-up is censored provides no observed ordering of true failure times; that person might fail before or after the other. Excluding it preserves the interpretation of the comparable-pairs sample but changes the sample composition. A strictly monotonic transformation preserving every ordering leaves the C-index unchanged, even if the resulting values are poor probability estimates. This demonstrates why discrimination must be evaluated alongside calibration and proper scoring rules.</p></section><section class="practice" id="section-30"><div class="chapter-label">MODULE 30 / 34</div><h2>30. Practice problem 4 — the censoring survival and Brier Score</h2><p class="first-intuition"><strong>Problem.</strong> Estimate the reverse-KM censoring survival through eight, then calculate the IPCW Brier Score. Identify which terms come from event subjects, which from known survivors, and which from censored-before-horizon subjects. Explain why the contributions are divided by different values of \(G\).</p><p><strong>Hint.</strong> At time 4, there are ten units at risk; at time 7, seven. A failure at 5 needs observation through 5; a survivor at eight needs observation through eight.</p><p><strong>Worked solution.</strong> \(\widehat G(4)=9/10=0.9\), and \(\widehat G(8)=(9/10)(6/7)=27/35\approx0.77143\). The five observed failures by eight contribute respectively 0.057600, 0.102400, 0.100000, 0.245444 and 0.207407. The five modules followed beyond eight contribute 0.228667, 0.274296, 0.132741, 0.087630 and 0.158796. C and F are censored before eight and contribute zero directly because their binary survival status at eight is unknown. Sum the ten nonzero terms, approximately 1.594981, and divide by all twelve enrolled units: \(BS_{IPCW}(8)\approx0.132915\). The event denominators use the chance of remaining observable to the event time, whereas the known-survivor denominators use the chance of remaining observable through the horizon. This weighting targets the average squared probability error under the censoring assumptions.</p></section><section class="practice" id="section-31"><div class="chapter-label">MODULE 31 / 34</div><h2>31. Practice problem 5 — competing events are not ordinary censoring</h2><p class="first-intuition"><strong>Problem.</strong> In the four-unit example, calculate the type-A cumulative incidence at time 4 using the overall event-free survival and the type-specific event increments. Separately calculate one minus KM when type B at time 2 is treated as censored. Explain the difference in everyday language and verify that probabilities across mutually exclusive first outcomes sum to one.</p><p><strong>Hint.</strong> At time 1, one of four experiences A. At time 2, one of the remaining three experiences B. At time 3, one of the remaining two experiences A.</p><p><strong>Worked solution.</strong> Aalen–Johansen-type increments for A are \(1(1/4)=0.25\) and \((1/2)(1/2)=0.25\); therefore \(F_A(4)=0.50\). The B increment is \((3/4)(1/3)=0.25\), and all-event survival is 0.25, yielding \(0.50+0.25+0.25=1\). When B is censored for a Kaplan–Meier calculation of type A, \(S_{KM,A}(4)=(3/4)(1/2)=3/8\), so \(1-KM=5/8=0.625\). The difference is 0.125 because an individual who experienced B can no longer have A as the <strong>first</strong> event, yet the censored-KM calculation behaves as though competing-event removal were ordinary independent observation loss. The larger number is not the absolute observed-world incidence of type A.</p></section><section class="practice" id="section-32"><div class="chapter-label">MODULE 32 / 34</div><h2>32. Practice problem 6 — an accountable model and intervention decision</h2><p class="first-intuition"><strong>Problem.</strong> A team reports “the model is 89% accurate, therefore inspect only the three predicted highest-risk modules and deploy immediately.” Critique this statement using the illustrative C-index, calibration comparison, Brier Score, uncertainty and the distinction between prediction and causal impact. Name the selected three under the simple risk ranking, and state what additional evidence would justify action.</p><p><strong>Hint.</strong> Sort \(1-S_i(8)\) from largest to smallest. Recall the C-index describes pair ranking and the twelve records were constructed rather than collected prospectively.</p><p><strong>Worked solution.</strong> The top three predicted risks are A (0.76), D (0.70) and B (0.68). The C-index is 42/47 ≈ 0.8936, not an 89% binary accuracy rate. IPCW Brier at eight is ≈0.1329, and overall predicted failure risk ≈0.5217 differs from the descriptive KM probability ≈0.4599. The sample has only twelve fabricated modules and cannot produce a credible prospective confidence interval. Even accurate predicted risks would not establish that inspection prevents failure; an intervention study or defensible causal analysis is required, together with costs, capacity and side-effect assessment. The correct conclusion is that A, D and B are highest in this <strong>illustrative ranking</strong>, while deployment remains unsubstantiated pending real data, model training on an independent sample, censoring diagnostics, external calibration and decision-effectiveness evidence.</p></section><section class="practice" id="section-33"><div class="chapter-label">MODULE 33 / 34</div><h2>33. Practice problem 7 — transfer to a health cohort and a final synthesis</h2><p class="first-intuition"><strong>Problem.</strong> A hospital predicts death within 90 days after discharge. Some patients lose contact at day 30, some die from a different cause before the condition-specific event of interest, and some patients have multiple admissions. Propose an evaluation plan, defining the endpoint and target, split, metrics, censoring method, competing-risk treatment, uncertainty and communication limits. Finish with a plain-language statement that a policymaker could understand.</p><p><strong>Hint.</strong> Do not mix all-cause mortality with cause-specific incidence. Keep all admissions from the same patient together where necessary. Think about temporal validation and outcome ascertainment.</p><p><strong>Worked solution.</strong> If the target is <strong>all-cause death within 90 days</strong>, define discharge as time zero, death as the event, right censoring for genuinely incomplete observation, and follow-up in days. Death from any cause is an event, not a competitor. If the target is <strong>death from a specified cause</strong>, other-cause death competes and the relevant absolute probability is a cumulative incidence function. Split by patient, not admission row, and consider later calendar cohorts for external temporal validation. Train Cox and plausible AFT models only within development data and verify their assumptions; report a KM benchmark for all-cause survival or appropriate cumulative incidence for specific causes. On independent test patients compute discrimination with appropriate censoring handling, calibration at 90 days, an IPCW Brier Score if assumptions are defensible, and confidence intervals respecting patient or hospital clustering. Document censoring weight stability, missing covariates, transportability and ethically relevant subgroups. A defensible summary is: “The model may help prioritize follow-up, but its absolute probabilities and practical benefits must be validated in comparable patients, and competing causes of death must be handled as separate first-event outcomes.”</p></section><section id="section-34"><div class="chapter-label">MODULE 34 / 34</div><h2>34. Final synthesis: what constitutes a completed survival evaluation?</h2><p class="first-intuition">A credible survival-model evaluation begins before fitting any mathematical formula: the event, time zero, unit, horizon and observation process must have a coherent scientific meaning. Otherwise a precise C-index or a beautiful survival curve can summarize the wrong target. Our constructed example showed why censoring is not ordinary absence of a binary outcome and why a failure at the horizon must count as a failure if that is the declared rule.</p><p>We connected three complementary views. Kaplan–Meier estimated overall survival at eight as about 0.54012 under independent censoring. The fixed illustrative risk ranking gave 42 concordant comparisons among 47 comparable event pairs, or C≈0.8936. The IPCW Brier Score, incorporating a censoring-survival estimate of 27/35 at eight, was about 0.132915. Aggregate predicted failure risk of about 0.5217 could be compared descriptively with KM event probability of about 0.4599, but twelve synthetic records cannot establish deployed calibration. None of those metrics substitutes for the other.</p><p>We also derived the decisive competing-risks warning: in a four-unit study, the absolute incidence of type A by time four was 0.50, while one minus KM after censoring type B was 0.625. The discrepancy is not rounding; it comes from asking different scientific questions. This distinction is essential whenever death from other causes, permanent replacement, loan prepayment, customer migration or another terminal outcome prevents the original event from occurring as the first event.</p><p>The final practical rule is to make performance claims no broader than the evidence. Validate on genuinely independent subjects and relevant future cohorts; compare identical horizons and endpoints; inspect diagnostics and censoring weights; quantify uncertainty at the unit or cluster level; and judge decision utility with real intervention benefits and harms. A model can order cases well yet predict the wrong absolute probabilities, and a calibrated risk prediction cannot by itself demonstrate that acting upon it will improve outcomes. The evidence must survive these distinctions. That is the transferable competency of this final guide.</p><blockquote>
+<p><strong>Student Understanding Test.</strong> Without consulting a library, can you reconstruct the 12-row dataset, reproduce KM 175/324, C-index 42/47 and IPCW Brier ≈0.132915, explain the 0.50 versus 0.625 competing-risks contrast, and justify when those results would or would not support a real decision? If not, revisit the corresponding calculations before treating the model evaluation as complete.</p>
+</blockquote></section></article><aside aria-label="Contents" class="toc"><h2>Contents</h2><a href="#section-1">1. An integrated decision, not a competition for a single number</a><a href="#section-2">2. Prerequisites and the conceptual map</a><a href="#section-3">3. Specify the estimand, observation process and time zero</a><a href="#section-4">4. Complete synthetic evaluation dataset</a><a href="#section-5">5. What constitutes valid training and validation?</a><a href="#section-6">6. Establish the Kaplan–Meier benchmark</a><a href="#section-7">7. Cox and AFT: comparable predictions, different parameter meanings</a><a href="#section-8">8. Why ordinary classification accuracy is wrong under early censoring</a><a href="#section-9">9. Discrimination as an ordering question</a><a href="#section-10">10. Enumerating every comparable pair and verifying the C-index</a><a href="#section-11">11. Discrimination is not calibration</a><a href="#section-12">12. An honest small-sample calibration display</a><a href="#section-13">13. From the binary Brier Score to a censored survival Brier Score</a><a href="#section-14">14. Estimate the censoring distribution, not the failure distribution</a><a href="#section-15">15. Derive and calculate the IPCW Brier Score at eight units</a><a href="#section-16">16. Interpret a full record-level scoring audit</a><a href="#section-17">17. Compare against an explicit reference predictor</a><a href="#section-18">18. Uncertainty is about independent units, not pair counts</a><a href="#section-19">19. Horizons, follow-up support and extrapolation</a><a href="#section-20">20. Competing risks: define which event you mean</a><a href="#section-21">21. Four-subject competing-risk counterexample</a><a href="#section-22">22. The cause-specific decomposition, worked another way</a><a href="#section-23">23. From evaluation to threshold-based action</a><a href="#section-24">24. Communicating the model comparison without claiming false certainty</a><a href="#section-25">25. Model diagnostics and sensitivity analyses</a><a href="#section-26">26. Fully reproducible manual calculations: checklist and independent checks</a><a href="#section-27">27. Practice problem 1 — event definition, clock and censoring</a><a href="#section-28">28. Practice problem 2 — calculate Kaplan–Meier without mixing event types</a><a href="#section-29">29. Practice problem 3 — enumerate concordant and discordant pairs</a><a href="#section-30">30. Practice problem 4 — the censoring survival and Brier Score</a><a href="#section-31">31. Practice problem 5 — competing events are not ordinary censoring</a><a href="#section-32">32. Practice problem 6 — an accountable model and intervention decision</a><a href="#section-33">33. Practice problem 7 — transfer to a health cohort and a final synthesis</a><a href="#section-34">34. Final synthesis: what constitutes a completed survival evaluation?</a></aside></div></main><footer class="foot"><div class="container"><p>© Alfredo Saldana · Guide 80 · Statistics &amp; Probability · Synthetic teaching examples · READY FOR AUTHOR REVIEW</p></div></footer><script>document.querySelector('#menu-btn').addEventListener('click',function(){let n=document.querySelector('#global-nav');let open=n.classList.toggle('open');this.setAttribute('aria-expanded',String(open));this.setAttribute('aria-label',open?'Close menu':'Open menu')});</script></body></html>

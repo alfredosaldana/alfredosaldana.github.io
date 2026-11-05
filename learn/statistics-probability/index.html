@@ -1,317 +1,106 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Statistics & Probability learning path by Alfredo Saldana: probability, distributions, sampling, inference, hypothesis testing, ANOVA, correlation, and regression.">
-<title>Statistics & Probability — Alfredo Saldana</title>
-<link rel="icon" href="../../assets/images/favicon.svg">
-<link rel="stylesheet" href="../../assets/css/style.css">
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Statistics &amp; Probability Study Guides | Alfredo Saldana</title>
+<meta name="description" content="80 English-language guides, from statistical foundations to survival models. Select a topic to open its complete study guide.">
+<link rel="icon" href="/assets/images/favicon.svg"><link rel="stylesheet" href="/assets/css/style.css">
+<link rel="alternate" hreflang="es" href="/es/learn/statistics-probability/index.html">
 <style>
-  .path-wrap{max-width:1120px;margin:0 auto;padding:0 20px}
-  .breadcrumb{margin:0 0 18px;font-size:.94rem;color:#6b7b8f}
-  .breadcrumb a{color:#245f9e;text-decoration:none;font-weight:700}
-  .breadcrumb a:hover{text-decoration:underline}
-
-  .path-intro{display:grid;grid-template-columns:1.12fr .88fr;gap:30px;align-items:center;margin:0 0 36px}
-  .path-copy h2{margin:0 0 12px;color:#0b1f3a;font-size:clamp(1.7rem,3vw,2.35rem)}
-  .path-copy p{margin:0 0 14px;color:#5e6f83;line-height:1.75;font-size:1.03rem}
-  .path-image{width:100%;border-radius:22px;box-shadow:0 16px 38px rgba(18,42,74,.12);border:1px solid #dbe6f2}
-
-  .path-note{margin:18px 0 0;padding:16px 18px;border-radius:15px;background:#eef9f7;border:1px solid #cfe9e3;color:#335c57;line-height:1.65}
-  .section-mini{margin:0 0 10px;color:#5a6b7f;font-size:.94rem;line-height:1.65}
-
-  .guide-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:26px}
-  .guide-card{
-    --accent:#16847a;
-    position:relative;
-    background:#fff;
-    border:1px solid #dfe8f2;
-    border-radius:18px;
-    padding:24px 20px 20px;
-    box-shadow:0 10px 26px rgba(18,42,74,.07);
-    display:flex;
-    flex-direction:column;
-    min-height:255px;
-    overflow:hidden;
-    transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease
-  }
-  .guide-card::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:var(--accent)}
-  .guide-card.group-probability{--accent:#2563a8}
-  .guide-card.group-distributions{--accent:#16847a}
-  .guide-card.group-sampling{--accent:#7253a5}
-  .guide-card.group-inference{--accent:#c77a22}
-  .guide-card.group-association{--accent:#b94d5c}
-  .guide-card:hover{transform:translateY(-4px);box-shadow:0 16px 32px rgba(18,42,74,.12);border-color:#cbdced}
-
-  .guide-status{display:inline-flex;align-self:flex-start;padding:5px 9px;border-radius:999px;font-size:.76rem;font-weight:800;letter-spacing:.02em;margin-bottom:11px;background:#f1f5f9;color:#607085}
-  .guide-card h3{margin:0 0 10px;color:#0b1f3a;font-size:1.12rem;line-height:1.36}
-  .guide-card p{margin:0 0 16px;color:#617287;line-height:1.62;font-size:.95rem}
-  .guide-card .disabled-link{margin-top:auto;color:#94a3b8;font-weight:700}
-
-  .sequence{margin:38px 0 0;padding:22px;background:#fff;border:1px solid #dfe8f2;border-radius:18px}
-  .sequence h3{margin:0 0 12px;color:#0b1f3a}
-  .sequence p{color:#5f6f82;line-height:1.7;margin:0 0 12px}
-  .sequence p:last-child{margin-bottom:0}
-
-  @media(max-width:900px){
-    .path-intro{grid-template-columns:1fr}
-    .guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  }
-  @media(max-width:620px){
-    .guide-grid{grid-template-columns:1fr}
-  }
-</style>
-</head>
-<body>
-
-<header class="site-header">
-  <div class="container nav-wrap">
-    <div style="display:flex;align-items:center;gap:20px;">
-      <a class="brand" href="../../index.html">Alfredo Saldana</a>
-      <div class="lang-switch" style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:.92rem;white-space:nowrap;">
-        <a href="index.html" aria-current="page" style="color:#2563eb;text-decoration:none;font-weight:800;">EN</a>
-        <span aria-hidden="true" style="color:#64748b;">|</span>
-        <a href="../../es/learn/statistics-probability/" style="color:#111827;text-decoration:none;font-weight:700;">ES</a>
-      </div>
-    </div>
-    <button class="menu-btn" aria-label="Open navigation">☰</button>
-    <nav class="nav">
-      <a href="../../index.html">Home</a>
-      <a href="../../tutorials.html" class="active">Learn</a>
-      <a href="../../projects.html">Projects</a>
-      <a href="../../open-box.html">Open Box</a>
-      <a href="../../about.html">About</a>
-      <a href="../../contact.html">Contact</a>
-    </nav>
-  </div>
-</header>
-
-<main>
-<section class="page-hero">
-  <div class="container">
-    <div class="eyebrow">Learn · Statistics & Probability</div>
-    <h1>Statistics & Probability</h1>
-    <p class="lead">A structured path from basic probability to inference, ANOVA, correlation, and regression.</p>
-  </div>
-</section>
-
-<section class="section">
-  <div class="path-wrap">
-    <div class="breadcrumb">
-      <a href="../../tutorials.html">Learn</a> → Statistics & Probability
-    </div>
-
-    <div class="path-intro">
-      <div class="path-copy">
-        <h2>Build the statistical foundation that supports Data Science.</h2>
-        <p>Statistics and Probability allow us to reason about uncertainty, samples, variability, and evidence. This path is designed to move step by step from basic probability concepts to inferential tools used constantly in Data Science.</p>
-        <p>The order is intentional: first probability and random variables, then distributions, followed by sampling and the Central Limit Theorem, and finally estimation, hypothesis testing, ANOVA, correlation, and regression.</p>
-        <div class="path-note"><strong>Recommended order:</strong> follow the guides in sequence. In particular, keep Sampling Distributions → Central Limit Theorem → Standard Error → Confidence Intervals → Hypothesis Testing together because each topic depends on intuition developed earlier.</div>
-      </div>
-
-      <img class="path-image" src="../../assets/images/learn-statistics-probability.png" alt="Statistics and Probability learning path">
-    </div>
-
-    <div class="eyebrow">Guides</div>
-    <h2 style="margin-top:8px;color:#0b1f3a;">Learning sequence</h2>
-    <p class="section-mini">The path moves from <strong>probability</strong> to <strong>distributions</strong>, then to <strong>sampling and inference</strong>, and ends with <strong>ANOVA, association, and regression</strong>.</p>
-
-    <div class="path-note" style="margin-top:20px;">
-      <strong>Visual guide:</strong> blue = probability foundations, green = distributions, purple = sampling and estimation, orange = inference and hypothesis testing, red = association and regression.
-    </div>
-
-    <div class="guide-grid">
-      <article class="guide-card group-probability">
-        <span class="guide-status">Planned · 1</span>
-        <h3>Probability from First Principles</h3>
-        <p>Events, sample spaces, probability rules, complements, unions, intersections, and an intuitive foundation for reasoning under uncertainty.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-probability">
-        <span class="guide-status">Planned · 2</span>
-        <h3>Conditional Probability and Independence</h3>
-        <p>Understand how probability changes when additional information is known and what independence really means.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-probability">
-        <span class="guide-status">Planned · 3</span>
-        <h3>Bayes’ Theorem from First Principles</h3>
-        <p>Derive Bayes’ Theorem step by step and use it to update probabilities when new evidence appears.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-probability">
-        <span class="guide-status">Planned · 4</span>
-        <h3>Random Variables: Discrete vs. Continuous</h3>
-        <p>Learn what a random variable is and how to distinguish discrete from continuous random variables.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-probability">
-        <span class="guide-status">Planned · 5</span>
-        <h3>Expected Value, Variance and Standard Deviation</h3>
-        <p>Build intuition for expected value and the main measures of variability.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-distributions">
-        <span class="guide-status">Planned · 6</span>
-        <h3>Bernoulli and Binomial Distributions</h3>
-        <p>Study success/failure experiments, parameters, mean, variance, and practical applications.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-distributions">
-        <span class="guide-status">Planned · 7</span>
-        <h3>The Normal Distribution</h3>
-        <p>Explore shape, mean, standard deviation, properties, and the 68–95–99.7 rule.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-distributions">
-        <span class="guide-status">Planned · 8</span>
-        <h3>Z-Scores and Standardization</h3>
-        <p>Learn to express observations in standard deviation units and interpret z-scores.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-distributions">
-        <span class="guide-status">Planned · 9</span>
-        <h3>The t, Chi-Square and F Distributions</h3>
-        <p>Understand why these three distributions appear in statistical inference and when each is used.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-sampling">
-        <span class="guide-status">Planned · 10</span>
-        <h3>Populations, Samples, Parameters and Statistics</h3>
-        <p>Clearly distinguish populations, samples, parameters, and statistics before moving into inference.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-sampling">
-        <span class="guide-status">Planned · 11</span>
-        <h3>Sampling Distributions from First Principles</h3>
-        <p>Learn why the distribution of a statistic changes when the sampling process is repeated.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-sampling">
-        <span class="guide-status">Planned · 12</span>
-        <h3>The Central Limit Theorem</h3>
-        <p>Understand one of the most important results in statistics and why it makes inference possible.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-sampling">
-        <span class="guide-status">Planned · 13</span>
-        <h3>Standard Error and Point Estimation</h3>
-        <p>Distinguish standard deviation from standard error and understand estimators, precision, and sampling variability.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-sampling">
-        <span class="guide-status">Planned · 14</span>
-        <h3>Confidence Intervals from First Principles</h3>
-        <p>Build and correctly interpret confidence intervals for means and proportions.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-inference">
-        <span class="guide-status">Planned · 15</span>
-        <h3>Hypothesis Testing from First Principles</h3>
-        <p>Learn the complete logic of hypothesis testing: null hypothesis, alternative hypothesis, test statistic, significance level, and decision rule.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-inference">
-        <span class="guide-status">Planned · 16</span>
-        <h3>P-Values: What They Mean and What They Do Not Mean</h3>
-        <p>Clarify one of the most misunderstood ideas in statistics using examples and counterexamples.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-inference">
-        <span class="guide-status">Planned · 17</span>
-        <h3>Type I Error, Type II Error and Statistical Power</h3>
-        <p>Connect alpha, beta, power, sample size, and the probability of detecting real effects.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-inference">
-        <span class="guide-status">Planned · 18</span>
-        <h3>One-Sample and Two-Sample t-Tests</h3>
-        <p>Learn when to use each t-test, its assumptions, and how to interpret the results.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-inference">
-        <span class="guide-status">Planned · 19</span>
-        <h3>The F-Test: Comparing Variability</h3>
-        <p>Understand variance ratios and how the F distribution leads into ANOVA.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-inference">
-        <span class="guide-status">Planned · 20</span>
-        <h3>ANOVA from First Principles</h3>
-        <p>Study between-group and within-group variability, sums of squares, degrees of freedom, mean squares, the F statistic, and the p-value.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-inference">
-        <span class="guide-status">Planned · 21</span>
-        <h3>Post-Hoc Tests: What Happens After ANOVA?</h3>
-        <p>Learn why ANOVA alone does not identify which groups differ and introduce multiple-comparison methods such as Tukey HSD.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-association">
-        <span class="guide-status">Planned · 22</span>
-        <h3>Chi-Square Tests for Categorical Data</h3>
-        <p>Work with goodness-of-fit, independence, and contingency tables.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-association">
-        <span class="guide-status">Planned · 23</span>
-        <h3>Correlation from First Principles</h3>
-        <p>Build intuition for covariance and Pearson correlation, including direction, magnitude, assumptions, and limitations.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-association">
-        <span class="guide-status">Planned · 24</span>
-        <h3>Correlation Does Not Imply Causation</h3>
-        <p>Explore confounding variables, spurious associations, and why statistical relationships do not prove causation.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-      <article class="guide-card group-association">
-        <span class="guide-status">Planned · 25</span>
-        <h3>Simple Linear Regression from a Statistical Perspective</h3>
-        <p>Study slope, intercept, error, residuals, R², coefficient inference, and model assumptions.</p>
-        <div class="disabled-link">Coming soon</div>
-      </article>
-    </div>
-
-    <div class="sequence">
-      <h3>Why this order?</h3>
-      <p>The sequence begins with probability because we need a formal way to describe uncertainty before studying random variables and distributions. We then introduce populations, samples, and sampling distributions to understand why a statistic changes from one sample to another.</p>
-      <p>The Central Limit Theorem connects sampling variability to Standard Error and opens the door to Confidence Intervals and Hypothesis Testing. From there, the path advances to t-tests, F-tests, ANOVA, Chi-Square tests, and finally to correlation and simple linear regression from a statistical perspective.</p>
-    </div>
-  </div>
-</section>
+:root{--guide-blue:#2563eb;--guide-ink:#142339;--guide-muted:#536477}
+*{box-sizing:border-box} body{margin:0;color:var(--guide-ink);font-family:Inter,Arial,sans-serif;background:#f8fbff;line-height:1.6}
+.site-head{background:white;border-bottom:1px solid #e1e8f2} .head-in{max-width:1120px;padding:16px 22px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{font-size:1.14rem;font-weight:800;color:#122d4d;text-decoration:none} .languages{display:flex;gap:10px;align-items:center;font-weight:750}
+.languages a{text-decoration:none;color:#203044} .languages a[aria-current="page"]{color:var(--guide-blue)} .navlinks{display:flex;flex-wrap:wrap;gap:18px}
+.navlinks a{font-size:.92rem;color:#34536d;text-decoration:none} a:focus-visible{outline:3px solid #2563eb;outline-offset:4px;border-radius:3px}
+.wrap{max-width:1120px;margin:auto;padding:36px 22px 80px} .breadcrumb{font-size:.92rem;margin-bottom:20px} .breadcrumb a{color:#245f9e}
+h1{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(2.1rem,4vw,3.2rem);line-height:1.15;margin:0 0 18px;color:#112e53}
+.lead{max-width:770px;color:var(--guide-muted);font-size:1.07rem;margin-bottom:34px}
+.study-group{margin:34px 0} .study-group h2{font-size:1.18rem;color:#183e68;margin:0 0 15px;border-left:4px solid #2563eb;padding-left:13px}
+.guide-list{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.guide-list a{display:flex;align-items:center;gap:12px;min-height:75px;padding:15px 16px;background:#fff;border:1px solid #dce6f3;border-radius:14px;text-decoration:none;color:#15283f;box-shadow:0 2px 8px #1a3a5c0b}
+.guide-list a:hover{border-color:#5b8fcf;box-shadow:0 6px 16px #1a3a5c18} .n{flex:0 0 auto;font-weight:800;color:#2563eb} .guide-title{flex:1;font-size:.95rem;line-height:1.38}
+.arrow{color:#6a8cac} footer{padding:25px 20px;text-align:center;color:#617185;border-top:1px solid #dce6f3}
+@media(max-width:680px){.guide-list{grid-template-columns:1fr}.navlinks{gap:12px}}
+</style></head><body><a class="skip" href="#main" style="position:absolute;left:-9999px" onfocus="this.style.left='12px'" onblur="this.style.left='-9999px'">Skip to content</a>
+<header class="site-head"><div class="head-in"><a class="brand" href="/index.html">Alfredo Saldana</a><div class="languages"><a href="/learn/statistics-probability/index.html" aria-current="page">EN</a><span>|</span><a href="/es/learn/statistics-probability/index.html" >ES</a></div><nav class="navlinks" aria-label="Main navigation"><a href="/index.html">Home</a><a href="/tutorials.html">Learn</a><a href="/projects.html">Projects</a></nav></div></header>
+<main id="main" class="wrap"><div class="breadcrumb"><a href="/tutorials.html">Learn</a> / Statistics & Probability</div><h1>Statistics &amp; Probability Study Guides</h1><p class="lead">80 English-language guides, from statistical foundations to survival models. Select a topic to open its complete study guide.</p><section class="study-group" aria-labelledby="group-1"><h2 id="group-1">I. Foundations / Fundamentos</h2><ol class="guide-list"><li><a href="/learn/statistics-probability/statistics-from-first-principles-questions-data-variability-and-evidence.html"><span class="n">01</span><span class="guide-title">Statistics from First Principles</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/data-types-frequency-distributions-and-exploratory-visualization.html"><span class="n">02</span><span class="guide-title">Data Types</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/descriptive-statistics-center-spread-shape-and-outliers.html"><span class="n">03</span><span class="guide-title">Descriptive Statistics</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/populations-samples-sampling-methods-and-study-design.html"><span class="n">04</span><span class="guide-title">Populations, Samples, Sampling Methods and Study Design</span><span class="arrow" aria-hidden="true">↗</span></a></li></ol></section>
+<section class="study-group" aria-labelledby="group-5"><h2 id="group-5">II. Probability foundations / Fundamentos de probabilidad</h2><ol class="guide-list"><li><a href="/learn/statistics-probability/probability-from-first-principles-events-and-probability-rules.html"><span class="n">05</span><span class="guide-title">Probability from First Principles</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/counting-principles-permutations-and-combinations.html"><span class="n">06</span><span class="guide-title">Counting Principles</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/conditional-probability-and-independence.html"><span class="n">07</span><span class="guide-title">Conditional Probability</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/bayes-theorem-from-first-principles.html"><span class="n">08</span><span class="guide-title">Bayes’ Theorem</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/discrete-random-variables-and-probability-mass-functions.html"><span class="n">09</span><span class="guide-title">Discrete Random Variables</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/continuous-random-variables-density-and-cumulative-distribution-functions.html"><span class="n">10</span><span class="guide-title">Continuous Random Variables</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/expected-value-variance-and-standard-deviation.html"><span class="n">11</span><span class="guide-title">Expected Value, Variance and Standard Deviation</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/moments-and-deviations-raw-central-and-standardized-moments.html"><span class="n">12</span><span class="guide-title">Moments and Deviations: Raw, Central and Standardized Moments</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/joint-marginal-and-conditional-distributions-covariance-and-dependence.html"><span class="n">13</span><span class="guide-title">Joint, Marginal and Conditional Distributions: Covariance and Dependence</span><span class="arrow" aria-hidden="true">↗</span></a></li></ol></section>
+<section class="study-group" aria-labelledby="group-14"><h2 id="group-14">III. Distributions / Distribuciones</h2><ol class="guide-list"><li><a href="/learn/statistics-probability/bernoulli-and-binomial-distributions.html"><span class="n">14</span><span class="guide-title">Bernoulli and Binomial Distributions</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/the-hypergeometric-distribution-and-sampling-without-replacement.html"><span class="n">15</span><span class="guide-title">The Hypergeometric Distribution and Sampling Without Replacement</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/geometric-and-negative-binomial-distributions.html"><span class="n">16</span><span class="guide-title">Geometric and Negative Binomial Distributions</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/the-poisson-distribution.html"><span class="n">17</span><span class="guide-title">The Poisson Distribution</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/the-exponential-distribution-and-waiting-times.html"><span class="n">18</span><span class="guide-title">The Exponential Distribution and Waiting Times</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/the-gamma-distribution-shape-scale-and-waiting-times.html"><span class="n">19</span><span class="guide-title">The Gamma Distribution: Shape, Scale and Waiting Times</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/the-beta-distribution-modeling-uncertainty-on-the-unit-interval.html"><span class="n">20</span><span class="guide-title">The Beta Distribution: Modeling Uncertainty on the Unit Interval</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/the-normal-distribution.html"><span class="n">21</span><span class="guide-title">The Normal Distribution</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/z-scores-standardization-and-normal-probability-calculations.html"><span class="n">22</span><span class="guide-title">Z-Scores, Standardization and Normal Probability Calculations</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/moment-generating-functions-moments-and-sums-of-independent-variables.html"><span class="n">23</span><span class="guide-title">Moment Generating Functions: Moments and Sums of Independent Variables</span><span class="arrow" aria-hidden="true">↗</span></a></li></ol></section>
+<section class="study-group" aria-labelledby="group-24"><h2 id="group-24">IV. Estimation / Estimación</h2><ol class="guide-list"><li><a href="/learn/statistics-probability/the-law-of-large-numbers-and-monte-carlo-simulation.html"><span class="n">24</span><span class="guide-title">The Law of Large Numbers and Monte Carlo Simulation</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/sampling-distributions-from-first-principles.html"><span class="n">25</span><span class="guide-title">Sampling Distributions from First Principles</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/point-estimation-estimands-estimators-bias-and-precision.html"><span class="n">26</span><span class="guide-title">Point Estimation: Estimands, Estimators, Bias and Precision</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/standard-error-from-first-principles.html"><span class="n">27</span><span class="guide-title">Standard Error from First Principles</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/the-central-limit-theorem.html"><span class="n">28</span><span class="guide-title">The Central Limit Theorem</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/chi-square-and-f-distributions-sampling-variability-and-ratios.html"><span class="n">29</span><span class="guide-title">Chi-Square and F Distributions: Sampling Variability and Ratios</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/the-students-t-distribution-and-degrees-of-freedom.html"><span class="n">30</span><span class="guide-title">The Student’s t Distribution and Degrees of Freedom</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/method-of-moments-estimation.html"><span class="n">31</span><span class="guide-title">Method of Moments Estimation</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/likelihood-and-maximum-likelihood-estimation.html"><span class="n">32</span><span class="guide-title">Likelihood and Maximum Likelihood Estimation</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/exponential-families-and-sufficient-statistics.html"><span class="n">33</span><span class="guide-title">Exponential Families and Sufficient Statistics</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/confidence-intervals-for-means-and-proportions.html"><span class="n">34</span><span class="guide-title">Confidence Intervals for Means and Proportions</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/bootstrap-estimation-and-confidence-intervals.html"><span class="n">35</span><span class="guide-title">Bootstrap Estimation and Confidence Intervals</span><span class="arrow" aria-hidden="true">↗</span></a></li></ol></section>
+<section class="study-group" aria-labelledby="group-36"><h2 id="group-36">V. Statistical inference / Inferencia</h2><ol class="guide-list"><li><a href="/learn/statistics-probability/hypothesis-testing-from-first-principles.html"><span class="n">36</span><span class="guide-title">Hypothesis Testing from First Principles</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/p-values-interpretation-and-common-misconceptions.html"><span class="n">37</span><span class="guide-title">P-Values: Interpretation and Common Misconceptions</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/randomization-and-permutation-tests.html"><span class="n">38</span><span class="guide-title">Randomization and Permutation Tests</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/simulation-based-and-theoretical-inference-choosing-and-comparing-methods.html"><span class="n">39</span><span class="guide-title">Simulation-Based and Theoretical Inference: Choosing and Comparing Methods</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/effect-sizes-statistical-power-and-sample-size.html"><span class="n">40</span><span class="guide-title">Effect Sizes, Statistical Power and Sample Size</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/one-sample-tests-for-means-and-proportions.html"><span class="n">41</span><span class="guide-title">One-Sample Tests for Means and Proportions</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/comparing-two-independent-means.html"><span class="n">42</span><span class="guide-title">Comparing Two Independent Means</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/paired-samples-and-within-subject-comparisons.html"><span class="n">43</span><span class="guide-title">Paired Samples and Within-Subject Comparisons</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/comparing-proportions-rates-and-relative-risks.html"><span class="n">44</span><span class="guide-title">Comparing Proportions, Rates and Relative Risks</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/chi-square-tests-and-exact-methods-for-categorical-data.html"><span class="n">45</span><span class="guide-title">Chi-Square Tests and Exact Methods for Categorical Data</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/multiple-hypothesis-testing-and-false-discoveries.html"><span class="n">46</span><span class="guide-title">Multiple Hypothesis Testing and False Discoveries</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/one-way-anova-from-first-principles.html"><span class="n">47</span><span class="guide-title">One-Way ANOVA from First Principles</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/anova-diagnostics-planned-contrasts-and-post-hoc-comparisons.html"><span class="n">48</span><span class="guide-title">ANOVA Diagnostics, Planned Contrasts and Post-Hoc Comparisons</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/rank-based-nonparametric-tests-assumptions-and-interpretation.html"><span class="n">49</span><span class="guide-title">Rank-Based Nonparametric Tests: Assumptions and Interpretation</span><span class="arrow" aria-hidden="true">↗</span></a></li></ol></section>
+<section class="study-group" aria-labelledby="group-50"><h2 id="group-50">VI. Regression / Regresión</h2><ol class="guide-list"><li><a href="/learn/statistics-probability/correlation-confounding-and-causality.html"><span class="n">50</span><span class="guide-title">Correlation, Confounding and Causality</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/simple-linear-regression-for-statistical-inference.html"><span class="n">51</span><span class="guide-title">Simple Linear Regression for Statistical Inference</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/multiple-linear-regression-and-conditional-interpretation.html"><span class="n">52</span><span class="guide-title">Multiple Linear Regression and Conditional Interpretation</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/interactions-and-nonlinear-terms-in-regression.html"><span class="n">53</span><span class="guide-title">Interactions and Nonlinear Terms in Regression</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/regression-diagnostics-influential-observations-and-multicollinearity.html"><span class="n">54</span><span class="guide-title">Regression Diagnostics, Influential Observations and Multicollinearity</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/heteroscedasticity-robust-standard-errors-and-sensitivity-analysis.html"><span class="n">55</span><span class="guide-title">Heteroscedasticity, Robust Standard Errors and Sensitivity Analysis</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/logistic-regression-estimation-odds-ratios-and-statistical-inference.html"><span class="n">56</span><span class="guide-title">Logistic Regression: Estimation, Odds Ratios and Statistical Inference</span><span class="arrow" aria-hidden="true">↗</span></a></li></ol></section>
+<section class="study-group" aria-labelledby="group-57"><h2 id="group-57">VII. Bayesian inference / Inferencia bayesiana</h2><ol class="guide-list"><li><a href="/learn/statistics-probability/bayesian-inference-priors-likelihoods-and-posterior-distributions.html"><span class="n">57</span><span class="guide-title">Bayesian Inference: Priors, Likelihoods and Posterior Distributions</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/credible-intervals-posterior-prediction-and-prior-sensitivity.html"><span class="n">58</span><span class="guide-title">Credible Intervals, Posterior Prediction and Prior Sensitivity</span><span class="arrow" aria-hidden="true">↗</span></a></li></ol></section>
+<section class="study-group" aria-labelledby="group-59"><h2 id="group-59">VIII. Experimentation / Experimentación</h2><ol class="guide-list"><li><a href="/learn/statistics-probability/randomized-experiments-controls-blocking-and-experimental-units.html"><span class="n">59</span><span class="guide-title">Randomized Experiments: Controls, Blocking and Experimental Units</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/factorial-experiments-and-treatment-interactions.html"><span class="n">60</span><span class="guide-title">Factorial Experiments and Treatment Interactions</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/a-b-testing-planning-analysis-and-statistical-communication.html"><span class="n">61</span><span class="guide-title">A/B Testing: Planning, Analysis and Statistical Communication</span><span class="arrow" aria-hidden="true">↗</span></a></li></ol></section>
+<section class="study-group" aria-labelledby="group-62"><h2 id="group-62">IX. Time series / Series temporales</h2><ol class="guide-list"><li><a href="/learn/statistics-probability/time-series-from-first-principles-time-indexes-frequency-and-dependence.html"><span class="n">62</span><span class="guide-title">Time Series from First Principles: Time Indexes, Frequency and Dependence</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/trend-seasonality-and-time-series-decomposition.html"><span class="n">63</span><span class="guide-title">Trend, Seasonality and Time Series Decomposition</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/stationarity-transformations-and-differencing.html"><span class="n">64</span><span class="guide-title">Stationarity, Transformations and Differencing</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/autocovariance-autocorrelation-and-partial-autocorrelation.html"><span class="n">65</span><span class="guide-title">Autocovariance, Autocorrelation and Partial Autocorrelation</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/forecasting-baselines-rolling-evaluation-and-prediction-intervals.html"><span class="n">66</span><span class="guide-title">Forecasting Baselines, Rolling Evaluation and Prediction Intervals</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/exponential-smoothing-simple-holt-and-holt-winters-methods.html"><span class="n">67</span><span class="guide-title">Exponential Smoothing: Simple, Holt and Holt–Winters Methods</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/autoregressive-and-moving-average-models-ar-ma-and-arma.html"><span class="n">68</span><span class="guide-title">Autoregressive and Moving Average Models: AR, MA and ARMA</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/arima-models-identification-estimation-and-diagnostics.html"><span class="n">69</span><span class="guide-title">ARIMA Models: Identification, Estimation and Diagnostics</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/seasonal-arima-models.html"><span class="n">70</span><span class="guide-title">Seasonal ARIMA Models</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/time-series-regression-external-predictors-and-applied-forecasting.html"><span class="n">71</span><span class="guide-title">Time Series Regression, External Predictors and Applied Forecasting</span><span class="arrow" aria-hidden="true">↗</span></a></li></ol></section>
+<section class="study-group" aria-labelledby="group-72"><h2 id="group-72">X. Survival analysis / Análisis de supervivencia</h2><ol class="guide-list"><li><a href="/learn/statistics-probability/time-to-event-data-events-time-origins-censoring-and-truncation.html"><span class="n">72</span><span class="guide-title">Time-to-Event Data: Events, Time Origins, Censoring and Truncation</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/survival-hazard-and-cumulative-hazard-functions.html"><span class="n">73</span><span class="guide-title">Survival, Hazard and Cumulative Hazard Functions</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/kaplan-meier-estimation-and-survival-uncertainty.html"><span class="n">74</span><span class="guide-title">Kaplan–Meier Estimation and Survival Uncertainty</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/comparing-survival-curves-the-log-rank-test.html"><span class="n">75</span><span class="guide-title">Comparing Survival Curves: The Log-Rank Test</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/cox-proportional-hazards-regression.html"><span class="n">76</span><span class="guide-title">Cox Proportional Hazards Regression</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/cox-model-diagnostics-and-proportional-hazards-violations.html"><span class="n">77</span><span class="guide-title">Cox Model Diagnostics and Proportional Hazards Violations</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/parametric-survival-distributions-exponential-weibull-and-lognormal.html"><span class="n">78</span><span class="guide-title">Parametric Survival Distributions: Exponential, Weibull and Lognormal</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/accelerated-failure-time-regression-estimation-and-interpretation.html"><span class="n">79</span><span class="guide-title">Accelerated Failure Time Regression: Estimation and Interpretation</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+<li><a href="/learn/statistics-probability/evaluating-and-applying-survival-models-an-integrated-case-study.html"><span class="n">80</span><span class="guide-title">Evaluating and Applying Survival Models: An Integrated Case Study</span><span class="arrow" aria-hidden="true">↗</span></a></li></ol></section>
 </main>
-
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div>
-        <h3>Alfredo Saldana</h3>
-        <p>Data Scientist · Economist · Educator</p>
-        <p>I study, explore and share ideas across Data Science, Statistics, Machine Learning, Deep Learning and Artificial Intelligence.</p>
-      </div>
-      <div>
-        <h4>Explore</h4>
-        <a href="../../projects.html">Projects</a>
-        <a href="../../tutorials.html">Learn</a>
-        <a href="../../open-box.html">Open Box</a>
-      </div>
-      <div>
-        <h4>Connect</h4>
-        <a href="https://github.com/alfredosaldana" target="_blank" rel="noopener">GitHub ↗</a>
-        <a href="https://www.linkedin.com/in/asaldanamle/" target="_blank" rel="noopener">LinkedIn ↗</a>
-        <a href="https://www.youtube.com/@alfredosaldana-ds" target="_blank" rel="noopener">YouTube ↗</a>
-        <a href="../../contact.html">Contact</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 Alfredo Saldana</span>
-      <span>Built as a learning and project portfolio.</span>
-    </div>
-  </div>
-</footer>
-
-<script src="../../assets/js/script.js"></script>
-</body>
-</html>
+<footer>© 2026 Alfredo Saldana · Data Scientist · Economist · Educator</footer></body></html>

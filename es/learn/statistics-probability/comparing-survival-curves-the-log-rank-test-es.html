@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Comparación de curvas de supervivencia: Log-Rank Test | Alfredo Saldana</title><meta content="Guía completa del Log-Rank Test: curvas de supervivencia, conjuntos de riesgo, eventos esperados, varianza Hypergeometric, Chi-Square y curvas cruzadas." name="description"/><link href="/assets/css/style.css" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Source+Serif+4:wght@400;600;700&amp;display=swap" rel="stylesheet"/><style>
+:root{--guide-blue:#2563eb;--guide-ink:#162b40;--guide-mute:#51657a;--guide-line:#dbe5ed}
+html{scroll-behavior:smooth}body.study75{margin:0;background:#f6f9fd;color:#24374b;font-family:Inter,system-ui,Arial,sans-serif;font-size:16px;line-height:1.77;overflow-x:hidden}
+ .study75 *, .study75 *:before, .study75 *:after{box-sizing:border-box}
+ .study75 a{color:#245fc5} .study75 a:focus-visible, .study75 button:focus-visible, .study75 [tabindex]:focus-visible{outline:3px solid #e29c11;outline-offset:3px}
+ .study75 .container{max-width:1180px;width:calc(100% - 34px);margin:0 auto}
+ .study75 .site-header{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--guide-line);box-shadow:0 2px 9px #152e4410}
+ .study75 .nav-wrap{min-height:74px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+ .study75 .identity{display:flex;align-items:center;gap:15px;flex-wrap:wrap}
+ .study75 .brand{font-size:1.06rem;font-weight:800;color:#102033;text-decoration:none;white-space:nowrap}
+ .study75 .lang-switch{display:flex;align-items:center;gap:9px;white-space:nowrap}
+ .study75 .site-header .lang-switch a[lang]{color:#111827;text-decoration:none;font-weight:750}
+ .study75 .site-header .lang-switch a[lang][aria-current=page]{color:#2563eb!important;font-weight:850}
+ .study75 .nav{display:flex;align-items:center;gap:17px}
+ .study75 .nav a{font-size:.86rem;text-decoration:none;color:#415269}
+ .study75 .nav a:hover, .study75 .toc a:hover{color:var(--guide-blue)}
+ .study75 .menu-btn{display:none;background:#eaf2fb;border:1px solid #dae6f4;border-radius:8px;color:#203e58;font-size:1.25rem;cursor:pointer;padding:5px 12px}
+ .study75 .hero{background:#fff;border-bottom:1px solid #e2eaf2;padding:51px 0 47px;color:#19334e}
+ .study75 .hero .eyebrow{color:#2563eb;text-transform:uppercase;font-size:.78rem;font-weight:850;letter-spacing:.12em}
+ .study75 .hero h1{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(2.1rem,4.4vw,3.65rem);line-height:1.14;color:#172e45;margin:13px 0 15px;max-width:980px}
+ .study75 .hero p{max-width:930px;font-size:1.075rem;line-height:1.75;color:#51647a;margin:0}
+ .study75 .hero-tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:21px}
+ .study75 .hero-tags span{font-size:.78rem;color:#375e89;background:#eef5fd;border:1px solid #d8e5f5;border-radius:99px;padding:4px 11px}
+ .study75 .shell{display:grid;grid-template-columns:235px minmax(0,1fr);gap:24px;align-items:start;padding:31px 0 60px}
+ .study75 .toc{position:sticky;top:95px;max-height:calc(100vh - 110px);overflow-y:auto;background:#fff;border:1px solid var(--guide-line);border-radius:16px;padding:17px}
+ .study75 .toc strong{display:block;margin:0 0 10px;color:#163652}
+ .study75 .toc a{display:block;padding:4px 0;line-height:1.45;font-size:.78rem;color:#52677b;text-decoration:none}
+ .study75 .article{min-width:0}
+ .study75 .chapter{background:#fff;border:1px solid var(--guide-line);border-radius:18px;box-shadow:0 4px 17px #0d24410a;padding:clamp(18px,3vw,39px);margin-bottom:21px;scroll-margin-top:95px}
+ .study75 .chapter h2{font-family:'Source Serif 4',Georgia,serif;color:#1b3b56;font-size:clamp(1.5rem,2.5vw,2.0rem);line-height:1.26;margin:0 0 20px}
+ .study75 .chapter p{margin:12px 0 19px;overflow-wrap:anywhere} .study75 .math-inline{display:inline-block;max-width:100%;overflow-x:auto;vertical-align:middle;white-space:nowrap}
+ .study75 .chapter p:last-child{margin-bottom:0}
+ .study75 .chapter strong{color:#183e61}
+ .study75 .math-panel{border-left:4px solid #2563eb;background:#edf5fe;border-radius:0 13px 13px 0;margin:24px 0;padding:18px 18px 17px;max-width:100%;min-width:0;}
+ .study75 .math-panel .formula-title{font-size:.76rem;color:#466687;font-weight:850;text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px}
+ .study75 .math-inner{overflow-x:auto;max-width:100%;min-width:0;text-align:center;overscroll-behavior-x:contain;padding:3px 0 8px;}
+ .study75 .math-inner .math-source{font-family:'Source Serif 4',Georgia,serif;color:#204b80}
+ .study75 mjx-container[display=true]{margin:0.48em 0!important;max-width:100%}
+ .study75 .table-scroll{overflow-x:auto;max-width:100%;border:1px solid #d7e4ef;border-radius:12px;margin:18px 0}
+ .study75 table{width:100%;min-width:495px;border-collapse:collapse;font-size:.91rem}
+ .study75 thead{background:#eaf2fb} .study75 th, .study75 td{border-bottom:1px solid #e6edf4;padding:9px 12px;text-align:left;vertical-align:top}
+ .study75 tr:last-child td{border-bottom:0} .study75 tbody tr:nth-child(2n){background:#f9fbfd}
+ .study75 .chapter blockquote{background:#f1f6fd;border-left:3px solid #8aaedf;margin:14px 0;padding:14px 20px;color:#34516c}
+ .study75 .chart{border:1px solid #d8e5ef;border-radius:14px;padding:15px;margin:22px 0;background:#fbfdff;overflow-x:auto}
+ .study75 .chart svg{max-width:100%;height:auto;display:block;margin:auto}
+ .study75 .chart figcaption{font-size:.85rem;color:#576e84;margin-top:9px;line-height:1.55}
+ .study75 .chapter ul, .study75 .chapter ol{padding-left:26px}
+ .study75 footer{border-top:1px solid #dce5ee;background:#fff;padding:20px 0 30px;color:#586b7e;font-size:.88rem}
+ .study75 .skip-link{position:absolute;left:-10000px;top:6px;background:#fff;padding:8px;z-index:200} .study75 .skip-link:focus{left:12px}
+@media(max-width:940px){ .study75 .shell{grid-template-columns:1fr} .study75 .toc{position:static;max-height:none} .study75 .toc a{display:inline-block;margin-right:13px} .study75 .nav{display:none;position:absolute;right:16px;top:70px;background:white;border:1px solid #dbe5ed;border-radius:12px;box-shadow:0 15px 35px #0e284533;padding:16px;flex-direction:column;align-items:flex-start;min-width:180px} .study75 .nav.open{display:flex} .study75 .menu-btn{display:inline-flex} .study75 .hero{padding:39px 0}}
+@media(max-width:390px){ .study75 .container{width:calc(100% - 24px)} .study75 .brand{font-size:.98rem} .study75 .identity{gap:8px} .study75 .lang-switch{gap:6px} .study75 .nav-wrap{gap:5px} .study75 .chapter{padding:18px 15px} .study75 .math-panel{padding:13px 10px}}
+
+ .study75 .math-panel{color:#193c64}
+ .study75 .math-panel .math-inner{overflow-x:auto;max-width:100%;padding-bottom:8px}
+ .study75 .chapter .math-panel .math-inner{overflow-wrap:normal}
+ .study75 .chapter h3{font-family:"Source Serif 4",Georgia,serif;font-size:1.3rem;color:#23496b;margin-top:2rem}
+ .study75 .chapter h4{font-size:1.05rem;color:#294b6d}
+ .study75 .chapter td, .study75 .chapter th{font-variant-numeric:tabular-nums}
+ .study75 .chart svg{max-width:100%;height:auto;min-width:0}
+ .study75 .hero{background:#fff!important;background-image:none!important;color:#19334e!important}
+ .study75 .chapter p{overflow-wrap:break-word}
+ .study75 .chapter .math-inline{max-width:100%;overflow-x:auto}
+ .study75 .chapter img{max-width:100%;height:auto}
+
+ .study75 .lesson-note{background:#f4f8fd;border-left:4px solid #7fa5d5;padding:12px 16px;border-radius:0 12px 12px 0} .study75 .chapter .exercise{border-top:1px solid #dbe6f2;padding-top:16px} .study75 .chart{overflow-x:auto} .study75 .chart svg{width:100%;max-width:780px;min-width:0} .study75 .equation-caption{font-size:.84rem;color:#526b82;text-align:center;margin:0 0 4px} .study75 .math-panel .formula-title{font-size:.77rem} .study75 .chapter p, .study75 .chapter li{overflow-wrap:break-word} .study75 .chart svg text{font-family:Inter,Arial,sans-serif} .study75 .article .chapter table{min-width:470px}
+
+ .study75 .hero{background:linear-gradient(180deg,#f8fbfe 0%,#edf5fc 100%)!important;color:#1d3753!important;border-bottom:1px solid #dbe7f1}
+ .study75 .hero h1, .study75 .hero p, .study75 .hero .eyebrow{color:#1d3753!important}
+ .study75 .hero-tags span{background:#fff!important;color:#27527a!important;border:1px solid #d7e6f3!important}
+ .study75 .math-panel{background:#eef5fc!important;border-left:4px solid #2563eb!important;border-radius:0 12px 12px 0!important;max-width:100%}
+ .study75 .math-inner{max-width:100%;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;padding:4px 8px}
+ .study75 .chapter p, .study75 .chapter li{overflow-wrap:break-word}
+ .study75 .math-panel .formula-title{font-size:.77rem;letter-spacing:.04em}
+ .study75 .chart{overflow-x:auto;max-width:100%}
+ .study75 .chart svg{display:block;width:100%;height:auto;max-width:800px}
+ .study75 .lesson-note{background:#f4f8fd;border-left:4px solid #7fa5d5;padding:12px 16px;border-radius:0 12px 12px 0}
+ .study75 .table-scroll{max-width:100%;overflow-x:auto;border:1px solid #dbe7f2;border-radius:10px}
+ .study75 .chapter table{min-width:480px;width:100%;margin:0}
+ .study75 .chapter table th, .study75 .chapter table td{padding:9px 12px}
+ .study75 .chart figcaption{font-size:.89rem;line-height:1.55;color:#51677b;margin:10px 0 0}
+ .study75 .source-links a{display:inline-block;margin-right:16px}
+@media(max-width:600px){ .study75 .chapter{min-width:0} .study75 .article{min-width:0} .study75 .math-panel{min-width:0} .study75 .hero h1{overflow-wrap:anywhere}}
+
+ .study75 .chapter h2{scroll-margin-top:25px}
+ .study75 .toc a{display:block}
+ .study75 .math-panel .math-inner{padding:8px 12px}
+ .study75 .table-scroll{max-width:100%;overflow-x:auto}
+ .study75 .table-scroll table{min-width:520px}
+ .study75 .chart{margin:24px 0}
+ .study75 .chart svg{display:block;width:100%;height:auto}
+ .study75 .chapter{max-width:100%;min-width:0}
+ .study75 .article{min-width:0}
+ .study75 .lesson-note p{margin-bottom:0}
+ .study75 .math-inner mjx-container{max-width:none}
+
+ .study75 .hero{background:linear-gradient(180deg,#fbfdff 0%,#eff6fc 100%)!important;color:#173b5a!important;border-bottom:1px solid #dbe9f2}
+ .study75 .hero h1, .study75 .hero p, .study75 .hero .eyebrow{color:#173b5a!important}
+ .study75 .hero-tags span{background:#fff!important;color:#23517b!important;border:1px solid #d6e4ef!important}
+ .study75 .chapter, .study75 .article{min-width:0;max-width:100%}
+ .study75 .table-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;border:1px solid #dce8f2;border-radius:9px}
+ .study75 .table-scroll table{min-width:525px;width:100%;margin:0}
+ .study75 .math-panel{background:#edf5fc!important;border-left:4px solid #2563eb!important;border-radius:0 12px 12px 0!important}
+ .study75 .math-inner{max-width:100%;min-width:0;overflow-x:auto;overflow-y:hidden;padding:12px}
+ .study75 .chart{max-width:100%;overflow:hidden;margin:22px 0}
+ .study75 .chart svg{width:100%;height:auto;max-width:820px;display:block}
+ .study75 .chapter p{overflow-wrap:break-word}
+ .study75 .chapter h2{scroll-margin-top:25px}
+ .study75 .source-links a{margin-right:18px;display:inline-block}
+@media(max-width:600px){ .study75 .hero h1{overflow-wrap:anywhere} .study75 .table-scroll table{min-width:525px}}
+
+ .study75 .hero{background:#fff!important;background-image:none!important;color:#19334e!important;border-bottom:1px solid #dbe7f1!important} .study75 .hero h1{color:#172e45!important} .study75 .hero .eyebrow{color:#2563eb!important} .study75 .hero p{color:#51647a!important} .study75 .hero-tags span{background:#eef5fd!important} .study75 .table-scroll{overflow-x:auto!important;max-width:100%} .study75 .math-panel .math-inner{overflow-x:auto;max-width:100%} .study75 .chapter p{overflow-wrap:break-word} .study75 .decision-chart{background:#fafdff;border:1px solid #dce5ee;border-radius:14px;margin:20px 0;padding:15px} .study75 .decision-chart svg{width:100%;height:auto;max-width:780px;display:block;margin:0 auto} .study75 .decision-chart figcaption{font-size:.86rem;color:#526579;margin-top:10px} .study75 .chapter h3{font-family:'Source Serif 4',Georgia,serif;color:#234969;margin:25px 0 8px} .study75 .chapter strong{color:#214467}
+
+ .study75 .hero{background:#ffffff!important;background-image:none!important;color:#19334e!important;border-bottom:1px solid #dbe7f1!important} .study75 .hero h1{color:#172e45!important} .study75 .hero .eyebrow{color:#2563eb!important} .study75 .hero p{color:#51647a!important} .study75 .table-scroll{max-width:100%;overflow-x:auto} .study75 .case-table, .study75  .study75-figure{margin:1.5rem 0} .study75 .case-table figcaption, .study75  .study75-figure figcaption{font-size:.87rem;color:#536477;line-height:1.55;margin-top:.5rem} .study75  .study75-figure svg{max-width:100%;height:auto;display:block} .study75 .case-table table{min-width:490px;width:100%;border-collapse:collapse} .study75 .case-table th, .study75 .case-table td{padding:.4rem .65rem;border-bottom:1px solid #d8e1eb;text-align:right} .study75 .case-table th:first-child{text-align:left} .study75 .math-inner{max-width:100%;overflow-x:auto} .study75 .chapter{overflow-wrap:anywhere} .study75 .chapter a{overflow-wrap:break-word} .study75 .toc a{overflow-wrap:break-word} .study75 .hero .hero-tags span{background:#eef5fd!important} .study75 .chapter h3{font-family:'Source Serif 4',Georgia,serif;color:#234969}
+ .study75 .hero{background:#ffffff!important;background-image:none!important;color:#19334e!important;border-bottom:1px solid #dbe7f1!important} .study75 .hero h1{color:#172e45!important} .study75 .hero .eyebrow{color:#2563eb!important} .study75 .hero p{color:#51647a!important} .study75 .table-scroll{max-width:100%;overflow-x:auto} .study75 .teach-figure{margin:1.5rem 0;max-width:100%} .study75 .teach-figure figcaption{font-size:.87rem;color:#52687c;line-height:1.58;margin-top:.55rem} .study75 .teach-figure svg{max-width:100%;height:auto;display:block} .study75 .teach-figure table{min-width:660px;width:100%;border-collapse:collapse} .study75 .teach-figure th, .study75 .teach-figure td{padding:.48rem .65rem;border-bottom:1px solid #dce6ef;text-align:right;white-space:nowrap} .study75 .teach-figure th:nth-child(2), .study75 .teach-figure td:nth-child(2){text-align:left} .study75 .teach-figure tfoot{font-weight:750;background:#edf5fb} .study75 .math-inner{max-width:100%;overflow-x:auto} .study75 .chapter{overflow-wrap:break-word} .study75 .chapter a{overflow-wrap:anywhere} .study75 .toc a{overflow-wrap:break-word} .study75 .article p{line-height:1.78} .study75 .chapter h2{scroll-margin-top:6rem} .study75 .teach-figure .table-scroll:focus-visible, .study75 .math-inner:focus-visible{outline:3px solid #2868bc;outline-offset:2px}@media(max-width:390px){ .study75 .teach-figure figcaption{font-size:.82rem}}
+ .study75 .hero{background:#fff!important;background-image:none!important;color:#19334e!important;border-bottom:1px solid #dbe7f1!important} .study75 .hero h1{color:#172e45!important} .study75 .hero .eyebrow{color:#2563eb!important} .study75 .hero p{color:#51647a!important} .study75 .table-scroll{max-width:100%;overflow-x:auto} .study75 .teach-figure{margin:1.5rem 0;max-width:100%} .study75 .teach-figure figcaption{font-size:.87rem;color:#52687c;line-height:1.58;margin-top:.55rem} .study75 .teach-figure svg{max-width:100%;height:auto;display:block} .study75 .teach-figure table{min-width:850px;width:100%;border-collapse:collapse} .study75 .teach-figure th, .study75 .teach-figure td{padding:.48rem .65rem;border-bottom:1px solid #dce6ef;text-align:right;white-space:nowrap} .study75 .teach-figure th:nth-child(2), .study75 .teach-figure td:nth-child(2){text-align:left} .study75 .math-inner{max-width:100%;overflow-x:auto} .study75 .chapter{overflow-wrap:break-word} .study75 .chapter a{overflow-wrap:anywhere} .study75 .article p{line-height:1.78} .study75 .chapter h2{scroll-margin-top:6rem} .study75 .teach-figure .table-scroll:focus-visible, .study75 .math-inner:focus-visible{outline:3px solid #2868bc;outline-offset:2px}@media(max-width:390px){ .study75 .teach-figure figcaption{font-size:.82rem}}
+ .study75 .hero{background:#fff!important;background-image:none!important;color:#19334e!important;border-bottom:1px solid #dbe7f1!important} .study75 .hero h1{color:#172e45!important} .study75 .hero .eyebrow{color:#2563eb!important} .study75 .hero p{color:#51647a!important} .study75 .table-scroll{max-width:100%;overflow-x:auto} .study75 .teach-figure{margin:1.5rem 0;max-width:100%} .study75 .teach-figure figcaption{font-size:.87rem;color:#52687c;line-height:1.58;margin-top:.55rem} .study75 .teach-figure svg{max-width:100%;height:auto;display:block} .study75 .teach-figure table{min-width:780px;width:100%;border-collapse:collapse} .study75 .teach-figure th, .study75 .teach-figure td{padding:.48rem .65rem;border-bottom:1px solid #dce6ef;text-align:right;white-space:nowrap} .study75 .teach-figure th:first-child, .study75 .teach-figure td:first-child{text-align:left} .study75 .teach-figure tr.total{font-weight:700;background:#edf5ff} .study75 .math-inner{max-width:100%;overflow-x:auto} .study75 .chapter{overflow-wrap:break-word} .study75 .chapter a{overflow-wrap:anywhere} .study75 .article p{line-height:1.78} .study75 .chapter h2{scroll-margin-top:6rem} .study75 .teach-figure .table-scroll:focus-visible, .study75 .math-inner:focus-visible{outline:3px solid #2868bc;outline-offset:2px}@media(max-width:390px){ .study75 .teach-figure figcaption{font-size:.82rem}}
+
+.study75 .hero{background:#fff!important;background-image:none!important;color:#19334e!important;border-bottom:1px solid #dbe7f1!important}.study75 .hero h1{color:#172e45!important}.study75 .hero .eyebrow{color:#2563eb!important}.study75 .hero p{color:#51647a!important}.study75 .table-scroll{max-width:100%;overflow-x:auto}.study75 .teach-figure{margin:1.5rem 0;max-width:100%}.study75 .teach-figure figcaption{font-size:.87rem;color:#52687c;line-height:1.58;margin-top:.55rem}.study75 .teach-figure svg{max-width:100%;height:auto;display:block}.study75 .teach-figure table{min-width:780px;width:100%;border-collapse:collapse}.study75 .teach-figure th,.study75 .teach-figure td{padding:.48rem .65rem;border-bottom:1px solid #dce6ef;text-align:right;white-space:nowrap}.study75 .teach-figure th:first-child,.study75 .teach-figure td:first-child{text-align:left}.study75 .math-inner{max-width:100%;overflow-x:auto}.study75 .chapter{overflow-wrap:break-word}.study75 .chapter a{overflow-wrap:anywhere}.study75 .article p{line-height:1.78}.study75 .chapter h2{scroll-margin-top:6rem}.study75 .table-scroll:focus-visible,.study75 .math-inner:focus-visible{outline:3px solid #2868bc;outline-offset:2px}@media(max-width:390px){.study75 .teach-figure figcaption{font-size:.82rem}}
+
+.study75 .chapter .caption{font-size:.84rem;color:#617487;margin:8px 0 14px}.study75 .teach-figure{margin:23px 0 29px}.study75 .teach-figure figcaption{font-size:.86rem;color:#536779;line-height:1.6}.study75 .table-scroll{max-width:100%;overflow-x:auto;outline-offset:3px}.study75 .chapter .table-scroll table{min-width:570px}.study75 .chapter h2{scroll-margin-top:95px}.study75 .math-inline{display:inline;white-space:normal}.study75 .math-panel .math-inner{overflow-x:auto} .study75 .chapter .math-panel .formula-title{white-space:normal}
+.study75 .hero{background:#fff!important;background-image:none!important}.study75 .chapter{overflow-wrap:break-word}.study75 .math-panel .math-inner{overflow-x:auto;max-width:100%}.study75 .table-scroll{max-width:100%;overflow-x:auto}.study75 .site-header .lang-switch a[lang][aria-current="page"]{color:#2563eb!important}.study75 .site-header .lang-switch a[lang]:not([aria-current]){color:#111827!important}
+.study75 .hero,.study75 .hero h1,.study75 .hero p,.study75 .hero .eyebrow{background:#fff!important;background-image:none!important;color:#183a56!important}
+.study75 .hero .eyebrow{color:#2563eb!important}
+.study75 .chapter .math-inner {overflow-x:auto;white-space:normal}
+.study75 .data-source {font-size:.84rem;color:#4f647b}
+.study75 .chapter .math-panel .math-inner{overflow-x:auto;min-width:0}
+@media(max-width:540px){.study75 .article .chapter table{min-width:450px}.study75 .hero h1{font-size:2.05rem}.study75 .formula-title{font-size:.7rem}}
+
+.study75 .article{overflow-wrap:anywhere}.study75 .chapter .math-inner{overflow-x:auto}.study75 .data-grid{width:100%;min-width:550px}.study75 .table-scroll{overflow-x:auto}.study75 .hero{background:#fff!important;background-image:none!important}.study75 .math-inner{white-space:nowrap} .study75 .meta{font-size:.86rem;color:#58738e} .study75 .formula-source{color:#183e61;font-family:Georgia,serif}
+.study75 .hero{background:#fff!important;background-image:none!important;color:#19334e!important}
+.study75 .hero h1,.study75 .hero p{color:#19334e!important}
+.study75 .site-header .lang-switch a[aria-current=page]{color:#2563eb!important}
+.study75 .chapter .table-scroll{max-width:100%;overflow-x:auto}
+.study75 .chapter .table-scroll table{min-width:515px}
+.study75 .math-inner .math-source{overflow-x:auto;display:block}
+.study75 a:focus-visible,.study75 button:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
+.study75 .chart svg{width:100%;height:auto;max-width:800px}
+
+.study75 .exercise-label{font-weight:800;color:#2563eb;margin:8px 0}.study75 .toc{scrollbar-width:thin}.study75 .chapter h3{font-family:Inter,sans-serif;font-size:1.05rem;color:#244b6a;margin:26px 0 10px}.study75 .math-inline{display:inline;overflow-wrap:anywhere}.study75 .chapter p{overflow-wrap:anywhere}
+</style><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']}};</script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script><style>body.study75 .table-wrap{width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;margin:20px 0}body.study75 .table-wrap table{min-width:630px;width:100%;font-variant-numeric:tabular-nums}body.study75 .chapter{min-width:0}body.study75 .article{min-width:0}body.study75 .chapter p{overflow-wrap:break-word}body.study75 .chart{max-width:100%;overflow-x:auto}body.study75 .chart svg{display:block;max-width:100%;height:auto}body.study75 .chart figcaption{font-size:.83rem;color:#596e81}body.study75 .hero{background:#fff!important;background-image:none!important}body.study75 .chapter .MathJax{max-width:100%;overflow-x:auto}</style><style>body.study75 .formula-box{border-left:4px solid #2563eb;background:#edf5fd;color:#153451;border-radius:0 10px 10px 0;padding:15px 15px;margin:18px 0;overflow-x:auto;max-width:100%}body.study75 .article{min-width:0}body.study75 .chapter{min-width:0}body.study75 .table-wrap{max-width:100%;width:100%;overflow-x:auto}body.study75 .table-wrap table{min-width:580px;width:100%}body.study75 .chart{max-width:100%;overflow-x:auto}body.study75 .chart svg{display:block;max-width:100%;height:auto}body.study75 .chart figcaption{font-size:.85rem;color:#51657a}body.study75 .site-header .lang-switch a[aria-current="page"]{color:#2563eb!important}body.study75 .hero{background:#fff!important;background-image:none!important}</style><style>body.study75 .chart-figure{margin:22px 0;max-width:100%;background:#fff;padding:12px;border:1px solid #dae6ef;border-radius:14px}body.study75 .chart-figure svg{max-width:100%;height:auto}body.study75 .chart-figure figcaption{font-size:.84rem;color:#50657a;margin-top:8px}body.study75 .math-segment{overflow-wrap:anywhere}body.study75 .math-display{overflow-x:auto;max-width:100%}body.study75 .chapter table{font-variant-numeric:tabular-nums}body.study75 .chapter table td,body.study75 .chapter table th{white-space:nowrap}body.study75 .chapter p{overflow-wrap:break-word}body.study75 .formula-box .math-display{margin:12px 0}</style><style id="stats80-responsive-correction-v1-2">
+
+/* Statistics & Probability responsive equation/table correction v1.2.
+   Localized to previously flagged guides; preserves font size and academic content. */
+html,body{max-width:100%;}
+main,main article,main section,main .container,main .content,main .prose,
+main .layout,main .study-layout,main .study-content,main .article-body,
+main .chapter,main .card,main .grid,main .equation-card,
+main .math-scroll,main .table-wrap,main .table-scroll,main .datawrap,
+main .table-responsive{min-width:0;max-width:100%;}
+main .table-wrap,main .table-scroll,main .datawrap,main .table-responsive,
+main .table-container,main .table-wrapper{overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;}
+/* Tables without an existing scroll wrapper retain native semantic table elements. */
+main table.stats80-responsive-table{display:block;max-width:100%;overflow-x:auto;
+ overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;}
+main table.stats80-responsive-table tbody,main table.stats80-responsive-table thead,
+main table.stats80-responsive-table tfoot{width:max-content;min-width:100%;}
+/* MathJax display math scrolls within its own box; never scale symbols to illegibility. */
+main mjx-container[jax="CHTML"][display="true"],main mjx-container[jax="SVG"][display="true"],
+main .math-display,main .math-block,main .math-scroll,main .equation-card,
+main .equation,main .formula,main .eq,main .display-math{
+ max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;
+ overscroll-behavior-x:contain;}
+main mjx-container[jax="CHTML"]:not([display="true"]),
+main mjx-container[jax="SVG"]:not([display="true"]){max-width:100%;vertical-align:middle;overflow-x:auto;overflow-y:hidden;}
+main p,main li,main figcaption,main td,main th{overflow-wrap:anywhere;}
+main img,main svg,main canvas{max-width:100%;height:auto;}
+@media(max-width:768px){main figure{max-width:100%;min-width:0;}}
+
+
+
+/* Additional containment after browser diagnostics: paragraphs with long inline
+   formulae, worked examples, and long display derivations can scroll locally. */
+main p,main li,main blockquote,main .chapter,main .equation-card,
+main .mathbox,main .formula-box,main .worked-example,main .example,
+main .solution,main .math-panel,main .equation-block{
+ min-width:0;max-width:100%;overflow-x:auto;
+ overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;}
+main table.stats80-responsive-table{min-width:0!important;width:100%!important;}
+
+</style></head><body class="study75"><a class="skip-link" href="#main-content">Skip to main content</a><header class="site-header"><div class="container nav-wrap"><div class="identity"><a class="brand" href="/es/index.html">Alfredo Saldana</a><div aria-label="Selector de idioma" class="lang-switch"><a href="/learn/statistics-probability/comparing-survival-curves-the-log-rank-test.html" lang="en">EN</a><span aria-hidden="true">|</span><a aria-current="page" href="/es/learn/statistics-probability/comparing-survival-curves-the-log-rank-test-es.html" lang="es">ES</a></div></div><nav aria-label="Navegación principal" class="nav" id="menu75"><a href="/es/index.html">Inicio</a><a href="/es/projects.html">Proyectos</a><a href="/es/tutorials.html">Aprender</a><a href="/es/open-box.html">Open Box</a><a href="/es/about.html">Acerca de</a><a href="/es/contact.html">Contacto</a></nav><button aria-controls="menu75" aria-expanded="false" aria-label="Abrir menú" class="menu-btn" type="button">☰</button></div></header><section class="hero"><div class="container"><div class="eyebrow">Statistics &amp; Probability · Guía 75 / 80</div><h1>Comparación de curvas de supervivencia: Log-Rank Test</h1><p>Fallas observadas y esperadas, varianza Hypergeometric, inferencia Chi-Square, curvas cruzadas e interpretación rigurosa de supervivencia.</p><div class="hero-tags"><span>20 registros sintéticos completos</span><span>Log-Rank · χ²</span><span>MathJax 3</span><span>15 ejercicios resueltos</span></div></div></section><main class="container shell" id="main-content"><aside class="toc"><strong>Contenido de esta guía</strong><a href="#section-1">1. La pregunta que resuelve comparar curvas de supervivencia</a><a href="#section-2">2. Prerrequisitos, objetivos y mapa del razonamiento</a><a href="#section-3">3. Unidad de observación, evento y reglas de censura</a><a href="#section-4">4. Conjunto de datos sintéticos completo: veinte máquinas</a><a href="#section-5">5. Contexto Kaplan–Meier antes del contraste</a><a href="#section-6">6. Formular correctamente las hipótesis</a><a href="#section-7">7. Contar el conjunto de riesgo inmediatamente antes del evento</a><a href="#section-8">8. Fallas observadas y esperadas: la comparación esencial</a><a href="#section-9">9. Por qué usar la varianza Hypergeometric</a><a href="#section-10">10. Reconstruir cada contribución de la tabla completa</a><a href="#section-11">11. Obtener la estadística Chi-Square sin omitir pasos</a><a href="#section-12">12. Qué mide y qué no mide el p-value</a><a href="#section-13">13. Fallas empatadas y corrección por población finita</a><a href="#section-14">14. Censura y entrada tardía: reglas diferentes</a><a href="#section-15">15. Proportional Hazards: validez bajo la nula frente a potencia</a><a href="#section-16">16. Curvas cruzadas: demostrar la cancelación de evidencia</a><a href="#section-17">17. Contrastes Log-Rank ponderados y preguntas distintas</a><a href="#section-18">18. Comparar tres o más grupos</a><a href="#section-19">19. Tamaño de muestra, cantidad de eventos y potencia</a><a href="#section-20">20. Gráficos, tablas de riesgo y comunicación científica</a><a href="#section-21">21. Asociación, causalidad y explicaciones alternativas</a><a href="#section-22">22. Riesgos competitivos y eventos que impiden el desenlace</a><a href="#section-23">23. Flujo completo de decisión, del diseño a la conclusión</a><a href="#section-24">24. Ejercicio resuelto 1 — Codificar evento y censura</a><a href="#section-25">25. Ejercicio resuelto 2 — Reconstruir el riesgo del mes seis</a><a href="#section-26">26. Ejercicio resuelto 3 — Esperanza de fallas y contribución con signo</a><a href="#section-27">27. Ejercicio resuelto 4 — Varianza condicional del mes seis</a><a href="#section-28">28. Ejercicio resuelto 5 — Del puntaje acumulado al p-value</a><a href="#section-29">29. Ejercicio resuelto 6 — Supervivencia Kaplan–Meier en ocho</a><a href="#section-30">30. Ejercicio resuelto 7 — Dos fallas simultáneas</a><a href="#section-31">31. Ejercicio resuelto 8 — Cancelación ante curvas cruzadas</a><a href="#section-32">32. Ejercicio resuelto 9 — Incorporar entrada tardía</a><a href="#section-33">33. Ejercicio resuelto 10 — Interpretar tres grupos</a><a href="#section-34">34. Ejercicio resuelto 11 — Multiplicidad después de una prueba global</a><a href="#section-35">35. Ejercicio resuelto 12 — Diferenciar Hazard Ratio de Log-Rank</a><a href="#section-36">36. Ejercicio resuelto 13 — Modificar el nivel de significación</a><a href="#section-37">37. Ejercicio resuelto 14 — Conteo de fallas frente a comparación temporal</a><a href="#section-38">38. Ejercicio resuelto 15 — Redactar una conclusión científica honesta</a><a href="#section-39">39. Integración conceptual final y transferencia</a><a href="#section-40">40. Fuentes, procedencia y límites de validez</a></aside><article class="article"><section class="chapter" id="section-1"><h2>1. La pregunta que resuelve comparar curvas de supervivencia</h2><p>Una curva Kaplan–Meier describe la probabilidad estimada de que un evento todavía no haya ocurrido en un instante determinado. Sin embargo, presentar dos curvas no equivale a evaluar formalmente si difieren las distribuciones de supervivencia de dos poblaciones. Un grupo puede presentar fallas antes, ambos pueden experimentar fallas en períodos parecidos o las curvas pueden cruzarse. El Log-Rank Test reúne las diferencias entre eventos observados y esperados para construir una medida estandarizada de evidencia. Es una comparación <em>global</em> durante el seguimiento observado, no una afirmación limitada a un mes ni una estimación de cuántos meses adicionales produce un protocolo.</p>
+<p>Imaginemos un estudio de confiabilidad con dos programas de mantenimiento, Protocolo A y Protocolo B, asignados a veinte máquinas inicialmente operativas. El evento es la primera falla importante confirmada; el origen temporal es el comienzo del programa asignado y la unidad de tiempo es el mes. Una primera falla termina el seguimiento del desenlace. En cambio, una máquina puede permanecer operativa hasta la fecha de cierre del estudio. Su salida se registra entonces como censura derecha, no como falla. Todos los datos son <strong>sintéticos y didácticos</strong>: no proceden de un hospital, fabricante ni ensayo real. Incluimos deliberadamente censuras y eventos, porque la cuestión metodológica consiste en comparar grupos cuando parte de los tiempos verdaderos de evento no se observan.</p>
+<p>Nuestro parámetro de interés contrapone las funciones poblacionales <span class="math-segment">\(S_A(t)=P(T_A&gt;t)\)</span> y <span class="math-segment">\(S_B(t)=P(T_B&gt;t)\)</span>, donde <span class="math-segment">\(T_g\)</span> representa el tiempo hasta la primera falla en el grupo <span class="math-segment">\(g\)</span>. La prueba contrasta principalmente la igualdad de las distribuciones de supervivencia. Utilizar la palabra <em>protocolo</em> no convierte automáticamente la comparación en causal. Para atribuir diferencias al mantenimiento se necesitan además asignación adecuada, comparabilidad inicial y mecanismos de seguimiento defendibles.</p>
+</section><section class="chapter" id="section-2"><h2>2. Prerrequisitos, objetivos y mapa del razonamiento</h2><p>Se requieren aritmética elemental, fracciones, probabilidad condicionada, raíces cuadradas, nociones de contraste de hipótesis y la diferencia entre una muestra y una población. Presentaremos la distribución Hypergeometric en la forma particular necesaria; no es imprescindible haber estudiado combinatoria avanzada. La Guía 72 introdujo eventos, censura y entradas tardías; la 73 conectó supervivencia y Hazard; y la 74 desarrolló Kaplan–Meier y los conjuntos de riesgo. Recuperamos aquí lo indispensable para que esta unidad pueda estudiarse de forma autónoma, aunque revisar esas guías puede facilitar la comprensión.</p>
+<p>Al terminar, el estudiante debe identificar los tiempos de falla distintos, contar las máquinas expuestas inmediatamente antes de cada evento, calcular fallas observadas y esperadas, obtener la contribución a la varianza y combinar los resultados en una estadística Chi-Square de un grado de libertad. También debe interpretar el p-value sin confundirlo con el tamaño de efecto; resolver empates; distinguir censuras de eventos; conocer la extensión a múltiples grupos; y reconocer los problemas de potencia cuando los Hazard cambian de dirección. El objetivo no es solo reproducir una fórmula, sino justificar cada operación y comprender qué afirmaciones permite.</p>
+<p>Seguiremos esta secuencia: definir la pregunta y el mecanismo de observación, mostrar todos los datos, reconstruir los conjuntos de riesgo, formular la hipótesis nula, deducir el reparto esperado de eventos bajo esa hipótesis, agregar las diferencias y sus varianzas, verificar independientemente el resultado e interpretar el test junto a las curvas Kaplan–Meier. Finalmente abordaremos tamaño de muestra, comparaciones múltiples, causalidad y límites. El orden importa: una estadística impecable no soluciona un evento mal definido ni un conjunto de riesgo que excluye anticipadamente observaciones censuradas.</p>
+</section><section class="chapter" id="section-3"><h2>3. Unidad de observación, evento y reglas de censura</h2><p>La unidad de observación es una máquina, no cada inspección mensual. El seguimiento comienza cuando se inicia su protocolo de mantenimiento. El desenlace es la primera falla mayor y cada máquina puede contribuir, como máximo, una falla a esta evaluación. El estado <span class="math-segment">\(\delta_i=1\)</span> identifica una falla observada; <span class="math-segment">\(\delta_i=0\)</span> indica que la máquina seguía sin experimentar el evento cuando terminó su observación. El tiempo registrado <span class="math-segment">\(X_i\)</span> es el mínimo entre el tiempo verdadero de falla y el de censura: <span class="math-segment">\(X_i=\min(T_i,C_i)\)</span>. El indicador <span class="math-segment">\(\delta_i=I(T_i\le C_i)\)</span> vale uno cuando se cumple la condición indicada.</p>
+<p>Esta codificación cambia el resultado científico. Para una máquina censurada en el mes siete sabemos que permaneció sin falla durante el seguimiento documentado. No sabemos si hubiera fallado en el mes ocho o funcionado durante varios años más. Al estudiar una falla ocurrida en el mes cinco, esa máquina todavía integra el conjunto de riesgo. Al llegar al mes ocho, ya no. Aporta información mientras estuvo observada, pero no se le puede atribuir una falla ficticia con el propósito de completar la tabla.</p>
+<p>La interpretación habitual exige que la censura sea no informativa respecto del tiempo de falla no observado, bajo las condiciones relevantes, o que se emplee un método especializado que trate la censura informativa. Si las máquinas más deterioradas del Protocolo A se retiran discretamente antes de registrar una falla formal, tanto la curva como la comparación pueden resultar engañosas. Un cierre administrativo definido previamente puede ser más defendible; aun así, las diferencias de fecha de incorporación y duración del seguimiento deben revisarse. Estas son condiciones de recolección y diseño, no opciones decorativas de un programa estadístico.</p>
+</section><section class="chapter" id="section-4"><h2>4. Conjunto de datos sintéticos completo: veinte máquinas</h2><p>La tabla siguiente presenta las veinte observaciones, sin omitir filas. Todas las máquinas comienzan en el mes cero. Por ello, el conjunto de riesgo elemental en el tiempo <span class="math-segment">\(t\)</span> contiene a las máquinas cuyo tiempo de salida registrado satisface <span class="math-segment">\(X_i\ge t\)</span>. A tiene diez máquinas y seis fallas observadas; B también comienza con diez y registra cinco fallas. Las demás salidas corresponden a censura derecha. Los tiempos se expresan en meses desde la asignación. Los identificadores no representan categorías científicas; sirven para localizar cada máquina al reconstruir las operaciones.</p>
+<div class="table-wrap"><table><caption>Registros sintéticos completos: tiempo en meses; 1 = falla, 0 = censura derecha.</caption><thead><tr><th scope="col">Machine / Máquina</th><th scope="col">Group / Grupo</th><th scope="col">Time (months) / Tiempo (meses)</th><th scope="col">Event / Evento</th></tr></thead><tbody><tr><th scope="row">A01</th><td>A</td><td>2</td><td>1</td></tr><tr><th scope="row">A02</th><td>A</td><td>3</td><td>1</td></tr><tr><th scope="row">A03</th><td>A</td><td>4</td><td>1</td></tr><tr><th scope="row">A04</th><td>A</td><td>5</td><td>1</td></tr><tr><th scope="row">A05</th><td>A</td><td>6</td><td>1</td></tr><tr><th scope="row">A06</th><td>A</td><td>7</td><td>0</td></tr><tr><th scope="row">A07</th><td>A</td><td>8</td><td>0</td></tr><tr><th scope="row">A08</th><td>A</td><td>9</td><td>1</td></tr><tr><th scope="row">A09</th><td>A</td><td>10</td><td>0</td></tr><tr><th scope="row">A10</th><td>A</td><td>12</td><td>0</td></tr><tr><th scope="row">B01</th><td>B</td><td>3</td><td>0</td></tr><tr><th scope="row">B02</th><td>B</td><td>4</td><td>0</td></tr><tr><th scope="row">B03</th><td>B</td><td>6</td><td>0</td></tr><tr><th scope="row">B04</th><td>B</td><td>8</td><td>1</td></tr><tr><th scope="row">B05</th><td>B</td><td>9</td><td>0</td></tr><tr><th scope="row">B06</th><td>B</td><td>10</td><td>1</td></tr><tr><th scope="row">B07</th><td>B</td><td>11</td><td>1</td></tr><tr><th scope="row">B08</th><td>B</td><td>12</td><td>1</td></tr><tr><th scope="row">B09</th><td>B</td><td>13</td><td>1</td></tr><tr><th scope="row">B10</th><td>B</td><td>14</td><td>0</td></tr></tbody></table></div>
+<p>Antes de operar, cuente las observaciones con estado uno en cada grupo y compruebe que no existan tiempos negativos. Después ordene los <em>tiempos de falla</em> de ambos grupos, no todas las salidas sin distinguir su estado. Los tiempos de evento distintos son 2, 3, 4, 5, 6, 8, 9, 10, 11, 12 y 13 meses. En A hay una censura en el mes siete, no una falla. En B existe una censura en el mes catorce. Aunque una censura no aparece en la lista de tiempos de falla, puede modificar los denominadores de los eventos posteriores y nunca debe desaparecer de los registros.</p>
+<p>El conjunto es pequeño intencionalmente para permitir verificar cada paso. No es representativo de una industria, enfermedad o fabricante. Solo veinte máquinas generan gran incertidumbre y sus tiempos se seleccionaron para practicar el razonamiento, no para recomendar una política de mantenimiento real. La interpretación final debe reconocer explícitamente la procedencia sintética y las condiciones que harían falta para trasladar el análisis al mundo real.</p>
+</section><section class="chapter" id="section-5"><h2>5. Contexto Kaplan–Meier antes del contraste</h2><p>Un test no sustituye la primera descripción de las observaciones. Para cada grupo, Kaplan–Meier multiplica las fracciones condicionales de supervivencia correspondientes a sus eventos: <span class="math-segment">\(\widehat S_g(t)=\prod_{t_j\le t}(1-d_{gj}/n_{gj})\)</span>. El símbolo <span class="math-segment">\(n_{gj}\)</span> representa la cantidad en riesgo del grupo <span class="math-segment">\(g\)</span> inmediatamente antes de <span class="math-segment">\(t_j\)</span>, y <span class="math-segment">\(d_{gj}\)</span> cuenta sus fallas registradas allí. Una censura modifica conjuntos de riesgo posteriores, pero no crea por sí misma un escalón descendente. Ambas curvas deben representarse sobre el mismo eje temporal y con el mismo criterio de seguimiento.</p>
+<p>En A, las cinco primeras fallas ocurren en los meses 2 a 6 sin censuras anteriores en ese grupo. El producto correspondiente es <span class="math-segment">\((9/10)(8/9)(7/8)(6/7)(5/6)=0.5\)</span>. Otra falla en el mes nueve ocurre después de dos censuras en siete y ocho, de manera que quedan tres máquinas de A inmediatamente antes de nueve: la supervivencia pasa a <span class="math-segment">\(0.5(2/3)=1/3\)</span>. En B, la primera falla es en el mes ocho, después de tres censuras en tres, cuatro y seis. Quedan siete máquinas expuestas y <span class="math-segment">\(\widehat S_B(8)=6/7\)</span>. Las fallas de 10, 11, 12 y 13 modifican posteriormente la segunda curva.</p>
+<figure class="chart-figure"><svg aria-label="Estimaciones Kaplan–Meier: los signos + marcan censura; los datos son sintéticos." preserveaspectratio="xMidYMid meet" role="img" style="width:100%;height:auto;display:block" version="1.1" viewbox="0 0 619.2 252" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<metadata>
+<rdf:rdf xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<cc:work>
+<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"></dc:type>
+<dc:format>image/svg+xml</dc:format>
+<dc:creator>
+<cc:agent>
+<dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+</cc:agent>
+</dc:creator>
+</cc:work>
+</rdf:rdf>
+</metadata>
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="g75km_figure_1">
+<g id="g75km_patch_1">
+<path d="M 0 252 
+L 619.2 252 
+L 619.2 0 
+L 0 0 
+z
+" style="fill: #ffffff"></path>
+</g>
+<g id="g75km_axes_1">
+<g id="g75km_patch_2">
+<path d="M 47.72 210.04 
+L 602.055 210.04 
+L 602.055 10.8 
+L 47.72 10.8 
+z
+" style="fill: #ffffff"></path>
+</g>
+<g id="g75km_PathCollection_1">
+<defs>
+<path d="M -4.092676 0 
+L 4.092676 0 
+M 0 4.092676 
+L 0 -4.092676 
+" id="g75km_mb58ab26a7c" style="stroke: #2563eb; stroke-width: 1.7"></path>
+</defs>
+<g clip-path="url(#g75km_p5d6f5d4894)">
+<use style="fill: #2563eb; stroke: #2563eb; stroke-width: 1.7" x="324.8875" xlink:href="#g75km_mb58ab26a7c" y="115.16381"></use>
+<use style="fill: #2563eb; stroke: #2563eb; stroke-width: 1.7" x="364.482857" xlink:href="#g75km_mb58ab26a7c" y="115.16381"></use>
+<use style="fill: #2563eb; stroke: #2563eb; stroke-width: 1.7" x="443.673571" xlink:href="#g75km_mb58ab26a7c" y="146.789206"></use>
+<use style="fill: #2563eb; stroke: #2563eb; stroke-width: 1.7" x="522.864286" xlink:href="#g75km_mb58ab26a7c" y="146.789206"></use>
+</g>
+</g>
+<g id="g75km_PathCollection_2">
+<defs>
+<path d="M -4.092676 0 
+L 4.092676 0 
+M 0 4.092676 
+L 0 -4.092676 
+" id="g75km_m48d9d035e3" style="stroke: #db783d; stroke-width: 1.7"></path>
+</defs>
+<g clip-path="url(#g75km_p5d6f5d4894)">
+<use style="fill: #db783d; stroke: #db783d; stroke-width: 1.7" x="166.506071" xlink:href="#g75km_m48d9d035e3" y="20.287619"></use>
+<use style="fill: #db783d; stroke: #db783d; stroke-width: 1.7" x="206.101429" xlink:href="#g75km_m48d9d035e3" y="20.287619"></use>
+<use style="fill: #db783d; stroke: #db783d; stroke-width: 1.7" x="285.292143" xlink:href="#g75km_m48d9d035e3" y="20.287619"></use>
+<use style="fill: #db783d; stroke: #db783d; stroke-width: 1.7" x="404.078214" xlink:href="#g75km_m48d9d035e3" y="47.395102"></use>
+<use style="fill: #db783d; stroke: #db783d; stroke-width: 1.7" x="602.055" xlink:href="#g75km_m48d9d035e3" y="177.51102"></use>
+</g>
+</g>
+<g id="g75km_matplotlib.axis_1">
+<g id="g75km_xtick_1">
+<g id="g75km_line2d_1">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="g75km_m952d20cbc2" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#g75km_m952d20cbc2" y="210.04"></use>
+</g>
+</g>
+<g id="g75km_text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 47.72 224.638438)" x="47.72" y="224.638438">0</text>
+</g>
+</g>
+<g id="g75km_xtick_2">
+<g id="g75km_line2d_2">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="126.910714" xlink:href="#g75km_m952d20cbc2" y="210.04"></use>
+</g>
+</g>
+<g id="g75km_text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 126.910714 224.638438)" x="126.910714" y="224.638438">2</text>
+</g>
+</g>
+<g id="g75km_xtick_3">
+<g id="g75km_line2d_3">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="206.101429" xlink:href="#g75km_m952d20cbc2" y="210.04"></use>
+</g>
+</g>
+<g id="g75km_text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 206.101429 224.638438)" x="206.101429" y="224.638438">4</text>
+</g>
+</g>
+<g id="g75km_xtick_4">
+<g id="g75km_line2d_4">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="285.292143" xlink:href="#g75km_m952d20cbc2" y="210.04"></use>
+</g>
+</g>
+<g id="g75km_text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 285.292143 224.638438)" x="285.292143" y="224.638438">6</text>
+</g>
+</g>
+<g id="g75km_xtick_5">
+<g id="g75km_line2d_5">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="364.482857" xlink:href="#g75km_m952d20cbc2" y="210.04"></use>
+</g>
+</g>
+<g id="g75km_text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 364.482857 224.638438)" x="364.482857" y="224.638438">8</text>
+</g>
+</g>
+<g id="g75km_xtick_6">
+<g id="g75km_line2d_6">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="443.673571" xlink:href="#g75km_m952d20cbc2" y="210.04"></use>
+</g>
+</g>
+<g id="g75km_text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 443.673571 224.638438)" x="443.673571" y="224.638438">10</text>
+</g>
+</g>
+<g id="g75km_xtick_7">
+<g id="g75km_line2d_7">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="522.864286" xlink:href="#g75km_m952d20cbc2" y="210.04"></use>
+</g>
+</g>
+<g id="g75km_text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 522.864286 224.638438)" x="522.864286" y="224.638438">12</text>
+</g>
+</g>
+<g id="g75km_xtick_8">
+<g id="g75km_line2d_8">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="602.055" xlink:href="#g75km_m952d20cbc2" y="210.04"></use>
+</g>
+</g>
+<g id="g75km_text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 602.055 224.638438)" x="602.055" y="224.638438">14</text>
+</g>
+</g>
+<g id="g75km_text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 324.8875 238.316563)" x="324.8875" y="238.316563">Tiempo desde inicio (meses)</text>
+</g>
+</g>
+<g id="g75km_matplotlib.axis_2">
+<g id="g75km_ytick_1">
+<g id="g75km_line2d_9">
+<path clip-path="url(#g75km_p5d6f5d4894)" d="M 47.72 210.04 
+L 602.055 210.04 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75km_line2d_10">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="g75km_ma98d8c443b" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#g75km_ma98d8c443b" y="210.04"></use>
+</g>
+</g>
+<g id="g75km_text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 40.72 213.839219)" x="40.72" y="213.839219">0.0</text>
+</g>
+</g>
+<g id="g75km_ytick_2">
+<g id="g75km_line2d_11">
+<path clip-path="url(#g75km_p5d6f5d4894)" d="M 47.72 172.089524 
+L 602.055 172.089524 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75km_line2d_12">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#g75km_ma98d8c443b" y="172.089524"></use>
+</g>
+</g>
+<g id="g75km_text_11">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 40.72 175.888743)" x="40.72" y="175.888743">0.2</text>
+</g>
+</g>
+<g id="g75km_ytick_3">
+<g id="g75km_line2d_13">
+<path clip-path="url(#g75km_p5d6f5d4894)" d="M 47.72 134.139048 
+L 602.055 134.139048 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75km_line2d_14">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#g75km_ma98d8c443b" y="134.139048"></use>
+</g>
+</g>
+<g id="g75km_text_12">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 40.72 137.938266)" x="40.72" y="137.938266">0.4</text>
+</g>
+</g>
+<g id="g75km_ytick_4">
+<g id="g75km_line2d_15">
+<path clip-path="url(#g75km_p5d6f5d4894)" d="M 47.72 96.188571 
+L 602.055 96.188571 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75km_line2d_16">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#g75km_ma98d8c443b" y="96.188571"></use>
+</g>
+</g>
+<g id="g75km_text_13">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 40.72 99.98779)" x="40.72" y="99.98779">0.6</text>
+</g>
+</g>
+<g id="g75km_ytick_5">
+<g id="g75km_line2d_17">
+<path clip-path="url(#g75km_p5d6f5d4894)" d="M 47.72 58.238095 
+L 602.055 58.238095 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75km_line2d_18">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#g75km_ma98d8c443b" y="58.238095"></use>
+</g>
+</g>
+<g id="g75km_text_14">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 40.72 62.037314)" x="40.72" y="62.037314">0.8</text>
+</g>
+</g>
+<g id="g75km_ytick_6">
+<g id="g75km_line2d_19">
+<path clip-path="url(#g75km_p5d6f5d4894)" d="M 47.72 20.287619 
+L 602.055 20.287619 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.22; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75km_line2d_20">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="47.72" xlink:href="#g75km_ma98d8c443b" y="20.287619"></use>
+</g>
+</g>
+<g id="g75km_text_15">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 40.72 24.086838)" x="40.72" y="24.086838">1.0</text>
+</g>
+</g>
+<g id="g75km_text_16">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-90 18.737188 110.42)" x="18.737188" y="110.42">Supervivencia estimada</text>
+</g>
+</g>
+<g id="g75km_line2d_21">
+<path clip-path="url(#g75km_p5d6f5d4894)" d="M 47.72 20.287619 
+L 126.910714 20.287619 
+L 126.910714 39.262857 
+L 166.506071 39.262857 
+L 166.506071 58.238095 
+L 206.101429 58.238095 
+L 206.101429 77.213333 
+L 245.696786 77.213333 
+L 245.696786 96.188571 
+L 285.292143 96.188571 
+L 285.292143 115.16381 
+L 404.078214 115.16381 
+L 404.078214 146.789206 
+L 602.055 146.789206 
+L 602.055 146.789206 
+" style="fill: none; stroke: #2563eb; stroke-width: 2.6; stroke-linecap: square"></path>
+</g>
+<g id="g75km_line2d_22">
+<path clip-path="url(#g75km_p5d6f5d4894)" d="M 47.72 20.287619 
+L 364.482857 20.287619 
+L 364.482857 47.395102 
+L 443.673571 47.395102 
+L 443.673571 79.924082 
+L 483.268929 79.924082 
+L 483.268929 112.453061 
+L 522.864286 112.453061 
+L 522.864286 144.982041 
+L 562.459643 144.982041 
+L 562.459643 177.51102 
+L 602.055 177.51102 
+L 602.055 177.51102 
+" style="fill: none; stroke: #db783d; stroke-width: 2.6; stroke-linecap: square"></path>
+</g>
+<g id="g75km_patch_3">
+<path d="M 47.72 210.04 
+L 47.72 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g75km_patch_4">
+<path d="M 602.055 210.04 
+L 602.055 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g75km_patch_5">
+<path d="M 47.72 210.04 
+L 602.055 210.04 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g75km_patch_6">
+<path d="M 47.72 10.8 
+L 602.055 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g75km_legend_1">
+<g id="g75km_line2d_23">
+<path d="M 56.72 180.782188 
+L 66.72 180.782188 
+L 66.72 180.782188 
+L 76.72 180.782188 
+L 76.72 180.782188 
+" style="fill: none; stroke: #2563eb; stroke-width: 2.6; stroke-linecap: square"></path>
+</g>
+<g id="g75km_text_17">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" transform="rotate(-0 84.72 184.282188)" x="84.72" y="184.282188">Protocolo A</text>
+</g>
+<g id="g75km_line2d_24">
+<path d="M 56.72 195.460313 
+L 66.72 195.460313 
+L 66.72 195.460313 
+L 76.72 195.460313 
+L 76.72 195.460313 
+" style="fill: none; stroke: #db783d; stroke-width: 2.6; stroke-linecap: square"></path>
+</g>
+<g id="g75km_text_18">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start" transform="rotate(-0 84.72 198.960313)" x="84.72" y="198.960313">Protocolo B</text>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="g75km_p5d6f5d4894">
+<rect height="199.24" width="554.335" x="47.72" y="10.8"></rect>
+</clippath>
+</defs>
+</svg><figcaption>Estimaciones Kaplan–Meier: los signos + marcan censura; los datos son sintéticos.</figcaption></figure>
+<p>Las curvas se pueden observar separadas durante una parte considerable del seguimiento. Pero la distancia visual no equivale a significación estadística: algunos escalones se calculan cuando quedan muy pocas máquinas en riesgo. Por otro lado, un contraste global no significativo tampoco establece que las curvas sean idénticas o que una diferencia práctica importante haya sido descartada. La supervivencia estimada en un tiempo elegido anticipadamente y el p-value global responden preguntas distintas; una comunicación responsable presenta e interpreta ambas.</p>
+</section><section class="chapter" id="section-6"><h2>6. Formular correctamente las hipótesis</h2><p>La hipótesis nula de dos grupos es <span class="math-segment">\(H_0:S_A(t)=S_B(t)\)</span> a lo largo del intervalo temporal relevante. Bajo condiciones apropiadas de tiempo continuo, equivale a igualdad de las funciones Hazard. La alternativa plantea que las distribuciones difieren en algún momento. La prueba resume información de los eventos observados y no selecciona retrospectivamente el mes donde las curvas parecen más separadas. Escoger después de inspeccionar la figura el mes más favorable para hacer allí un contraste constituiría otro análisis, posiblemente sesgado.</p>
+<p>La hipótesis nula no exige que cada máquina experimente una falla en el mismo instante. Puede existir variación aleatoria considerable entre individuos aunque las distribuciones poblacionales sean iguales. La pregunta es si la etiqueta de grupo aporta evidencia de una distribución distinta de fallas, después de considerar quién permanecía expuesto en cada instante. Bajo la nula, cuando ocurre una falla entre las máquinas expuestas, la asignación esperada de esa falla a A es proporcional a su participación en el conjunto de riesgo actual.</p>
+<p>Fije el nivel de significación antes de conocer el resultado, por ejemplo <span class="math-segment">\(\alpha=0.05\)</span>. La regla frecuentista controla, bajo las condiciones del modelo, una probabilidad de error de Tipo I a largo plazo. No expresa la probabilidad de que la hipótesis nula sea verdadera. Si el p-value supera 0.05, no se rechaza la nula; no se escribe que ambos protocolos sean equivalentes, intercambiables o idénticos. Un estudio de equivalencia requiere otra pregunta, márgenes aceptables previamente definidos y un análisis orientado específicamente a dichos márgenes.</p>
+</section><section class="chapter" id="section-7"><h2>7. Contar el conjunto de riesgo inmediatamente antes del evento</h2><p>En <span class="math-segment">\(t_j\)</span>, definimos <span class="math-segment">\(n_{Aj}\)</span> y <span class="math-segment">\(n_{Bj}\)</span> como las cantidades de máquinas todavía observadas y sin falla inmediatamente antes de ese instante. El total es <span class="math-segment">\(n_j=n_{Aj}+n_{Bj}\)</span>. Una máquina que falla en <span class="math-segment">\(t_j\)</span> todavía pertenece al conjunto de riesgo inmediatamente antes de fallar; una que fue censurada previamente ya no pertenece. Este orden evita dividir por un denominador del cual se eliminó de manera incorrecta la propia falla analizada.</p>
+<p>En el mes seis quedan seis máquinas A y ocho B. B ya tuvo censuras en los meses tres y cuatro, pero la censura B registrada exactamente en seis se procesa después de las fallas de ese mismo instante, bajo la convención declarada. En ese mes ocurre una falla de A y el conjunto total es catorce; el número esperado de fallas A resulta <span class="math-segment">\(6/14\)</span>. En el mes ocho quedan cuatro máquinas A porque ocurrió una censura A en siete, y siete B porque la censura B de seis ya surtió efecto. La falla observada en ocho pertenece a B, aunque el número esperado de fallas A sigue siendo positivo.</p>
+<p>Cuando evento y censura poseen exactamente la misma marca temporal, debe indicarse un criterio. Una convención extendida cuenta primero los eventos y después las censuras en ese instante. Un registro mensual puede generar empates aparentes que desaparecerían con fechas y horas precisas. Antes de interpretar un empate como simultaneidad exacta conviene verificar la resolución del registro. La tabla de esta guía aplica la convención eventos-antes-de-censuras y permite reproducir cada denominador a partir de las veinte observaciones.</p>
+</section><section class="chapter" id="section-8"><h2>8. Fallas observadas y esperadas: la comparación esencial</h2><p>Denotemos por <span class="math-segment">\(d_{Aj}\)</span> y <span class="math-segment">\(d_{Bj}\)</span> las fallas observadas a tiempo <span class="math-segment">\(t_j\)</span>, de modo que <span class="math-segment">\(d_j=d_{Aj}+d_{Bj}\)</span>. Bajo igualdad de Hazard en ese instante, las fallas esperadas de A, condicionadas al total de eventos y composición del conjunto de riesgo, son <span class="math-segment">\(E_{Aj}=d_j n_{Aj}/n_j\)</span>. Se trata de una esperanza condicional y no de una predicción de la fecha de falla de una máquina individual. Puede ser un número fraccionario aunque las fallas observadas sean enteras: resume muchas asignaciones hipotéticas de los eventos entre los sujetos expuestos.</p>
+<p>En el mes dos hay diez máquinas A y diez B expuestas; falla una de A. Su esperanza bajo la nula es <span class="math-segment">\(1(10/20)=0.5\)</span>, y la contribución observada-menos-esperada es <span class="math-segment">\(1-0.5=0.5\)</span>. En el mes ocho hay cuatro A y siete B expuestas y falla una B. Para A se esperaría <span class="math-segment">\(1(4/11)=0.363636\)</span>, pero se observan cero fallas, por lo que la contribución es <span class="math-segment">\(-0.363636\)</span>. Estas contribuciones positivas y negativas explican por qué la prueba considera el <em>orden temporal</em> de las fallas y no se limita a comparar los totales de seis y cinco.</p>
+<p>El total esperado de A es la suma de sus contribuciones esperadas en todos los tiempos distintos de evento. Su conteo observado total es seis. El puntaje acumulado es <span class="math-segment">\(U=\sum_j(d_{Aj}-E_{Aj})\)</span>. Un valor positivo sugiere más fallas A de las esperadas durante los conjuntos de riesgo observados; uno negativo, menos. El contraste bilateral usa el cuadrado del puntaje estandarizado. Pero ese signo, por sí solo, no estima un Hazard Ratio ajustado ni cuantifica cuántos meses se ganan o pierden.</p>
+</section><section class="chapter" id="section-9"><h2>9. Por qué usar la varianza Hypergeometric</h2><p>Condicionemos a <span class="math-segment">\(n_j\)</span> máquinas en riesgo, <span class="math-segment">\(n_{Aj}\)</span> de A y <span class="math-segment">\(d_j\)</span> fallas en ese instante. Bajo igualdad de Hazard, la distribución de esas fallas entre grupos se comporta como una extracción sin reposición. El número que corresponde a A sigue una distribución Hypergeometric. Su esperanza es <span class="math-segment">\(d_jn_{Aj}/n_j\)</span> y, cuando <span class="math-segment">\(n_j&gt;1\)</span>, la varianza condicional es <span class="math-segment">\(V_j=n_{Aj}n_{Bj}d_j(n_j-d_j)/[n_j^2(n_j-1)]\)</span>. El factor de corrección por población finita cobra especial importancia cuando ocurren varias fallas empatadas.</p>
+<p>Con una sola falla, <span class="math-segment">\(d_j=1\)</span>, la fórmula se reduce a <span class="math-segment">\(n_{Aj}n_{Bj}/n_j^2\)</span>. En el mes dos vale <span class="math-segment">\(10\times10/20^2=0.25\)</span>. En el mes seis vale <span class="math-segment">\(6\times8/14^2=48/196=0.244898\)</span>. En el mes doce A tiene una máquina en riesgo y B tres: <span class="math-segment">\(V_{12}=1\times3/4^2=0.1875\)</span>. Si en determinado momento queda en riesgo solo uno de los grupos, la varianza condicional es cero: ese evento ya no puede distinguir la asignación entre ambos grupos, aunque continúe apareciendo en la curva descriptiva correspondiente.</p>
+<p>La varianza total del puntaje se obtiene sumando las contribuciones: <span class="math-segment">\(V=\sum_j V_j\)</span>. No es la varianza muestral de los veinte tiempos ni se calcula elevando al cuadrado las desviaciones de las fechas de falla. Describe la incertidumbre bajo la hipótesis nula del puntaje de eventos observados menos esperados, condicionada a los conjuntos de riesgo cambiantes. Por eso utilizar la desviación estándar de los tiempos de salida como denominador contestaría otra pregunta y trataría incorrectamente la censura.</p>
+</section><section class="chapter" id="section-10"><h2>10. Reconstruir cada contribución de la tabla completa</h2><p>La siguiente tabla presenta los once tiempos distintos de falla. Los conjuntos de riesgo, eventos observados, eventos A esperados y contribuciones de varianza se calcularon nuevamente desde los veinte registros. Una máquina censurada en el mismo mes que una falla permanece en el conjunto inmediatamente anterior al evento, y sale para los siguientes meses. Las cifras mostradas se redondean a seis decimales después del cálculo; sumar números redondeados demasiado temprano puede generar pequeñas diferencias en la estadística final.</p>
+<div class="table-wrap"><table><caption>Observados, esperados y varianza condicional en cada tiempo conjunto de falla.</caption><thead><tr><th scope="col">t (meses)</th><th scope="col">nA</th><th scope="col">nB</th><th scope="col">dA</th><th scope="col">dB</th><th scope="col">Esperado A</th><th scope="col">Varianza</th></tr></thead><tbody><tr><td>2</td><td>10</td><td>10</td><td>1</td><td>0</td><td>0.500000</td><td>0.250000</td></tr><tr><td>3</td><td>9</td><td>10</td><td>1</td><td>0</td><td>0.473684</td><td>0.249307</td></tr><tr><td>4</td><td>8</td><td>9</td><td>1</td><td>0</td><td>0.470588</td><td>0.249135</td></tr><tr><td>5</td><td>7</td><td>8</td><td>1</td><td>0</td><td>0.466667</td><td>0.248889</td></tr><tr><td>6</td><td>6</td><td>8</td><td>1</td><td>0</td><td>0.428571</td><td>0.244898</td></tr><tr><td>8</td><td>4</td><td>7</td><td>0</td><td>1</td><td>0.363636</td><td>0.231405</td></tr><tr><td>9</td><td>3</td><td>6</td><td>1</td><td>0</td><td>0.333333</td><td>0.222222</td></tr><tr><td>10</td><td>2</td><td>5</td><td>0</td><td>1</td><td>0.285714</td><td>0.204082</td></tr><tr><td>11</td><td>1</td><td>4</td><td>0</td><td>1</td><td>0.200000</td><td>0.160000</td></tr><tr><td>12</td><td>1</td><td>3</td><td>0</td><td>1</td><td>0.250000</td><td>0.187500</td></tr><tr><td>13</td><td>0</td><td>2</td><td>0</td><td>1</td><td>0.000000</td><td>0.000000</td></tr></tbody><tfoot><tr><th scope="row">TOTAL</th><td>—</td><td>—</td><td>6</td><td>5</td><td>3.772195</td><td>2.247438</td></tr></tfoot></table></div><p>La figura siguiente muestra desviaciones con signo, no Hazard Ratios.</p><figure class="chart-figure"><svg aria-label="Puntaje observado-menos-esperado por tiempo de falla." preserveaspectratio="xMidYMid meet" role="img" style="width:100%;height:auto;display:block" version="1.1" viewbox="0 0 619.2 237.6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<metadata>
+<rdf:rdf xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<cc:work>
+<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"></dc:type>
+<dc:format>image/svg+xml</dc:format>
+<dc:creator>
+<cc:agent>
+<dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+</cc:agent>
+</dc:creator>
+</cc:work>
+</rdf:rdf>
+</metadata>
+<defs>
+<style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+</defs>
+<g id="g75score_figure_1">
+<g id="g75score_patch_1">
+<path d="M 0 237.6 
+L 619.2 237.6 
+L 619.2 0 
+L 0 0 
+z
+" style="fill: #ffffff"></path>
+</g>
+<g id="g75score_axes_1">
+<g id="g75score_patch_2">
+<path d="M 56 195.64 
+L 608.4 195.64 
+L 608.4 10.8 
+L 56 10.8 
+z
+" style="fill: #ffffff"></path>
+</g>
+<g id="g75score_patch_3">
+<path clip-path="url(#g75score_p6aa146a681)" d="M 81.109091 127.93123 
+L 110.345704 127.93123 
+L 110.345704 46.384171 
+L 81.109091 46.384171 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="g75score_patch_4">
+<path clip-path="url(#g75score_p6aa146a681)" d="M 124.10411 127.93123 
+L 153.340722 127.93123 
+L 153.340722 42.092221 
+L 124.10411 42.092221 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="g75score_patch_5">
+<path clip-path="url(#g75score_p6aa146a681)" d="M 167.099128 127.93123 
+L 196.335741 127.93123 
+L 196.335741 41.587285 
+L 167.099128 41.587285 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="g75score_patch_6">
+<path clip-path="url(#g75score_p6aa146a681)" d="M 210.094147 127.93123 
+L 239.33076 127.93123 
+L 239.33076 40.947701 
+L 210.094147 40.947701 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="g75score_patch_7">
+<path clip-path="url(#g75score_p6aa146a681)" d="M 253.089166 127.93123 
+L 282.325778 127.93123 
+L 282.325778 34.734591 
+L 253.089166 34.734591 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="g75score_patch_8">
+<path clip-path="url(#g75score_p6aa146a681)" d="M 339.079203 127.93123 
+L 368.315816 127.93123 
+L 368.315816 187.238182 
+L 339.079203 187.238182 
+z
+" style="fill: #db783d"></path>
+</g>
+<g id="g75score_patch_9">
+<path clip-path="url(#g75score_p6aa146a681)" d="M 382.074222 127.93123 
+L 411.310834 127.93123 
+L 411.310834 19.201818 
+L 382.074222 19.201818 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="g75score_patch_10">
+<path clip-path="url(#g75score_p6aa146a681)" d="M 425.06924 127.93123 
+L 454.305853 127.93123 
+L 454.305853 174.529549 
+L 425.06924 174.529549 
+z
+" style="fill: #db783d"></path>
+</g>
+<g id="g75score_patch_11">
+<path clip-path="url(#g75score_p6aa146a681)" d="M 468.064259 127.93123 
+L 497.300872 127.93123 
+L 497.300872 160.550053 
+L 468.064259 160.550053 
+z
+" style="fill: #db783d"></path>
+</g>
+<g id="g75score_patch_12">
+<path clip-path="url(#g75score_p6aa146a681)" d="M 511.059278 127.93123 
+L 540.29589 127.93123 
+L 540.29589 168.704759 
+L 511.059278 168.704759 
+z
+" style="fill: #db783d"></path>
+</g>
+<g id="g75score_patch_13">
+<path clip-path="url(#g75score_p6aa146a681)" d="M 554.054296 127.93123 
+L 583.290909 127.93123 
+L 583.290909 127.93123 
+L 554.054296 127.93123 
+z
+" style="fill: #2563eb"></path>
+</g>
+<g id="g75score_matplotlib.axis_1">
+<g id="g75score_xtick_1">
+<g id="g75score_line2d_1">
+<defs>
+<path d="M 0 0 
+L 0 3.5 
+" id="g75score_m276720694a" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="95.727397" xlink:href="#g75score_m276720694a" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_1">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 95.727397 210.238437)" x="95.727397" y="210.238437">2</text>
+</g>
+</g>
+<g id="g75score_xtick_2">
+<g id="g75score_line2d_2">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="138.722416" xlink:href="#g75score_m276720694a" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_2">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 138.722416 210.238437)" x="138.722416" y="210.238437">3</text>
+</g>
+</g>
+<g id="g75score_xtick_3">
+<g id="g75score_line2d_3">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="181.717435" xlink:href="#g75score_m276720694a" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_3">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 181.717435 210.238437)" x="181.717435" y="210.238437">4</text>
+</g>
+</g>
+<g id="g75score_xtick_4">
+<g id="g75score_line2d_4">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="224.712453" xlink:href="#g75score_m276720694a" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_4">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 224.712453 210.238437)" x="224.712453" y="210.238437">5</text>
+</g>
+</g>
+<g id="g75score_xtick_5">
+<g id="g75score_line2d_5">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="267.707472" xlink:href="#g75score_m276720694a" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_5">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 267.707472 210.238437)" x="267.707472" y="210.238437">6</text>
+</g>
+</g>
+<g id="g75score_xtick_6">
+<g id="g75score_line2d_6">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="353.697509" xlink:href="#g75score_m276720694a" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_6">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 353.697509 210.238437)" x="353.697509" y="210.238437">8</text>
+</g>
+</g>
+<g id="g75score_xtick_7">
+<g id="g75score_line2d_7">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="396.692528" xlink:href="#g75score_m276720694a" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_7">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 396.692528 210.238437)" x="396.692528" y="210.238437">9</text>
+</g>
+</g>
+<g id="g75score_xtick_8">
+<g id="g75score_line2d_8">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="439.687547" xlink:href="#g75score_m276720694a" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_8">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 439.687547 210.238437)" x="439.687547" y="210.238437">10</text>
+</g>
+</g>
+<g id="g75score_xtick_9">
+<g id="g75score_line2d_9">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="482.682565" xlink:href="#g75score_m276720694a" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_9">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 482.682565 210.238437)" x="482.682565" y="210.238437">11</text>
+</g>
+</g>
+<g id="g75score_xtick_10">
+<g id="g75score_line2d_10">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="525.677584" xlink:href="#g75score_m276720694a" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_10">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 525.677584 210.238437)" x="525.677584" y="210.238437">12</text>
+</g>
+</g>
+<g id="g75score_xtick_11">
+<g id="g75score_line2d_11">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="568.672603" xlink:href="#g75score_m276720694a" y="195.64"></use>
+</g>
+</g>
+<g id="g75score_text_11">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 568.672603 210.238437)" x="568.672603" y="210.238437">13</text>
+</g>
+</g>
+<g id="g75score_text_12">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-0 332.2 223.916562)" x="332.2" y="223.916562">Tiempo de falla conjunto (meses)</text>
+</g>
+</g>
+<g id="g75score_matplotlib.axis_2">
+<g id="g75score_ytick_1">
+<g id="g75score_line2d_12">
+<path clip-path="url(#g75score_p6aa146a681)" d="M 56 193.168877 
+L 608.4 193.168877 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75score_line2d_13">
+<defs>
+<path d="M 0 0 
+L -3.5 0 
+" id="g75score_mb67bd91f1a" style="stroke: #000000; stroke-width: 0.8"></path>
+</defs>
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="56" xlink:href="#g75score_mb67bd91f1a" y="193.168877"></use>
+</g>
+</g>
+<g id="g75score_text_13">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 49 196.968096)" x="49" y="196.968096">−0.4</text>
+</g>
+</g>
+<g id="g75score_ytick_2">
+<g id="g75score_line2d_14">
+<path clip-path="url(#g75score_p6aa146a681)" d="M 56 160.550053 
+L 608.4 160.550053 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75score_line2d_15">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="56" xlink:href="#g75score_mb67bd91f1a" y="160.550053"></use>
+</g>
+</g>
+<g id="g75score_text_14">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 49 164.349272)" x="49" y="164.349272">−0.2</text>
+</g>
+</g>
+<g id="g75score_ytick_3">
+<g id="g75score_line2d_16">
+<path clip-path="url(#g75score_p6aa146a681)" d="M 56 127.93123 
+L 608.4 127.93123 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75score_line2d_17">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="56" xlink:href="#g75score_mb67bd91f1a" y="127.93123"></use>
+</g>
+</g>
+<g id="g75score_text_15">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 49 131.730449)" x="49" y="131.730449">0.0</text>
+</g>
+</g>
+<g id="g75score_ytick_4">
+<g id="g75score_line2d_18">
+<path clip-path="url(#g75score_p6aa146a681)" d="M 56 95.312406 
+L 608.4 95.312406 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75score_line2d_19">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="56" xlink:href="#g75score_mb67bd91f1a" y="95.312406"></use>
+</g>
+</g>
+<g id="g75score_text_16">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 49 99.111625)" x="49" y="99.111625">0.2</text>
+</g>
+</g>
+<g id="g75score_ytick_5">
+<g id="g75score_line2d_20">
+<path clip-path="url(#g75score_p6aa146a681)" d="M 56 62.693583 
+L 608.4 62.693583 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75score_line2d_21">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="56" xlink:href="#g75score_mb67bd91f1a" y="62.693583"></use>
+</g>
+</g>
+<g id="g75score_text_17">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 49 66.492802)" x="49" y="66.492802">0.4</text>
+</g>
+</g>
+<g id="g75score_ytick_6">
+<g id="g75score_line2d_22">
+<path clip-path="url(#g75score_p6aa146a681)" d="M 56 30.074759 
+L 608.4 30.074759 
+" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"></path>
+</g>
+<g id="g75score_line2d_23">
+<g>
+<use style="stroke: #000000; stroke-width: 0.8" x="56" xlink:href="#g75score_mb67bd91f1a" y="30.074759"></use>
+</g>
+</g>
+<g id="g75score_text_18">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: end" transform="rotate(-0 49 33.873978)" x="49" y="33.873978">0.6</text>
+</g>
+</g>
+<g id="g75score_text_19">
+<text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: middle" transform="rotate(-90 18.6375 103.22)" x="18.6375" y="103.22">Observado − esperado (A)</text>
+</g>
+</g>
+<g id="g75score_line2d_24">
+<path clip-path="url(#g75score_p6aa146a681)" d="M 56 127.93123 
+L 608.4 127.93123 
+" style="fill: none; stroke: #60768e; stroke-linecap: square"></path>
+</g>
+<g id="g75score_patch_14">
+<path d="M 56 195.64 
+L 56 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g75score_patch_15">
+<path d="M 608.4 195.64 
+L 608.4 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g75score_patch_16">
+<path d="M 56 195.64 
+L 608.4 195.64 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+<g id="g75score_patch_17">
+<path d="M 56 10.8 
+L 608.4 10.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"></path>
+</g>
+</g>
+</g>
+<defs>
+<clippath id="g75score_p6aa146a681">
+<rect height="184.84" width="552.4" x="56" y="10.8"></rect>
+</clippath>
+</defs>
+</svg><figcaption>Puntaje observado-menos-esperado por tiempo de falla.</figcaption></figure>
+<p>Compruebe manualmente las primeras cuatro filas: sus esperanzas son <span class="math-segment">\(0.5\)</span>, <span class="math-segment">\(9/19\)</span>, <span class="math-segment">\(8/17\)</span> y <span class="math-segment">\(7/15\)</span>. En todos esos meses la falla pertenece a A y su número observado es uno. Examine después el mes ocho: A observa cero eventos y espera <span class="math-segment">\(4/11\)</span>. Finalmente, en el mes trece ya no hay máquinas A en riesgo; tanto su esperanza como su contribución a la varianza son cero. La falla B de ese mes modifica, sin embargo, la curva Kaplan–Meier de B. Explicar por qué una fila contribuye cero es tan importante como desarrollar una contribución positiva.</p>
+<p>En cada fila la suma de los eventos esperados de ambos grupos debe coincidir con el total de fallas: <span class="math-segment">\(E_{Aj}+E_{Bj}=d_j\)</span>. Por consiguiente, el puntaje acumulado observado-menos-esperado de B debe ser <span class="math-segment">\(-U\)</span>. Esta propiedad de conservación ofrece una comprobación inmediata. Si los puntajes de A y B terminaran ambos con el mismo signo positivo, o si las esperanzas no sumaran las fallas totales, habría un error de transcripción o programación.</p>
+</section><section class="chapter" id="section-11"><h2>11. Obtener la estadística Chi-Square sin omitir pasos</h2><p>Sumando con precisión completa obtenemos <span class="math-segment">\(O_A=6\)</span>, <span class="math-segment">\(E_A\approx3.7721945\)</span>, y por tanto <span class="math-segment">\(U=O_A-E_A\approx2.2278055\)</span>. La suma de las varianzas condicionales es <span class="math-segment">\(V\approx2.2474381\)</span>. Al estandarizar resulta <span class="math-segment">\(Z=U/\sqrt V\approx1.48605\)</span>; al elevar al cuadrado, <span class="math-segment">\(\chi^2=U^2/V\approx2.2083444\)</span>. Bajo la aproximación asintótica nula usual, esta estadística sigue una distribución Chi-Square de un grado de libertad. Su probabilidad de cola superior es aproximadamente 0.137266.</p>
+<div class="formula-box"><strong>Cálculo Log-Rank completo</strong><div class="math-display"><span class="math-segment">\[\begin{aligned}U&amp;=O_A-E_A=6-3.7721945=2.2278055\\ V&amp;=\sum_jV_j=2.2474381\\ \chi^2&amp;=\frac{U^2}{V}=\frac{(2.2278055)^2}{2.2474381}=2.2083444\\ p&amp;=P(\chi^2_1\ge2.2083444)\approx0.137266\end{aligned}\]</span></div><small>Un grado de libertad; comparación global bilateral.</small></div>
+<p>Como <span class="math-segment">\(0.137266&gt;0.05\)</span>, la decisión es <strong>no rechazar la hipótesis nula</strong> al nivel del 5%. Las diferencias observadas en el gráfico no desaparecen: simplemente, con este número limitado de fallas, la diferencia estandarizada no es lo suficientemente extrema según el criterio fijado. Una comunicación apropiada sería “Log-Rank <span class="math-segment">\(\chi^2(1)=2.208\)</span>, <span class="math-segment">\(p=0.137\)</span>”, acompañada de la dirección y el calendario de las diferencias de supervivencia estimada. El p-value no cuantifica meses adicionales de funcionamiento ni la probabilidad de que ambos protocolos sean idénticos.</p>
+<p>Como comprobación, cambie los nombres de los dos grupos en todos los registros. El signo de <span class="math-segment">\(U\)</span> se invierte, pero <span class="math-segment">\(U^2/V\)</span> y el p-value bilateral deben permanecer iguales. Otra comprobación consiste en observar que una fila sin máquinas A expuestas no puede modificar la estadística. Ambas propiedades se cumplen. Una ejecución independiente mediante <code>statsmodels.duration.survfunc.survdiff</code> reproduce el Chi-Square y el p-value, verificando los cálculos sin depender de la tabla confeccionada manualmente.</p>
+</section><section class="chapter" id="section-12"><h2>12. Qué mide y qué no mide el p-value</h2><p>El p-value es una probabilidad, calculada bajo la hipótesis nula y las condiciones del test, de obtener una estadística al menos tan extrema como la observada. Depende del modelo estadístico y del mecanismo de recolección. No representa la probabilidad de que los protocolos tengan efectos idénticos, ni el porcentaje futuro de máquinas que fallarán, ni la probabilidad de que otro estudio reproduzca el resultado. Una muestra pequeña puede producir un p-value grande incluso cuando existen diferencias relevantes en términos prácticos.</p>
+<p>Un contraste de hipótesis informa sobre evidencia frente a igualdad, no sobre la magnitud del efecto. Para interpretar una decisión conviene informar además la supervivencia Kaplan–Meier a meses establecidos de antemano, cantidades en riesgo, duración de seguimiento, fallas, censuras y un intervalo de incertidumbre para una medida de efecto apropiada. Por ejemplo, una diferencia de varios meses en Restricted Mean Survival Time podría importar aunque el test global no tenga potencia suficiente; también una diferencia temporal pequeña puede generar p-value bajo con una muestra enorme. La medida de efecto debe seleccionarse por la pregunta científica, no improvisarse después de encontrar significación.</p>
+<p>No rechazar no significa demostrar equivalencia. Un diseño de equivalencia pregunta si la diferencia cabe dentro de márgenes aceptables y exige fijarlos en unidades importantes para ingeniería o salud. Tampoco la no significación demuestra que el mantenimiento carezca de consecuencias causales. Confounding, censura informativa, errores de medición y pocos eventos pueden impedir detectar diferencias que sí serían importantes.</p>
+</section><section class="chapter" id="section-13"><h2>13. Fallas empatadas y corrección por población finita</h2><p>El caso principal registra una falla en cada tiempo de evento, lo que simplifica la varianza. Para comprender empates, consideremos otro conjunto de riesgo ilustrativo con seis máquinas A y cuatro B: diez en total. Ocurren dos fallas simultáneas y ambas pertenecen a A. Entonces <span class="math-segment">\(O_A=2\)</span>, <span class="math-segment">\(E_A=2(6/10)=1.2\)</span>, y el puntaje de ese instante es <span class="math-segment">\(0.8\)</span>. La varianza Hypergeometric exacta condicionada es <span class="math-segment">\((6)(4)(2)(10-2)/(10^2(10-1))=384/900\approx0.426667\)</span>.</p>
+<p>Si duplicáramos equivocadamente la varianza de un solo evento sin aplicar la corrección, obtendríamos <span class="math-segment">\(2(6\times4/100)=0.48\)</span>, una cifra distinta. La diferencia proviene de que extraer dos fallas sin reposición vincula sus asignaciones. La fórmula correcta incorpora esa dependencia. Si en vez de dos fallas A ocurriera una de cada grupo, la esperanza A seguiría siendo 1.2, pero su puntaje sería <span class="math-segment">\(-0.2\)</span>, con la <em>misma</em> varianza condicional para ese conjunto y número total de eventos.</p>
+<p>Los empates pueden ser verdaderamente simultáneos o surgir porque registros precisos se redondearon a días o meses. Distintos programas pueden aplicar convenciones equivalentes en grandes muestras, pero diferir en el orden de entrada y salida o en aproximaciones para modelos relacionados. Conviene registrar la resolución del timestamp y la convención usada. Una fórmula algebraicamente correcta aplicada a un conjunto de riesgo mal ordenado sigue produciendo un análisis incorrecto.</p>
+</section><section class="chapter" id="section-14"><h2>14. Censura y entrada tardía: reglas diferentes</h2><p>La censura derecha indica que una máquina permaneció sin evento hasta la última observación conocida, pero su tiempo posterior de falla se desconoce. En el instante <span class="math-segment">\(t\)</span>, contribuye al conjunto de riesgo si su salida es igual o posterior a <span class="math-segment">\(t\)</span>. Según la convención usada, las censuras exactamente en <span class="math-segment">\(t\)</span> se procesan después de las fallas del mismo instante. Así, la censura modifica las esperanzas y varianzas futuras sin generar por sí misma fallas observadas.</p>
+<p>La entrada tardía es diferente. Una máquina que ingresa al estudio en el mes cuatro, con una escala temporal originada previamente, no debe contarse en los conjuntos de riesgo de los meses dos y tres. Si <span class="math-segment">\(L_i\)</span> es la entrada y <span class="math-segment">\(X_i\)</span> la salida, el indicador típico para truncamiento izquierdo es <span class="math-segment">\(I(L_i<t\le span="" x_i)\)<="">. La comparación se refiere entonces a supervivencia condicional a poder ser observado al ingresar, bajo las condiciones que justifican tratar la selección por truncamiento. No debe confundirse entrada tardía con una censura derecha registrada artificialmente al inicio.</t\le></span></p>
+<p>En nuestro caso todos comienzan en cero, de modo que <span class="math-segment">\(L_i\)</span> no participa de la tabla numérica. Declaramos esta simplificación expresamente. Al transferir el procedimiento a cohortes reales con edades de enrolamiento, fechas calendario o ventanas desiguales, primero se verifica el origen temporal y la lógica de elegibilidad; después se reconstruyen los conjuntos de riesgo. Ninguna llamada automática a una función Log-Rank puede reparar una escala temporal conceptualmente incoherente.</p>
+</section><section class="chapter" id="section-15"><h2>15. Proportional Hazards: validez bajo la nula frente a potencia</h2><p>A veces se afirma que el Log-Rank Test “requiere Proportional Hazards”. Eso es demasiado categórico. Bajo la hipótesis nula de distribuciones de supervivencia idénticas, el contraste ordinario posee una aproximación nula asintótica válida bajo sus condiciones habituales; la proporcionalidad no es un requisito universal para plantear esa hipótesis. Sin embargo, las alternativas con Hazard aproximadamente proporcionales favorecen especialmente su <strong>potencia</strong>: si un grupo presenta de forma sostenida más riesgo instantáneo, las diferencias observadas-menos-esperadas tienden a acumularse con el mismo signo.</p>
+<p>La condición de Proportional Hazards establece que <span class="math-segment">\(h_A(t)/h_B(t)\)</span> permanece constante en el tiempo; así se facilita interpretar un único Hazard Ratio. El Log-Rank Test, por sí mismo, no estima esa razón. La estimación de un Hazard Ratio posiblemente ajustado y la evaluación de su supuesto corresponden a Cox Regression, tema de la Guía 76. Incluso con proporcionalidad perfecta, un Hazard Ratio no es una razón de probabilidades de supervivencia, de medianas ni una probabilidad de falla. Presentarlos como equivalentes cambiaría el parámetro que se pretende estimar.</p>
+<p>Cuando el riesgo relativo cambia de dirección, el puntaje ordinario puede experimentar cancelación. Un test significativo todavía es posible, y un test no significativo no demuestra igualdad. La elección del método depende de la pregunta y de las alternativas previstas: supervivencia en instantes determinados, Restricted Mean Survival Time, contrastes ponderados especificados de antemano o modelos con efectos variables en el tiempo pueden abordar aspectos distintos. Cambiar de método únicamente después de ver cuál entrega el menor p-value afecta el control de errores declarado.</p>
+</section><section class="chapter" id="section-16"><h2>16. Curvas cruzadas: demostrar la cancelación de evidencia</h2><p>Consideremos dos etapas ilustrativas de otro contraste, separadas de las veinte máquinas. En el seguimiento temprano, el puntaje de A es <span class="math-segment">\(+3\)</span>, con contribución de varianza 2. Más adelante se invierte el patrón de Hazard y el puntaje es <span class="math-segment">\(-2.5\)</span>, también con varianza 2. El puntaje ordinario total es <span class="math-segment">\(U=3-2.5=0.5\)</span>, su varianza <span class="math-segment">\(V=2+2=4\)</span> y la estadística Chi-Square <span class="math-segment">\(0.5^2/4=0.0625\)</span>, de modo que el p-value es grande. Si ambos puntajes hubieran sido positivos se habrían reforzado en vez de contrarrestarse.</p>
+<p>Estos valores son contribuciones agregadas hipotéticas, no un conjunto observado adicional ni una afirmación nueva sobre el caso central. Su función es algebraica: mostrar cómo diferencias reales en direcciones opuestas pueden producir un test global no ponderado poco sensible. También muestran que ver curvas cruzadas no implica automáticamente un p-value superior a 0.05: importan el tamaño de las diferencias, el momento de los eventos y la precisión de los conjuntos de riesgo. Hay que describir la forma de la diferencia y no ocultarla tras una decisión binaria.</p>
+<p>Un plan válido puede establecer anticipadamente una comparación de Restricted Mean Survival Time hasta un horizonte importante, dado que el área bajo cada curva se expresa en meses libres de evento. Otra opción es un contraste Log-Rank ponderado que priorice eventos tempranos o tardíos, pero sus pesos y justificación deben definirse antes de inspeccionar los resultados. Una búsqueda no declarada entre numerosos pesos, ventanas o contrastes aumenta el riesgo de hallazgos falsos. La Guía 46 ofrece el marco de multiplicidad para abordar ese problema.</p>
+</section><section class="chapter" id="section-17"><h2>17. Contrastes Log-Rank ponderados y preguntas distintas</h2><p>El Log-Rank ordinario utiliza el mismo peso del puntaje para cada tiempo distinto de evento. Una versión ponderada aplica <span class="math-segment">\(U_w=\sum_jw_j(d_{Aj}-E_{Aj})\)</span> y <span class="math-segment">\(V_w=\sum_jw_j^2V_j\)</span>. Los pesos deben elegirse mediante información disponible y un procedimiento válido bajo la nula. Por ejemplo, enfatizar eventos tempranos puede responder una preocupación sobre daños iniciales; privilegiar los tardíos puede ser pertinente ante un beneficio demorado. Un peso igual a cero excluye de ese contraste temporal el evento correspondiente, aunque haya ocurrido realmente.</p>
+<p>La variante Gehan–Breslow utiliza como peso el tamaño del conjunto de riesgo y concede mayor importancia relativa al comienzo; Tarone–Ware utiliza su raíz cuadrada. Las ponderaciones Fleming–Harrington pueden construirse con supervivencia Kaplan–Meier conjunta inmediatamente anterior al evento y parámetros habitualmente denominados <span class="math-segment">\(\rho\)</span> y <span class="math-segment">\(\gamma\)</span>. Estas pruebas no generan automáticamente un tamaño de efecto. Diferentes pesos producen p-values diferentes porque sus alternativas preferidas también cambian, no necesariamente porque alguno de los programas esté equivocado.</p>
+<p>Ante curvas cruzadas resulta tentador probar todos los pesos y comunicar el resultado más favorable. Precisamente allí es fundamental separar el análisis planificado de la exploración. Publicar solo el mínimo p-value después de numerosas variantes y ventanas no conserva la interpretación de una comparación única. La solución consiste en indicar el contraste principal, declarar los complementarios como exploratorios y documentar cómo se controla o reconoce la multiplicidad.</p>
+</section><section class="chapter" id="section-18"><h2>18. Comparar tres o más grupos</h2><p>Con <span class="math-segment">\(K\)</span> grupos, la hipótesis nula global establece <span class="math-segment">\(S_1(t)=\cdots=S_K(t)\)</span> durante la ventana relevante. En cada tiempo de evento conjunto, la esperanza del grupo <span class="math-segment">\(g\)</span> es <span class="math-segment">\(d_jn_{gj}/n_j\)</span>. Las diferencias observadas-menos-esperadas forman un vector y su matriz de covarianzas recoge que la suma de eventos entre grupos es fija. Por tanto, las desviaciones suman cero y la matriz completa es singular. Usando una inversa generalizada o eliminando el componente redundante se obtiene una estadística global asintótica Chi-Square con <span class="math-segment">\(K-1\)</span> grados de libertad, cuando se cumplen las condiciones correspondientes.</p>
+<p>Un resultado global significativo aporta evidencia de que no todas las distribuciones de supervivencia son idénticas. No indica directamente qué pares difieren. Con cuatro tratamientos existen seis comparaciones posibles. Aplicar cada una al 5% sin plan de multiplicidad incrementa la probabilidad de comunicar al menos un falso positivo. Bonferroni, Holm u otro procedimiento justificado permiten controlar el error deseado, siempre que la familia de hipótesis se defina anticipadamente. Así, los principios de la Guía 46 siguen siendo necesarios aunque el desenlace sea tiempo hasta evento.</p>
+<p>Un contraste global no significativo tampoco prohíbe necesariamente un contraste específico planificado previamente, si el diseño y el plan de multiplicidad lo permiten. En cambio, ejecutar todos los pares tras observar la no significación y seleccionar solamente los favorables constituiría búsqueda exploratoria. Informe estadística global, grados de libertad, seguimiento, curvas por grupo y cantidades en riesgo; distinga luego qué pruebas adicionales fueron planificadas y cuáles surgieron de explorar los datos.</p>
+</section><section class="chapter" id="section-19"><h2>19. Tamaño de muestra, cantidad de eventos y potencia</h2><p>El Log-Rank obtiene información principalmente de los <strong>eventos</strong> y de qué grupos permanecían expuestos cuando sucedieron. Veinte máquinas con once fallas observadas proporcionan evidencia menos estable que un estudio apropiadamente diseñado con muchos eventos informativos. Por eso es engañoso llamar enorme a un estudio únicamente porque incorpora miles de personas cuando casi todas son censuradas antes de un seguimiento suficiente. La potencia depende del número de fallas, balance de asignación, censura, duración, magnitud de diferencias y forma de los Hazard.</p>
+<p>La distribución de referencia Chi-Square asintótica se vuelve menos confiable cuando hay esperanzas de eventos extremadamente pequeñas o los grupos apenas comparten períodos de riesgo. En tales situaciones pueden considerarse procedimientos exactos o de remuestreo si sus supuestos y diseño se justifican; no se debe confiar automáticamente en cualquier p-value asintótico. Nuestro caso es deliberadamente pequeño, de manera que el p-value calculado ejemplifica el procedimiento estándar, sin garantizar que su error de Tipo I finito sea exactamente el nominal para veinte máquinas.</p>
+<p>La planificación prospectiva debe especificar evento, fracción esperada de fallas, censura y pérdidas, horizonte, alternativas prácticamente importantes, test principal, alfa y potencia deseada. El tamaño de muestra se deriva de esas condiciones. Calcular “potencia observada” después del resultado a partir del mismo p-value aporta poca evidencia nueva; los intervalos de confianza y estimaciones de efecto suelen describir mejor la incertidumbre. Si se realizan revisiones repetidas o cambia el seguimiento, debe establecerse cómo se conserva el control de errores de la estrategia de monitoreo.</p>
+</section><section class="chapter" id="section-20"><h2>20. Gráficos, tablas de riesgo y comunicación científica</h2><p>Un gráfico Kaplan–Meier útil identifica unidades temporales en el eje horizontal, probabilidad de supervivencia entre cero y uno en el vertical, grupos con leyendas legibles y marcas de censura cuando sea posible. Debe presentar cantidades en riesgo bajo la curva en instantes relevantes. Sin esa tabla, una cola plana y prolongada puede parecer precisa cuando únicamente quedan una o dos máquinas observadas. Las cantidades de ambos grupos y el cierre del seguimiento deben poder identificarse.</p>
+<p>Un párrafo de resultados adecuado informa tamaños de grupo, fallas, método, estadística Chi-Square con grados de libertad, p-value y alguna medida de efecto elegida por la pregunta. No escribiríamos “A es significativamente peor” cuando <span class="math-segment">\(p=0.137\)</span>, ni “son igual de seguros” porque el test no resultó significativo. Se comunica la dirección descriptiva, la incertidumbre, la muestra pequeña y la ausencia de rechazo global. Si interesa la supervivencia a seis meses, se reporta con incertidumbre; si la decisión exige meses esperados de funcionamiento antes de un año, puede considerarse RMST hasta un horizonte fijado.</p>
+<p>La reproducibilidad requiere además un diccionario de variables: códigos de grupo y evento, unidades, origen temporal, criterios de inclusión, pérdidas y orden de registros empatados. Una visualización atractiva puede ocultar errores metodológicos importantes. Por ello, el primer control de calidad consiste en verificar si otra persona puede reconstruir la tabla de riesgo desde los registros individuales, no solo en evaluar la estética de la figura.</p>
+</section><section class="chapter" id="section-21"><h2>21. Asociación, causalidad y explicaciones alternativas</h2><p>Supongamos que los protocolos no fueron asignados al azar y que las máquinas más antiguas recibieron preferentemente A. La comparación Log-Rank podría entonces reflejar tanto el mantenimiento como las diferentes edades iniciales. La pertenencia a un grupo estaría asociada con la falla, pero esa asociación no identificaría necesariamente el efecto causal del tratamiento. En medicina sucede algo parecido cuando los pacientes más graves reciben tratamientos más intensivos. Un p-value calculado con gran precisión no ajusta por sí solo estas diferencias de partida.</p>
+<p>Si existen factores importantes, contrastes estratificados pueden comparar grupos dentro de estratos predefinidos, y los modelos de regresión pueden estimar asociaciones condicionales a covariables. Estratificar modifica qué conjuntos de riesgo se comparan y normalmente agrega evidencia dentro de cada estrato; las variables de estratificación deben tener justificación científica. Cox Regression responde una pregunta relacionada pero diferente: estimar Hazard Ratios condicionales, bajo sus supuestos. Ningún procedimiento elimina mágicamente Confounding no medido ni una censura informativa.</p>
+<p>La asignación aleatoria fortalece la interpretación causal, pero no elimina todos los problemas: incumplimiento, cruces entre tratamientos, intensidad desigual de seguimiento, eventos competitivos y pérdidas pueden alterar el estimando. El análisis debe decir si estudia la <strong>asignación</strong> de un protocolo, el tratamiento realmente recibido o un escenario hipotético de adherencia perfecta. No se deben inferir estos últimos efectos únicamente a partir de un Log-Rank no ajustado sobre los grupos asignados.</p>
+</section><section class="chapter" id="section-22"><h2>22. Riesgos competitivos y eventos que impiden el desenlace</h2><p>En confiabilidad, una máquina puede retirarse definitivamente por una causa ajena a la primera falla de interés. En salud, una persona puede fallecer por otra causa antes de experimentar el evento objetivo. Si ese desenlace competitivo impide que el evento de interés pueda ocurrir, tratarlo como censura derecha independiente ordinaria puede distorsionar la interpretación de la probabilidad acumulada del evento. Esto difiere del cierre administrativo, después del cual el evento todavía podría suceder aunque dejara de observarse.</p>
+<p>Los contrastes de Hazard de causa específica pueden utilizar conjuntos de riesgo adecuados, pero no estiman directamente diferencias de incidencia acumulada ante eventos competitivos. La Cumulative Incidence Function responde por la probabilidad de una causa determinada hasta cierto tiempo teniendo en cuenta las demás formas de terminar el seguimiento. Así, comparar Hazard por causa no equivale a comparar probabilidades del desenlace. Esta guía no desarrolla pruebas especializadas de riesgos competitivos porque ello desviaría la atención de la deducción fundamental del Log-Rank; sí señala el límite donde hace falta otra metodología.</p>
+<p>Antes de aplicar el test convencional, pregúntese si cada observación codificada cero realmente representa a alguien que podría experimentar el evento posteriormente, o si entre los ceros existen desenlaces que hacen imposible ese evento. En este segundo caso debe revisarse la definición y seleccionarse un método alineado con la pregunta. Esta comprobación pertenece al comienzo del proceso y no debe añadirse como un descargo superficial después de obtener el p-value.</p>
+</section><section class="chapter" id="section-23"><h2>23. Flujo completo de decisión, del diseño a la conclusión</h2><p>Comience redactando en una frase la pregunta sobre tiempo hasta un evento claramente definido en grupos identificables. Especifique origen, unidades temporales, horizonte y qué salidas serán eventos o censuras. Verifique la independencia de unidades al nivel apropiado, la comparabilidad de las escalas de tiempo y el mecanismo de censura. Muestre todos los registros de un pequeño conjunto didáctico o un diccionario y auditoría suficientes cuando los datos reales sean extensos.</p>
+<p>Después calcule y grafique Kaplan–Meier con censura y cantidades en riesgo. Construya tiempos de evento conjuntos, conjuntos de riesgo por grupo, fallas observadas, esperanzas y varianzas condicionales. Sume puntaje y varianza, derive Chi-Square y consulte la cola superior de la distribución con grados de libertad correctos. Compruebe la aritmética mediante una implementación independiente. Si hay discrepancias entre cálculo manual y programa, examine empates, entradas tardías y tiempos antes de atribuirlas a la precisión decimal.</p>
+<p>Por último redacte dos afirmaciones separadas: una sobre la evidencia estadística y otra sobre magnitud, calendario e importancia práctica de las diferencias. Revise curvas cruzadas, pocos eventos, riesgos competitivos y multiplicidad. Identifique decisiones exploratorias explícitamente. El informe debe permitir reproducir el test y reconocer hasta dónde llegan sus conclusiones. Una decisión clínica, industrial o pública exige ese contexto, no únicamente un p-value.</p>
+</section><section class="chapter" id="section-24"><h2>24. Ejercicio resuelto 1 — Codificar evento y censura</h2><p><strong>Problema.</strong> Una máquina inicia seguimiento en cero, permanece operativa hasta una inspección del mes seis y sale porque termina el estudio. Otra falla en el mes cuatro. Indique <span class="math-segment">\((X,\delta)\)</span> para ambas y explique si se registra una falla en el mes seis.</p>
+<p><strong>Solución.</strong> La primera observación es <span class="math-segment">\((6,0)\)</span>: seis es el tiempo de salida conocido y cero señala que no se observó el evento. La segunda es <span class="math-segment">\((4,1)\)</span>, porque hubo una falla real. En el tiempo conjunto de evento cuatro, la primera máquina está en riesgo, puesto que <span class="math-segment">\(6\ge4\)</span>. En el mes seis continúa en el conjunto inmediatamente anterior a cualquier falla del mismo instante, pero no genera un evento. <span class="math-segment">\(\delta=0\)</span> no significa que nunca fallará: únicamente indica que el período documentado terminó sin observar la falla definida. Codificarla como <span class="math-segment">\((6,1)\)</span> fabricaría una falla y modificaría conteos, esperanzas y precisión del contraste.</p>
+<p><strong>Transferencia.</strong> En una investigación clínica sustituya “falla” por primera recaída y “cierre del estudio” por última visita confirmada sin recaída. La representación es la misma si se justifican los supuestos sobre censura. La idea decisiva consiste en reconocer información parcial sin convertirla en un evento inexistente.</p>
+</section><section class="chapter" id="section-25"><h2>25. Ejercicio resuelto 2 — Reconstruir el riesgo del mes seis</h2><p><strong>Problema.</strong> Con los veinte registros, encuentre <span class="math-segment">\(n_{A,6}\)</span>, <span class="math-segment">\(n_{B,6}\)</span> y <span class="math-segment">\(d_{A,6}\)</span>. ¿Qué sucede con la máquina B censurada exactamente en seis?</p>
+<p><strong>Solución.</strong> A inicia con diez máquinas y registra cuatro fallas previas: meses dos, tres, cuatro y cinco. Por eso quedan seis inmediatamente antes del mes seis: <span class="math-segment">\(n_{A,6}=6\)</span>. B inicia con diez y ya perdió dos por censura en los meses tres y cuatro, de modo que <span class="math-segment">\(n_{B,6}=8\)</span>. En seis ocurre una sola falla y pertenece a A, por lo que <span class="math-segment">\(d_{A,6}=1\)</span>, <span class="math-segment">\(d_{B,6}=0\)</span> y el conjunto total contiene catorce máquinas. La censura B en seis se procesa después del evento de ese mismo instante, según la convención declarada, y afectará los denominadores futuros.</p>
+<p><strong>Comprobación.</strong> El siguiente evento es en ocho. Después de retirar la falla A de seis, la censura A de siete y la censura B de seis, quedan cuatro máquinas A y siete B. Recontar las filas individuales reproduce esos resultados, lo que comprueba que no se eliminó prematuramente una máquina censurada.</p>
+</section><section class="chapter" id="section-26"><h2>26. Ejercicio resuelto 3 — Esperanza de fallas y contribución con signo</h2><p><strong>Problema.</strong> En el mes ocho hay cuatro máquinas A y siete B en riesgo. La única falla pertenece a B. Calcule la cantidad esperada de fallas A y su contribución al puntaje.</p>
+<p><strong>Solución.</strong> Primero sumamos el conjunto total: <span class="math-segment">\(n=4+7=11\)</span>. El total de fallas es <span class="math-segment">\(d=1\)</span>. Bajo igualdad de Hazard, la esperanza condicional para A es <span class="math-segment">\(E_A=d(n_A/n)=1(4/11)=0.363636\)</span>. Como la falla observada fue B, el conteo observado A es cero y su contribución es <span class="math-segment">\(O_A-E_A=0-4/11=-0.363636\)</span>. Un término negativo indica que en ese instante hubo menos fallas A de las esperadas; no demuestra que A tenga menor Hazard en todo el horizonte.</p>
+<p><strong>Comprobación independiente.</strong> La esperanza B es <span class="math-segment">\(7/11\)</span>, y su diferencia es <span class="math-segment">\(1-7/11=4/11\)</span>, exactamente el opuesto del puntaje A. Las esperanzas suman una falla observada. Estas igualdades son un control directo contra utilizar como denominador las veinte máquinas originales en lugar de las once todavía expuestas.</p>
+</section><section class="chapter" id="section-27"><h2>27. Ejercicio resuelto 4 — Varianza condicional del mes seis</h2><p><strong>Problema.</strong> Obtenga la contribución de varianza del mes seis y explique qué representa su unidad.</p>
+<p><strong>Solución.</strong> En seis tenemos <span class="math-segment">\(n_A=6\)</span>, <span class="math-segment">\(n_B=8\)</span>, <span class="math-segment">\(n=14\)</span> y <span class="math-segment">\(d=1\)</span>. Sustituimos en <span class="math-segment">\(V_j=n_A n_B d(n-d)/[n^2(n-1)]\)</span>: <span class="math-segment">\(V_6=(6)(8)(1)(13)/(14^2\cdot13)=48/196\approx0.244898\)</span>. La expresión simplificada para un evento, <span class="math-segment">\(n_A n_B/n^2\)</span>, confirma el mismo valor. Es la varianza condicional de un <em>conteo</em> de eventos asignados por grupo bajo la nula; no se expresa en meses al cuadrado ni representa variabilidad de tiempos de vida.</p>
+<p><strong>Interpretación y control.</strong> Si todos los expuestos pertenecieran a un solo grupo, no existiría incertidumbre sobre cuál grupo recibió la falla y la contribución de varianza sería cero. Aquí es positiva porque ambos grupos están representados en el conjunto de riesgo. La varianza total del test se obtiene al sumar esta cantidad y las de los demás eventos, no al calcular la desviación estándar de las fechas de salida.</p>
+</section><section class="chapter" id="section-28"><h2>28. Ejercicio resuelto 5 — Del puntaje acumulado al p-value</h2><p><strong>Problema.</strong> Con <span class="math-segment">\(U=2.2278054763\)</span> y <span class="math-segment">\(V=2.2474380889\)</span>, calcule la estadística Log-Rank e indique la decisión para <span class="math-segment">\(\alpha=0.05\)</span>.</p>
+<p><strong>Solución.</strong> Primero elevamos al cuadrado el puntaje: <span class="math-segment">\(U^2\approx4.963117\)</span>. Dividimos por la varianza nula: <span class="math-segment">\(Q=4.963117/2.2474380889\approx2.208344\)</span>. Hay dos grupos y un contraste independiente, así que la distribución de referencia asintótica es Chi-Square con un grado de libertad. Su probabilidad de cola superior es <span class="math-segment">\(P(\chi^2_1\ge2.208344)\approx0.137266\)</span>. Como <span class="math-segment">\(0.137266&gt;0.05\)</span>, no rechazamos igualdad de distribuciones al nivel especificado. Eso no prueba equivalencia ni descarta una diferencia práctica importante.</p>
+<p><strong>Verificación.</strong> Si invertimos los nombres de los protocolos, el puntaje cambia a <span class="math-segment">\(-2.2278054763\)</span>, pero el cuadrado, el denominador y el p-value bilateral permanecen iguales. Esta simetría confirma la estructura del contraste. Si el intercambio de nombres cambiara la significación, revisaríamos denominadores y asignaciones de eventos.</p>
+</section><section class="chapter" id="section-29"><h2>29. Ejercicio resuelto 6 — Supervivencia Kaplan–Meier en ocho</h2><p><strong>Problema.</strong> Calcule la supervivencia KM inmediatamente después del mes ocho para cada protocolo. ¿Por qué esta diferencia no determina automáticamente la significación global?</p>
+<p><strong>Solución.</strong> En A las fallas de los meses dos a seis reducen la supervivencia acumulada a <span class="math-segment">\(0.5\)</span>. No ocurre otra falla A antes o durante ocho; las censuras de siete y ocho no crean escalones descendentes. Por tanto <span class="math-segment">\(\widehat S_A(8)=0.5\)</span>. En B ocurrieron tres censuras antes del primer evento, así que quedan siete máquinas expuestas cuando se produce la falla del mes ocho: <span class="math-segment">\(\widehat S_B(8)=6/7\approx0.857143\)</span>. La diferencia descriptiva es <span class="math-segment">\(0.857143-0.5=0.357143\)</span>, aproximadamente 35.7 puntos porcentuales.</p>
+<p><strong>Interpretación.</strong> Esta distancia en un tiempo puntual no es el tamaño de efecto del Log-Rank y presenta incertidumbre importante con diez máquinas por grupo. El contraste reúne fallas a lo largo del seguimiento completo. Una separación gráfica llamativa puede coexistir con <span class="math-segment">\(p=0.137\)</span> cuando los conjuntos de riesgo son pequeños y las observaciones posteriores agregan variabilidad. Debe comunicarse la diferencia descriptiva sin convertirla en una conclusión confirmatoria.</p>
+</section><section class="chapter" id="section-30"><h2>30. Ejercicio resuelto 7 — Dos fallas simultáneas</h2><p><strong>Problema.</strong> En un conjunto combinado hay seis máquinas A y cuatro B. Ocurren dos fallas en el mismo instante, ambas de A. Obtenga la esperanza, el puntaje y su varianza.</p>
+<p><strong>Solución.</strong> Hay diez máquinas expuestas y dos eventos. La esperanza A es <span class="math-segment">\(E_A=2(6/10)=1.2\)</span>. Se observan dos fallas A, así que el puntaje del instante es <span class="math-segment">\(2-1.2=0.8\)</span>. Con corrección por población finita, <span class="math-segment">\(V=(6)(4)(2)(8)/(10^2\cdot9)=384/900\approx0.426667\)</span>. No coincide con sumar ingenuamente dos varianzas de evento único iguales a <span class="math-segment">\(0.24\)</span>, porque eso produciría 0.48. Las asignaciones de dos extracciones sin reposición no son condicionalmente independientes.</p>
+<p><strong>Transferencia.</strong> Si los tiempos fueron redondeados a meses, investigue si las fallas realmente ocurrieron simultáneamente o si el empate es un artefacto de medición. Indique la resolución temporal y la convención, en lugar de cambiar las fechas para evitar empates. El cálculo válido comienza por comprender la procedencia del registro.</p>
+</section><section class="chapter" id="section-31"><h2>31. Ejercicio resuelto 8 — Cancelación ante curvas cruzadas</h2><p><strong>Problema.</strong> Los eventos tempranos producen un puntaje <span class="math-segment">\(+3\)</span> con varianza 2, y los tardíos <span class="math-segment">\(-2.5\)</span> con varianza 2. ¿Cuál es la estadística no ponderada?</p>
+<p><strong>Solución.</strong> Primero sumamos las contribuciones <em>con signo</em>: <span class="math-segment">\(U=3-2.5=0.5\)</span>. Sumamos las varianzas: <span class="math-segment">\(V=2+2=4\)</span>. Entonces <span class="math-segment">\(Q=0.5^2/4=0.0625\)</span>, cuyo p-value Chi-Square de un grado de libertad es aproximadamente 0.8026. Si eleváramos al cuadrado los puntajes temprano y tardío por separado antes de sumarlos, eliminaríamos artificialmente la cancelación, alterando el significado del Log-Rank ordinario. La pequeña estadística puede coexistir con diferencias de distinta dirección en etapas distintas.</p>
+<p><strong>Interpretación.</strong> La demostración ilustra pérdida de potencia frente a determinadas alternativas con Hazard cruzados, pero no afirma que todo cruce produzca p-value elevado. El tamaño y momento de las diferencias siguen importando. Un RMST hasta un horizonte planificado o un contraste ponderado establecido anticipadamente puede responder una pregunta más pertinente si se espera un patrón temporal particular.</p>
+</section><section class="chapter" id="section-32"><h2>32. Ejercicio resuelto 9 — Incorporar entrada tardía</h2><p><strong>Problema.</strong> Una máquina adicional del Protocolo A se observa desde el mes cinco hasta el once, cuando falla. ¿Cuenta en el mes tres? ¿Qué sucede en seis y once?</p>
+<p><strong>Solución.</strong> Con entrada <span class="math-segment">\(L=5\)</span> y salida <span class="math-segment">\(X=11\)</span>, el indicador de riesgo es <span class="math-segment">\(I(L<t\le span="" x)\)<="">. En el mes tres vale cero porque la máquina todavía no había ingresado. En seis y once vale uno: participa en los conjuntos expuestos inmediatamente anteriores a esos eventos. Su falla de once se contabiliza como evento A. Agregar este registro obliga a reconstruir <em>todos</em> los conjuntos de riesgo, las esperanzas y las varianzas afectadas. Sumar solamente una falla al total final sin rehacer la tabla sería incorrecto.</t\le></span></p>
+<p><strong>Límite.</strong> La entrada tardía plantea una cuestión de selección: las máquinas que fallaron antes de volverse elegibles no aparecerán en la cohorte. La interpretación exige supuestos adecuados de truncamiento izquierdo. Una columna de fecha de ingreso permite calcular los conjuntos, pero no garantiza por sí misma la validez de la población observada.</p>
+</section><section class="chapter" id="section-33"><h2>33. Ejercicio resuelto 10 — Interpretar tres grupos</h2><p><strong>Problema.</strong> Una comparación global de tres distribuciones de supervivencia produce <span class="math-segment">\(Q=7.81\)</span> con dos grados de libertad. Encuentre el p-value y explique si identifica el par diferente.</p>
+<p><strong>Solución.</strong> Los grados de libertad son <span class="math-segment">\(K-1=3-1=2\)</span>. Para Chi-Square de dos grados, la cola superior es <span class="math-segment">\(e^{-Q/2}\)</span>; por tanto <span class="math-segment">\(p=e^{-7.81/2}\approx0.0201\)</span>. Rechazamos la igualdad global al 5%. Hay evidencia de que las tres distribuciones poblacionales no son todas idénticas, pero la estadística no identifica automáticamente el par responsable. La respuesta “el grupo uno difiere del tres” no se deriva del contraste global sin un análisis adicional.</p>
+<p><strong>Transferencia.</strong> Existen tres comparaciones por pares. Si se pretende control familiar del error, debe declararse antes un procedimiento como Holm u otro plan justificado. Publicar únicamente el menor p-value entre los pares distorsionaría la tasa de error de la búsqueda y convertiría una prueba global en una colección no declarada de hipótesis.</p>
+</section><section class="chapter" id="section-34"><h2>34. Ejercicio resuelto 11 — Multiplicidad después de una prueba global</h2><p><strong>Problema.</strong> Tres comparaciones exploratorias entre pares devuelven p-values 0.012, 0.028 y 0.041. Aplique Holm al nivel familiar 0.05.</p>
+<p><strong>Solución.</strong> Ordenamos las tres probabilidades, que ya aparecen de menor a mayor. Para la primera usamos <span class="math-segment">\(0.05/3\approx0.016667\)</span>: como <span class="math-segment">\(0.012\le0.016667\)</span>, se rechaza. Para la segunda el umbral aumenta a <span class="math-segment">\(0.05/2=0.025\)</span>: dado que <span class="math-segment">\(0.028&gt;0.025\)</span>, nos detenemos. La segunda y la tercera no se rechazan mediante Holm. Solo se sostiene el primer contraste de la familia. Sin ajuste, el 0.028 habría parecido significativo, evidenciando que la interpretación depende del plan de comparaciones.</p>
+<p><strong>Interpretación.</strong> Ajustar p-values no corrige ocultar múltiples pruebas, redefinir grupos retrospectivamente ni buscar muchas ventanas temporales sin declararlas. La familia y el carácter exploratorio deben informarse. Holm controla un criterio de error familiar; no asigna una probabilidad de falsedad a cada hallazgo concreto.</p>
+</section><section class="chapter" id="section-35"><h2>35. Ejercicio resuelto 12 — Diferenciar Hazard Ratio de Log-Rank</h2><p><strong>Problema.</strong> Un investigador obtiene <span class="math-segment">\(p=0.04\)</span> de un Log-Rank y escribe “el Hazard Ratio es 0.04”. Explique el error y proponga una presentación correcta.</p>
+<p><strong>Solución.</strong> El número 0.04 es una probabilidad de cola bajo la hipótesis de igualdad de distribuciones y el modelo nulo de referencia. Un Hazard Ratio es una <em>razón adimensional entre tasas instantáneas de riesgo</em>, normalmente estimada mediante un modelo como Cox Regression. El p-value del test no determina ese estimador. Una muestra muy grande puede producir p-value pequeño para una razón de Hazard moderada; una muestra pequeña puede no detectar una razón considerable. Además, cuando la relación de Hazard cambia en el tiempo, un solo valor constante puede resumir mal la forma del efecto.</p>
+<p><strong>Corrección.</strong> Informe estadística y p-value del Log-Rank, curvas y cantidades en riesgo, y una medida de efecto con intervalo si la pregunta lo requiere. No transforme una medición de evidencia contra la nula en un tamaño de efecto. También especifique si la medida es marginal o ajustada, según el modelo que se utilice.</p>
+</section><section class="chapter" id="section-36"><h2>36. Ejercicio resuelto 13 — Modificar el nivel de significación</h2><p><strong>Problema.</strong> Reinterprete el resultado principal <span class="math-segment">\(p=0.137266\)</span> con umbrales de 0.05, 0.10 y 0.20. ¿Es correcto escoger 0.20 después de ver el resultado?</p>
+<p><strong>Solución.</strong> Con 0.05 no rechazamos porque <span class="math-segment">\(0.137266&gt;0.05\)</span>. Con 0.10 tampoco rechazamos. Con 0.20 la probabilidad queda por debajo del umbral y la regla formal lleva a rechazar. Pero los datos y la fuerza de la evidencia no cambiaron: solo se modificó el criterio de decisión. Elegir 0.20 retrospectivamente para poder afirmar significación invalidaría la interpretación del error Tipo I que se había declarado inicialmente.</p>
+<p><strong>Interpretación.</strong> Alfa debe responder al costo de falsos positivos y al protocolo de análisis. Una exploración puede tener una tolerancia distinta de una evaluación confirmatoria con consecuencias clínicas, pero ambas deben declarar sus reglas. Ninguna elección transforma el p-value en la probabilidad de que el tratamiento funcione ni elimina la incertidumbre de una muestra pequeña.</p>
+</section><section class="chapter" id="section-37"><h2>37. Ejercicio resuelto 14 — Conteo de fallas frente a comparación temporal</h2><p><strong>Problema.</strong> Hay seis fallas A y cinco B. ¿Por qué no concluir directamente a partir de esos dos totales que A es peor?</p>
+<p><strong>Solución.</strong> Ambos grupos comienzan con diez máquinas, pero los patrones de censura y los momentos de falla son distintos. El conteo seis frente a cinco ignora si los eventos sucedieron en dos o trece meses y cuántas máquinas seguían siendo observables en cada instante. El Log-Rank condiciona en todos los conjuntos de riesgo, produciendo una esperanza total A <span class="math-segment">\(E_A\approx3.7721945\)</span>, en vez de comparar dos números con denominador constante. Asimismo, proporciones de eventos calculadas bajo períodos de seguimiento desiguales pueden distorsionar la comparación del riesgo subyacente.</p>
+<p><strong>Verificación.</strong> La estadística calculada con los registros completos es <span class="math-segment">\(Q\approx2.208344\)</span>, con <span class="math-segment">\(p\approx0.137266\)</span>; no proviene de suponer que los conteos seis y cinco son variables independientes con igual exposición. Las curvas Kaplan–Meier y la tabla de riesgo muestran la dimensión temporal que los conteos simples omiten. Esa dimensión es justamente la razón para emplear una herramienta de supervivencia.</p>
+</section><section class="chapter" id="section-38"><h2>38. Ejercicio resuelto 15 — Redactar una conclusión científica honesta</h2><p><strong>Problema.</strong> Un responsable de mantenimiento pregunta si debe implantar inmediatamente el Protocolo A o B basándose solo en este conjunto sintético. Redacte una conclusión con límites claros.</p>
+<p><strong>Solución.</strong> “En una comparación sintética de veinte máquinas, diez por programa, se observaron seis primeras fallas en A y cinco en B. Las curvas Kaplan–Meier mostraron diferencias descriptivas durante el seguimiento, especialmente en etapas iniciales. Sin embargo, el Log-Rank bilateral produjo <span class="math-segment">\(\chi^2(1)=2.208\)</span> y <span class="math-segment">\(p=0.137\)</span>. Al umbral previamente fijado de 0.05 no rechazamos la igualdad de distribuciones poblacionales. Este resultado no demuestra equivalencia entre programas. Con pocas máquinas y pocos eventos permanece considerable incertidumbre; además, los datos sintéticos no constituyen evidencia para una decisión industrial real. Un estudio aplicable debería predefinir una diferencia temporal importante, acumular eventos suficientes, examinar censura y reportar supervivencia o RMST en horizontes útiles con sus intervalos.”</p>
+<p><strong>Por qué es correcto.</strong> Se declaran procedencia, desenlace, muestra, método, resultado, decisión y límites. No se inventa una conclusión causal ni se promete un beneficio. Un estudiante que comprenda el procedimiento debe poder reproducir la tabla de riesgo y explicar por qué una separación visual no implica automáticamente p-value pequeño.</p>
+</section><section class="chapter" id="section-39"><h2>39. Integración conceptual final y transferencia</h2><p>Volvamos a la pregunta inicial: ¿cómo comparar dos distribuciones de supervivencia si algunos tiempos verdaderos de evento no se conocen? El Log-Rank observa fallas únicamente entre individuos todavía expuestos y pregunta cuántas cabría esperar en cada grupo si sus Hazard fueran idénticos en esos instantes. Restar eventos esperados de observados genera contribuciones con signo; agregarlas y dividir su cuadrado por la varianza nula correspondiente produce un contraste global de igualdad. La censura modifica quién permanece en el conjunto de riesgo y no autoriza a fabricar una falla.</p>
+<p>El recorrido numérico puede verificarse íntegramente: los veinte registros originan once tiempos conjuntos de evento; la tabla genera <span class="math-segment">\(U\approx2.227805\)</span> y <span class="math-segment">\(V\approx2.247438\)</span>; Chi-Square resulta aproximadamente 2.2083 y p aproximadamente 0.1373. El estudiante puede auditar la fila del mes ocho, la varianza ante empates y la simetría al cambiar etiquetas sin disponer de un paquete especializado. Una implementación independiente reproduce la cifra. Sin embargo, ninguna comprobación aritmética acredita ausencia de Confounding, censura independiente ni representatividad; esas condiciones requieren juicio científico y evidencia del diseño.</p>
+<p>La última pregunta de transferencia es qué cambiaría si hubiera pacientes con cambios de tratamiento, beneficio tardío, muertes competitivas y tres grupos. No basta con sustituir etiquetas en la misma fórmula. Se deben redefinir estimando y evento, auditar ingresos y censuras, examinar cruces de curvas, planificar contrastes globales y por pares, valorar si el Log-Rank ordinario tiene potencia frente a la alternativa esperada y escoger medidas de efecto útiles para decidir. La competencia fundamental es <strong>reproducir el cálculo y explicar por qué corresponde, qué mide y dónde terminan sus afirmaciones</strong>.</p>
+</section><section class="chapter" id="section-40"><h2>40. Fuentes, procedencia y límites de validez</h2><p>El conjunto de veinte máquinas y los ejemplos numéricos complementarios son sintéticos y fueron preparados únicamente con fines educativos. No provienen de un registro hospitalario ni de una base industrial de mantenimiento. El marco estadístico concuerda con los apuntes de Stanford STATS 305B, el material didáctico de Duke STA 490 y la literatura de Survival Analysis. Esas fuentes respaldan la construcción observado-versus-esperado, la varianza Hypergeometric, la inferencia asintótica Chi-Square y los conjuntos de riesgo. No convierten las máquinas sintéticas en evidencia sobre ningún protocolo real.</p>
+<p>Referencias de comprobación: Stanford, <em>Survival Analysis: Log-Rank Test</em> (https://web.stanford.edu/class/stats305b/notes/Survival_I.html); Duke, <em>The Log-Rank Test</em> (https://www2.stat.duke.edu/courses/Fall24/sta490.01/slides/log-rank.html); y Simon Fraser University, <em>Comparing Groups: The Log-Rank Test and Hazard Ratio</em> (https://www.sfu-epi.ca/modules/HSCI_341_Lesson_8_Time_to_Event_Data.html). Los resultados numéricos se cotejaron independientemente con la implementación <code>statsmodels</code>, sin pretender que el software verifique la validez del diseño del estudio.</p>
+<p>Antes de emplear este material como herramienta decisoria se deben confirmar origen temporal, definición de evento y censura, composición de grupos, independencia apropiada de unidades, eventos competitivos y correspondencia del contraste con el estimando. Ante múltiples grupos o análisis exploratorios hace falta un plan de multiplicidad. La siguiente unidad curricular introduce Cox Regression y el modelado de Hazard ajustado por covariables; no debe interpretarse retroactivamente como si la estadística Log-Rank no ajustada ya hubiese proporcionado un Hazard Ratio.</p>
+<p><strong>Source links / Enlaces a fuentes</strong></p><ul><li><a href="https://web.stanford.edu/class/stats305b/notes/Survival_I.html" rel="noopener noreferrer" target="_blank">Stanford STATS 305B</a></li><li><a href="https://www2.stat.duke.edu/courses/Fall24/sta490.01/slides/log-rank.html" rel="noopener noreferrer" target="_blank">Duke STA 490</a></li><li><a href="https://www.sfu-epi.ca/modules/HSCI_341_Lesson_8_Time_to_Event_Data.html" rel="noopener noreferrer" target="_blank">Simon Fraser University</a></li></ul>
+</section></article></main><footer><div class="container">Alfredo Saldana · Statistics &amp; Probability · Guía 75 · Datos sintéticos didácticos · <a href="#main-content">Volver arriba</a></div></footer><script>const b=document.querySelector('.menu-btn'),n=document.querySelector('#menu75');b?.addEventListener('click',()=>{const active=n.classList.toggle('open');b.setAttribute('aria-expanded',String(active));b.setAttribute('aria-label',active?'Cerrar menú':'Abrir menú')});</script></body></html>
